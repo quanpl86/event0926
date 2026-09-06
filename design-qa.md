@@ -12,7 +12,7 @@
 - Implementation screenshot evidence: Codex in-app Browser captures of the landing page, selected-interest state, Creator Profile state, and final Website Preview state. The browser tool returned the captures inline and did not expose a filesystem path.
 - Viewport: approximately 977 × 1151 CSS px, device scale factor 1.
 - Source dimensions: TEKY activity images 1200 × 1200 px; reference landing desktop 2048 × 1168 px; logo 500 × 250 px.
-- State: landing, identity input, every journey step, selected cards, parent handoff, profile, pathway, showcase, and local-save success.
+- State: landing, identity input, every journey step, selected cards, parent handoff, parent observation, parent support, family mirror, self-designed character, profile, project showcase, roadmap, Google AI Studio handoff, refinement guidance, sharing guidance, and local-save success.
 
 ## Full-view comparison evidence
 
@@ -25,6 +25,7 @@
 - Header and logo: the supplied transparent TEKY mark is used directly, with its original aspect ratio preserved and no recreated mark.
 - Choice cards: icon sizing, mint icon wells, thin borders, selected check state, radius, and text hierarchy match the reference card language.
 - Creator Profile and Website Preview: large navy headings, teal identity accent, white card shell, restrained secondary labels, and project cards match the reference visual system without introducing numeric scoring.
+- Workshop timeline: six checkpoints map the complete 60-minute facilitation plan (8' → 14' → 5' → 17' → 9' → 7'). Participant UI shows approximate stage duration rather than a countdown timer.
 - Activity guide: all six supplied 1:1 images use `object-cover` at their natural square ratio, with no stretching, placeholder imagery, or synthetic replacement.
 
 ## Required fidelity surfaces
@@ -48,7 +49,11 @@
 - Name a future project.
 - Complete the child-to-parent handoff.
 - Select parent observations with a maximum of three.
-- View derived profile, recommended pathway, and website preview.
+- Select up to two concrete parent-support actions.
+- Enter a real parent observation and choose one shared family action.
+- Confirm 2–4 inferred traits and switch between Future Buddy suggestion and child-designed character modes.
+- Verify that portrait style, palette, future identity, and signature gear are derived from earlier interest/project/impact selections.
+- View the four project recommendations, three exploration directions, three-stage roadmap, full website prompt, six-stage workshop timeline, Version 2 editing prompts, and family sharing prompts.
 - Complete without cloud consent and confirm local-save success.
 
 ## Console and runtime checks
@@ -56,6 +61,7 @@
 - Next.js production build completed successfully.
 - TypeScript strict typecheck completed successfully.
 - No runtime error state or Next.js error overlay appeared during the complete browser journey.
+- Google AI Studio link resolves to `https://aistudio.google.com/app/apps` and opens in a new tab; QA did not transmit or paste child data to the external service.
 - Cloud persistence was intentionally not submitted during QA because it would transmit a child's sample profile to the connected Supabase project. The local-only fallback was verified.
 
 ## Comparison history

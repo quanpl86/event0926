@@ -5,7 +5,7 @@
     "title": "Future Buddy nên gọi con là gì?",
     "description": "Chọn tên và nhóm lớp để hành trình phù hợp với con.",
     "type": "identity",
-    "minutes": 5,
+    "minutes": 1,
     "buddy": "Hồ sơ này là của riêng con. Mình bắt đầu bằng một cái tên thật ngầu nhé!"
   },
   {
@@ -14,7 +14,7 @@
     "title": "Nếu được tạo một điều mới, con muốn tạo gì?",
     "description": "Con có thể chọn nhiều thế giới khiến mình tò mò.",
     "type": "multi",
-    "minutes": 6,
+    "minutes": 2,
     "buddy": "Có rất nhiều cánh cửa! Con cứ chọn những gì làm con thấy háo hức.",
     "options": [
       { "id": "game", "title": "Game", "description": "Tạo thế giới và nhân vật", "icon": "Gamepad2", "tags": ["game", "storytelling"] },
@@ -29,7 +29,7 @@
     "title": "Con muốn mang gì trong balo khám phá?",
     "description": "Chọn 2–3 món giống con nhất.",
     "type": "bag",
-    "minutes": 6,
+    "minutes": 1,
     "buddy": "Balo của mỗi nhà sáng tạo đều khác nhau. Món nào giống con nhất?",
     "options": [
       { "id": "creative", "title": "Sáng tạo", "description": "Nghĩ ra điều mới", "icon": "Sparkles", "tags": ["creativity"] },
@@ -44,7 +44,7 @@
     "title": "Khi có ý tưởng mới, con bắt đầu thế nào?",
     "description": "Cách nào cũng có điểm hay. Hãy chọn cách gần với con nhất.",
     "type": "single",
-    "minutes": 6,
+    "minutes": 1,
     "buddy": "Có bạn vẽ trước, có bạn làm thử ngay. Cách của con là gì?",
     "options": [
       { "id": "sketch", "title": "Vẽ ra giấy", "description": "Nhìn thấy ý tưởng trước", "icon": "Pencil", "tags": ["visual"] },
@@ -59,7 +59,7 @@
     "title": "Robot của con bỗng không chạy…",
     "description": "Con sẽ thử điều gì trước tiên?",
     "type": "scenario",
-    "minutes": 7,
+    "minutes": 2,
     "buddy": "Không sao đâu, nhà sáng tạo nào cũng gặp lúc sản phẩm chưa hoạt động!",
     "options": [
       { "id": "inspect", "title": "Kiểm tra từng phần", "description": "Xem dây, pin và bánh xe", "icon": "ScanSearch", "tags": ["analysis"] },
@@ -74,7 +74,7 @@
     "title": "Dự án tuyệt vời nhất sẽ giúp ai?",
     "description": "Chọn một câu chuyện mà con muốn góp sức.",
     "type": "single",
-    "minutes": 7,
+    "minutes": 1,
     "buddy": "Công nghệ trở nên kỳ diệu nhất khi nó giúp một ai đó!",
     "options": [
       { "id": "family", "title": "Gia đình", "description": "Giúp việc hằng ngày dễ hơn", "icon": "House", "tags": ["family"] },
@@ -89,7 +89,7 @@
     "title": "Lắp ráp dự án tương lai của con",
     "description": "Đặt tên cho ý tưởng đang thành hình.",
     "type": "project",
-    "minutes": 9,
+    "minutes": 2,
     "buddy": "Mình thấy một ý tưởng rất hay rồi. Con hãy đặt cho nó một cái tên!"
   },
   {
@@ -98,7 +98,7 @@
     "title": "Đến lượt ba mẹ đồng hành",
     "description": "Con kể về dự án vừa tạo. Ba mẹ sẽ bổ sung những điều mình thường quan sát thấy.",
     "type": "handoff",
-    "minutes": 2,
+    "minutes": 1,
     "buddy": "Con làm tuyệt lắm! Giờ mình mời ba mẹ cùng mở mảnh ghép tiếp theo nhé."
   },
   {
@@ -107,7 +107,7 @@
     "title": "Ba mẹ thường thấy con…",
     "description": "Chọn tối đa 3 điều xuất hiện thường xuyên trong cuộc sống hằng ngày.",
     "type": "parent",
-    "minutes": 5,
+    "minutes": 1,
     "buddy": "Không cần biết công nghệ — chỉ cần chia sẻ điều ba mẹ hiểu về con.",
     "options": [
       { "id": "curious", "title": "Hay đặt câu hỏi", "description": "Muốn hiểu vì sao", "icon": "CircleHelp", "tags": ["curiosity"] },
@@ -117,10 +117,39 @@
     ]
   },
   {
+    "id": "parent-support",
+    "phase": "Ba mẹ đồng hành",
+    "title": "Ba mẹ muốn đồng hành với con theo cách nào?",
+    "description": "Chọn tối đa 2 cách phù hợp với gia đình ở thời điểm này.",
+    "type": "parent",
+    "minutes": 1,
+    "buddy": "Ba mẹ không cần biết công nghệ. Một câu hỏi đúng lúc hay một lần cùng làm thử đã là sự đồng hành quý giá.",
+    "options": [
+      { "id": "encourage", "title": "Lắng nghe và khích lệ", "description": "Hỏi con điều gì làm con hào hứng", "icon": "Heart", "tags": ["family-support"] },
+      { "id": "together", "title": "Cùng con làm thử", "description": "Chia một dự án thành bước nhỏ", "icon": "Users", "tags": ["co-creation"] },
+      { "id": "space", "title": "Cho con tự khám phá", "description": "Để con thử, sai và thử lại", "icon": "Sprout", "tags": ["autonomy"] },
+      { "id": "connect", "title": "Tìm người hướng dẫn", "description": "Kết nối con với trải nghiệm phù hợp", "icon": "Compass", "tags": ["guidance"] }
+    ]
+  },
+  {
+    "id": "family-mirror",
+    "phase": "Ba mẹ đồng hành",
+    "title": "Cả nhà cùng ghép mảnh chân dung",
+    "description": "Ba mẹ kể một khoảnh khắc thật; con chọn bước nhỏ cả nhà muốn làm cùng nhau.",
+    "type": "family",
+    "minutes": 1,
+    "buddy": "Một câu chuyện thật của ba mẹ sẽ giúp chân dung của con ấm áp và đúng với con hơn.",
+    "options": [
+      { "id": "try-project", "title": "Chọn một dự án nhỏ", "description": "Cùng bắt đầu trong tuần này", "icon": "Rocket", "tags": ["family-action"] },
+      { "id": "visit-class", "title": "Thử một buổi trải nghiệm", "description": "Quan sát xem con hứng thú điều gì", "icon": "School", "tags": ["family-action"] },
+      { "id": "talk-weekly", "title": "Có giờ kể chuyện mỗi tuần", "description": "Con chia sẻ điều đã thử và muốn thử tiếp", "icon": "MessagesSquare", "tags": ["family-action"] }
+    ]
+  },
+  {
     "id": "profile",
     "phase": "Creator Profile",
-    "title": "Hồ sơ nhà sáng tạo của con",
-    "description": "Một chân dung tích cực được tạo từ điều con chọn và điều ba mẹ quan sát.",
+    "title": "Future Buddy hình dung chân dung của con là…",
+    "description": "Cả nhà đọc, xác nhận những nét đúng với con rồi cùng hoàn thiện nhân vật Future Me.",
     "type": "profile",
     "minutes": 3,
     "buddy": "Tada! Đây là chân dung nhà sáng tạo đang lớn lên từng ngày của con."
@@ -128,8 +157,8 @@
   {
     "id": "pathway",
     "phase": "Creator Profile",
-    "title": "Con có thể bắt đầu từ đâu?",
-    "description": "Ba dự án nhỏ và lộ trình mở để con tiếp tục khám phá.",
+    "title": "Con có thể tạo ra những gì?",
+    "description": "Project showcase, hướng khám phá và roadmap linh hoạt dành riêng cho con.",
     "type": "pathway",
     "minutes": 2,
     "buddy": "Không có một con đường duy nhất. Mình chọn bước đầu tiên khiến con hào hứng nhất nhé!"
@@ -137,10 +166,10 @@
   {
     "id": "showcase",
     "phase": "Creator Profile",
-    "title": "Website tương lai của con",
-    "description": "Một nơi để lưu dự án, kể câu chuyện và theo dõi hành trình học tập.",
+    "title": "Tạo website Future Me của con",
+    "description": "Sao chép prompt đã chứa chân dung, mô tả nhân vật, project và roadmap để tiếp tục trong Google AI Studio.",
     "type": "showcase",
-    "minutes": 2,
+    "minutes": 17,
     "buddy": "Hành trình hôm nay kết thúc, nhưng thế giới sáng tạo của con mới chỉ bắt đầu!"
   }
 ]

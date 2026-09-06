@@ -11,7 +11,7 @@ export type JourneyStep = {
   phase: string;
   title: string;
   description: string;
-  type: "identity" | "multi" | "bag" | "single" | "scenario" | "project" | "handoff" | "parent" | "profile" | "pathway" | "showcase";
+  type: "identity" | "multi" | "bag" | "single" | "scenario" | "project" | "handoff" | "parent" | "family" | "profile" | "pathway" | "showcase";
   minutes: number;
   buddy: string;
   options?: Option[];
@@ -22,6 +22,13 @@ export type JourneyAnswers = {
   gradeBand: string;
   avatar: string;
   projectName: string;
+  futureSelf: string;
+  favoriteColor: string;
+  characterStyle: string;
+  signatureGear: string;
+  confirmedTraits: string[];
+  portraitMode: "buddy" | "self";
+  parentMoment: string;
   consent: boolean;
   selections: Record<string, string[]>;
 };

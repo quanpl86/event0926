@@ -27,16 +27,24 @@ export async function saveJourney(answers: JourneyAnswers, steps: JourneyStep[])
   }));
   if (answers.projectName) interactions.push({ profile_id: profileId, step_id: "project", response: { selected: [answers.projectName] } });
 
-  await Promise.all([
+  const writes = await Promise.all([
     interactions.length ? supabase.from("interaction_history").insert(interactions) : Promise.resolve(),
     tags.length ? supabase.from("student_tags").insert(tags.map(tag => ({ profile_id: profileId, tag_type: "discovery", tag }))) : Promise.resolve(),
     supabase.from("pathway_recommendations").insert({
       profile_id: profileId,
       archetype: result.archetype,
-      pathway_id: result.pathway.title,
+      pathway_id: result.directions.featured,
       rationale: { interests: result.interestLabels, strengths: result.strengthLabels },
       generated_prompt: createPrompt(answers)
+    }),
+    supabase.from("discovery_results").insert({
+      profile_id: profileId,
+      payload: result.structuredData,
+      character_brief: result.characterBrief,
+      website_prompt: createPrompt(answers)
     })
   ]);
+  const failed = writes.find(result => result && "error" in result && result.error);
+  if (failed && "error" in failed && failed.error) return { cloud: false, reason: failed.error.message };
   return { cloud: true, profileId };
 }
