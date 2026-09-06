@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page: #f8faf9;
+  --surface: #ffffff;
+  --surface-soft: #f3f8f5;
+  --ink: #111827;
+  --muted: #667085;
+  --line: #e5ebe7;
+  --green: #18af99;
+  --green-dark: #08776d;
+  --green-soft: #eaf9f5;
+  --yellow: #ffcf4a;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-height: 100vh; background: var(--page); color: var(--ink); font-family: "Be Vietnam Pro", Arial, sans-serif; }
+button, input, select, textarea { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+
+::selection { background: #afeede; color: #064b45; }
+
+.page-haze {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--page);
+  background-image:
+    radial-gradient(circle at 8% 18%, rgba(66, 203, 179, .14), transparent 24%),
+    radial-gradient(circle at 92% 12%, rgba(66, 203, 179, .12), transparent 26%);
+  z-index: -1;
+}
+
+.focus-ring:focus-visible { outline: 3px solid rgba(24, 175, 153, .28); outline-offset: 3px; }
+
+.choice-card { transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, background 160ms ease; }
+.choice-card:hover { transform: translateY(-2px); border-color: #87dea8; box-shadow: 0 9px 24px rgba(15, 36, 28, .07); }
+.choice-card[data-selected="true"] { border-color: var(--green); background: var(--green-soft); box-shadow: 0 0 0 3px rgba(24, 175, 153, .10); }
+
+.buddy-float { animation: buddyFloat 3.4s ease-in-out infinite; }
+.success-pop { animation: successPop .46s cubic-bezier(.2,.8,.2,1) both; }
+.fade-up { animation: fadeUp .32s ease-out both; }
+
+@keyframes buddyFloat { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-6px) rotate(2deg); } }
+@keyframes successPop { from { opacity:0; transform:scale(.93); } to { opacity:1; transform:scale(1); } }
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

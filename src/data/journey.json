@@ -1,0 +1,146 @@
+[
+  {
+    "id": "identity",
+    "phase": "Bắt đầu",
+    "title": "Future Buddy nên gọi con là gì?",
+    "description": "Chọn tên và nhóm lớp để hành trình phù hợp với con.",
+    "type": "identity",
+    "minutes": 5,
+    "buddy": "Hồ sơ này là của riêng con. Mình bắt đầu bằng một cái tên thật ngầu nhé!"
+  },
+  {
+    "id": "interest",
+    "phase": "Sở thích",
+    "title": "Nếu được tạo một điều mới, con muốn tạo gì?",
+    "description": "Con có thể chọn nhiều thế giới khiến mình tò mò.",
+    "type": "multi",
+    "minutes": 6,
+    "buddy": "Có rất nhiều cánh cửa! Con cứ chọn những gì làm con thấy háo hức.",
+    "options": [
+      { "id": "game", "title": "Game", "description": "Tạo thế giới và nhân vật", "icon": "Gamepad2", "tags": ["game", "storytelling"] },
+      { "id": "robot", "title": "Robot", "description": "Làm máy móc thông minh", "icon": "Bot", "tags": ["robotics", "engineering"] },
+      { "id": "design", "title": "Thiết kế", "description": "Tạo hình ảnh và câu chuyện", "icon": "Palette", "tags": ["design", "creativity"] },
+      { "id": "digital-world", "title": "Thế giới số", "description": "Kết nối và xây điều mới", "icon": "Globe2", "tags": ["digital", "community"] }
+    ]
+  },
+  {
+    "id": "strength",
+    "phase": "Sở thích",
+    "title": "Con muốn mang gì trong balo khám phá?",
+    "description": "Chọn 2–3 món giống con nhất.",
+    "type": "bag",
+    "minutes": 6,
+    "buddy": "Balo của mỗi nhà sáng tạo đều khác nhau. Món nào giống con nhất?",
+    "options": [
+      { "id": "creative", "title": "Sáng tạo", "description": "Nghĩ ra điều mới", "icon": "Sparkles", "tags": ["creativity"] },
+      { "id": "experiment", "title": "Thử nghiệm", "description": "Làm thử và chỉnh lại", "icon": "Wrench", "tags": ["experimentation"] },
+      { "id": "solve", "title": "Giải quyết vấn đề", "description": "Tìm ra cách giải", "icon": "Puzzle", "tags": ["problem-solving"] },
+      { "id": "team", "title": "Đồng đội", "description": "Cùng nhau hoàn thành", "icon": "Users", "tags": ["collaboration"] }
+    ]
+  },
+  {
+    "id": "creation-style",
+    "phase": "Cách con tạo",
+    "title": "Khi có ý tưởng mới, con bắt đầu thế nào?",
+    "description": "Cách nào cũng có điểm hay. Hãy chọn cách gần với con nhất.",
+    "type": "single",
+    "minutes": 6,
+    "buddy": "Có bạn vẽ trước, có bạn làm thử ngay. Cách của con là gì?",
+    "options": [
+      { "id": "sketch", "title": "Vẽ ra giấy", "description": "Nhìn thấy ý tưởng trước", "icon": "Pencil", "tags": ["visual"] },
+      { "id": "make", "title": "Làm thử ngay", "description": "Học bằng cách chạm và làm", "icon": "Blocks", "tags": ["hands-on"] },
+      { "id": "research", "title": "Tìm hiểu", "description": "Xem người khác đã làm gì", "icon": "Search", "tags": ["research"] },
+      { "id": "talk", "title": "Kể cho ai đó", "description": "Trao đổi để ý tưởng rõ hơn", "icon": "MessagesSquare", "tags": ["communication"] }
+    ]
+  },
+  {
+    "id": "problem-strategy",
+    "phase": "Cách con tạo",
+    "title": "Robot của con bỗng không chạy…",
+    "description": "Con sẽ thử điều gì trước tiên?",
+    "type": "scenario",
+    "minutes": 7,
+    "buddy": "Không sao đâu, nhà sáng tạo nào cũng gặp lúc sản phẩm chưa hoạt động!",
+    "options": [
+      { "id": "inspect", "title": "Kiểm tra từng phần", "description": "Xem dây, pin và bánh xe", "icon": "ScanSearch", "tags": ["analysis"] },
+      { "id": "retry", "title": "Thử cách khác", "description": "Đổi một chi tiết rồi thử lại", "icon": "RefreshCw", "tags": ["persistence"] },
+      { "id": "ask", "title": "Hỏi đồng đội", "description": "Cùng nhau tìm nguyên nhân", "icon": "UserRoundPlus", "tags": ["collaboration"] },
+      { "id": "guide", "title": "Tìm hướng dẫn", "description": "Xem gợi ý từ người đi trước", "icon": "BookOpen", "tags": ["self-learning"] }
+    ]
+  },
+  {
+    "id": "impact",
+    "phase": "Cách con tạo",
+    "title": "Dự án tuyệt vời nhất sẽ giúp ai?",
+    "description": "Chọn một câu chuyện mà con muốn góp sức.",
+    "type": "single",
+    "minutes": 7,
+    "buddy": "Công nghệ trở nên kỳ diệu nhất khi nó giúp một ai đó!",
+    "options": [
+      { "id": "family", "title": "Gia đình", "description": "Giúp việc hằng ngày dễ hơn", "icon": "House", "tags": ["family"] },
+      { "id": "school", "title": "Trường học", "description": "Học và chơi vui hơn", "icon": "School", "tags": ["education"] },
+      { "id": "earth", "title": "Trái đất", "description": "Bảo vệ môi trường", "icon": "Sprout", "tags": ["environment"] },
+      { "id": "community", "title": "Cộng đồng", "description": "Kết nối và chia sẻ", "icon": "HeartHandshake", "tags": ["community"] }
+    ]
+  },
+  {
+    "id": "project",
+    "phase": "Dự án tương lai",
+    "title": "Lắp ráp dự án tương lai của con",
+    "description": "Đặt tên cho ý tưởng đang thành hình.",
+    "type": "project",
+    "minutes": 9,
+    "buddy": "Mình thấy một ý tưởng rất hay rồi. Con hãy đặt cho nó một cái tên!"
+  },
+  {
+    "id": "handoff",
+    "phase": "Ba mẹ đồng hành",
+    "title": "Đến lượt ba mẹ đồng hành",
+    "description": "Con kể về dự án vừa tạo. Ba mẹ sẽ bổ sung những điều mình thường quan sát thấy.",
+    "type": "handoff",
+    "minutes": 2,
+    "buddy": "Con làm tuyệt lắm! Giờ mình mời ba mẹ cùng mở mảnh ghép tiếp theo nhé."
+  },
+  {
+    "id": "parent",
+    "phase": "Ba mẹ đồng hành",
+    "title": "Ba mẹ thường thấy con…",
+    "description": "Chọn tối đa 3 điều xuất hiện thường xuyên trong cuộc sống hằng ngày.",
+    "type": "parent",
+    "minutes": 5,
+    "buddy": "Không cần biết công nghệ — chỉ cần chia sẻ điều ba mẹ hiểu về con.",
+    "options": [
+      { "id": "curious", "title": "Hay đặt câu hỏi", "description": "Muốn hiểu vì sao", "icon": "CircleHelp", "tags": ["curiosity"] },
+      { "id": "persistent", "title": "Kiên trì", "description": "Tiếp tục khi chưa thành công", "icon": "Mountain", "tags": ["persistence"] },
+      { "id": "ideas", "title": "Nhiều ý tưởng", "description": "Hay nghĩ ra cách mới", "icon": "Lightbulb", "tags": ["creativity"] },
+      { "id": "share", "title": "Thích chia sẻ", "description": "Kể và giải thích cho người khác", "icon": "MessageCircleMore", "tags": ["communication"] }
+    ]
+  },
+  {
+    "id": "profile",
+    "phase": "Creator Profile",
+    "title": "Hồ sơ nhà sáng tạo của con",
+    "description": "Một chân dung tích cực được tạo từ điều con chọn và điều ba mẹ quan sát.",
+    "type": "profile",
+    "minutes": 3,
+    "buddy": "Tada! Đây là chân dung nhà sáng tạo đang lớn lên từng ngày của con."
+  },
+  {
+    "id": "pathway",
+    "phase": "Creator Profile",
+    "title": "Con có thể bắt đầu từ đâu?",
+    "description": "Ba dự án nhỏ và lộ trình mở để con tiếp tục khám phá.",
+    "type": "pathway",
+    "minutes": 2,
+    "buddy": "Không có một con đường duy nhất. Mình chọn bước đầu tiên khiến con hào hứng nhất nhé!"
+  },
+  {
+    "id": "showcase",
+    "phase": "Creator Profile",
+    "title": "Website tương lai của con",
+    "description": "Một nơi để lưu dự án, kể câu chuyện và theo dõi hành trình học tập.",
+    "type": "showcase",
+    "minutes": 2,
+    "buddy": "Hành trình hôm nay kết thúc, nhưng thế giới sáng tạo của con mới chỉ bắt đầu!"
+  }
+]
