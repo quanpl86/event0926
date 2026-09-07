@@ -2,174 +2,174 @@
   {
     "id": "identity",
     "phase": "Bắt đầu",
-    "title": "Future Buddy nên gọi con là gì?",
-    "description": "Chọn tên và nhóm lớp để hành trình phù hợp với con.",
+    "title": "Kitten Bot nên gọi {you} là gì?",
+    "description": "Cho mình biết tên {you} muốn dùng và nhóm lớp đang học, để hành trình vừa với {you}.",
     "type": "identity",
     "minutes": 1,
-    "buddy": "Hồ sơ này là của riêng con. Mình bắt đầu bằng một cái tên thật ngầu nhé!"
+    "buddy": "Xin chào, mình là Kitten Bot! Mình cần tên và lớp để đồng hành cho đúng với {you}."
   },
   {
     "id": "interest",
     "phase": "Sở thích",
-    "title": "Nếu được tạo một điều mới, con muốn tạo gì?",
-    "description": "Con có thể chọn nhiều thế giới khiến mình tò mò.",
+    "title": "Nếu được tự làm một thứ mới, {you} muốn làm gì nhất?",
+    "description": "Chọn những thế giới {you} đang tò mò. Có thể chọn một hoặc nhiều, không có đáp án đúng sai.",
     "type": "multi",
     "minutes": 2,
-    "buddy": "Có rất nhiều cánh cửa! Con cứ chọn những gì làm con thấy háo hức.",
+    "buddy": "Nhiều thứ hay lắm. {You} cứ chọn thứ làm mình thấy háo hức nha.",
     "options": [
-      { "id": "game", "title": "Game", "description": "Tạo thế giới và nhân vật", "icon": "Gamepad2", "tags": ["game", "storytelling"] },
-      { "id": "robot", "title": "Robot", "description": "Làm máy móc thông minh", "icon": "Bot", "tags": ["robotics", "engineering"] },
-      { "id": "design", "title": "Thiết kế", "description": "Tạo hình ảnh và câu chuyện", "icon": "Palette", "tags": ["design", "creativity"] },
-      { "id": "digital-world", "title": "Thế giới số", "description": "Kết nối và xây điều mới", "icon": "Globe2", "tags": ["digital", "community"] }
+      { "id": "game", "title": "Game", "description": "Tạo nhân vật, màn chơi và luật chơi", "icon": "Gamepad2", "tags": ["game", "storytelling"] },
+      { "id": "robot", "title": "Robot", "description": "Lắp máy móc biết cử động và giúp việc", "icon": "Bot", "tags": ["robotics", "engineering"] },
+      { "id": "design", "title": "Thiết kế", "description": "Vẽ hình, nhân vật và câu chuyện", "icon": "Palette", "tags": ["design", "creativity"] },
+      { "id": "digital-world", "title": "Thế giới số", "description": "Xây một thế giới trên máy tính", "icon": "Globe2", "tags": ["digital", "community"] }
     ]
   },
   {
     "id": "strength",
     "phase": "Sở thích",
-    "title": "Con muốn mang gì trong balo khám phá?",
-    "description": "Chọn 2–3 món giống con nhất.",
+    "title": "Khi {you} làm một thứ mới, {you} thường làm theo cách nào?",
+    "description": "Đây là cách {you} hay bắt đầu và làm tiếp khi khám phá. Chọn 2–3 điều thấy đúng với mình.",
     "type": "bag",
     "minutes": 1,
-    "buddy": "Balo của mỗi nhà sáng tạo đều khác nhau. Món nào giống con nhất?",
+    "buddy": "Không phải chọn nghề, cũng không có đáp án đúng sai. Cứ chọn cách {you} hay làm khi khám phá nha.",
     "options": [
-      { "id": "creative", "title": "Sáng tạo", "description": "Nghĩ ra điều mới", "icon": "Sparkles", "tags": ["creativity"] },
-      { "id": "experiment", "title": "Thử nghiệm", "description": "Làm thử và chỉnh lại", "icon": "Wrench", "tags": ["experimentation"] },
-      { "id": "solve", "title": "Giải quyết vấn đề", "description": "Tìm ra cách giải", "icon": "Puzzle", "tags": ["problem-solving"] },
-      { "id": "team", "title": "Đồng đội", "description": "Cùng nhau hoàn thành", "icon": "Users", "tags": ["collaboration"] }
+      { "id": "creative", "title": "Sáng tạo", "description": "Hay nghĩ ra ý tưởng mới", "icon": "Sparkles", "tags": ["creativity"] },
+      { "id": "experiment", "title": "Thích thử", "description": "Làm thử, chưa được thì làm lại", "icon": "Wrench", "tags": ["experimentation"] },
+      { "id": "solve", "title": "Gặp khó thì tìm cách", "description": "Không bỏ cuộc khi bị kẹt", "icon": "Puzzle", "tags": ["problem-solving"] },
+      { "id": "team", "title": "Thích làm cùng mọi người", "description": "Làm chung thì vui và xong hơn", "icon": "Users", "tags": ["collaboration"] }
     ]
   },
   {
     "id": "creation-style",
-    "phase": "Cách con tạo",
-    "title": "Khi có ý tưởng mới, con bắt đầu thế nào?",
-    "description": "Cách nào cũng có điểm hay. Hãy chọn cách gần với con nhất.",
+    "phase": "Cách {you} làm",
+    "title": "Khi vừa có một ý tưởng mới, {you} thường làm gì trước?",
+    "description": "Ai cũng có cách bắt đầu riêng. Chọn cách gần với {you} nhất.",
     "type": "single",
     "minutes": 1,
-    "buddy": "Có bạn vẽ trước, có bạn làm thử ngay. Cách của con là gì?",
+    "buddy": "Có người vẽ trước, có người làm thử ngay, có người hỏi bạn bè. {You} thì sao?",
     "options": [
-      { "id": "sketch", "title": "Vẽ ra giấy", "description": "Nhìn thấy ý tưởng trước", "icon": "Pencil", "tags": ["visual"] },
-      { "id": "make", "title": "Làm thử ngay", "description": "Học bằng cách chạm và làm", "icon": "Blocks", "tags": ["hands-on"] },
-      { "id": "research", "title": "Tìm hiểu", "description": "Xem người khác đã làm gì", "icon": "Search", "tags": ["research"] },
-      { "id": "talk", "title": "Kể cho ai đó", "description": "Trao đổi để ý tưởng rõ hơn", "icon": "MessagesSquare", "tags": ["communication"] }
+      { "id": "sketch", "title": "Vẽ ra giấy", "description": "Nhìn thấy ý tưởng trước khi làm", "icon": "Pencil", "tags": ["visual"] },
+      { "id": "make", "title": "Làm thử ngay", "description": "Cầm và thử luôn cho rõ", "icon": "Blocks", "tags": ["hands-on"] },
+      { "id": "research", "title": "Tìm hiểu trước", "description": "Xem người khác đã làm thế nào", "icon": "Search", "tags": ["research"] },
+      { "id": "talk", "title": "Kể cho ai đó", "description": "Nói ra để ý tưởng rõ hơn", "icon": "MessagesSquare", "tags": ["communication"] }
     ]
   },
   {
     "id": "problem-strategy",
-    "phase": "Cách con tạo",
-    "title": "Robot của con bỗng không chạy…",
-    "description": "Con sẽ thử điều gì trước tiên?",
+    "phase": "Cách {you} làm",
+    "title": "Úi, thứ {you} vừa làm chưa chạy…",
+    "description": "Khi gặp trục trặc như vậy, {you} thường làm gì trước?",
     "type": "scenario",
     "minutes": 2,
-    "buddy": "Không sao đâu, nhà sáng tạo nào cũng gặp lúc sản phẩm chưa hoạt động!",
+    "buddy": "Bình thường mà! Làm gì cũng có lúc trục trặc. {You} hay xử lý thế nào?",
     "options": [
-      { "id": "inspect", "title": "Kiểm tra từng phần", "description": "Xem dây, pin và bánh xe", "icon": "ScanSearch", "tags": ["analysis"] },
-      { "id": "retry", "title": "Thử cách khác", "description": "Đổi một chi tiết rồi thử lại", "icon": "RefreshCw", "tags": ["persistence"] },
-      { "id": "ask", "title": "Hỏi đồng đội", "description": "Cùng nhau tìm nguyên nhân", "icon": "UserRoundPlus", "tags": ["collaboration"] },
-      { "id": "guide", "title": "Tìm hướng dẫn", "description": "Xem gợi ý từ người đi trước", "icon": "BookOpen", "tags": ["self-learning"] }
+      { "id": "inspect", "title": "Kiểm tra từng phần", "description": "Xem lại từng chỗ có thể đang lỗi", "icon": "ScanSearch", "tags": ["analysis"] },
+      { "id": "retry", "title": "Thử cách khác", "description": "Đổi một chi tiết rồi làm lại", "icon": "RefreshCw", "tags": ["persistence"] },
+      { "id": "ask", "title": "Hỏi người đi cùng", "description": "Cùng nhau tìm ra chỗ đang kẹt", "icon": "UserRoundPlus", "tags": ["collaboration"] },
+      { "id": "guide", "title": "Tìm hướng dẫn", "description": "Xem gợi ý từ người đã làm rồi", "icon": "BookOpen", "tags": ["self-learning"] }
     ]
   },
   {
     "id": "impact",
-    "phase": "Cách con tạo",
-    "title": "Dự án tuyệt vời nhất sẽ giúp ai?",
-    "description": "Chọn một câu chuyện mà con muốn góp sức.",
+    "phase": "Cách {you} làm",
+    "title": "Dự án tương lai mà {you} tạo ra sẽ giúp ai?",
+    "description": "Chọn một người hoặc một nơi {you} muốn dự án này giúp ích.",
     "type": "single",
     "minutes": 1,
-    "buddy": "Công nghệ trở nên kỳ diệu nhất khi nó giúp một ai đó!",
+    "buddy": "Dự án của {you} sẽ ý nghĩa hơn khi giúp được ai đó.",
     "options": [
-      { "id": "family", "title": "Gia đình", "description": "Giúp việc hằng ngày dễ hơn", "icon": "House", "tags": ["family"] },
-      { "id": "school", "title": "Trường học", "description": "Học và chơi vui hơn", "icon": "School", "tags": ["education"] },
-      { "id": "earth", "title": "Trái đất", "description": "Bảo vệ môi trường", "icon": "Sprout", "tags": ["environment"] },
-      { "id": "community", "title": "Cộng đồng", "description": "Kết nối và chia sẻ", "icon": "HeartHandshake", "tags": ["community"] }
+      { "id": "family", "title": "Gia đình", "description": "Giúp việc ở nhà dễ hơn", "icon": "House", "tags": ["family"] },
+      { "id": "school", "title": "Trường học", "description": "Làm việc học và chơi ở trường vui hơn", "icon": "School", "tags": ["education"] },
+      { "id": "earth", "title": "Trái đất", "description": "Giúp chăm sóc môi trường", "icon": "Sprout", "tags": ["environment"] },
+      { "id": "community", "title": "Cộng đồng", "description": "Giúp mọi người kết nối với nhau", "icon": "HeartHandshake", "tags": ["community"] }
     ]
   },
   {
     "id": "project",
     "phase": "Dự án tương lai",
-    "title": "Lắp ráp dự án tương lai của con",
-    "description": "Đặt tên cho ý tưởng đang thành hình.",
+    "title": "Đặt tên cho dự án tương lai của {you}",
+    "description": "Gom những gì {you} vừa chọn thành một ý tưởng, rồi đặt một cái tên vui, dễ nhớ.",
     "type": "project",
     "minutes": 2,
-    "buddy": "Mình thấy một ý tưởng rất hay rồi. Con hãy đặt cho nó một cái tên!"
+    "buddy": "Mình thấy ý tưởng đang thành hình rồi. Đặt tên như một dự án thật nha!"
   },
   {
     "id": "handoff",
     "phase": "Ba mẹ đồng hành",
-    "title": "Đến lượt ba mẹ đồng hành",
-    "description": "Con kể về dự án vừa tạo. Ba mẹ sẽ bổ sung những điều mình thường quan sát thấy.",
+    "title": "Tới lượt ba mẹ cùng kể về {child}",
+    "description": "Mời {child} chia sẻ dự án vừa nghĩ. Ba mẹ hãy kể những điều thường thấy ở {child} hàng ngày.",
     "type": "handoff",
     "minutes": 1,
-    "buddy": "Con làm tuyệt lắm! Giờ mình mời ba mẹ cùng mở mảnh ghép tiếp theo nhé."
+    "buddy": "{Child} đã làm rất tốt! Giờ mời ba mẹ kể thêm để bức chân dung được đủ hơn."
   },
   {
     "id": "parent",
     "phase": "Ba mẹ đồng hành",
-    "title": "Ba mẹ thường thấy con…",
-    "description": "Chọn tối đa 3 điều xuất hiện thường xuyên trong cuộc sống hằng ngày.",
+    "title": "Trong đời thường, ba mẹ thường thấy {child} như thế nào?",
+    "description": "Chọn tối đa 3 điều ba mẹ hay bắt gặp ở nhà. Không cần rành công nghệ.",
     "type": "parent",
     "minutes": 1,
-    "buddy": "Không cần biết công nghệ — chỉ cần chia sẻ điều ba mẹ hiểu về con.",
+    "buddy": "Ba mẹ không cần rành máy móc. Cứ chọn điều mình thấy ở {child} là được.",
     "options": [
-      { "id": "curious", "title": "Hay đặt câu hỏi", "description": "Muốn hiểu vì sao", "icon": "CircleHelp", "tags": ["curiosity"] },
-      { "id": "persistent", "title": "Kiên trì", "description": "Tiếp tục khi chưa thành công", "icon": "Mountain", "tags": ["persistence"] },
+      { "id": "curious", "title": "Hay đặt câu hỏi", "description": "Thường muốn hiểu vì sao", "icon": "CircleHelp", "tags": ["curiosity"] },
+      { "id": "persistent", "title": "Kiên trì", "description": "Cứ làm tiếp khi chưa thành", "icon": "Mountain", "tags": ["persistence"] },
       { "id": "ideas", "title": "Nhiều ý tưởng", "description": "Hay nghĩ ra cách mới", "icon": "Lightbulb", "tags": ["creativity"] },
-      { "id": "share", "title": "Thích chia sẻ", "description": "Kể và giải thích cho người khác", "icon": "MessageCircleMore", "tags": ["communication"] }
+      { "id": "share", "title": "Thích chia sẻ", "description": "Hay kể và giải thích cho người khác", "icon": "MessageCircleMore", "tags": ["communication"] }
     ]
   },
   {
     "id": "parent-support",
     "phase": "Ba mẹ đồng hành",
-    "title": "Ba mẹ muốn đồng hành với con theo cách nào?",
-    "description": "Chọn tối đa 2 cách phù hợp với gia đình ở thời điểm này.",
+    "title": "Ba mẹ muốn đồng hành với {child} theo cách nào?",
+    "description": "Chọn tối đa 2 cách vừa với gia đình ở thời điểm này.",
     "type": "parent",
     "minutes": 1,
-    "buddy": "Ba mẹ không cần biết công nghệ. Một câu hỏi đúng lúc hay một lần cùng làm thử đã là sự đồng hành quý giá.",
+    "buddy": "Một câu hỏi đúng lúc, hoặc một lần cùng {child} làm thử, cũng đã rất quý.",
     "options": [
-      { "id": "encourage", "title": "Lắng nghe và khích lệ", "description": "Hỏi con điều gì làm con hào hứng", "icon": "Heart", "tags": ["family-support"] },
-      { "id": "together", "title": "Cùng con làm thử", "description": "Chia một dự án thành bước nhỏ", "icon": "Users", "tags": ["co-creation"] },
-      { "id": "space", "title": "Cho con tự khám phá", "description": "Để con thử, sai và thử lại", "icon": "Sprout", "tags": ["autonomy"] },
-      { "id": "connect", "title": "Tìm người hướng dẫn", "description": "Kết nối con với trải nghiệm phù hợp", "icon": "Compass", "tags": ["guidance"] }
+      { "id": "encourage", "title": "Lắng nghe và khích lệ", "description": "Hỏi {child} đang hào hứng điều gì", "icon": "Heart", "tags": ["family-support"] },
+      { "id": "together", "title": "Cùng {child} làm thử", "description": "Chia dự án thành bước nhỏ rồi làm cùng", "icon": "Users", "tags": ["co-creation"] },
+      { "id": "space", "title": "Cho {child} tự khám phá", "description": "Để {child} thử, sai rồi thử lại", "icon": "Sprout", "tags": ["autonomy"] },
+      { "id": "connect", "title": "Tìm người hướng dẫn", "description": "Kết nối {child} với trải nghiệm phù hợp", "icon": "Compass", "tags": ["guidance"] }
     ]
   },
   {
     "id": "family-mirror",
     "phase": "Ba mẹ đồng hành",
-    "title": "Cả nhà cùng ghép mảnh chân dung",
-    "description": "Ba mẹ kể một khoảnh khắc thật; con chọn bước nhỏ cả nhà muốn làm cùng nhau.",
+    "title": "Cả nhà cùng hoàn thiện chân dung của {child}",
+    "description": "Ba mẹ kể một khoảnh khắc thật về {child}. Rồi cả nhà chọn một việc nhỏ muốn làm cùng sau hôm nay.",
     "type": "family",
     "minutes": 1,
-    "buddy": "Một câu chuyện thật của ba mẹ sẽ giúp chân dung của con ấm áp và đúng với con hơn.",
+    "buddy": "Một câu chuyện thật sẽ làm chân dung của {child} ấm và đúng hơn.",
     "options": [
-      { "id": "try-project", "title": "Chọn một dự án nhỏ", "description": "Cùng bắt đầu trong tuần này", "icon": "Rocket", "tags": ["family-action"] },
-      { "id": "visit-class", "title": "Thử một buổi trải nghiệm", "description": "Quan sát xem con hứng thú điều gì", "icon": "School", "tags": ["family-action"] },
-      { "id": "talk-weekly", "title": "Có giờ kể chuyện mỗi tuần", "description": "Con chia sẻ điều đã thử và muốn thử tiếp", "icon": "MessagesSquare", "tags": ["family-action"] }
+      { "id": "try-project", "title": "Cùng làm một dự án nhỏ", "description": "Cả nhà bắt đầu trong tuần này", "icon": "Rocket", "tags": ["family-action"] },
+      { "id": "visit-class", "title": "Thử một buổi trải nghiệm", "description": "Xem {child} hứng thú điều gì", "icon": "School", "tags": ["family-action"] },
+      { "id": "talk-weekly", "title": "Có giờ kể chuyện mỗi tuần", "description": "Nghe {child} chia sẻ điều đã thử và muốn thử tiếp", "icon": "MessagesSquare", "tags": ["family-action"] }
     ]
   },
   {
     "id": "profile",
-    "phase": "Creator Profile",
-    "title": "Future Buddy hình dung chân dung của con là…",
-    "description": "Cả nhà đọc, xác nhận những nét đúng với con rồi cùng hoàn thiện nhân vật Future Me.",
+    "phase": "Chân dung",
+    "title": "Đây là chân dung nhà sáng tạo mà Kitten Bot thấy ở {you}",
+    "description": "Cả nhà đọc lại. {You} chọn những nét đúng với mình, ba mẹ nói chân dung có giống con không, rồi hoàn thiện nhân vật.",
     "type": "profile",
     "minutes": 3,
-    "buddy": "Tada! Đây là chân dung nhà sáng tạo đang lớn lên từng ngày của con."
+    "buddy": "Tada! Đây là {you}. {You} chọn nét đúng với mình, ba mẹ nói chân dung có giống con không nha."
   },
   {
     "id": "pathway",
-    "phase": "Creator Profile",
-    "title": "Con có thể tạo ra những gì?",
-    "description": "Project showcase, hướng khám phá và roadmap linh hoạt dành riêng cho con.",
+    "phase": "Chân dung",
+    "title": "Từ chân dung này, {you} có thể thử những gì?",
+    "description": "Kitten Bot gợi ý vài dự án gần với những gì cả nhà vừa kể. Cả nhà xem, nhớ một ý thích, rồi sang bước làm website.",
     "type": "pathway",
     "minutes": 2,
-    "buddy": "Không có một con đường duy nhất. Mình chọn bước đầu tiên khiến con hào hứng nhất nhé!"
+    "buddy": "Đây là gợi ý để thử, không phải danh sách phải làm hết. Cả nhà chọn một ý {you} thấy vui nhất nha."
   },
   {
     "id": "showcase",
-    "phase": "Creator Profile",
-    "title": "Tạo website Future Me của con",
-    "description": "Sao chép prompt đã chứa chân dung, mô tả nhân vật, project và roadmap để tiếp tục trong Google AI Studio.",
+    "phase": "Chân dung",
+    "title": "Tạo website Future Me của {you}",
+    "description": "Sao chép lời gợi ý bên dưới, rồi dán vào Google AI Studio để làm website của {you}.",
     "type": "showcase",
     "minutes": 17,
-    "buddy": "Hành trình hôm nay kết thúc, nhưng thế giới sáng tạo của con mới chỉ bắt đầu!"
+    "buddy": "Hôm nay tới đây thôi — nhưng câu chuyện của {you} mới bắt đầu."
   }
 ]

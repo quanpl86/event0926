@@ -8,7 +8,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Future Creator Journey",
-  description: "Khám phá điều con yêu thích và hành trình con có thể tạo ra.",
+  description: "Cả nhà cùng Kitten Bot khám phá điều con yêu thích và những thứ con có thể tạo ra.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
