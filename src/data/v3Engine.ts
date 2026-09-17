@@ -339,9 +339,20 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     displayName: answers.name?.trim() || 'Nhà Sáng Tạo',
     grade: gradeNum,
     educationLevel: level,
-    technologyDomain: branch?.domain || (isPrimary ? 'game_programming' : 'programming'),
+    technologyDomain: branch?.domain || answers.domain || (isPrimary ? 'game_programming' : 'programming'),
     specialization: branchKey,
     specializationLabel: branch?.label || branchKey,
+    futureProfile: {
+      role: answers.futureSelf || (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Lập trình vì môi trường'),
+      motto: isPrimary ? 'Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!' : 'Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.',
+      quote: answers.dreamPurpose ? `Dự án ${dreamName} sẽ ${answers.dreamPurpose}` : (isPrimary ? 'Chú robot Thủ Thư Nhí sẽ mang sách đến cho các bạn!' : 'Con muốn xây dựng một website giúp các bạn học sinh bảo vệ môi trường.'),
+      interests: answers.domain === 'robotics' ? 'Robot, sáng tạo' : answers.domain === 'game_programming' ? 'Lập trình, công nghệ' : answers.domain === 'multimedia' ? 'Thiết kế, đồ họa' : 'Khoa học, công nghệ',
+      style: (answers.confirmedTraits && answers.confirmedTraits.slice(0, 2).join(', ')) || (isPrimary ? 'Tò mò, kiên trì' : 'Chủ động, sáng tạo'),
+      dreamAudience: dreamAudience,
+      aboutMe: isPrimary
+        ? `Con thích lắp ráp, tìm hiểu cách các thiết bị hoạt động và luôn muốn tạo ra những sản phẩm có ích. Con đặc biệt thích ${answers.domain === 'robotics' ? 'robot' : answers.domain === 'game_programming' ? 'lập trình game' : answers.domain === 'multimedia' ? 'thiết kế sáng tạo' : 'khám phá công nghệ'} và muốn dùng công nghệ để giúp cuộc sống tốt đẹp hơn.`
+        : `Con thích tìm hiểu công nghệ, đặc biệt là ${answers.domain === 'robotics' ? 'robotics và vi điều khiển' : answers.domain === 'game_programming' ? 'lập trình và phát triển phần mềm' : answers.domain === 'multimedia' ? 'thiết kế đồ họa và trải nghiệm số' : 'công nghệ và đổi mới sáng tạo'}. Con muốn dùng kỹ năng của mình để tạo ra những giải pháp hữu ích cho cộng đồng.`
+    },
     dreamProject: {
       name: dreamName,
       audience: dreamAudience,
@@ -389,23 +400,46 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     ? 'Học sinh Tiểu học: Giao diện flat, hình lớn, chữ ngắn gọn, nhân vật Kitten Bot chibi vui nhộn (hoặc nhân vật con đã tải lên), ít menu phức tạp, bản đồ bốn chặng khám phá. Dùng ngôn ngữ ấm áp “con”, “mình”, “ba mẹ”.'
     : 'Học sinh THCS: Giao diện công nghệ hiện đại, rõ ràng, trực quan dạng thẻ dự án và dòng thời gian; thể hiện các nhiệm vụ, tiêu chí và tính năng cụ thể nhưng tự nhiên, không cứng nhắc như báo cáo máy. Dùng “bạn”.';
 
-  const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và lập trình web sáng tạo. Hãy tạo một website một trang (single-page website) sống động, có thể chạy được cho học sinh từ hồ sơ JSON bên dưới.
+  const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và lập trình web sáng tạo hàng đầu. Hãy tạo một website một trang duy nhất (Single-File HTML: index.html) hoàn chỉnh, đẹp mắt, có thể mở trực tiếp bằng trình duyệt từ hồ sơ JSON bên dưới.
 
-YÊU CẦU CỐT LÕI:
-1. Hiển thị hoàn toàn bằng tiếng Việt tự nhiên, truyền cảm hứng và tôn trọng sự tự chủ của học sinh.
-2. Trưng bày ĐÚNG 4 DỰ ÁN được cá nhân hóa ở dưới, trong đó Dự Án 4 là Dự Án Mơ Ước ("${dreamName}") của con với bản MVP v1 và kế hoạch mở rộng v2.
-3. Không suy diễn điểm số hay vẽ biểu đồ năng lực giả định.
-4. Nếu gia đình chưa chốt giờ học, hiển thị "Lộ trình linh hoạt theo chặng", không dựng timeline 16 tuần giả.
-5. Tuyệt đối không chứa họ tên thật, số điện thoại, email hay ảnh đời tư.
-6. Có các nút đánh dấu hoàn thành nhiệm vụ và ghi chú tiến độ được lưu vào localStorage của trình duyệt gia đình.
-7. Hình đại diện: ${answers.avatarSource === 'custom' ? 'Sử dụng ảnh nhân vật do học sinh cung cấp làm hình đại diện chính của website (giữ nguyên thiết kế nhân vật).' : 'Sử dụng hình linh vật Kitten Bot làm bạn đồng hành.'}`;
+YÊU CẦU KỸ THUẬT BẮT BUỘC:
+1. ĐẦU RA LÀ 1 TỆP HTML DUY NHẤT: Chứa toàn bộ mã HTML, CSS và JavaScript bên trong một khối mã duy nhất (không tách rời file).
+2. THƯ VIỆN & PHÔNG CHỮ:
+   - Nhúng Tailwind CSS CDN: <script src="https://cdn.tailwindcss.com"></script>
+   - Nhúng Google Font 'Plus Jakarta Sans': <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+   - Nhúng Lucide Icons CDN: <script src="https://unpkg.com/lucide@latest"></script> (gọi lucide.createIcons() sau khi tải trang).
+3. THIẾT KẾ FLAT PASTEL CAO CẤP:
+   - Tông màu TEKY chủ đạo (#1a8a7d, nền gradient pastel nhẹ nhàng #eff8f6 sang #f5f9fe).
+   - Thẻ bo tròn góc lớn (rounded-3xl, rounded-2xl), viền mảnh (#c8e6df), bóng đổ dịu mắt.
+   - Đáp ứng hoàn hảo cả trên điện thoại (Mobile Responsive) và máy tính.
 
-  const fullPrompt = `# TẠO WEBSITE FUTURE ME TỪ HỒ SƠ ĐÃ DUYỆT
+CẤU TRÚC GIAO DIỆN 4 KHỐI CHÍNH:
+1. KHỐI 1 — HỒ SƠ TƯƠNG LAI CỦA CON (Future Profile Card):
+   - Tái hiện đúng bố cục thẻ Profile: Banner minh họa lớn, huy hiệu cấp học, tên học sinh, vai trò tương lai (futureProfile.role).
+   - 4 thẻ thuộc tính nổi bật: Khối lớp, Sở thích, Phong cách, Ước mơ.
+   - Khung "Về mình" với đoạn văn giới thiệu truyền cảm hứng.
+   - Trích dẫn châm ngôn (motto) của con được đóng khung trang nhã.
+2. KHỐI 2 — BẢN ĐỒ 4 CHẶNG & LỘ TRÌNH THỰC HIỆN (Interactive 4-Stage Roadmap):
+   - Thanh tiến trình 4 chặng kết nối: Chặng 1 -> Chặng 2 -> Chặng 3 -> Chặng 4 (Dự án Mơ ước).
+   - Mỗi chặng hiển thị: Tên chặng, mục tiêu, sản phẩm bàn giao và danh sách checkbox các nhiệm vụ (tasks).
+   - TÍNH NĂNG TƯƠNG TÁC: Người dùng có thể tích chọn vào các checkbox nhiệm vụ; thanh % tiến độ tự động tăng/giảm và lưu trạng thái vào localStorage trình duyệt.
+3. KHỐI 3 — SHOWCASE DỰ ÁN MƠ ƯỚC ("${dreamName}"):
+   - Trưng bày chi tiết ý tưởng lớn: Vấn đề con giải quyết, đối tượng thụ hưởng ("${dreamAudience}"), các tính năng chính.
+   - Phân định rõ 2 giai đoạn: Phiên bản thử nghiệm V1 (MVP) và Lộ trình mở rộng V2.
+4. KHỐI 4 — GÓC ĐỒNG HÀNH CỦA GIA ĐÌNH:
+   - Ghi nhận thời gian biểu linh hoạt (${answers.hoursPerWeek ? `${answers.hoursPerWeek} giờ/tuần` : "Linh hoạt theo chặng"}), các nguồn lực và phương thức hỗ trợ của ba mẹ.
+   - Footer trang nhã: "Hồ sơ sáng tạo tương lai — Bản quyền thuộc về ${answers.name || "con"}".
+
+NGUYÊN TẮC BẢO MẬT & TRẢI NGHIỆM:
+- Tuyệt đối không suy diễn điểm số hay vẽ biểu đồ chấm điểm.
+- Giữ sạch sẽ thông tin cá nhân, dùng ngôn ngữ ấm áp, khích lệ.`;
+
+  const fullPrompt = `# TẠO WEBSITE PORTFOLIO FUTURE ME & LỘ TRÌNH TƯƠNG LAI
 ${intro}
 
 ${instructions}
 
-HỒ SƠ ĐÃ LOẠI BỎ THÔNG TIN NHẠY CẢM VÀ ĐƯỢC GIA ĐÌNH XÁC NHẬN:
+HỒ SƠ ĐÃ DUYỆT ĐỂ DỰNG WEBSITE (JSON):
 ${JSON.stringify(safePayload, null, 2)}
 `;
 
