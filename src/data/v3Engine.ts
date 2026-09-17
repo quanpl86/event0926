@@ -343,9 +343,31 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     specialization: branchKey,
     specializationLabel: branch?.label || branchKey,
     futureProfile: {
-      role: answers.futureSelf || (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Lập trình vì môi trường'),
-      motto: isPrimary ? 'Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!' : 'Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.',
-      quote: answers.dreamPurpose ? `Dự án ${dreamName} sẽ ${answers.dreamPurpose}` : (isPrimary ? 'Chú robot Thủ Thư Nhí sẽ mang sách đến cho các bạn!' : 'Con muốn xây dựng một website giúp các bạn học sinh bảo vệ môi trường.'),
+      role: answers.futureSelf || (
+        answers.domain === 'multimedia'
+          ? (isPrimary ? 'Nhà sáng tạo nội dung số nhí' : 'Nhà thiết kế trải nghiệm số')
+          : answers.domain === 'game_programming'
+          ? (isPrimary ? 'Nhà sáng tạo game nhí' : 'Kỹ sư lập trình phần mềm')
+          : (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Kỹ sư Robotics & Tự động hóa')
+      ),
+      motto: answers.domain === 'multimedia'
+        ? (isPrimary
+            ? 'Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!'
+            : 'Thiết kế không chỉ là hình thức, mà là cách chúng ta lan tỏa giá trị sống.')
+        : answers.domain === 'game_programming'
+        ? (isPrimary
+            ? 'Chơi game thật vui, nhưng tự tay làm ra game còn tuyệt vời hơn!'
+            : 'Lập trình là công cụ biến mọi ý tưởng tưởng chừng không thể thành hiện thực.')
+        : (isPrimary
+            ? 'Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!'
+            : 'Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.'),
+      quote: answers.dreamPurpose
+        ? `Dự án ${dreamName} sẽ ${answers.dreamPurpose}`
+        : answers.domain === 'multimedia'
+        ? (isPrimary ? 'Con muốn tạo nên những câu chuyện và hình ảnh số tuyệt đẹp!' : 'Thiết kế và sáng tạo số giúp kết nối con người với những điều ý nghĩa.')
+        : answers.domain === 'game_programming'
+        ? (isPrimary ? 'Con muốn tạo ra những trò chơi thông minh, bổ ích cho bạn bè!' : 'Phần mềm và lập trình là chìa khóa mở ra những giải pháp tương lai.')
+        : (isPrimary ? 'Chú robot Thủ Thư Nhí sẽ mang sách đến cho các bạn!' : 'Robot và tự động hóa sẽ giúp cuộc sống tiện lợi hơn mỗi ngày.'),
       interests: answers.domain === 'robotics' ? 'Robot, sáng tạo' : answers.domain === 'game_programming' ? 'Lập trình, công nghệ' : answers.domain === 'multimedia' ? 'Thiết kế, đồ họa' : 'Khoa học, công nghệ',
       style: (answers.confirmedTraits && answers.confirmedTraits.slice(0, 2).join(', ')) || (isPrimary ? 'Tò mò, kiên trì' : 'Chủ động, sáng tạo'),
       dreamAudience: dreamAudience,

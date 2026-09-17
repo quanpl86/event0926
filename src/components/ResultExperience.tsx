@@ -715,7 +715,11 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
                         {activeAnswers.name || (isPrimary ? "Bé" : "Học sinh")}
                       </h3>
                       <p className="text-xs font-bold text-[#1a8a7d]">
-                        {isPrimary ? "🌱 Nhà sáng tạo robot nhí" : "🍃 Lập trình vì môi trường"}
+                        {activeAnswers.domain === "multimedia"
+                          ? (isPrimary ? "🎨 Nhà sáng tạo nội dung số nhí" : "🎨 Nhà thiết kế trải nghiệm số")
+                          : activeAnswers.domain === "game_programming"
+                          ? (isPrimary ? "🎮 Nhà sáng tạo game nhí" : "💻 Kỹ sư lập trình phần mềm")
+                          : (isPrimary ? "🌱 Nhà sáng tạo robot nhí" : "🤖 Kỹ sư Robotics & Tự động hóa")}
                       </p>
                     </div>
                     <span className="rounded-xl bg-[#e0f5ef] text-[#1a8a7d] px-2.5 py-1 text-xs font-extrabold">
@@ -724,7 +728,17 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
                   </div>
 
                   <p className="text-[11px] text-slate-500 italic line-clamp-2">
-                    &ldquo;{isPrimary ? "Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!" : "Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn."}&rdquo;
+                    &ldquo;{activeAnswers.domain === "multimedia"
+                      ? (isPrimary
+                          ? "Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!"
+                          : "Thiết kế không chỉ là hình thức, mà là cách chúng ta lan tỏa giá trị sống.")
+                      : activeAnswers.domain === "game_programming"
+                      ? (isPrimary
+                          ? "Chơi game thật vui, nhưng tự tay làm ra game còn tuyệt vời hơn!"
+                          : "Lập trình là công cụ biến mọi ý tưởng tưởng chừng không thể thành hiện thực.")
+                      : (isPrimary
+                          ? "Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!"
+                          : "Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.")}&rdquo;
                   </p>
 
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-[#1a8a7d]">

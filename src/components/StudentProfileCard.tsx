@@ -43,18 +43,31 @@ export function StudentProfileCard({
   const displayGrade = answers.grade || (isPrimary ? "4" : "7");
 
   // Role
-  const displayRole =
-    answers.futureSelf ||
-    (isPrimary ? "Nhà sáng tạo robot nhí" : "Lập trình vì môi trường");
-  const roleIcon = isPrimary ? "🌱" : "🍃";
+  const defaultRole = answers.domain === "multimedia"
+    ? (isPrimary ? "Nhà sáng tạo nội dung số nhí" : "Nhà thiết kế trải nghiệm số")
+    : answers.domain === "game_programming"
+    ? (isPrimary ? "Nhà sáng tạo game nhí" : "Kỹ sư lập trình phần mềm")
+    : (isPrimary ? "Nhà sáng tạo robot nhí" : "Kỹ sư Robotics & Tự động hóa");
+
+  const displayRole = answers.futureSelf?.trim() || defaultRole;
+
+  const roleIcon = answers.domain === "multimedia"
+    ? "🎨"
+    : answers.domain === "game_programming"
+    ? "🎮"
+    : (isPrimary ? "🌱" : "🤖");
 
   // Quote
+  const defaultQuote = answers.domain === "multimedia"
+    ? (isPrimary ? "Con muốn tạo nên những câu chuyện và hình ảnh số tuyệt đẹp!" : "Thiết kế và sáng tạo số giúp kết nối con người với những điều ý nghĩa.")
+    : answers.domain === "game_programming"
+    ? (isPrimary ? "Con muốn tạo ra những trò chơi thông minh, bổ ích cho bạn bè!" : "Phần mềm và lập trình là chìa khóa mở ra những giải pháp tương lai.")
+    : (isPrimary ? "Chú robot Thủ Thư Nhí sẽ mang sách đến cho các bạn!" : "Robot và tự động hóa sẽ giúp cuộc sống tiện lợi hơn mỗi ngày.");
+
   const displayQuote =
     answers.dreamPurpose
       ? `Dự án ${answers.projectName || "của con"} sẽ ${answers.dreamPurpose}`
-      : isPrimary
-      ? "Chú robot Thủ Thư Nhí sẽ mang sách đến cho các bạn!"
-      : "Con muốn xây dựng một website giúp các bạn học sinh bảo vệ môi trường.";
+      : defaultQuote;
 
   // Interests
   const displayInterest =
@@ -103,9 +116,17 @@ export function StudentProfileCard({
       }. Con muốn dùng kỹ năng của mình để tạo ra những giải pháp hữu ích cho cộng đồng.`;
 
   // Motto
-  const displayMotto = isPrimary
-    ? "Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!"
-    : "Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.";
+  const displayMotto = answers.domain === "multimedia"
+    ? (isPrimary
+        ? "Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!"
+        : "Thiết kế không chỉ là hình thức, mà là cách chúng ta lan tỏa giá trị sống.")
+    : answers.domain === "game_programming"
+    ? (isPrimary
+        ? "Chơi game thật vui, nhưng tự tay làm ra game còn tuyệt vời hơn!"
+        : "Lập trình là công cụ biến mọi ý tưởng tưởng chừng không thể thành hiện thực.")
+    : (isPrimary
+        ? "Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!"
+        : "Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.");
 
   // Banner image resolution
   const bannerSrc =

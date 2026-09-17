@@ -670,7 +670,17 @@ export function FutureJourney() {
                           key={dom.id}
                           onClick={() => {
                             const nextBranch = getDefaultBranchForDomain(Boolean(isPrimary), dom.id);
-                            setAnswers(a => ({ ...a, domain: dom.id, branch: nextBranch }));
+                            const nextRole = dom.id === 'multimedia'
+                              ? (isPrimary ? 'Nhà sáng tạo nội dung số nhí' : 'Nhà thiết kế trải nghiệm số')
+                              : dom.id === 'game_programming'
+                              ? (isPrimary ? 'Nhà sáng tạo game nhí' : 'Kỹ sư lập trình phần mềm')
+                              : (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Kỹ sư Robotics & Tự động hóa');
+                            setAnswers(a => ({
+                              ...a,
+                              domain: dom.id,
+                              branch: nextBranch,
+                              futureSelf: nextRole
+                            }));
                           }}
                           className={`group flex flex-col justify-between overflow-hidden rounded-3xl border text-left transition-all duration-200 ${
                             active
@@ -882,7 +892,17 @@ export function FutureJourney() {
                           key={d.id}
                           onClick={() => {
                             const nextBranch = getDefaultBranchForDomain(Boolean(isPrimary), d.id);
-                            setAnswers(a => ({ ...a, domain: d.id, branch: nextBranch }));
+                            const nextRole = d.id === 'multimedia'
+                              ? (isPrimary ? 'Nhà sáng tạo nội dung số nhí' : 'Nhà thiết kế trải nghiệm số')
+                              : d.id === 'game_programming'
+                              ? (isPrimary ? 'Nhà sáng tạo game nhí' : 'Kỹ sư lập trình phần mềm')
+                              : (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Kỹ sư Robotics & Tự động hóa');
+                            setAnswers(a => ({
+                              ...a,
+                              domain: d.id,
+                              branch: nextBranch,
+                              futureSelf: nextRole
+                            }));
                           }}
                           className={`group overflow-hidden rounded-2xl border text-left transition-all ${
                             active
