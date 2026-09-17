@@ -396,9 +396,50 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     }
   };
 
-  const intro = isPrimary
-    ? 'Học sinh Tiểu học: Giao diện flat, hình lớn, chữ ngắn gọn, nhân vật Kitten Bot chibi vui nhộn (hoặc nhân vật con đã tải lên), ít menu phức tạp, bản đồ bốn chặng khám phá. Dùng ngôn ngữ ấm áp “con”, “mình”, “ba mẹ”.'
-    : 'Học sinh THCS: Giao diện công nghệ hiện đại, rõ ràng, trực quan dạng thẻ dự án và dòng thời gian; thể hiện các nhiệm vụ, tiêu chí và tính năng cụ thể nhưng tự nhiên, không cứng nhắc như báo cáo máy. Dùng “bạn”.';
+  // ĐỊNH HƯỚNG PHONG CÁCH HÌNH ẢNH (VISUAL STYLING) THEO LĨNH VỰC & CẤP HỌC
+  const domainVisualConfig = answers.domain === 'robotics'
+    ? {
+        label: 'Robot & Điều khiển Tự Động',
+        primaryColor: '#1a8a7d',
+        gradientHero: 'from-[#1a8a7d] via-[#0d9488] to-[#0f766e]',
+        accentTag: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+        motifNote: 'Hệ biểu tượng kỹ thuật & cơ điện tử: Robot, Chip vi điều khiển, Cảm biến, Bánh răng cơ khí, Khay nâng thông minh.'
+      }
+    : answers.domain === 'game_programming'
+    ? {
+        label: 'Lập Trình Game & Sáng Tạo Số',
+        primaryColor: '#4f46e5',
+        gradientHero: 'from-[#4338ca] via-[#4f46e5] to-[#6366f1]',
+        accentTag: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+        motifNote: 'Hệ biểu tượng game studio & logic: Gamepad tay cầm, Khối lệnh code, Màn chơi nhiệm vụ, Huy hiệu thành tựu.'
+      }
+    : answers.domain === 'multimedia'
+    ? {
+        label: 'Thiết Kế Đồ Họa & Trải Nghiệm Số',
+        primaryColor: '#e11d48',
+        gradientHero: 'from-[#be123c] via-[#e11d48] to-[#f43f5e]',
+        accentTag: 'bg-rose-100 text-rose-800 border-rose-200',
+        motifNote: 'Hệ biểu tượng nghệ thuật số & đồ họa: Bảng màu palette, Khung vẽ layout, Camera ống kính, Tương tác thẩm mỹ trực quan.'
+      }
+    : {
+        label: 'Khoa Học & Đổi Mới Công Nghệ',
+        primaryColor: '#0284c7',
+        gradientHero: 'from-[#0369a1] via-[#0284c7] to-[#0ea5e9]',
+        accentTag: 'bg-sky-100 text-sky-800 border-sky-200',
+        motifNote: 'Hệ biểu tượng công nghệ tương lai: Tên lửa khám phá, Quả cầu số, Mạng lưới kết nối, Đổi mới sáng tạo.'
+      };
+
+  const ageVisualConfig = isPrimary
+    ? {
+        styleTone: 'Tiểu học (Lớp 1-5): Vui tươi, ngộ nghĩnh, khích lệ. Bo góc cực đại (rounded-3xl), thẻ to bản, hình minh họa lớn, avatar linh vật Kitten Bot chibi làm bạn đồng hành. Đại từ nhân xưng: “con”, “mình”, “ba mẹ”.',
+        borderRadius: 'rounded-3xl',
+        fontSize: 'text-sm sm:text-base',
+      }
+    : {
+        styleTone: 'THCS (Lớp 6-9): Hiện đại, phong cách Tech Studio chuyên nghiệp, thanh lịch. Bo góc tiêu chuẩn (rounded-2xl), bố cục thẻ kỹ thuật sắc nét, phân cấp thông tin khoa học (Milestones, MVP, Deliverables). Đại từ nhân xưng: “bạn”.',
+        borderRadius: 'rounded-2xl',
+        fontSize: 'text-xs sm:text-sm',
+      };
 
   const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và lập trình web sáng tạo hàng đầu. Hãy tạo một website một trang duy nhất (Single-File HTML: index.html) hoàn chỉnh, đẹp mắt, có thể mở trực tiếp bằng trình duyệt từ hồ sơ JSON bên dưới.
 
@@ -408,23 +449,27 @@ YÊU CẦU KỸ THUẬT BẮT BUỘC:
    - Nhúng Tailwind CSS CDN: <script src="https://cdn.tailwindcss.com"></script>
    - Nhúng Google Font 'Plus Jakarta Sans': <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
    - Nhúng Lucide Icons CDN: <script src="https://unpkg.com/lucide@latest"></script> (gọi lucide.createIcons() sau khi tải trang).
-3. THIẾT KẾ FLAT PASTEL CAO CẤP:
-   - Tông màu TEKY chủ đạo (#1a8a7d, nền gradient pastel nhẹ nhàng #eff8f6 sang #f5f9fe).
-   - Thẻ bo tròn góc lớn (rounded-3xl, rounded-2xl), viền mảnh (#c8e6df), bóng đổ dịu mắt.
-   - Đáp ứng hoàn hảo cả trên điện thoại (Mobile Responsive) và máy tính.
+
+3. ĐỊNH HƯỚNG VISUAL RIÊNG BIỆT (CÁ NHÂN HÓA THEO ĐỘ TUỔI & LĨNH VỰC):
+   - ĐỘ TUỔI & PHONG CÁCH: ${ageVisualConfig.styleTone}
+   - LĨNH VỰC CHỦ ĐẠO: ${domainVisualConfig.label}
+   - BẢNG MÀU ĐẶC TRƯNG: Tông màu chủ đạo ${domainVisualConfig.primaryColor}, Hero gradient nền (${domainVisualConfig.gradientHero}), nhãn tag (${domainVisualConfig.accentTag}).
+   - HỆ ICON & MOTIF CHỦ ĐỀ: ${domainVisualConfig.motifNote}
+   - VAI TRÒ NGHỀ NGHIỆP: Nổi bật huy hiệu vai trò "${safePayload.futureProfile.role}" ở vị trí danh dự trên Hero Banner.
 
 CẤU TRÚC GIAO DIỆN 4 KHỐI CHÍNH:
 1. KHỐI 1 — HỒ SƠ TƯƠNG LAI CỦA CON (Future Profile Card):
-   - Tái hiện đúng bố cục thẻ Profile: Banner minh họa lớn, huy hiệu cấp học, tên học sinh, vai trò tương lai (futureProfile.role).
-   - 4 thẻ thuộc tính nổi bật: Khối lớp, Sở thích, Phong cách, Ước mơ.
-   - Khung "Về mình" với đoạn văn giới thiệu truyền cảm hứng.
-   - Trích dẫn châm ngôn (motto) của con được đóng khung trang nhã.
+   - Tái hiện đúng bố cục thẻ Profile: Hero Banner theo tông màu ${domainVisualConfig.label}, huy hiệu cấp học (${isPrimary ? 'Tiểu học' : 'THCS'}), tên học sinh, vai trò tương lai (${safePayload.futureProfile.role}).
+   - Khung Bạn Đồng Hành: ${answers.avatarSource === 'custom' ? 'Nhân vật tự vẽ của con' : 'Linh vật Kitten Bot Chibi với lời nhắn truyền lửa vui nhộn'}.
+   - 4 thẻ thuộc tính nổi bật: Khối lớp, Sở thích (${safePayload.futureProfile.interests}), Phong cách (${safePayload.futureProfile.style}), Ước mơ (${dreamName}).
+   - Khung "Về mình" (Tâm tư của ${answers.name || 'con'}): Đoạn văn giới thiệu truyền cảm hứng.
+   - Khung "Tầm nhìn dự án": Trích dẫn mục tiêu "${safePayload.futureProfile.quote}".
 2. KHỐI 2 — BẢN ĐỒ 4 CHẶNG & LỘ TRÌNH THỰC HIỆN (Interactive 4-Stage Roadmap):
    - Thanh tiến trình 4 chặng kết nối: Chặng 1 -> Chặng 2 -> Chặng 3 -> Chặng 4 (Dự án Mơ ước).
    - Mỗi chặng hiển thị: Tên chặng, mục tiêu, sản phẩm bàn giao và danh sách checkbox các nhiệm vụ (tasks).
-   - TÍNH NĂNG TƯƠNG TÁC: Người dùng có thể tích chọn vào các checkbox nhiệm vụ; thanh % tiến độ tự động tăng/giảm và lưu trạng thái vào localStorage trình duyệt.
+   - TÍNH NĂNG TƯƠNG TÁC: Checkbox tương tác thực tế; thanh % tiến độ tự động tính toán (kèm các nút tiện ích "Đánh dấu tất cả" / "Đặt lại") và lưu trạng thái vào localStorage trình duyệt.
 3. KHỐI 3 — SHOWCASE DỰ ÁN MƠ ƯỚC ("${dreamName}"):
-   - Trưng bày chi tiết ý tưởng lớn: Vấn đề con giải quyết, đối tượng thụ hưởng ("${dreamAudience}"), các tính năng chính.
+   - Trưng bày chi tiết ý tưởng lớn: Vấn đề con giải quyết ("${dreamPurpose}"), đối tượng thụ hưởng ("${dreamAudience}"), các tính năng chính.
    - Phân định rõ 2 giai đoạn: Phiên bản thử nghiệm V1 (MVP) và Lộ trình mở rộng V2.
 4. KHỐI 4 — GÓC ĐỒNG HÀNH CỦA GIA ĐÌNH:
    - Ghi nhận thời gian biểu linh hoạt (${answers.hoursPerWeek ? `${answers.hoursPerWeek} giờ/tuần` : "Linh hoạt theo chặng"}), các nguồn lực và phương thức hỗ trợ của ba mẹ.
@@ -435,7 +480,6 @@ NGUYÊN TẮC BẢO MẬT & TRẢI NGHIỆM:
 - Giữ sạch sẽ thông tin cá nhân, dùng ngôn ngữ ấm áp, khích lệ.`;
 
   const fullPrompt = `# TẠO WEBSITE PORTFOLIO FUTURE ME & LỘ TRÌNH TƯƠNG LAI
-${intro}
 
 ${instructions}
 
