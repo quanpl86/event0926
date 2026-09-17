@@ -523,7 +523,7 @@ CẤU TRÚC GIAO DIỆN 5 KHỐI ĐẶC TRƯNG CỦA FUTURE CAPABILITY PORTFOLIO
 
 3. KHỐI 3 — BỘ CÔNG CỤ & KỸ NĂNG MỤC TIÊU (Target Tech Stack & 4Cs Skills):
    - 3 Phân nhóm công cụ con sẽ làm chủ:
-     ${riasec.techStack.map(ts => `* ${ts.category}: ${ts.items.join(', ')}`).join('\n     ')}
+     ${riasec.techStack.map(ts => `* ${ts.category}: ${ts.items.map(i => typeof i === 'string' ? i : `${i.name} [${i.level}]`).join(', ')}`).join('\n     ')}
    - Kỹ năng thế kỷ 21 (4Cs): ${riasec.softSkills.join(', ')}.
 
 4. KHỐI 4 — BỘ 4 ĐỒ ÁN THỰC NGHIỆM PORTFOLIO & LỘ TRÌNH PHÁT TRIỂN (4-Stage Roadmap):
@@ -834,7 +834,12 @@ Proceed immediately using the fallback rules if references are absent.`;
  * 2. Lập trình & AI (Nhóm I)
  * 3. Multimedia (Nhóm A)
  */
-export type RIASECProfileData = {
+export interface TechStackToolItem {
+  name: string;
+  level: 'Tiểu học' | 'THCS' | 'Tiểu học & THCS';
+}
+
+export interface RIASECProfileData {
   primaryCode: 'R' | 'I' | 'A';
   primaryName: string;
   hollandFullName: string;
@@ -847,7 +852,7 @@ export type RIASECProfileData = {
   naturalTraits: string[];
   techStack: {
     category: string;
-    items: string[];
+    items: (string | TechStackToolItem)[];
   }[];
   softSkills: string[];
   triangulation: {
@@ -890,16 +895,34 @@ export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData
       ],
       techStack: [
         {
-          category: 'Mạch Vi Điều Khiển & Nhúng',
-          items: ['Arduino Uno/Nano', 'ESP32 IoT Mạch Kép', 'Micro:bit V2', 'Mạch điều khiển động cơ L298N', 'Module nguồn pin sạc']
+          category: 'Mạch Vi Điều Khiển & Nền Tảng Lập Trình',
+          items: [
+            { name: 'CodeKitten & Scratch Robotics', level: 'Tiểu học' },
+            { name: 'PictoBlox (Điều khiển Robot & AI Vision)', level: 'Tiểu học & THCS' },
+            { name: 'Micro:bit V2 & MakeCode Blocks', level: 'Tiểu học' },
+            { name: 'Arduino IDE & C++ Nhúng', level: 'THCS' },
+            { name: 'ESP32 IoT Mạch Kép & MicroPython', level: 'THCS' }
+          ]
         },
         {
-          category: 'Cảm Biến & Thiết Bị Đo',
-          items: ['Cảm biến Siêu âm (Ultrasonic)', 'Cảm biến Dò đường (IR Line)', 'Cảm biến Nhận diện Màu sắc', 'Cảm biến Nhiệt & Độ ẩm DHT11', 'LiDAR 2D quét vật cản']
+          category: 'Cảm Biến & Thiết Bị Đo Thông Minh',
+          items: [
+            { name: 'Cảm biến Siêu âm (Ultrasonic Distance)', level: 'Tiểu học' },
+            { name: 'Cảm biến Dò đường (IR Line Tracking)', level: 'Tiểu học' },
+            { name: 'Cảm biến Nhận diện Màu sắc & Ánh sáng', level: 'Tiểu học & THCS' },
+            { name: 'PictoBlox AI Camera (Nhận diện khuôn mặt/vật thể)', level: 'Tiểu học & THCS' },
+            { name: 'Cảm biến Nhiệt & Độ ẩm DHT11', level: 'THCS' },
+            { name: 'LiDAR 2D quét vật cản & Động cơ Servo/DC', level: 'THCS' }
+          ]
         },
         {
-          category: 'Lập Trình & Mô Phỏng Hệ Thống',
-          items: ['C++ nhúng trên Arduino IDE', 'Python (MicroPython)', 'Khối lệnh Block-based nâng cao', 'Mô phỏng Tinkercad Circuits']
+          category: 'Lắp Ráp Cơ Học & Mô Phỏng Hệ Thống',
+          items: [
+            { name: 'Khung cơ khí lắp ghép & Bánh xe tự hành', level: 'Tiểu học' },
+            { name: 'Mô phỏng 3D Tinkercad Circuits', level: 'Tiểu học & THCS' },
+            { name: 'Mạch công suất L298N & Nguồn pin sạc Li-ion', level: 'THCS' },
+            { name: 'Thiết kế sơ đồ mạch in PCB căn bản', level: 'THCS' }
+          ]
         }
       ],
       softSkills: [
@@ -942,15 +965,33 @@ export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData
       techStack: [
         {
           category: 'Ngôn Ngữ Lập Trình Cốt Lõi',
-          items: ['Python nâng cao', 'Scratch 3.0 chuyên sâu', 'C# căn bản', 'Logic JavaScript']
+          items: [
+            { name: 'CodeKitten (Kéo thả khối & Sáng tạo game nhí)', level: 'Tiểu học' },
+            { name: 'Scratch 3.0 (Tư duy thuật toán & Logic khối)', level: 'Tiểu học' },
+            { name: 'PictoBlox (Lập trình khối & Trí tuệ nhân tạo AI)', level: 'Tiểu học & THCS' },
+            { name: 'Python (Lập trình kịch bản & Giải thuật)', level: 'THCS' },
+            { name: 'C# / Lua Scripting (Logic nâng cao)', level: 'THCS' }
+          ]
         },
         {
           category: 'Game Engine & Nền Tảng Phần Mềm',
-          items: ['Pygame Framework', 'Roblox Studio (Ngôn ngữ Lua)', 'Unity Engine 2D/3D', 'Godot Engine']
+          items: [
+            { name: 'CodeKitten Arcade & Canvas 2D', level: 'Tiểu học' },
+            { name: 'Roblox Studio (Ngôn ngữ Lua & Thiết kế map)', level: 'Tiểu học & THCS' },
+            { name: 'Pygame Framework (Lập trình game Python)', level: 'THCS' },
+            { name: 'Unity Engine 2D/3D & C# Scripting', level: 'THCS' },
+            { name: 'Godot Engine mã nguồn mở', level: 'THCS' }
+          ]
         },
         {
-          category: 'Cấu Trúc Dữ Liệu & Thuật Toán',
-          items: ['Vòng lặp Game Loop', 'Vật lý 2D & Xử lý va chạm', 'Cấu trúc mảng & danh sách', 'Mô hình AI cơ bản (State Machine)']
+          category: 'Cấu Trúc Dữ Liệu & Thuật Toán AI',
+          items: [
+            { name: 'Logic tuần tự, Sự kiện & Vòng lặp Game Loop', level: 'Tiểu học' },
+            { name: 'Tọa độ không gian 2D, Trọng lực & Xử lý va chạm', level: 'Tiểu học & THCS' },
+            { name: 'PictoBlox Computer Vision & Machine Learning', level: 'Tiểu học & THCS' },
+            { name: 'Cấu trúc mảng, danh sách & Biến số quản lý điểm', level: 'THCS' },
+            { name: 'Mô hình AI máy trạng thái (FSM) & Tìm đường', level: 'THCS' }
+          ]
         }
       ],
       softSkills: [
@@ -993,15 +1034,32 @@ export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData
     techStack: [
       {
         category: 'Dựng Hình 3D & Không Gian Diorama',
-        items: ['Blender 3D (Modeling & Lighting)', 'Tinkercad 3D Design', 'Voxel Art Studio', 'Diorama không gian di sản 3D']
+        items: [
+          { name: 'Tinkercad 3D Design (Dựng hình khối cơ bản)', level: 'Tiểu học' },
+          { name: 'Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)', level: 'Tiểu học' },
+          { name: 'CodeKitten Storymaker (Dựng hoạt hình số)', level: 'Tiểu học' },
+          { name: 'Blender 3D (Modeling, Materials & Lighting)', level: 'THCS' },
+          { name: 'Diorama không gian di sản số 3D', level: 'THCS' }
+        ]
       },
       {
         category: 'Thiết Kế Đồ Họa & Giao Diện UI/UX',
-        items: ['Figma UI/UX Design', 'Canva Pro & Vector Design', 'Bảng màu HSL & Typography', 'Wireframe giao diện web/app']
+        items: [
+          { name: 'Canva Design & Bảng vẽ kỹ thuật số', level: 'Tiểu học' },
+          { name: 'Bảng màu HSL, Typography & Bố cục thị giác', level: 'Tiểu học & THCS' },
+          { name: 'PictoBlox Animation (Kỹ xảo nhân vật tương tác)', level: 'Tiểu học & THCS' },
+          { name: 'Figma UI/UX Design (Thiết kế Web/App)', level: 'THCS' },
+          { name: 'Thiết kế hệ thống Icon Vector chuẩn tỉ lệ', level: 'THCS' }
+        ]
       },
       {
-        category: 'Biên Tập Truyền Thông & Hoạt Hình Số',
-        items: ['Kỹ xảo Animation 2D/3D', 'Biên tập Video kỹ thuật số', 'Thiết kế âm thanh tương tác', 'Kể chuyện đa phương tiện (Digital Storytelling)']
+        category: 'Biên Tập Truyền Thông & Kỹ Xảo Số',
+        items: [
+          { name: 'Kể chuyện đa phương tiện (Digital Storytelling)', level: 'Tiểu học' },
+          { name: 'Kỹ xảo hoạt hình 2D Keyframe', level: 'Tiểu học & THCS' },
+          { name: 'Biên tập Video kỹ thuật số & Âm thanh Sound FX', level: 'THCS' },
+          { name: 'Xử lý hậu kỳ & Xuất bản tác phẩm số chuẩn quốc tế', level: 'THCS' }
+        ]
       }
     ],
     softSkills: [

@@ -6,15 +6,36 @@ import {
   GraduationCap, Heart, Star, Users, User, Camera,
   Pencil, Sparkles, ArrowRight, BookOpen, BarChart3,
   Compass, ShieldCheck, CheckCircle2, Cpu, Layers,
-  ChevronRight, ChevronDown, ChevronUp, Award, Target, Wrench
+  ChevronRight, ChevronDown, ChevronUp, Award, Target, Wrench,
+  Bot, Gamepad2, Palette, Handshake, Lightbulb, Code2, BrainCircuit, PackageCheck
 } from "lucide-react";
 import type { JourneyAnswers } from "@/types/journey";
 import {
   type SIOEvidenceCard,
   type V3PersonalizedProject,
+  type TechStackToolItem,
   generatePersonalizedProjects,
   extractRIASECProfile
 } from "@/data/v3Engine";
+
+interface ParsedToolItem {
+  name: string;
+  level: 'Tiểu học' | 'THCS' | 'Tiểu học & THCS';
+}
+
+function parseToolItem(item: any): ParsedToolItem {
+  if (typeof item === 'object' && item !== null && 'name' in item) {
+    return item as ParsedToolItem;
+  }
+  const str = String(item || '');
+  if (str.includes('(Tiểu học)')) {
+    return { name: str.replace('(Tiểu học)', '').trim(), level: 'Tiểu học' };
+  }
+  if (str.includes('(THCS)')) {
+    return { name: str.replace('(THCS)', '').trim(), level: 'THCS' };
+  }
+  return { name: str, level: 'Tiểu học & THCS' };
+}
 
 export interface StudentProfileCardProps {
   answers: JourneyAnswers;
@@ -52,6 +73,7 @@ export function StudentProfileCard({
   // Expandable sections state
   const [showRiasecDetails, setShowRiasecDetails] = useState(false);
   const [showTechStackDetails, setShowTechStackDetails] = useState(false);
+  const [techLevelFilter, setTechLevelFilter] = useState<'all' | 'primary' | 'secondary'>('all');
 
   const displayName = answers.name || fallbackName;
   const displayGrade = answers.grade || (isPrimary ? "4" : "7");
@@ -63,6 +85,19 @@ export function StudentProfileCard({
     return riasec.techStack.reduce((acc, g) => acc + g.items.length, 0);
   }, [riasec]);
 
+  const techLevelCounts = useMemo(() => {
+    let primary = 0;
+    let secondary = 0;
+    riasec.techStack.forEach(g => {
+      g.items.forEach(it => {
+        const p = parseToolItem(it);
+        if (p.level === 'Tiểu học' || p.level === 'Tiểu học & THCS') primary++;
+        if (p.level === 'THCS' || p.level === 'Tiểu học & THCS') secondary++;
+      });
+    });
+    return { primary, secondary };
+  }, [riasec.techStack]);
+
   // Projects
   const finalProjects = useMemo(() => {
     if (projects && projects.length > 0) return projects;
@@ -72,11 +107,11 @@ export function StudentProfileCard({
   // Role
   const displayRole = answers.futureSelf?.trim() || riasec.roleTitle;
 
-  const roleIcon = answers.domain === "multimedia"
-    ? "🎨"
+  const RoleIconComponent = answers.domain === "multimedia"
+    ? Palette
     : answers.domain === "game_programming"
-    ? "🎮"
-    : (isPrimary ? "🌱" : "🤖");
+    ? Gamepad2
+    : Bot;
 
   // Quote
   const defaultQuote = answers.domain === "multimedia"
@@ -174,7 +209,9 @@ export function StudentProfileCard({
         {/* ══ TOP BANNER BADGE: FUTURE CAPABILITY PORTFOLIO ══ */}
         <div className="bg-gradient-to-r from-teal-700 via-[#1a8a7d] to-emerald-700 px-5 py-2.5 text-white flex flex-wrap items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2">
-            <span className="grid h-5 w-5 place-items-center rounded-full bg-white/20 text-yellow-300 text-[11px] font-bold">★</span>
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-white/20">
+              <Star className="h-3 w-3 fill-yellow-300 text-yellow-300" />
+            </span>
             <span className="font-extrabold uppercase tracking-wider text-[11px]">Future Capability Portfolio</span>
             <span className="hidden sm:inline text-teal-200">|</span>
             <span className="text-[11px] text-teal-100 hidden sm:inline">Chân dung Năng lực Tương lai con & gia đình hướng tới</span>
@@ -263,7 +300,10 @@ export function StudentProfileCard({
                 </div>
               )}
               <p className="mt-1 flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-[#1a8a7d]">
-                <span>{roleIcon}</span> {displayRole}
+                <span className="grid h-5 w-5 place-items-center rounded-md bg-teal-50 text-[#1a8a7d] border border-teal-200">
+                  <RoleIconComponent className="h-3.5 w-3.5" />
+                </span>
+                <span>{displayRole}</span>
               </p>
               <p className="text-[11px] text-slate-400 font-medium">
                 {riasec.roleSubtitle}
@@ -370,7 +410,9 @@ export function StudentProfileCard({
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Mã Holland</span>
                   <span className="text-xs font-extrabold text-[#1a8a7d]">{riasec.primaryName}</span>
                 </div>
-                <span className="text-base">🎯</span>
+                <span className="grid h-7 w-7 place-items-center rounded-xl bg-teal-50 text-[#1a8a7d] border border-teal-200 shadow-2xs shrink-0">
+                  <Target className="h-3.5 w-3.5" />
+                </span>
               </div>
 
               <div className="rounded-2xl bg-white p-3 border border-amber-200/70 shadow-2xs flex items-center justify-between">
@@ -378,7 +420,9 @@ export function StudentProfileCard({
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Đồng thuận gia đình</span>
                   <span className="text-xs font-extrabold text-amber-600">{riasec.triangulation.alignmentPercent}% Nhất quán</span>
                 </div>
-                <span className="text-base">🤝</span>
+                <span className="grid h-7 w-7 place-items-center rounded-xl bg-amber-50 text-amber-600 border border-amber-200 shadow-2xs shrink-0">
+                  <Handshake className="h-3.5 w-3.5" />
+                </span>
               </div>
 
               <div className="rounded-2xl bg-white p-3 border border-teal-100/90 shadow-2xs flex items-center justify-between">
@@ -388,7 +432,9 @@ export function StudentProfileCard({
                     {riasec.naturalTraits[0] || "Tư duy sáng tạo"}
                   </span>
                 </div>
-                <span className="text-base">💡</span>
+                <span className="grid h-7 w-7 place-items-center rounded-xl bg-teal-50 text-[#1a8a7d] border border-teal-200 shadow-2xs shrink-0">
+                  <Lightbulb className="h-3.5 w-3.5" />
+                </span>
               </div>
             </div>
 
@@ -481,92 +527,154 @@ export function StudentProfileCard({
           </div>
 
           {/* ══ MỤC 2: BỘ KỸ NĂNG & CÔNG CỤ CÔNG NGHỆ MỤC TIÊU ══ */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm space-y-3.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-9 w-9 place-items-center rounded-2xl bg-indigo-600 text-white shadow-xs">
-                  <Cpu className="h-5 w-5" />
+                  <Wrench className="h-5 w-5" />
                 </span>
                 <div>
                   <h3 className="text-sm sm:text-base font-extrabold text-[#1a3a4a]">
                     Bộ Công Cụ & Kỹ Năng Công Nghệ Mục Tiêu
                   </h3>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Hệ thống kỹ năng và công cụ trọng tâm cho vai trò {displayRole}
+                    Hệ thống kỹ năng và công cụ trọng tâm phân cấp theo độ tuổi cho {displayRole}
                   </p>
                 </div>
               </div>
 
-              <span className="text-[11px] font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-full">
-                {totalToolsCount} Công Cụ Trọng Tâm
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-full">
+                  {totalToolsCount} Công Cụ Trọng Tâm
+                </span>
+              </div>
             </div>
 
-            {/* Concise View: 3 Trụ Cột Chính (Tối giản, trực quan) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-              {riasec.techStack.map((group, idx) => (
-                <div key={idx} className="rounded-2xl border border-slate-100 bg-[#fafcfb] p-3 space-y-1.5">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1a8a7d] block truncate">
-                    {group.category}
-                  </span>
-                  <div className="flex flex-wrap gap-1">
-                    {group.items.slice(0, 2).map((tool, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="rounded-lg border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-bold text-slate-700 shadow-2xs"
-                      >
-                        {tool}
-                      </span>
-                    ))}
-                    {group.items.length > 2 && (
-                      <span className="rounded-lg bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">
-                        +{group.items.length - 2}
-                      </span>
-                    )}
+            {/* Khi mở rộng: Hiển thị bộ lọc phân cấp Tiểu học / THCS */}
+            {showTechStackDetails && (
+              <div className="flex flex-wrap items-center gap-1.5 py-1 px-1 bg-slate-50/70 rounded-xl border border-slate-100">
+                <span className="text-[11px] font-bold text-slate-500 ml-2 mr-1">Phân cấp học tập:</span>
+                <button
+                  type="button"
+                  onClick={() => setTechLevelFilter('all')}
+                  className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${
+                    techLevelFilter === 'all'
+                      ? 'bg-indigo-600 text-white shadow-2xs'
+                      : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                  }`}
+                >
+                  Tất cả ({totalToolsCount})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTechLevelFilter('primary')}
+                  className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${
+                    techLevelFilter === 'primary'
+                      ? 'bg-amber-600 text-white shadow-2xs'
+                      : 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200/70'
+                  }`}
+                >
+                  Tiểu học ({techLevelCounts.primary})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTechLevelFilter('secondary')}
+                  className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${
+                    techLevelFilter === 'secondary'
+                      ? 'bg-teal-700 text-white shadow-2xs'
+                      : 'bg-teal-50 text-teal-800 hover:bg-teal-100 border border-teal-200/70'
+                  }`}
+                >
+                  THCS ({techLevelCounts.secondary})
+                </button>
+              </div>
+            )}
+
+            {/* Danh mục công cụ (Single Grid - không bao giờ bị render trùng) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {riasec.techStack.map((group, idx) => {
+                const parsedItems = group.items.map(parseToolItem);
+                const filteredItems = parsedItems.filter(tool => {
+                  if (techLevelFilter === 'primary') {
+                    return tool.level === 'Tiểu học' || tool.level === 'Tiểu học & THCS';
+                  }
+                  if (techLevelFilter === 'secondary') {
+                    return tool.level === 'THCS' || tool.level === 'Tiểu học & THCS';
+                  }
+                  return true;
+                });
+
+                const displayedItems = showTechStackDetails ? filteredItems : filteredItems.slice(0, 2);
+                const hiddenCount = filteredItems.length - displayedItems.length;
+
+                return (
+                  <div key={idx} className="rounded-2xl border border-slate-100 bg-[#fafcfb] p-3.5 space-y-2 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1a8a7d] block truncate">
+                          {group.category}
+                        </span>
+                        <span className="text-[10px] font-bold text-slate-400">
+                          {filteredItems.length}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {displayedItems.map((tool, tIdx) => (
+                          <span
+                            key={tIdx}
+                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-700 shadow-2xs"
+                          >
+                            <span>{tool.name}</span>
+                            <span
+                              className={`rounded px-1.5 py-0.2 text-[9px] font-bold ${
+                                tool.level === 'Tiểu học'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : tool.level === 'THCS'
+                                  ? 'bg-indigo-100 text-indigo-800'
+                                  : 'bg-emerald-50 text-emerald-700 border border-emerald-200/50'
+                              }`}
+                            >
+                              {tool.level === 'Tiểu học & THCS' ? 'Đa cấp' : tool.level}
+                            </span>
+                          </span>
+                        ))}
+                        {!showTechStackDetails && hiddenCount > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setShowTechStackDetails(true)}
+                            className="rounded-lg bg-indigo-50 border border-indigo-100/70 hover:bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700 transition"
+                          >
+                            +{hiddenCount} công cụ phân cấp ▾
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Toggle Button: Xem đầy đủ / Thu gọn */}
             <button
               type="button"
               onClick={() => setShowTechStackDetails(prev => !prev)}
-              className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-50 hover:bg-indigo-50/70 border border-slate-200 text-xs font-extrabold text-indigo-700 transition shadow-2xs"
+              className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-slate-50 hover:bg-indigo-50/70 border border-slate-200 text-xs font-extrabold text-indigo-700 transition shadow-2xs"
             >
-              <span>{showTechStackDetails ? "Thu gọn danh mục công cụ ▴" : `Xem đầy đủ ${totalToolsCount} công cụ & 4 kỹ năng 4Cs ▾`}</span>
+              <span>{showTechStackDetails ? "Thu gọn danh mục công cụ ▴" : `Xem chi tiết ${totalToolsCount} công cụ phân cấp & 4 kỹ năng 4Cs ▾`}</span>
               {showTechStackDetails ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
 
-            {/* Expanded Tech Stack & 4Cs Details */}
+            {/* 4Cs & Soft Skills (chỉ hiển thị khi mở rộng xem chi tiết) */}
             {showTechStackDetails && (
-              <div className="pt-2 space-y-3 border-t border-slate-100 animate-in fade-in duration-200">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {riasec.techStack.map((group, idx) => (
-                    <div key={idx} className="rounded-2xl border border-slate-100 bg-[#fafcfb] p-3.5 space-y-2">
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1a8a7d] block">
-                        {group.category}
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {group.items.map((tool, tIdx) => (
-                          <span
-                            key={tIdx}
-                            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-700 shadow-2xs"
-                          >
-                            {tool}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* 4Cs & Soft Skills */}
+              <div className="pt-2 space-y-2 border-t border-slate-100 animate-in fade-in duration-200">
                 <div className="rounded-2xl bg-slate-50 border border-slate-200/80 p-3.5 space-y-2">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">
-                    Năng Lực Thế Kỷ 21 & Tư Duy Sáng Tạo (4Cs Skills)
-                  </span>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <BrainCircuit className="h-4 w-4 text-[#1a8a7d]" />
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600 block">
+                      Năng Lực Thế Kỷ 21 & Tư Duy Sáng Tạo (4Cs Skills)
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {riasec.softSkills.map((skill, idx) => (
                       <span
                         key={idx}
@@ -637,8 +745,9 @@ export function StudentProfileCard({
                       {proj.name}
                     </strong>
                     <div className="mt-2 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
-                      <span className="font-semibold text-slate-600 break-words flex-1 mr-2">
-                        📦 {proj.deliverable}
+                      <span className="font-semibold text-slate-600 break-words flex-1 mr-2 inline-flex items-center gap-1.5">
+                        <PackageCheck className="h-3.5 w-3.5 text-[#1a8a7d] shrink-0" />
+                        <span>{proj.deliverable}</span>
                       </span>
                       <span className="text-[#1a8a7d] font-bold shrink-0">Chi tiết →</span>
                     </div>
