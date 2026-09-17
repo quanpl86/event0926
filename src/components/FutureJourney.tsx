@@ -353,7 +353,7 @@ export function FutureJourney() {
           />
           <div className="border-l border-slate-200 pl-3">
             <span className="flex items-center gap-1.5 text-sm font-extrabold tracking-tight text-ink group-hover:text-tek-600">
-              Future Creator <span className="text-tek-600 text-xs font-bold">V3</span>
+              Future Creator
             </span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-tek-600">
               CÙNG KITTEN BOT KHÁM PHÁ
@@ -1174,7 +1174,7 @@ export function FutureJourney() {
                   .filter(Boolean);
                 const defaultNames = isPrimary
                   ? ["Robot Hỗ Trợ Đời Sống", "Trạm Công Nghệ Mini", "Cỗ Máy Thông Minh Vui Nhộn"]
-                  : ["Hệ Thống Tự Động Hóa V1", "Ứng Dụng Đa Năng Thông Minh", "Mô Hình Công Nghệ Số"];
+                  : ["Hệ Thống Tự Động Hóa Thông Minh", "Ứng Dụng Đa Năng Thông Minh", "Mô Hình Công Nghệ Số"];
                 const projectSuggestions = Array.from(new Set([...sampleProjects, ...defaultNames])).slice(0, 4);
 
                 return (

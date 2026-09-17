@@ -140,7 +140,7 @@ export const ALIGNMENT_PILLARS: AlignmentPillar[] = [
       },
       {
         authorOrOrg: "Hội đồng Học thuật TEKY",
-        title: "Quy tắc Kiểm soát Xung đột Nhận thức & Đối chiếu Gia đình V3 (Family Alignment Protocol)",
+        title: "Quy tắc Kiểm soát Xung đột Nhận thức & Đối chiếu Gia đình (Family Alignment Protocol)",
         year: "2026",
         url: "https://teky.edu.vn",
         citationLabel: "TEKY Academic Board (2026)"

@@ -200,13 +200,13 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): V3Persona
     id: 'P4',
     projectNumber: 4,
     name: `Dự Án Mơ Ước: ${dreamName}`,
-    goal: `Hiện thực hóa ý tưởng "${dreamName}": Giải quyết vấn đề "${dreamPurpose}" phục vụ "${dreamAudience}" với các tính năng (${dreamFeatures.join(', ')}). Chia làm bản thử nghiệm V1 khả thi và lộ trình mở rộng V2.`,
+    goal: `Hiện thực hóa ý tưởng "${dreamName}": Giải quyết vấn đề "${dreamPurpose}" phục vụ "${dreamAudience}" với các tính năng (${dreamFeatures.join(', ')}). Chia làm bản thử nghiệm thực tế khả thi và lộ trình mở rộng phát triển.`,
     tasks: [
-      `Xây dựng Bản Thử Nghiệm V1 (MVP): Tập trung vào tính năng cốt lõi [${dreamFeatures.slice(0, 2).join(', ')}]`,
+      `Xây dựng Bản Thử Nghiệm Thực Tế (MVP): Tập trung vào tính năng cốt lõi [${dreamFeatures.slice(0, 2).join(', ')}]`,
       `Thử nghiệm người dùng thực tế: Trình diễn cho ${dreamAudience} và đo lường mức độ giải quyết mục tiêu "${dreamPurpose}"`,
-      `Lập kế hoạch nâng cấp V2: Bổ sung tính năng mở rộng [${dreamFeatures.slice(2).join(', ') || 'nâng cao tính tự động'}] và chuẩn bị trưng bày`
+      `Lập kế hoạch nâng cấp mở rộng: Bổ sung tính năng nâng cao [${dreamFeatures.slice(2).join(', ') || 'nâng cao tính tự động'}] và chuẩn bị trưng bày`
     ] as [string, string, string],
-    deliverable: `Bản sản phẩm thực tế hoạt động được (Phiên bản V1.0) kèm video demo và tài liệu lộ trình phát triển V2`,
+    deliverable: `Bản sản phẩm thực tế hoạt động được (Sản phẩm hoàn chỉnh) kèm video demo và tài liệu lộ trình phát triển`,
     completionCheck: `Sản phẩm vận hành đúng ý tưởng con mong muốn, ${dreamAudience} có thể sử dụng và phản hồi`,
     isDreamProject: true,
     adaptedFrom: 'Ý tưởng gốc từ học sinh (Dream Project Brief)',
@@ -492,7 +492,7 @@ CẤU TRÚC GIAO DIỆN 4 KHỐI CHÍNH:
    - TÍNH NĂNG TƯƠNG TÁC: Checkbox tương tác thực tế; thanh % tiến độ tự động tính toán (kèm các nút tiện ích "Đánh dấu tất cả" / "Đặt lại") và lưu trạng thái vào localStorage trình duyệt.
 3. KHỐI 3 — SHOWCASE DỰ ÁN MƠ ƯỚC ("${dreamName}"):
    - Trưng bày chi tiết ý tưởng lớn: Vấn đề con giải quyết ("${dreamPurpose}"), đối tượng thụ hưởng ("${dreamAudience}"), các tính năng chính.
-   - Phân định rõ 2 giai đoạn: Phiên bản thử nghiệm V1 (MVP) và Lộ trình mở rộng V2.
+   - Phân định rõ 2 giai đoạn: Phiên bản thử nghiệm thực tế (MVP) và Lộ trình mở rộng phát triển.
 4. KHỐI 4 — GÓC ĐỒNG HÀNH CỦA GIA ĐÌNH:
    - Ghi nhận thời gian biểu linh hoạt (${answers.hoursPerWeek ? `${answers.hoursPerWeek} giờ/tuần` : "Linh hoạt theo chặng"}), các nguồn lực và phương thức hỗ trợ của ba mẹ.
    - Footer trang nhã: "Hồ sơ sáng tạo tương lai — Bản quyền thuộc về ${answers.name || "con"}".
