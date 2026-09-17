@@ -511,3 +511,275 @@ ${JSON.stringify(safePayload, null, 2)}
 
   return { safePayload, fullPrompt };
 }
+
+/**
+ * Xây dựng câu lệnh tạo ảnh AI (Image Generation Prompt) chuẩn 16:9 cho Hero Banner Profile
+ * Tuân thủ nguyên tắc: Reference-Optional, Generation-Mandatory.
+ * Không bao giờ dừng lại đòi ảnh tham chiếu, tự động fallback theo độ tuổi, lĩnh vực, dự án mơ ước.
+ */
+export function buildSafeImageGenerationPrompt(answers: Partial<JourneyAnswers>): string {
+  const isPrimary = !answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand) || (answers.grade && parseInt(answers.grade, 10) <= 5);
+  const gradeNum = parseInt(answers.grade || (isPrimary ? '4' : '8'), 10);
+  const studentName = answers.name?.trim() || 'Student Creator';
+  const dreamName = answers.projectName?.trim() || (answers.domain === 'multimedia' ? 'Landmark in Vietnam' : answers.domain === 'game_programming' ? 'City Hero Game' : 'City Helper Robot');
+  const dreamPurpose = answers.dreamPurpose?.trim() || (isPrimary ? 'helping friends and community' : 'solving real-world community challenges');
+  const dreamFeatures = (answers.dreamFeatures && answers.dreamFeatures.length > 0) ? answers.dreamFeatures : ['Interactive user control', 'Automated smart sensing', 'Child-friendly interface'];
+
+  // Lĩnh vực & chuyên ban
+  const domainLabel = answers.domain === 'robotics'
+    ? 'Robotics & IoT'
+    : answers.domain === 'game_programming'
+    ? 'Game Programming & Software'
+    : answers.domain === 'multimedia'
+    ? 'Digital Multimedia, 3D & Visual Storytelling'
+    : 'Technology & Creative Innovation';
+
+  const specializationLabel = answers.branch || (isPrimary ? 'Creative Building' : 'Interactive Software');
+
+  // Features list
+  const featureList = dreamFeatures.map((f, i) => `  ${i + 1}. ${f}`).join('\n');
+
+  // Dynamic visual style & character by grade level
+  const visualStyle = isPrimary
+    ? `Premium 2.5D cartoon educational illustration.
+Original chibi character design.
+Clean vector-like silhouettes.
+Soft dimensional shading.
+Rounded geometry.
+Bright high-key lighting.
+Soft contact shadows.
+Pastel mint-teal and warm sunshine palette.
+Polished professional educational artwork.
+Friendly, imaginative, uplifting mood.
+Not photorealistic.
+Not flat icon style.
+Not anime-heavy.
+Not a website screenshot.`
+    : `Premium modern stylized 3D / 2.5D digital concept art for educational portfolio.
+Modern youthful character design with polished proportions.
+Clean crisp silhouettes with soft dimensional ambient occlusion.
+Smooth geometric forms and high-tech elegance.
+Bright dynamic lighting with subtle rim light.
+Harmonious modern tech palette (Teal, Indigo, or Coral accents).
+Professional, inspiring, innovative mood suitable for secondary school portfolio.
+Not photorealistic.
+Not flat icon style.
+Not gloomy or dark cyberpunk.
+Not a website screenshot.`;
+
+  const characterDesign = isPrimary
+    ? `Create an original fictional Grade ${gradeNum} student character named "${studentName}".
+Do not claim resemblance to any real child.
+The child should look cheerful, curious, proud, and excited about their creation.
+Use a simple school-age outfit in white, mint-teal, and soft accent colors.
+Keep the character proportions chibi and age-appropriate.
+Show the child interacting naturally with their creation (guiding, pointing, or interacting via a small tablet).`
+    : `Create an original fictional Grade ${gradeNum} secondary school student character named "${studentName}".
+Do not claim resemblance to any real child.
+The student should look confident, creative, innovative, and focused on building technology.
+Modern youth casual attire (e.g. comfortable hoodie or jacket with tech details, optional creative headset).
+Well-proportioned expressive character showing pride in their project.
+Show the student presenting or interacting naturally with their creation using modern digital tools.`;
+
+  // Dynamic Main Dream Project centerpiece based on domain
+  let centerpiece = '';
+  let environment = '';
+  let visualStory = '';
+  let colorPalette = '';
+
+  if (answers.domain === 'robotics') {
+    centerpiece = `The main dream robot ("${dreamName}") is the centerpiece.
+It should be clearly bigger than the companion mascot.
+Design it as a friendly, cute helper robot with:
+- rounded head and expressive friendly face display
+- white and mint-teal body with subtle tech accent lights
+- wheels or treads for smooth movement
+- one flexible robotic arm with a simple gripper
+- believable connected mechanical parts and sensors
+Show it following a path or assisting in a practical task.
+If features include obstacle detection, show a harmless small obstacle and the robot safely stopping before it.
+Also include a small light object near the gripper or being carried to suggest the carrying feature.`;
+
+    environment = `Create a miniature friendly smart city, school campus, or green park scene.
+Include:
+- clean curved path or gentle route
+- a few soft stylized modern buildings with green rooftop gardens
+- small trees, flowers, and gentle futuristic city atmosphere
+The environment should support the visual story without becoming cluttered.`;
+
+    visualStory = `A young student proudly imagines and presents "${dreamName}"—a smart helper robot designed for ${dreamPurpose}.
+The student appears as the proud creator, inventor, and guide of the technology.`;
+
+    colorPalette = `- Primary mint: #BDF3E5
+- Teal: #21B5A7
+- Deep teal: #147C87
+- Soft blue: #DDEEFF
+- Warm white: #FAFEFD
+- Gentle yellow accents: #FFD46B`;
+  } else if (answers.domain === 'game_programming') {
+    centerpiece = `The main dream project ("${dreamName}") is the centerpiece.
+Design it as an interactive holographic or floating game world showcasing the student's creation:
+- floating stylized game level island or dynamic game scene with glowing platforms
+- charming game characters or friendly digital sprites designed by the student
+- visible logic puzzle elements, quest paths, and playful collectible icons
+- glowing futuristic interactive HUD elements floating gently around the scene`;
+
+    environment = `Create a vibrant high-tech youth creative studio and interactive digital playground.
+Include:
+- soft ambient gaming/tech studio lighting
+- floating gentle digital particles and code/game elements
+- clean futuristic design desk with holographic displays
+- bright, imaginative, and encouraging atmosphere`;
+
+    visualStory = `A young student enthusiastically presents "${dreamName}"—an interactive game and software project created for ${dreamPurpose}.
+The student holds a digital controller or tablet, bringing their imaginative game world to life.`;
+
+    colorPalette = `- Primary indigo: #4F46E5
+- Cyber violet: #6366F1
+- Bright cyan: #06B6D4
+- Soft lavender: #E0E7FF
+- Crisp white: #FFFFFF
+- Golden achievement accents: #FBBF24`;
+  } else if (answers.domain === 'multimedia') {
+    centerpiece = `The main dream project ("${dreamName}") is the centerpiece.
+Design it as a stunning stylized 3D digital art and architectural landmark creation:
+- an iconic stylized Vietnamese cultural or modern landmark model floating as a digital 3D diorama
+- vibrant artistic details with delicate lighting and dimensional layering
+- glowing digital brushstrokes, creative color palettes, and floating UI/UX canvas frames
+- harmonious blend of cultural identity and modern digital design`;
+
+    environment = `Create a bright, spacious modern digital art and multimedia creative studio.
+Include:
+- large panoramic window with gentle daylight illuminating the workspace
+- creative concept boards, color palettes, and 3D wireframe sketches in the background
+- clean architectural diorama table with soft plant accents
+- inspiring, aesthetic, and premium creative atmosphere`;
+
+    visualStory = `A talented young student proudly showcases "${dreamName}"—a creative 3D multimedia and digital art project celebrating ${dreamPurpose}.
+The student holds a digital stylus, presenting their masterpiece with creative confidence.`;
+
+    colorPalette = `- Sunset rose: #E11D48
+- Coral pink: #F43F5E
+- Soft peach: #FED7AA
+- Warm amber: #F59E0B
+- Clean studio white: #FAFAFA
+- Subtle teal contrast: #14B8A6`;
+  } else {
+    centerpiece = `The main dream creation ("${dreamName}") is the centerpiece.
+A futuristic, friendly technological innovation designed to help people and solve practical challenges.`;
+    environment = `A bright, clean modern technology innovation space with green plants and soft natural light.`;
+    visualStory = `A student proudly presents "${dreamName}"—a creative tech innovation for ${dreamPurpose}.`;
+    colorPalette = `- Teal: #1A8A7D
+- Sky blue: #0284C7
+- Mint: #D1FAE5
+- Clean white: #FFFFFF
+- Warm sunshine: #FCD34D`;
+  }
+
+  return `Generate exactly ONE final image now.
+
+Do not ask for clarification.
+Do not ask for additional references.
+Do not ask the user to upload any more images.
+If any reference image is missing, use the fallback style and character rules in this prompt and proceed immediately.
+
+Create one premium personalized educational illustration for a Future Me student profile website.
+
+OUTPUT:
+- One final image only
+- Landscape 16:9
+- High resolution
+- Clean background composition suitable for use as a website profile hero image
+
+STUDENT PROFILE:
+- Student display name: ${studentName}
+- Grade: ${gradeNum}
+- Education level: ${isPrimary ? 'Vietnamese elementary school' : 'Vietnamese secondary school (middle school)'}
+- Technology domain: ${domainLabel}
+- Specialization: ${specializationLabel}
+- Dream project: "${dreamName}"
+- Dream project purpose: ${dreamPurpose}
+- Main confirmed features:
+${featureList}
+- Product appearance:
+  - ${answers.dreamAppearance || 'Modern child-friendly aesthetic, clean rounded design, approachable and inspiring'}
+- This image represents the student's future aspiration and imagination.
+- It must NOT imply the student has already completed the final real product.
+
+MANDATORY GENERATION BEHAVIOR:
+- Generate the image immediately.
+- Never stop to ask for more assets.
+- If no official Future Me reference image is available, infer the style from the description below.
+- If no official Kitten Bot reference image is available, create an original friendly cat-inspired educational robot companion in the same visual language.
+- The absence of reference images must never block generation.
+
+VISUAL STYLE:
+${visualStyle}
+
+CHARACTER DESIGN:
+${characterDesign}
+
+COMPANION ROBOT:
+Include a small friendly cat-inspired companion robot beside the student.
+If no official Kitten Bot reference is available, create an original mascot-like companion with:
+- white and mint-teal body
+- rounded head
+- cute cat ears
+- friendly smiling digital face
+- compact proportions
+- simple futuristic details
+The companion robot must be smaller and visually separate from the main dream project centerpiece.
+
+MAIN DREAM PROJECT / CREATION:
+${centerpiece}
+
+ENVIRONMENT:
+${environment}
+
+MAIN VISUAL STORY:
+${visualStory}
+
+COMPOSITION:
+- 16:9 hero image
+- Spacious clean composition
+- Place the student and the main dream creation in the center-left and center area
+- Keep the right side 30–35% relatively open and uncluttered for future website text overlay
+- Keep the face of the student clearly visible and expressive
+- Ensure the main creation design and key features are readable at web display size
+- Keep the composition balanced and elegant
+- No crowded layout
+
+COLOR PALETTE:
+${colorPalette}
+
+STRICT RESTRICTIONS:
+- No text
+- No letters
+- No numbers
+- No labels
+- No title
+- No logo
+- No watermark
+- No dashboard UI
+- No skill chart
+- No fake achievements
+- No certificates
+- No irrelevant technology
+- No visual clutter
+- No distorted anatomy
+- No extra fingers
+- No duplicated limbs
+- No disconnected machine parts
+- No aggressive weapons
+- No surveillance or police-style protection visuals
+- Do not depict the dream project as already fully verified or already completed in real life
+
+NEGATIVE PROMPT:
+no text, no letters, no numbers, no logo, no watermark, no website UI, no certificate, no badge, no crowded composition, no photorealistic child, no copyrighted character, no distorted hands, no extra fingers, no duplicated limbs, no broken parts, no unrelated objects, no dark scary atmosphere, no fake completed achievement
+
+FINAL INSTRUCTION:
+Generate exactly one final polished illustration now.
+Do not ask follow-up questions.
+Do not request more references.
+Proceed immediately using the fallback rules if references are absent.`;
+}

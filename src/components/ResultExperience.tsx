@@ -104,8 +104,14 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
   const [taskChecks, setTaskChecks] = useState<Record<string, boolean>>({});
   const [modalCode, setModalCode] = useState<string | null>(null);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [avatarModalTab, setAvatarModalTab] = useState<"banner" | "custom" | "system" | "ai-prompt">("banner");
   const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [guideStep, setGuideStep] = useState<number>(0); // 0=CTA, 1=copy, 2=open, 3=build, 4=refine
+
+  const handleOpenAvatarModal = (tab: "banner" | "custom" | "system" | "ai-prompt" = "banner") => {
+    setAvatarModalTab(tab);
+    setShowAvatarModal(true);
+  };
 
   useEffect(() => {
     if (initialTab) {
@@ -214,10 +220,18 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
           <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               type="button"
-              onClick={() => setShowAvatarModal(true)}
+              onClick={() => handleOpenAvatarModal("ai-prompt")}
+              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-3.5 py-1.5 text-[11px] font-extrabold shadow-xs transition shrink-0"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-yellow-200" /> Tạo ảnh AI
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleOpenAvatarModal("banner")}
               className="inline-flex items-center gap-1.5 rounded-full bg-white border border-[#c8e6df] px-3.5 py-1.5 text-[11px] font-bold text-[#1a8a7d] shadow-xs hover:bg-[#eff8f6] transition shrink-0"
             >
-              <Camera className="h-3.5 w-3.5" /> Thay ảnh đại diện
+              <Camera className="h-3.5 w-3.5" /> Đổi ảnh bìa
             </button>
 
             <div className="flex items-center gap-1 rounded-full bg-[#e8f5f2] p-0.5">
@@ -253,7 +267,7 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
           answers={activeAnswers}
           isPrimary={isPrimary}
           viewMode={viewMode}
-          onEditAvatar={() => setShowAvatarModal(true)}
+          onEditAvatar={(tab) => handleOpenAvatarModal(tab || "banner")}
           onGoToRoadmap={() => setActiveMainTab("dashboard")}
           onGoToWebsite={() => setActiveMainTab("website")}
           onOpenStandardsModal={(code) => setModalCode(code)}
@@ -284,13 +298,22 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
                     className="h-full w-full object-cover object-center transition duration-500"
                   />
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setShowAvatarModal(true)}
-                  className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 px-3 py-1 text-[11px] font-bold text-slate-600 shadow-xs hover:bg-white transition"
-                >
-                  <Camera className="h-3 w-3" /> Chỉnh sửa ảnh đại diện
-                </button>
+                <div className="mt-2 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleOpenAvatarModal("ai-prompt")}
+                    className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white px-2.5 py-1 text-[10px] font-bold shadow-xs hover:opacity-95 transition"
+                  >
+                    <Sparkles className="h-3 w-3 text-yellow-200" /> Tạo ảnh AI
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenAvatarModal("banner")}
+                    className="inline-flex items-center gap-1 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 px-2.5 py-1 text-[10px] font-bold text-slate-600 shadow-xs hover:bg-white transition"
+                  >
+                    <Camera className="h-3 w-3" /> Đổi ảnh
+                  </button>
+                </div>
               </div>
 
               {/* Right: Info & Dream Project Card */}
@@ -986,9 +1009,16 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
       )}
 
       {showAvatarModal && (
-        <AvatarUploaderModal isOpen={showAvatarModal} onClose={() => setShowAvatarModal(false)}
-          currentAvatar={activeAnswers.avatar} avatarSource={activeAnswers.avatarSource}
-          customAvatarData={activeAnswers.customAvatarData} onSaveAvatar={handleSaveAvatar} />
+        <AvatarUploaderModal
+          isOpen={showAvatarModal}
+          onClose={() => setShowAvatarModal(false)}
+          currentAvatar={activeAnswers.avatar}
+          avatarSource={activeAnswers.avatarSource}
+          customAvatarData={activeAnswers.customAvatarData}
+          onSaveAvatar={handleSaveAvatar}
+          answers={activeAnswers}
+          initialTab={avatarModalTab}
+        />
       )}
 
       {/* Export modal removed — integrated into step guide above */}

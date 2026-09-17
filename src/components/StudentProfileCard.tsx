@@ -15,7 +15,7 @@ export interface StudentProfileCardProps {
   isPrimary: boolean;
   activeProfileTab?: "current" | "may" | "nova";
   viewMode: "student" | "parent";
-  onEditAvatar: () => void;
+  onEditAvatar: (initialTab?: "banner" | "custom" | "system" | "ai-prompt") => void;
   onGoToRoadmap?: () => void;
   onGoToWebsite?: () => void;
   onOpenStandardsModal?: (code: string) => void;
@@ -168,15 +168,25 @@ export function StudentProfileCard({
                 </span>
               </div>
             )}
-            {/* Overlay Interactive Button for Camera */}
-            <button
-              type="button"
-              onClick={onEditAvatar}
-              className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-white/90 hover:bg-white text-slate-700 backdrop-blur-md px-3.5 py-1.5 text-[11px] sm:text-xs font-bold shadow-md transition hover:scale-105 active:scale-95 border border-white/60"
-            >
-              <Camera className="h-3.5 w-3.5 text-[#1a8a7d]" />
-              <span>Chỉnh sửa ảnh đại diện</span>
-            </button>
+            {/* Overlay Interactive Buttons */}
+            <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => onEditAvatar("ai-prompt")}
+                className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white backdrop-blur-md px-3 sm:px-3.5 py-1.5 text-[11px] sm:text-xs font-extrabold shadow-md transition hover:scale-105 active:scale-95 border border-white/40"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-yellow-200" />
+                <span>Tạo ảnh AI</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onEditAvatar("banner")}
+                className="inline-flex items-center gap-1.5 rounded-full bg-white/90 hover:bg-white text-slate-700 backdrop-blur-md px-3 sm:px-3.5 py-1.5 text-[11px] sm:text-xs font-bold shadow-md transition hover:scale-105 active:scale-95 border border-white/60"
+              >
+                <Camera className="h-3.5 w-3.5 text-[#1a8a7d]" />
+                <span>Đổi ảnh bìa</span>
+              </button>
+            </div>
           </div>
         </div>
 
