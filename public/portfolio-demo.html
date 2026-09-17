@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bảo Minh — Hồ Sơ Sáng Tạo & Lộ Trình Tương Lai</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            tek: {
+              50: '#eff8f6',
+              100: '#d9f0eb',
+              200: '#b6e1d8',
+              500: '#23a899',
+              600: '#1a8a7d',
+              700: '#156f64',
+              800: '#14574f',
+              900: '#154842',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(180deg, #EFF8F6 0%, #F5F9FE 40%, #FFFDF7 100%);
+      min-height: 100vh;
+    }
+    .card-shadow {
+      box-shadow: 0 4px 20px -2px rgba(26, 138, 125, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased p-4 sm:p-8 max-w-4xl mx-auto space-y-8">
+
+  <!-- ========================================================
+       TOP BRAND BAR
+       ======================================================== -->
+  <header class="flex items-center justify-between py-2 px-4 rounded-full bg-white/70 backdrop-blur-md border border-white/80 shadow-xs">
+    <div class="flex items-center gap-2">
+      <div class="h-7 w-7 rounded-full bg-tek-600 flex items-center justify-center text-white font-extrabold text-xs">
+        BM
+      </div>
+      <span class="text-xs font-bold text-slate-700 tracking-wide">FUTURE ME PORTFOLIO</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center gap-1 text-[11px] font-bold text-tek-700 bg-tek-50 px-3 py-1 rounded-full border border-tek-200">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i> Lộ trình phát triển 4 chặng
+      </span>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       KHỐI 1: HỒ SƠ TƯƠNG LAI CỦA CON (Future Profile Card)
+       ======================================================== -->
+  <section class="rounded-3xl bg-white border border-[#c8e6df] p-6 sm:p-8 card-shadow space-y-6">
+    <!-- Banner & Header -->
+    <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-tek-600 via-teal-600 to-cyan-700 p-6 sm:p-8 text-white">
+      <div class="absolute -right-8 -bottom-8 w-44 h-44 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+      
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white p-1.5 shadow-md flex items-center justify-center overflow-hidden">
+              <img src="/assets/kittenbot-creator.png" alt="Avatar" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=BaoMinh';" />
+            </div>
+            <span class="absolute -bottom-1 -right-1 bg-amber-400 text-amber-950 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-xs">
+              Cấp 1
+            </span>
+          </div>
+
+          <div>
+            <div class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-[11px] font-bold text-teal-50 mb-1">
+              <i data-lucide="bot" class="w-3.5 h-3.5"></i> Sáng tạo công nghệ
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Bảo Minh</h1>
+            <p class="text-teal-100 font-semibold text-sm sm:text-base mt-0.5">Nhà sáng tạo robot nhí</p>
+          </div>
+        </div>
+
+        <div class="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 text-right hidden sm:block">
+          <p class="text-[10px] font-extrabold text-teal-100 uppercase tracking-wider">Mục tiêu năm học</p>
+          <p class="text-sm font-bold text-white mt-0.5">Dự án Robot Thủ Thư Nhí</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Thẻ thuộc tính nổi bật -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="rounded-2xl bg-[#eff8f6] border border-[#c8e6df] p-3.5 text-center">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Khối lớp</span>
+        <p class="text-sm font-extrabold text-tek-700 mt-1">Lớp 4 (Tiểu học)</p>
+      </div>
+      <div class="rounded-2xl bg-[#f5f9fe] border border-blue-100 p-3.5 text-center">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Sở thích</span>
+        <p class="text-sm font-extrabold text-blue-700 mt-1">Robot, sáng tạo</p>
+      </div>
+      <div class="rounded-2xl bg-[#fffdf7] border border-amber-100 p-3.5 text-center">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Phong cách</span>
+        <p class="text-sm font-extrabold text-amber-700 mt-1">Tò mò, Kiên trì</p>
+      </div>
+      <div class="rounded-2xl bg-[#fdf8f6] border border-rose-100 p-3.5 text-center">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Ước mơ</span>
+        <p class="text-sm font-extrabold text-rose-700 mt-1 truncate">Robot Thủ Thư</p>
+      </div>
+    </div>
+
+    <!-- Khung Về Mình & Châm Ngôn -->
+    <div class="grid sm:grid-cols-3 gap-4 pt-2">
+      <div class="sm:col-span-2 rounded-2xl bg-slate-50 border border-slate-100 p-4 space-y-1.5">
+        <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
+          <i data-lucide="user" class="w-4 h-4 text-tek-600"></i>
+          <span>Về mình</span>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Con thích lắp ráp, tìm hiểu cách các thiết bị hoạt động và luôn muốn tạo ra những sản phẩm có ích. Con đặc biệt thích robot và muốn dùng công nghệ để giúp cuộc sống tốt đẹp hơn.
+        </p>
+      </div>
+
+      <div class="rounded-2xl bg-amber-50/70 border border-amber-200/60 p-4 space-y-1.5 flex flex-col justify-between">
+        <div class="flex items-center gap-1.5 text-xs font-bold text-amber-800">
+          <i data-lucide="quote" class="w-4 h-4 text-amber-600"></i>
+          <span>Châm ngôn của con</span>
+        </div>
+        <p class="text-xs font-semibold text-amber-900 italic leading-relaxed">
+          "Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!"
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       KHỐI 2: BẢN ĐỒ 4 CHẶNG & LỘ TRÌNH THỰC HIỆN
+       ======================================================== -->
+  <section class="rounded-3xl bg-white border border-[#c8e6df] p-6 sm:p-8 card-shadow space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+      <div>
+        <div class="inline-flex items-center gap-1.5 text-xs font-bold text-tek-600 mb-1">
+          <i data-lucide="map" class="w-4 h-4"></i> LỘ TRÌNH 4 CHẶNG
+        </div>
+        <h2 class="text-xl font-extrabold text-slate-900">Hành Trình Từng Bước Chinh Phục</h2>
+      </div>
+
+      <!-- Live Progress Bar Counter -->
+      <div class="flex items-center gap-3 bg-tek-50 border border-tek-200/80 px-4 py-2 rounded-2xl">
+        <div class="text-right">
+          <p class="text-[10px] font-bold text-slate-500 uppercase">Tiến độ hoàn thành</p>
+          <p id="progress-text" class="text-base font-extrabold text-tek-700">0% (0/12 việc)</p>
+        </div>
+        <div class="w-16 bg-slate-200 h-2.5 rounded-full overflow-hidden">
+          <div id="progress-bar" class="bg-tek-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 Chặng chi tiết -->
+    <div class="space-y-4">
+      
+      <!-- Chặng 1 -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 space-y-3 transition hover:border-tek-300">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-xl bg-tek-100 text-tek-800 text-xs font-extrabold flex items-center justify-center">1</span>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">Khám phá nền tảng sáng tạo</h3>
+              <p class="text-xs text-slate-500">Làm quen với các công cụ cơ bản và hoàn thiện thử nghiệm đầu tiên</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 shrink-0">Chặng khởi động</span>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3 space-y-2 text-xs">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t1_1" />
+            <span class="text-slate-700">Tìm hiểu bộ công cụ và các khối lệnh cơ bản</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t1_2" />
+            <span class="text-slate-700">Thực hành tính năng điều khiển động cơ đầu tiên</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t1_3" />
+            <span class="text-slate-700">Tạo bản phác thảo ban đầu cho Robot Thủ Thư Nhí</span>
+          </label>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] text-tek-700 font-semibold">
+          <i data-lucide="package" class="w-3.5 h-3.5 text-tek-600"></i>
+          <span>Bàn giao: Bản phác thảo thử nghiệm đầu tiên</span>
+        </div>
+      </div>
+
+      <!-- Chặng 2 -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 space-y-3 transition hover:border-tek-300">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-xl bg-blue-100 text-blue-800 text-xs font-extrabold flex items-center justify-center">2</span>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">Xây dựng cơ chế tương tác & Cảm biến dò đường</h3>
+              <p class="text-xs text-slate-500">Phát triển các tính năng có tính logic và chiều sâu kỹ thuật</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 shrink-0">Chặng kỹ thuật</span>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3 space-y-2 text-xs">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t2_1" />
+            <span class="text-slate-700">Thiết kế cấu trúc chức năng cảm biến quang học</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t2_2" />
+            <span class="text-slate-700">Lập trình cơ chế bám vạch kẻ sàn thư viện tự động</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t2_3" />
+            <span class="text-slate-700">Chạy thử và tối ưu phản hồi khi gặp góc cua</span>
+          </label>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] text-blue-700 font-semibold">
+          <i data-lucide="package" class="w-3.5 h-3.5 text-blue-600"></i>
+          <span>Bàn giao: Mô-đun chức năng dò đường hoạt động chính xác</span>
+        </div>
+      </div>
+
+      <!-- Chặng 3 -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 space-y-3 transition hover:border-tek-300">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-xl bg-amber-100 text-amber-800 text-xs font-extrabold flex items-center justify-center">3</span>
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">Tối ưu trải nghiệm cho bạn học và cô thủ thư</h3>
+              <p class="text-xs text-slate-500">Hoàn thiện trải nghiệm người dùng và thử nghiệm thực tế</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 shrink-0">Chặng thử nghiệm</span>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3 space-y-2 text-xs">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t3_1" />
+            <span class="text-slate-700">Ghép nối cánh tay nâng sách với khung thân robot</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t3_2" />
+            <span class="text-slate-700">Mời bạn học cùng lớp thử gọi sách và quan sát phản hồi</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t3_3" />
+            <span class="text-slate-700">Điều chỉnh tốc độ di chuyển và khoảng cách dừng xe</span>
+          </label>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] text-amber-700 font-semibold">
+          <i data-lucide="package" class="w-3.5 h-3.5 text-amber-600"></i>
+          <span>Bàn giao: Bản thử nghiệm thực tế có xác nhận từ người dùng</span>
+        </div>
+      </div>
+
+      <!-- Chặng 4: DỰ ÁN MƠ ƯỚC -->
+      <div class="rounded-2xl border-2 border-tek-500 bg-tek-50/50 p-5 space-y-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-xl bg-tek-600 text-white text-xs font-extrabold flex items-center justify-center">4</span>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-extrabold text-tek-900 text-sm sm:text-base">Dự Án Mơ Ước: Robot Thủ Thư Nhí</h3>
+                <span class="bg-amber-400 text-amber-950 text-[9px] font-black px-2 py-0.5 rounded-full">ĐÍCH ĐẾN</span>
+              </div>
+              <p class="text-xs text-tek-700">Hoàn thiện sản phẩm thực tế, video demo và kế hoạch mở rộng</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-tek-600 text-white shrink-0">MVP v1 + v2</span>
+        </div>
+        <div class="bg-white rounded-xl border border-tek-200 p-3 space-y-2 text-xs">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t4_1" />
+            <span class="text-slate-700"><strong>Bản MVP v1:</strong> Cảm biến dò đường kết hợp Tay nâng sách hoạt động mượt mà</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t4_2" />
+            <span class="text-slate-700"><strong>Thử nghiệm thực tế:</strong> Trình diễn tại thư viện trường và ghi nhận ý kiến</span>
+          </label>
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" class="task-checkbox h-4 w-4 rounded text-tek-600 focus:ring-tek-500 accent-tek-600" data-id="t4_3" />
+            <span class="text-slate-700"><strong>Kế hoạch mở rộng v2:</strong> Tích hợp màn hình cảm xúc Kitten Bot tương tác</span>
+          </label>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] text-tek-800 font-bold">
+          <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-500"></i>
+          <span>Bàn giao: Sản phẩm hoạt động + Video demo + Báo cáo lộ trình v2</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================
+       KHỐI 3: SHOWCASE DỰ ÁN MƠ ƯỚC
+       ======================================================== -->
+  <section class="rounded-3xl bg-white border border-[#c8e6df] p-6 sm:p-8 card-shadow space-y-6">
+    <div>
+      <div class="inline-flex items-center gap-1.5 text-xs font-bold text-tek-600 mb-1">
+        <i data-lucide="rocket" class="w-4 h-4"></i> DỰ ÁN TRỌNG TÂM
+      </div>
+      <h2 class="text-xl font-extrabold text-slate-900">Showcase: Robot Thủ Thư Nhí</h2>
+      <p class="text-xs text-slate-500 mt-1">Ý tưởng công nghệ giải quyết vấn đề thực tế trong trường học</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div class="rounded-2xl bg-tek-50/60 border border-tek-200/80 p-5 space-y-2">
+        <div class="flex items-center gap-2 text-tek-800 font-bold text-xs uppercase tracking-wide">
+          <i data-lucide="target" class="w-4 h-4 text-tek-600"></i> Vấn đề & Mục tiêu
+        </div>
+        <p class="text-xs text-slate-700 leading-relaxed">
+          Tự động phân loại sách trả lại và mang sách đến tận bàn đọc cho các bạn, giúp thư viện ngăn nắp và tiết kiệm thời gian cho cô thủ thư.
+        </p>
+      </div>
+
+      <div class="rounded-2xl bg-blue-50/60 border border-blue-200/80 p-5 space-y-2">
+        <div class="flex items-center gap-2 text-blue-800 font-bold text-xs uppercase tracking-wide">
+          <i data-lucide="users" class="w-4 h-4 text-blue-600"></i> Đối tượng thụ hưởng
+        </div>
+        <p class="text-xs text-slate-700 leading-relaxed">
+          Các bạn học sinh trong trường và cô thủ thư thư viện trường tiểu học.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2 Giai đoạn: MVP V1 & Lộ trình V2 -->
+    <div class="grid sm:grid-cols-2 gap-4 pt-2">
+      <div class="rounded-2xl border border-slate-200 p-5 bg-white space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold text-tek-700 uppercase">Phiên bản thử nghiệm V1 (MVP)</span>
+          <span class="text-[10px] font-bold bg-tek-100 text-tek-800 px-2 py-0.5 rounded-full">Hoàn thành cốt lõi</span>
+        </div>
+        <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside">
+          <li>Cảm biến dò đường chính xác theo tuyến vạch thư viện</li>
+          <li>Cơ cấu kẹp / tay nâng chuyển sách an toàn</li>
+          <li>Nút bấm gọi robot từ 3 khu vực bàn học chính</li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-dashed border-amber-300 p-5 bg-amber-50/40 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold text-amber-900 uppercase">Lộ trình mở rộng V2</span>
+          <span class="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">Kế hoạch tương lai</span>
+        </div>
+        <ul class="text-xs text-amber-950/80 space-y-1.5 list-disc list-inside">
+          <li>Màn hình LED hiển thị cảm xúc Kitten Bot chào hỏi</li>
+          <li>Nhận diện mã vạch barcode sách để cập nhật danh mục</li>
+          <li>Tích hợp phát âm thanh cảm ơn khi bạn nhận sách</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       KHỐI 4: GÓC ĐỒNG HÀNH CỦA GIA ĐÌNH & FOOTER
+       ======================================================== -->
+  <footer class="rounded-3xl bg-white border border-[#c8e6df] p-6 sm:p-8 card-shadow space-y-5">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+      <div>
+        <h4 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+          <i data-lucide="heart" class="w-4 h-4 text-rose-500 fill-rose-500"></i>
+          Góc Đồng Hành Của Gia Đình
+        </h4>
+        <p class="text-xs text-slate-500 mt-0.5">Cam kết hỗ trợ con phát triển đam mê sáng tạo</p>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs font-bold text-tek-800 bg-tek-50 border border-tek-200 px-3.5 py-1.5 rounded-full">
+        <i data-lucide="clock" class="w-3.5 h-3.5 text-tek-600"></i>
+        <span>Nhịp học: 3 giờ / tuần (Linh hoạt theo chặng)</span>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2 text-xs text-slate-600">
+      <span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full">
+        <i data-lucide="check-circle" class="w-3.5 h-3.5 text-tek-600"></i> Máy tính cá nhân & Thiết bị sẵn có
+      </span>
+      <span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full">
+        <i data-lucide="check-circle" class="w-3.5 h-3.5 text-tek-600"></i> Lắng nghe, khích lệ và tạo không gian sáng tạo
+      </span>
+      <span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full">
+        <i data-lucide="check-circle" class="w-3.5 h-3.5 text-tek-600"></i> Trải nghiệm cùng con các sản phẩm thử nghiệm
+      </span>
+    </div>
+
+    <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
+      <p>© 2026 Hồ sơ sáng tạo tương lai — Bản quyền thuộc về bé Bảo Minh</p>
+      <p class="font-medium text-slate-500">Đồng hành và hỗ trợ bởi Học viện Sáng tạo Công nghệ TEKY</p>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       JAVASCRIPT: TƯƠNG TÁC CHECKLIST & LOCALSTORAGE
+       ======================================================== -->
+  <script>
+    // Khởi tạo Lucide Icons
+    lucide.createIcons();
+
+    // Quản lý trạng thái tasks bằng localStorage
+    const STORAGE_KEY = 'future_me_tasks_baominh';
+    const checkboxes = document.querySelectorAll('.task-checkbox');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    function loadTasks() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        checkboxes.forEach(cb => {
+          const id = cb.getAttribute('data-id');
+          if (saved[id]) {
+            cb.checked = true;
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+      updateProgress();
+    }
+
+    function saveTasks() {
+      const state = {};
+      checkboxes.forEach(cb => {
+        const id = cb.getAttribute('data-id');
+        state[id] = cb.checked;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = checkboxes.length;
+      let completed = 0;
+      checkboxes.forEach(cb => {
+        if (cb.checked) completed++;
+      });
+      const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+      progressBar.style.width = percent + '%';
+      progressText.textContent = `${percent}% (${completed}/${total} việc)`;
+    }
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', saveTasks);
+    });
+
+    loadTasks();
+  </script>
+</body>
+</html>
