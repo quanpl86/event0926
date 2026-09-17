@@ -142,7 +142,7 @@ export function AvatarUploaderModal({
             >
               <Sparkles className="h-5 w-5 text-[#1a8a7d] mb-1.5" />
               <strong className="block text-xs font-extrabold text-slate-800">Ảnh Bìa Chuẩn</strong>
-              <span className="text-[10px] text-slate-500">Mây / Nova tràn ảnh</span>
+              <span className="text-[10px] text-slate-500">Tiểu học / THCS</span>
             </button>
 
             <button
@@ -191,14 +191,14 @@ export function AvatarUploaderModal({
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-amber-50">
                     <img
                       src="/assets/profile-may-banner.png"
-                      alt="Mây Tiểu học"
+                      alt="Ảnh Bìa Tiểu học"
                       className="h-full w-full object-cover group-hover:scale-105 transition duration-300"
                     />
                   </div>
                   <div className="p-3 bg-white">
                     <div className="flex items-center justify-between">
                       <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">Tiểu học</span>
-                      <strong className="text-xs font-extrabold text-[#1a3a4a]">Phong cách Mây</strong>
+                      <strong className="text-xs font-extrabold text-[#1a3a4a]">Phong cách Tiểu học</strong>
                     </div>
                     <p className="mt-1 text-[11px] text-slate-500 line-clamp-1">Khám phá · Tạo ra · Vui học mỗi ngày</p>
                   </div>
@@ -216,14 +216,14 @@ export function AvatarUploaderModal({
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-sky-50">
                     <img
                       src="/assets/profile-nova-banner.png"
-                      alt="Nova THCS"
+                      alt="Ảnh Bìa THCS"
                       className="h-full w-full object-cover group-hover:scale-105 transition duration-300"
                     />
                   </div>
                   <div className="p-3 bg-white">
                     <div className="flex items-center justify-between">
                       <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-bold text-sky-800">THCS</span>
-                      <strong className="text-xs font-extrabold text-[#1a3a4a]">Phong cách Nova</strong>
+                      <strong className="text-xs font-extrabold text-[#1a3a4a]">Phong cách THCS</strong>
                     </div>
                     <p className="mt-1 text-[11px] text-slate-500 line-clamp-1">Học sáng tạo · Làm dự án · Kiến tạo tương lai</p>
                   </div>

@@ -547,7 +547,7 @@ export function FutureJourney() {
                       maxLength={24}
                       value={answers.name}
                       onChange={e => setAnswers(a => ({ ...a, name: e.target.value }))}
-                      placeholder="Ví dụ: Mây / Nova / Alex"
+                      placeholder="Ví dụ: Bảo Minh / Gia Hân / Alex"
                       className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-bold text-ink outline-none focus:border-tek-500 focus:bg-white focus:ring-2 focus:ring-tek-100"
                     />
                     <p className="mt-1.5 text-[11px] text-slate-400">

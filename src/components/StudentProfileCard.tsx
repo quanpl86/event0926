@@ -10,10 +10,10 @@ import {
 import type { JourneyAnswers } from "@/types/journey";
 import type { SIOEvidenceCard } from "@/data/v3Engine";
 
-interface StudentProfileCardProps {
+export interface StudentProfileCardProps {
   answers: JourneyAnswers;
   isPrimary: boolean;
-  activeProfileTab: "current" | "may" | "nova";
+  activeProfileTab?: "current" | "may" | "nova";
   viewMode: "student" | "parent";
   onEditAvatar: () => void;
   onGoToRoadmap?: () => void;
@@ -36,9 +36,10 @@ export function StudentProfileCard({
   onUpdateName,
 }: StudentProfileCardProps) {
   const [isEditingName, setIsEditingName] = useState(false);
-  const [tempName, setTempName] = useState(answers.name || (isPrimary ? "Mây" : "Nova"));
+  const fallbackName = answers.name?.trim() || (isPrimary ? "Bé" : "Học sinh");
+  const [tempName, setTempName] = useState(answers.name || fallbackName);
 
-  const displayName = answers.name || (isPrimary ? "Mây" : "Nova");
+  const displayName = answers.name || fallbackName;
   const displayGrade = answers.grade || (isPrimary ? "4" : "7");
 
   // Role
@@ -49,11 +50,7 @@ export function StudentProfileCard({
 
   // Quote
   const displayQuote =
-    activeProfileTab === "may"
-      ? "Chú robot Thủ Thư Nhí sẽ mang sách đến cho các bạn!"
-      : activeProfileTab === "nova"
-      ? "Con muốn xây dựng một website giúp các bạn học sinh bảo vệ môi trường."
-      : answers.dreamPurpose
+    answers.dreamPurpose
       ? `Dự án ${answers.projectName || "của con"} sẽ ${answers.dreamPurpose}`
       : isPrimary
       ? "Chú robot Thủ Thư Nhí sẽ mang sách đến cho các bạn!"
@@ -61,31 +58,23 @@ export function StudentProfileCard({
 
   // Interests
   const displayInterest =
-    activeProfileTab === "may"
-      ? "Robot, sáng tạo"
-      : activeProfileTab === "nova"
-      ? "Lập trình, công nghệ"
-      : answers.domain === "robotics"
+    answers.domain === "robotics"
       ? "Robot, sáng tạo"
       : answers.domain === "game_programming"
       ? "Lập trình, công nghệ"
-      : "Thiết kế, đồ họa";
+      : answers.domain === "multimedia"
+      ? "Thiết kế, đồ họa"
+      : (isPrimary ? "Khám phá, sáng tạo" : "Khoa học, công nghệ");
 
   // Style
   const displayStyle =
-    activeProfileTab === "may"
-      ? "Tò mò, kiên trì"
-      : activeProfileTab === "nova"
-      ? "Chủ động, sáng tạo"
-      : (answers.confirmedTraits && answers.confirmedTraits.slice(0, 2).join(", ")) ||
-        (isPrimary ? "Tò mò, kiên trì" : "Chủ động, sáng tạo");
+    (answers.confirmedTraits && answers.confirmedTraits.slice(0, 2).join(", ")) ||
+    (isPrimary ? "Tò mò, kiên trì" : "Chủ động, sáng tạo");
 
   // Dream
   const displayDream =
-    activeProfileTab === "may"
-      ? "Giúp mọi người"
-      : activeProfileTab === "nova"
-      ? "Vì một hành tinh xanh"
+    answers.projectName
+      ? answers.projectName
       : answers.dreamAudience === "Bảo vệ môi trường & Động vật"
       ? "Vì một hành tinh xanh"
       : isPrimary
@@ -93,26 +82,25 @@ export function StudentProfileCard({
       : "Vì cộng đồng";
 
   // About paragraph
-  const displayAbout =
-    activeProfileTab === "may"
-      ? "Con thích lắp ráp, tìm hiểu cách các thiết bị hoạt động và luôn muốn tạo ra những sản phẩm có ích. Con đặc biệt thích robot và muốn dùng công nghệ để giúp cuộc sống tốt đẹp hơn."
-      : activeProfileTab === "nova"
-      ? "Con thích tìm hiểu công nghệ, đặc biệt là lập trình và các sản phẩm kỹ thuật số. Con muốn dùng kỹ năng của mình để tạo ra những giải pháp hữu ích cho cộng đồng, nhất là các vấn đề về môi trường."
-      : isPrimary
-      ? `Con thích lắp ráp, tìm hiểu cách các thiết bị hoạt động và luôn muốn tạo ra những sản phẩm có ích. Con đặc biệt thích ${
-          answers.domain === "robotics"
-            ? "robot"
-            : answers.domain === "game_programming"
-            ? "lập trình game"
-            : "thiết kế sáng tạo"
-        } và muốn dùng công nghệ để giúp cuộc sống tốt đẹp hơn.`
-      : `Con thích tìm hiểu công nghệ, đặc biệt là ${
-          answers.domain === "robotics"
-            ? "robotics và vi điều khiển"
-            : answers.domain === "game_programming"
-            ? "lập trình và phát triển phần mềm"
-            : "thiết kế đồ họa và trải nghiệm số"
-        }. Con muốn dùng kỹ năng của mình để tạo ra những giải pháp hữu ích cho cộng đồng.`;
+  const displayAbout = isPrimary
+    ? `Con thích lắp ráp, tìm hiểu cách các thiết bị hoạt động và luôn muốn tạo ra những sản phẩm có ích. Con đặc biệt thích ${
+        answers.domain === "robotics"
+          ? "robot"
+          : answers.domain === "game_programming"
+          ? "lập trình game"
+          : answers.domain === "multimedia"
+          ? "thiết kế sáng tạo"
+          : "công nghệ sáng tạo"
+      } và muốn dùng công nghệ để giúp cuộc sống tốt đẹp hơn.`
+    : `Con thích tìm hiểu công nghệ, đặc biệt là ${
+        answers.domain === "robotics"
+          ? "robotics và vi điều khiển"
+          : answers.domain === "game_programming"
+          ? "lập trình và phát triển phần mềm"
+          : answers.domain === "multimedia"
+          ? "thiết kế đồ họa và trải nghiệm số"
+          : "công nghệ và đổi mới sáng tạo"
+      }. Con muốn dùng kỹ năng của mình để tạo ra những giải pháp hữu ích cho cộng đồng.`;
 
   // Motto
   const displayMotto = isPrimary
@@ -121,11 +109,7 @@ export function StudentProfileCard({
 
   // Banner image resolution
   const bannerSrc =
-    activeProfileTab === "may"
-      ? "/assets/profile-may-banner.png"
-      : activeProfileTab === "nova"
-      ? "/assets/profile-nova-banner.png"
-      : answers.customAvatarData
+    answers.customAvatarData
       ? answers.customAvatarData
       : isPrimary
       ? "/assets/profile-may-banner.png"

@@ -34,55 +34,6 @@ type CommonProps = {
 };
 
 /* ─────────────────────────────────────────────────────────────
-   DEMO PROFILES
-   ───────────────────────────────────────────────────────────── */
-const demoMayAnswers: JourneyAnswers = {
-  name: "Mây", grade: "4", gradeBand: "3-5", avatar: "builder",
-  domain: "robotics", branch: "robot_build_and_block_control",
-  projectName: "Chú robot Thủ Thư Nhí",
-  dreamAudience: "bạn đọc trong thư viện trường",
-  dreamPurpose: "mang sách, đi đúng đường và dừng trước vật cản",
-  dreamFeatures: ["Tự động nhận biết vật cản", "Điều khiển bằng nút bấm", "Khay chở sách an toàn"],
-  dreamAppearance: "Robot hình hộp mini màu xanh lá có khay chở sách",
-  knowledgeResponse: "Nhận biết chức năng bánh xe, động cơ và cảm biến khoảng cách.",
-  skillResponse: "Sắp xếp trình tự di chuyển: tiến thẳng, nhận diện vật cản và dừng lại.",
-  problemResponse: "Nếu robot đi lệch hướng, kiểm tra lại tốc độ động cơ 2 bánh xe.",
-  parentObservedTask: "independent",
-  parentObservedExample: "Mây rất thích tự tháo lắp mô hình Lego và kiên trì thử lại.",
-  hoursPerWeek: 2, availableResources: ["Máy tính", "Vật liệu đơn giản"],
-  supportMode: ["Lắng nghe và khích lệ", "Cùng con thử một việc nhỏ"],
-  familyConflict: "agree", familyReviewConfirmed: true, parentApprovesExternalTransfer: true,
-  avatarSource: "system", consent: true, selections: {},
-  futureSelf: "Nhà Chế Tạo Robot", favoriteColor: "Xanh lá",
-  characterStyle: "Nhanh nhẹn", signatureGear: "Kính bảo hộ",
-  confirmedTraits: ["Kiên trì", "Tò mò", "Khéo tay"],
-  portraitMode: "buddy", parentMoment: "Tự mày mò sửa bánh xe đồ chơi"
-};
-
-const demoNovaAnswers: JourneyAnswers = {
-  name: "Nova", grade: "7", gradeBand: "6-7", avatar: "explorer",
-  domain: "game_programming", branch: "web",
-  projectName: "Website Hành Tinh Xanh",
-  dreamAudience: "học sinh các trường THCS trong quận",
-  dreamPurpose: "đổi rác tái chế lấy cây sen đá và tích điểm bảo vệ môi trường",
-  dreamFeatures: ["Bảng xếp hạng xanh", "Form quét mã nhận cây", "Giao diện di động responsive"],
-  dreamAppearance: "Tông màu xanh pastel, giao diện trực quan hiện đại",
-  knowledgeResponse: "Phân tích cấu trúc HTML, CSS cho bố cục và JS cho cơ chế tính điểm.",
-  skillResponse: "Tạo wireframe giao diện trước, dựng khung HTML/CSS rồi thêm tính năng.",
-  problemResponse: "Mở Console kiểm tra lỗi script và gỡ lỗi từng hàm chức năng.",
-  parentObservedTask: "independent",
-  parentObservedExample: "Nova tự tìm tòi xem các trang web và học cách làm layout.",
-  hoursPerWeek: 3, availableResources: ["Máy tính cá nhân", "Mạng Internet"],
-  supportMode: ["Tạo không gian tự do", "Tìm môi trường chuyên sâu"],
-  familyConflict: "agree", familyReviewConfirmed: true, parentApprovesExternalTransfer: true,
-  avatarSource: "system", consent: true, selections: {},
-  futureSelf: "Kỹ Sư Phần Mềm", favoriteColor: "Xanh dương",
-  characterStyle: "Hiện đại", signatureGear: "Balo công nghệ",
-  confirmedTraits: ["Logic", "Sáng tạo", "Chủ động"],
-  portraitMode: "buddy", parentMoment: "Tự học làm trang web đầu tiên"
-};
-
-/* ─────────────────────────────────────────────────────────────
    HELPERS
    ───────────────────────────────────────────────────────────── */
 type ProjectProgressStatus = "not_started" | "in_progress" | "submitted" | "verified";
@@ -144,7 +95,6 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
     initialTab || "profile"
   );
   const [viewMode, setViewMode] = useState<"student" | "parent">("student");
-  const [activeProfileTab, setActiveProfileTab] = useState<"current" | "may" | "nova">("current");
   const [selectedStageIndex, setSelectedStageIndex] = useState<number>(0);
   const [expandedEvidence, setExpandedEvidence] = useState<string | null>(null);
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
@@ -164,8 +114,7 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
   }, [initialTab]);
 
   /* ── Derived Data ─────────────────────────── */
-  const activeAnswers = activeProfileTab === "may" ? demoMayAnswers
-    : activeProfileTab === "nova" ? demoNovaAnswers : answers;
+  const activeAnswers = answers;
   const isPrimary = !activeAnswers.grade || parseInt(activeAnswers.grade, 10) <= 5;
 
   const personalizedProjects = useMemo(() => generatePersonalizedProjects(activeAnswers), [activeAnswers]);
@@ -176,11 +125,9 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
   const totalWeeks = Math.ceil(12 / hoursPerWeek);
 
   const resolvedProfileBanner = useMemo(() => {
-    if (activeProfileTab === "may") return "/assets/profile-may-banner.png";
-    if (activeProfileTab === "nova") return "/assets/profile-nova-banner.png";
     if (activeAnswers.customAvatarData) return activeAnswers.customAvatarData;
     return isPrimary ? "/assets/profile-may-banner.png" : "/assets/profile-nova-banner.png";
-  }, [activeProfileTab, activeAnswers.customAvatarData, isPrimary]);
+  }, [activeAnswers.customAvatarData, isPrimary]);
 
   const resolvedAvatarSrc =
     activeAnswers.avatarSource === "custom" && activeAnswers.customAvatarData
@@ -220,9 +167,8 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
     <div className="min-h-screen space-y-5 pb-16" style={{ background: "linear-gradient(180deg, #EFF8F6 0%, #F5F9FE 40%, #FFFDF7 100%)" }}>
 
       {/* ═══════════════════════════════════════════════════════
-          TOP BAR — Navigation Tabs + Profile Presets + View Mode Toggle
-         ═══════════════════════════════════════════════════════ */}
-      <div className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/80 p-3 sm:p-4 shadow-xs space-y-3">
+          {/* TOP BAR — Navigation Tabs + Actions */}
+          <div className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/80 p-3 sm:p-4 shadow-xs">
         <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
           {/* Main Navigation Tabs */}
           <div className="flex items-center gap-1 overflow-x-auto p-1 rounded-2xl bg-[#e8f5f2]/80 border border-[#c8e6df]/50">
@@ -264,60 +210,37 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
             </button>
           </div>
 
-          {/* View Mode Toggle: Học sinh vs Phụ huynh */}
-          <div className="flex items-center gap-1 self-start sm:self-auto rounded-full bg-[#e8f5f2] p-0.5">
+          {/* Action Buttons: Thay ảnh đại diện & Chế độ xem */}
+          <div className="flex items-center gap-2 self-start sm:self-auto">
             <button
               type="button"
-              onClick={() => setViewMode("student")}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${
-                viewMode === "student" ? "bg-white text-[#1a8a7d] shadow-xs" : "text-slate-500"
-              }`}
+              onClick={() => setShowAvatarModal(true)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-white border border-[#c8e6df] px-3.5 py-1.5 text-[11px] font-bold text-[#1a8a7d] shadow-xs hover:bg-[#eff8f6] transition shrink-0"
             >
-              <User className="h-3.5 w-3.5" /> Học sinh
+              <Camera className="h-3.5 w-3.5" /> Thay ảnh đại diện
             </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("parent")}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${
-                viewMode === "parent" ? "bg-white text-amber-700 shadow-xs" : "text-slate-500"
-              }`}
-            >
-              <UserCheck className="h-3.5 w-3.5" /> Phụ huynh
-            </button>
-          </div>
-        </div>
 
-        {/* Profile Preset Switcher Row */}
-        <div className="flex items-center justify-between border-t border-slate-100 pt-2.5 text-xs">
-          <div className="flex items-center gap-1.5 overflow-x-auto">
-            <span className="text-[11px] font-bold text-slate-400 mr-1 shrink-0">Hồ sơ mẫu:</span>
-            {([
-              { key: "current" as const, label: `Bé ${answers.name || "Minh Anh"} (con)` },
-              { key: "may" as const, label: "Mây (Tiểu học)" },
-              { key: "nova" as const, label: "Nova (THCS)" },
-            ]).map(t => (
+            <div className="flex items-center gap-1 rounded-full bg-[#e8f5f2] p-0.5">
               <button
-                key={t.key}
                 type="button"
-                onClick={() => setActiveProfileTab(t.key)}
-                className={`rounded-full px-3 py-1 text-[11px] font-bold transition shrink-0 ${
-                  activeProfileTab === t.key
-                    ? "bg-[#1a8a7d] text-white shadow-xs"
-                    : "bg-slate-50 text-slate-500 border border-slate-200 hover:bg-slate-100"
+                onClick={() => setViewMode("student")}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${
+                  viewMode === "student" ? "bg-white text-[#1a8a7d] shadow-xs" : "text-slate-500"
                 }`}
               >
-                {t.label}
+                <User className="h-3.5 w-3.5" /> Học sinh
               </button>
-            ))}
+              <button
+                type="button"
+                onClick={() => setViewMode("parent")}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${
+                  viewMode === "parent" ? "bg-white text-amber-700 shadow-xs" : "text-slate-500"
+                }`}
+              >
+                <UserCheck className="h-3.5 w-3.5" /> Phụ huynh
+              </button>
+            </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setShowAvatarModal(true)}
-            className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1a8a7d] hover:underline shrink-0"
-          >
-            <Camera className="h-3.5 w-3.5" /> Thay ảnh đại diện
-          </button>
         </div>
       </div>
 
@@ -329,7 +252,6 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
         <StudentProfileCard
           answers={activeAnswers}
           isPrimary={isPrimary}
-          activeProfileTab={activeProfileTab}
           viewMode={viewMode}
           onEditAvatar={() => setShowAvatarModal(true)}
           onGoToRoadmap={() => setActiveMainTab("dashboard")}
@@ -790,7 +712,7 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
                   <div className="flex items-start justify-between">
                     <div>
                       <h3 className="text-base font-extrabold text-[#1a3a4a] group-hover:text-[#1a8a7d] transition">
-                        {activeAnswers.name || (isPrimary ? "Mây" : "Nova")}
+                        {activeAnswers.name || (isPrimary ? "Bé" : "Học sinh")}
                       </h3>
                       <p className="text-xs font-bold text-[#1a8a7d]">
                         {isPrimary ? "🌱 Nhà sáng tạo robot nhí" : "🍃 Lập trình vì môi trường"}
