@@ -6,7 +6,7 @@ import {
   GraduationCap, Heart, Star, Users, User, Camera,
   Pencil, Sparkles, ArrowRight, BookOpen, BarChart3,
   Compass, ShieldCheck, CheckCircle2, Cpu, Layers,
-  ChevronRight, Award, Target, Wrench
+  ChevronRight, ChevronDown, ChevronUp, Award, Target, Wrench
 } from "lucide-react";
 import type { JourneyAnswers } from "@/types/journey";
 import {
@@ -49,11 +49,19 @@ export function StudentProfileCard({
   const fallbackName = answers.name?.trim() || (isPrimary ? "Bé" : "Học sinh");
   const [tempName, setTempName] = useState(answers.name || fallbackName);
 
+  // Expandable sections state
+  const [showRiasecDetails, setShowRiasecDetails] = useState(false);
+  const [showTechStackDetails, setShowTechStackDetails] = useState(false);
+
   const displayName = answers.name || fallbackName;
   const displayGrade = answers.grade || (isPrimary ? "4" : "7");
 
   // Extract RIASEC Profile & Alignment data
   const riasec = useMemo(() => extractRIASECProfile(answers), [answers]);
+
+  const totalToolsCount = useMemo(() => {
+    return riasec.techStack.reduce((acc, g) => acc + g.items.length, 0);
+  }, [riasec]);
 
   // Projects
   const finalProjects = useMemo(() => {
@@ -326,7 +334,7 @@ export function StudentProfileCard({
           </div>
 
           {/* ══ MỤC 1: MÔ HÌNH HƯỚNG NGHIỆP RIASEC & HOLLAND CODES (HOA KỲ) ══ */}
-          <div className="rounded-3xl border border-teal-200/80 bg-gradient-to-br from-[#f0faf7] via-white to-[#f4fcf9] p-5 sm:p-6 shadow-sm space-y-4">
+          <div className="rounded-3xl border border-teal-200/80 bg-gradient-to-br from-[#f0faf7] via-white to-[#f4fcf9] p-4 sm:p-5 shadow-sm space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-teal-100 pb-3">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-9 w-9 place-items-center rounded-2xl bg-[#1a8a7d] text-white shadow-xs">
@@ -337,12 +345,12 @@ export function StudentProfileCard({
                     <h3 className="text-sm sm:text-base font-extrabold text-[#1a3a4a]">
                       Định Hướng Ngành Nghề Theo Mô Hình RIASEC
                     </h3>
-                    <span className="rounded-full bg-teal-100 px-2.5 py-0.5 text-[10px] font-extrabold text-[#1a8a7d]">
+                    <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-extrabold text-[#1a8a7d]">
                       Holland Code / O*NET
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Ánh xạ sở thích tự nhiên (Bước 01–04) vào nhóm ngành công nghệ phù hợp nhất với con
+                    Khám phá nhóm ngành công nghệ tương lai phù hợp nhất với con
                   </p>
                 </div>
               </div>
@@ -355,81 +363,125 @@ export function StudentProfileCard({
               </div>
             </div>
 
-            {/* RIASEC Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-              <div className="rounded-2xl bg-white p-4 border border-teal-100/80 shadow-2xs space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                    Nhóm Sở Thích Chủ Đạo
-                  </span>
-                  <span className="rounded-lg bg-teal-50 px-2 py-0.5 text-[11px] font-extrabold text-[#1a8a7d]">
-                    {riasec.primaryName}
+            {/* Concise Summary Highlights (Hiển thị cô đọng, súc tích) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div className="rounded-2xl bg-white p-3 border border-teal-100/90 shadow-2xs flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Mã Holland</span>
+                  <span className="text-xs font-extrabold text-[#1a8a7d]">{riasec.primaryName}</span>
+                </div>
+                <span className="text-base">🎯</span>
+              </div>
+
+              <div className="rounded-2xl bg-white p-3 border border-amber-200/70 shadow-2xs flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Đồng thuận gia đình</span>
+                  <span className="text-xs font-extrabold text-amber-600">{riasec.triangulation.alignmentPercent}% Nhất quán</span>
+                </div>
+                <span className="text-base">🤝</span>
+              </div>
+
+              <div className="rounded-2xl bg-white p-3 border border-teal-100/90 shadow-2xs flex items-center justify-between">
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Điểm mạnh tự nhiên</span>
+                  <span className="text-xs font-extrabold text-slate-700 truncate block">
+                    {riasec.naturalTraits[0] || "Tư duy sáng tạo"}
                   </span>
                 </div>
-                <p className="text-xs font-bold text-[#1a3a4a] leading-snug">
-                  {riasec.hollandFullName}
-                </p>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
-                  {riasec.techSectorDescription}
-                </p>
-                <div className="pt-2 border-t border-slate-100">
-                  <span className="text-[10px] font-bold text-slate-400 block mb-1">Mã bổ trợ phối hợp:</span>
-                  <div className="flex flex-wrap gap-1">
-                    {riasec.secondaryCodes.map((code, idx) => (
-                      <span key={idx} className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
-                        {code}
+                <span className="text-base">💡</span>
+              </div>
+            </div>
+
+            {/* Toggle Button: Xem chi tiết / Thu gọn */}
+            <button
+              type="button"
+              onClick={() => setShowRiasecDetails(prev => !prev)}
+              className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white hover:bg-teal-50/80 border border-teal-200/80 text-xs font-extrabold text-[#1a8a7d] transition shadow-2xs"
+            >
+              <span>{showRiasecDetails ? "Thu gọn chi tiết phân tích ▴" : "Xem chi tiết phân tích RIASEC & Đối chiếu 3 chiều ▾"}</span>
+              {showRiasecDetails ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
+
+            {/* Expanded Detailed Content */}
+            {showRiasecDetails && (
+              <div className="pt-2 space-y-3.5 border-t border-teal-100/80 animate-in fade-in duration-200">
+                {/* RIASEC Details Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="rounded-2xl bg-white p-4 border border-teal-100/80 shadow-2xs space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+                        Nhóm Sở Thích Chủ Đạo
                       </span>
-                    ))}
+                      <span className="rounded-lg bg-teal-50 px-2 py-0.5 text-[11px] font-extrabold text-[#1a8a7d]">
+                        {riasec.primaryName}
+                      </span>
+                    </div>
+                    <p className="text-xs font-bold text-[#1a3a4a] leading-snug">
+                      {riasec.hollandFullName}
+                    </p>
+                    <p className="text-[11px] text-slate-600 leading-relaxed">
+                      {riasec.techSectorDescription}
+                    </p>
+                    <div className="pt-2 border-t border-slate-100">
+                      <span className="text-[10px] font-bold text-slate-400 block mb-1">Mã bổ trợ phối hợp:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {riasec.secondaryCodes.map((code, idx) => (
+                          <span key={idx} className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
+                            {code}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl bg-white p-4 border border-teal-100/80 shadow-2xs space-y-2">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
+                      Phản Xạ Sở Thích Tự Nhiên Được Ghi Nhận
+                    </span>
+                    <ul className="space-y-1.5 text-[11px] text-slate-600">
+                      {riasec.naturalTraits.map((trait, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-[#1a8a7d] font-bold mt-0.5">✓</span>
+                          <span>{trait}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-              </div>
 
-              <div className="rounded-2xl bg-white p-4 border border-teal-100/80 shadow-2xs space-y-2">
-                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
-                  Phản Xạ Sở Thích Tự Nhiên Được Ghi Nhận
-                </span>
-                <ul className="space-y-1.5 text-[11px] text-slate-600">
-                  {riasec.naturalTraits.map((trait, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-[#1a8a7d] font-bold mt-0.5">✓</span>
-                      <span>{trait}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Triangulation (Đối chiếu 3 chiều con & phụ huynh) */}
-            <div className="rounded-2xl bg-gradient-to-r from-amber-50/80 via-orange-50/50 to-amber-50/80 border border-amber-200/80 p-4 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-amber-600" />
-                  <strong className="text-xs font-extrabold text-[#1a3a4a]">
-                    Đối Chiếu 3 Chiều Gia Đình (Evidence Triangulation: Bước 03, 14 & 16)
-                  </strong>
-                </div>
-                <span className="rounded-full bg-amber-500 text-white px-2.5 py-0.5 text-[10px] font-extrabold shadow-2xs">
-                  {riasec.triangulation.alignmentPercent}% Đồng Thuận
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px]">
-                <div className="rounded-xl bg-white/90 p-2.5 border border-amber-100/80 shadow-2xs">
-                  <span className="font-extrabold text-[#1a8a7d] block mb-0.5">Động Lực Tự Thân Của Con:</span>
-                  <p className="text-slate-600 italic leading-relaxed">"{riasec.triangulation.studentAspiration}"</p>
-                </div>
-                <div className="rounded-xl bg-white/90 p-2.5 border border-amber-100/80 shadow-2xs">
-                  <span className="font-extrabold text-amber-700 block mb-0.5">Quan Sát Thực Tế Từ Ba Mẹ:</span>
-                  <p className="text-slate-600 italic leading-relaxed">"{riasec.triangulation.parentObservation}"</p>
+                {/* Triangulation (Đối chiếu 3 chiều con & phụ huynh) */}
+                <div className="rounded-2xl bg-gradient-to-r from-amber-50/80 via-orange-50/50 to-amber-50/80 border border-amber-200/80 p-4 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-amber-600" />
+                      <strong className="text-xs font-extrabold text-[#1a3a4a]">
+                        Đối Chiếu 3 Chiều Gia Đình (Evidence Triangulation)
+                      </strong>
+                    </div>
+                    <span className="rounded-full bg-amber-500 text-white px-2.5 py-0.5 text-[10px] font-extrabold shadow-2xs">
+                      {riasec.triangulation.alignmentPercent}% Đồng Thuận
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px]">
+                    <div className="rounded-xl bg-white/90 p-2.5 border border-amber-100/80 shadow-2xs">
+                      <span className="font-extrabold text-[#1a8a7d] block mb-0.5">Động Lực Tự Thân Của Con:</span>
+                      <p className="text-slate-600 italic leading-relaxed">"{riasec.triangulation.studentAspiration}"</p>
+                    </div>
+                    <div className="rounded-xl bg-white/90 p-2.5 border border-amber-100/80 shadow-2xs">
+                      <span className="font-extrabold text-amber-700 block mb-0.5">Quan Sát Thực Tế Từ Ba Mẹ:</span>
+                      <p className="text-slate-600 italic leading-relaxed">"{riasec.triangulation.parentObservation}"</p>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-amber-900 leading-snug font-medium pt-1">
+                    {riasec.triangulation.consensusSummary}
+                  </p>
                 </div>
               </div>
-              <p className="text-[11px] text-amber-900 leading-snug font-medium pt-1">
-                {riasec.triangulation.consensusSummary}
-              </p>
-            </div>
+            )}
           </div>
 
           {/* ══ MỤC 2: BỘ KỸ NĂNG & CÔNG CỤ CÔNG NGHỆ MỤC TIÊU ══ */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+          <div className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-9 w-9 place-items-center rounded-2xl bg-indigo-600 text-white shadow-xs">
@@ -440,54 +492,98 @@ export function StudentProfileCard({
                     Bộ Công Cụ & Kỹ Năng Công Nghệ Mục Tiêu
                   </h3>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Hệ thống kỹ năng thực hành và công cụ con dự kiến làm chủ để hiện thực hóa vai trò {displayRole}
+                    Hệ thống kỹ năng và công cụ trọng tâm cho vai trò {displayRole}
                   </p>
                 </div>
               </div>
+
+              <span className="text-[11px] font-extrabold text-indigo-700 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-full">
+                {totalToolsCount} Công Cụ Trọng Tâm
+              </span>
             </div>
 
-            {/* Categorized Tech Stack */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {/* Concise View: 3 Trụ Cột Chính (Tối giản, trực quan) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
               {riasec.techStack.map((group, idx) => (
-                <div key={idx} className="rounded-2xl border border-slate-100 bg-[#fafcfb] p-3.5 space-y-2">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1a8a7d] block">
+                <div key={idx} className="rounded-2xl border border-slate-100 bg-[#fafcfb] p-3 space-y-1.5">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1a8a7d] block truncate">
                     {group.category}
                   </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {group.items.map((tool, tIdx) => (
+                  <div className="flex flex-wrap gap-1">
+                    {group.items.slice(0, 2).map((tool, tIdx) => (
                       <span
                         key={tIdx}
-                        className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-700 shadow-2xs"
+                        className="rounded-lg border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-bold text-slate-700 shadow-2xs"
                       >
                         {tool}
                       </span>
                     ))}
+                    {group.items.length > 2 && (
+                      <span className="rounded-lg bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">
+                        +{group.items.length - 2}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* 4Cs & Soft Skills */}
-            <div className="rounded-2xl bg-slate-50 border border-slate-200/80 p-3.5 space-y-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">
-                Năng Lực Thế Kỷ 21 & Tư Duy Sáng Tạo (4Cs Skills)
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {riasec.softSkills.map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-white border border-teal-200 px-3 py-1 text-xs font-extrabold text-teal-800 shadow-2xs"
-                  >
-                    <CheckCircle2 className="h-3.5 w-3.5 text-[#1a8a7d]" />
-                    <span>{skill}</span>
+            {/* Toggle Button: Xem đầy đủ / Thu gọn */}
+            <button
+              type="button"
+              onClick={() => setShowTechStackDetails(prev => !prev)}
+              className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-50 hover:bg-indigo-50/70 border border-slate-200 text-xs font-extrabold text-indigo-700 transition shadow-2xs"
+            >
+              <span>{showTechStackDetails ? "Thu gọn danh mục công cụ ▴" : `Xem đầy đủ ${totalToolsCount} công cụ & 4 kỹ năng 4Cs ▾`}</span>
+              {showTechStackDetails ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
+
+            {/* Expanded Tech Stack & 4Cs Details */}
+            {showTechStackDetails && (
+              <div className="pt-2 space-y-3 border-t border-slate-100 animate-in fade-in duration-200">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {riasec.techStack.map((group, idx) => (
+                    <div key={idx} className="rounded-2xl border border-slate-100 bg-[#fafcfb] p-3.5 space-y-2">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#1a8a7d] block">
+                        {group.category}
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {group.items.map((tool, tIdx) => (
+                          <span
+                            key={tIdx}
+                            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-slate-700 shadow-2xs"
+                          >
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 4Cs & Soft Skills */}
+                <div className="rounded-2xl bg-slate-50 border border-slate-200/80 p-3.5 space-y-2">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">
+                    Năng Lực Thế Kỷ 21 & Tư Duy Sáng Tạo (4Cs Skills)
                   </span>
-                ))}
+                  <div className="flex flex-wrap gap-2">
+                    {riasec.softSkills.map((skill, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-white border border-teal-200 px-3 py-1 text-xs font-extrabold text-teal-800 shadow-2xs"
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5 text-[#1a8a7d]" />
+                        <span>{skill}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* ══ MỤC 3: KINH NGHIỆM ĐỒ ÁN 4 CHẶNG (PORTFOLIO SHOWCASE) ══ */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+          <div className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
                 <span className="grid h-9 w-9 place-items-center rounded-2xl bg-amber-500 text-white shadow-xs">
@@ -498,7 +594,7 @@ export function StudentProfileCard({
                     Kinh Nghiệm Học Tập & 4 Đồ Án Thực Nghiệm
                   </h3>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    4 sản phẩm thực tế con tự tay hoàn thiện qua 4 chặng để chứng minh năng lực
+                    4 sản phẩm thực tế chứng minh năng lực qua từng chặng phát triển
                   </p>
                 </div>
               </div>
@@ -515,39 +611,36 @@ export function StudentProfileCard({
               )}
             </div>
 
-            {/* 4 Projects Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* 4 Projects Grid (Gọn gàng, sạch sẽ, bỏ bớt đoạn văn dài) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {finalProjects.map((proj, idx) => {
                 const isDream = proj.isDreamProject;
                 return (
                   <div
                     key={proj.id}
                     onClick={() => onSelectProject ? onSelectProject(idx) : onGoToRoadmap?.()}
-                    className={`group cursor-pointer rounded-2xl p-4 border transition duration-200 hover:shadow-md ${
+                    className={`group cursor-pointer rounded-2xl p-3.5 border transition duration-200 hover:shadow-md ${
                       isDream
                         ? "bg-gradient-to-br from-amber-50/90 via-orange-50/50 to-amber-50/90 border-amber-300 ring-1 ring-amber-300/50"
-                        : "bg-slate-50/70 border-slate-200 hover:border-slate-300"
+                        : "bg-slate-50/70 border-slate-200 hover:border-slate-300 hover:bg-white"
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-extrabold ${
+                    <div className="flex items-center justify-between mb-1">
+                      <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-extrabold ${
                         isDream ? "bg-amber-500 text-white" : "bg-teal-100 text-teal-800"
                       }`}>
                         {isDream ? "★ CHẶNG 4 • DỰ ÁN MƠ ƯỚC" : `CHẶNG ${proj.projectNumber}`}
                       </span>
                       <ChevronRight className="h-4 w-4 text-slate-400 group-hover:translate-x-0.5 transition" />
                     </div>
-                    <strong className="text-xs sm:text-sm font-extrabold text-[#1a3a4a] block line-clamp-1 group-hover:text-[#1a8a7d] transition">
+                    <strong className="text-xs sm:text-sm font-extrabold text-[#1a3a4a] block truncate group-hover:text-[#1a8a7d] transition">
                       {proj.name}
                     </strong>
-                    <p className="mt-1 text-[11px] text-slate-500 line-clamp-2">
-                      {proj.goal}
-                    </p>
-                    <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
-                      <span className="font-extrabold text-slate-600 truncate max-w-[200px]">
+                    <div className="mt-2 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
+                      <span className="font-semibold text-slate-600 truncate max-w-[210px]">
                         📦 {proj.deliverable}
                       </span>
-                      <span className="text-[#1a8a7d] font-bold shrink-0">Khám phá →</span>
+                      <span className="text-[#1a8a7d] font-bold shrink-0">Chi tiết →</span>
                     </div>
                   </div>
                 );
