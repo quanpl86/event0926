@@ -25,73 +25,241 @@ import { FutureMeResult, ProfileResult, ProjectsJourneyResult } from "./ResultEx
 import { StandardsModal } from "./StandardsModal";
 import { LandingPage } from "./LandingPage";
 
-const AUDIENCE_PURPOSE_SUGGESTIONS: Record<string, { primary: string[]; secondary: string[] }> = {
-  "Bạn bè cùng tuổi": {
-    primary: [
-      "Cùng nhau chơi game giải trí và thi đua bảng điểm vui vẻ sau giờ học",
-      "Học nhóm, giải đố bài tập và chia sẻ tài liệu học tập cùng các bạn",
-      "Tạo không gian kết nối, trò chuyện và rèn luyện kỹ năng số an toàn"
-    ],
-    secondary: [
-      "Nền tảng chia sẻ dự án, lập trình game và thi đấu giải thuật cùng bạn bè",
-      "Ứng dụng hỗ trợ quản lý thời gian biểu và học nhóm ôn thi hiệu quả",
-      "Mạng xã hội học tập trao đổi tài liệu và dự án khoa học kỹ thuật"
-    ]
+const AUDIENCE_KEYS = [
+  "Gia đình và người thân",
+  "Bạn bè cùng tuổi",
+  "Trường học và lớp học",
+  "Bảo vệ môi trường & Động vật",
+  "Cộng đồng xung quanh"
+];
+
+const DOMAIN_AUDIENCE_PURPOSE_SUGGESTIONS: Record<
+  string,
+  Record<string, { primary: string[]; secondary: string[] }>
+> = {
+  robotics: {
+    "Gia đình và người thân": {
+      primary: [
+        "Hỗ trợ làm việc nhà thông minh (tưới cây tự động, bật tắt đèn, dọn phòng mini)",
+        "Nhắc nhở bố mẹ, ông bà uống nước, uống thuốc đúng giờ bằng chuông báo và đèn",
+        "Chế tạo thiết bị trợ lý gia đình đo nhiệt độ phòng và cảnh báo an toàn"
+      ],
+      secondary: [
+        "Hệ thống nhà thông minh tự động hóa tiết kiệm điện và cảnh báo an toàn",
+        "Trợ lý IoT theo dõi sức khỏe và lịch trình sinh hoạt của người thân",
+        "Mô hình thùng rác thông minh tự phân loại rác bảo vệ tổ ấm gia đình"
+      ]
+    },
+    "Bạn bè cùng tuổi": {
+      primary: [
+        "Xe robot tự hành vượt chướng ngại vật cùng thi đua tốc độ với các bạn",
+        "Hộp bút và đèn bàn thông minh tự động điều chỉnh ánh sáng bảo vệ mắt",
+        "Mô hình robot đá bóng và trò chơi đua xe cảm ứng vui nhộn sau giờ học"
+      ],
+      secondary: [
+        "Mô hình robot tự hành khám phá mê cung và chia sẻ giải thuật điều khiển",
+        "Hệ thống thiết bị đo bước chân và cảnh báo vận động cho nhóm bạn",
+        "Trạm thí nghiệm cơ điện tử mini học nhóm và nghiên cứu khoa học"
+      ]
+    },
+    "Trường học và lớp học": {
+      primary: [
+        "Robot Thủ Thư thông minh hỗ trợ bác quản thư vận chuyển và sắp xếp sách",
+        "Thùng rác phân loại thông minh tự mở nắp khi có người đến gần",
+        "Trạm quan trắc tự động đo nhiệt độ và chất lượng không khí trong lớp học"
+      ],
+      secondary: [
+        "Hệ thống điểm danh thẻ từ / nhận diện khuôn mặt thông minh cho lớp học",
+        "Mô hình trạm khí tượng học đường đo mưa, gió và chỉ số bụi mịn",
+        "Robot trợ giảng phát tín hiệu chuông báo giờ và hỗ trợ giáo cụ"
+      ]
+    },
+    "Bảo vệ môi trường & Động vật": {
+      primary: [
+        "Thiết bị tưới cây tự động đo độ ẩm đất cho vườn trường hoặc ban công",
+        "Hệ thống máng ăn tự động và theo dõi thú cưng khi vắng nhà",
+        "Robot dọn rác mini tự hành gom rác trên mặt sân"
+      ],
+      secondary: [
+        "Trạm quan trắc thông minh đo độ ô nhiễm nguồn nước và cảnh báo môi trường",
+        "Hệ thống phân loại rác tự động tích hợp camera AI nhận diện đồ tái chế",
+        "Thiết bị theo dõi vi khí hậu và bảo vệ môi trường sống cho động vật"
+      ]
+    },
+    "Cộng đồng xung quanh": {
+      primary: [
+        "Cột đèn tín hiệu thông minh cảnh báo xe giảm tốc độ trước cổng trường",
+        "Gậy thông minh gắn cảm biến siêu âm hỗ trợ người cao tuổi sang đường",
+        "Thiết bị cảnh báo ngập nước tự động phát còi báo khi triều cường dâng"
+      ],
+      secondary: [
+        "Hệ thống cảm biến cảnh báo cháy sớm và báo động khẩn cấp khu dân cư",
+        "Thiết bị thông minh hỗ trợ người khuyết tật di chuyển an toàn trong đô thị",
+        "Trạm quan trắc ngập lụt và cảnh báo an toàn giao thông mùa mưa bão"
+      ]
+    }
   },
-  "Gia đình và người thân": {
-    primary: [
-      "Nhắc nhở bố mẹ, ông bà uống nước, uống thuốc đúng giờ và tập thể dục",
-      "Hỗ trợ làm việc nhà thông minh (tưới cây tự động, bật tắt đèn, dọn phòng mini)",
-      "Gắn kết cả nhà qua các trò chơi tương tác và lưu giữ album kỷ niệm"
-    ],
-    secondary: [
-      "Hệ thống nhà thông minh tự động hóa tiết kiệm điện và cảnh báo an toàn",
-      "Trợ lý ảo gia đình theo dõi sức khỏe và lịch trình sinh hoạt của người thân",
-      "Ứng dụng gắn kết gia đình, phân chia việc nhà và quản lý chi tiêu nhỏ"
-    ]
+  game_programming: {
+    "Gia đình và người thân": {
+      primary: [
+        "Game tương tác đố vui gia đình rèn luyện trí nhớ và kết nối cả nhà",
+        "Ứng dụng trợ lý ảo mini nhắc nhở việc nhà và khen thưởng nếp sống đẹp",
+        "Trò chơi giải đố thông minh thư giãn cùng bố mẹ và ông bà cuối tuần"
+      ],
+      secondary: [
+        "Ứng dụng quản lý thời gian biểu và lịch sinh hoạt gắn kết gia đình",
+        "Game giáo dục tài chính gia đình dạy cách chi tiêu hợp lý cho trẻ",
+        "Nền tảng album ảnh số và trò chơi giải đố kỷ niệm cho cả nhà"
+      ]
+    },
+    "Bạn bè cùng tuổi": {
+      primary: [
+        "Game phiêu lưu vượt ải 2D/3D thi đua bảng xếp hạng điểm số cùng bạn bè",
+        "Trò chơi đối kháng chiến thuật và giải đố toán học vui nhộn",
+        "Ứng dụng giải câu đố nhanh và thử thách kiến thức số an toàn"
+      ],
+      secondary: [
+        "Nền tảng chia sẻ mini-game và thi đấu lập trình giải thuật cùng bạn bè",
+        "Ứng dụng học nhóm tương tác với bảng vinh danh thành tích học tập",
+        "Game nhập vai giáo dục khám phá kiến thức khoa học và công nghệ"
+      ]
+    },
+    "Trường học và lớp học": {
+      primary: [
+        "Phần mềm đố vui trắc nghiệm tương tác hỗ trợ các tiết học trên lớp",
+        "Game mô phỏng các thí nghiệm khoa học tự nhiên vui nhộn không sợ cháy nổ",
+        "Ứng dụng ghi nhận điểm tích lũy và khen thưởng nề nếp học sinh"
+      ],
+      secondary: [
+        "Website cổng thông tin câu lạc bộ và khảo sát ý kiến học sinh toàn trường",
+        "Phần mềm thư viện số hỗ trợ tra cứu và mượn trả tài liệu học tập",
+        "Game giáo dục lịch sử và văn học với cốt truyện phân nhánh tương tác"
+      ]
+    },
+    "Bảo vệ môi trường & Động vật": {
+      primary: [
+        "Game tương tác giải cứu động vật hoang dã và dọn sạch rác đại dương",
+        "Trò chơi mô phỏng phân loại rác đúng thùng để bảo vệ hành tinh xanh",
+        "Game nông trại sinh thái: Trồng cây xanh và chăm sóc muông thú"
+      ],
+      secondary: [
+        "Ứng dụng tính toán dấu chân carbon và gợi ý lối sống xanh cho cộng đồng",
+        "Game chiến thuật bảo vệ rừng phòng hộ và ngăn chặn biến đổi khí hậu",
+        "Phần mềm bản đồ tương tác theo dõi và bảo tồn các loài sinh vật quý hiếm"
+      ]
+    },
+    "Cộng đồng xung quanh": {
+      primary: [
+        "Game giáo dục kỹ năng tham gia giao thông an toàn và phòng tránh nguy hiểm",
+        "Ứng dụng cẩm nang số chỉ đường và giới thiệu văn hóa địa phương",
+        "Trò chơi giải đố tìm hiểu lịch sử và các địa danh nổi tiếng Việt Nam"
+      ],
+      secondary: [
+        "Nền tảng kết nối tình nguyện viên hỗ trợ các hoạt động thiện nguyện xã hội",
+        "Ứng dụng bản đồ số tương tác tìm kiếm điểm thu gom pin cũ và rác điện tử",
+        "Game tương tác hướng dẫn sơ cấp cứu và xử lý tình huống khẩn cấp"
+      ]
+    }
   },
-  "Trường học và lớp học": {
-    primary: [
-      "Giúp bác thủ thư sắp xếp, vận chuyển và tìm kiếm sách truyện nhanh chóng",
-      "Hỗ trợ giáo viên điểm danh tự động và khen thưởng nề nếp lớp học",
-      "Bảng tin thông minh thông báo thời khóa biểu và các sự kiện trường học"
-    ],
-    secondary: [
-      "Hệ thống điểm danh khuôn mặt và quản lý mượn trả thiết bị thí nghiệm",
-      "Website cổng thông tin sự kiện, câu lạc bộ và khảo sát ý kiến học sinh",
-      "Mô hình thùng rác phân loại thông minh và trạm đo chất lượng không khí lớp học"
-    ]
-  },
-  "Bảo vệ môi trường & Động vật": {
-    primary: [
-      "Phân loại rác tái chế, phát hiện rác thải và dọn dẹp vệ sinh khuôn viên",
-      "Theo dõi độ ẩm đất, tưới cây tự động và chăm sóc vườn hoa trường học",
-      "Cho thú cưng ăn tự động và theo dõi sức khỏe của vật nuôi"
-    ],
-    secondary: [
-      "Trạm quan trắc thông minh đo nhiệt độ, độ ẩm và chỉ số ô nhiễm môi trường",
-      "Hệ thống phân loại rác tự động tích hợp camera AI nhận diện đồ tái chế",
-      "Thiết bị cứu hộ hoặc giám sát môi trường sống tự nhiên cho động vật"
-    ]
-  },
-  "Cộng đồng xung quanh": {
-    primary: [
-      "Cảnh báo an toàn giao thông trước cổng trường và hỗ trợ sang đường",
-      "Hỗ trợ người cao tuổi hoặc người khuyết tật di chuyển thuận tiện hơn",
-      "Bản đồ hướng dẫn chỉ đường và giới thiệu địa điểm tham quan thú vị"
-    ],
-    secondary: [
-      "Hệ thống cảnh báo cháy sớm, giám sát mực nước ngập và cứu hộ đô thị",
-      "Ứng dụng kết nối tình nguyện viên hỗ trợ người già neo đơn và trẻ em khó khăn",
-      "Nền tảng quyên góp đồ cũ, sách báo và hỗ trợ các hoạt động thiện nguyện"
-    ]
+  multimedia: {
+    "Gia đình và người thân": {
+      primary: [
+        "Bộ tranh truyện số và video hoạt hình ngộ nghĩnh kể về kỷ niệm gia đình",
+        "Thiết kế thiệp điện tử 3D tương tác gửi lời yêu thương đến bố mẹ, ông bà",
+        "Không gian phòng 3D diorama mơ ước dành tặng người thân"
+      ],
+      secondary: [
+        "Phim hoạt hình ngắn 3D kể câu chuyện truyền cảm hứng về tình cảm gia đình",
+        "Bộ nhận diện và album số kỷ niệm gia đình với phong cách đồ họa độc bản",
+        "Trải nghiệm thực tế ảo (VR/3D) tái hiện ngôi nhà tuổi thơ của gia đình"
+      ]
+    },
+    "Bạn bè cùng tuổi": {
+      primary: [
+        "Bộ nhãn dán sticker và tạo hình nhân vật hoạt hình chia sẻ với bạn bè",
+        "Video hoạt hình ngắn (Animation) hài hước mang lại nụ cười sau giờ học",
+        "Mô hình không gian 3D thế giới diệu kỳ cùng khám phá với nhóm bạn"
+      ],
+      secondary: [
+        "Bộ truyện tranh số (Webtoon) đa phương tiện về tình bạn học trò",
+        "Video Motion Graphics giới thiệu các mẹo học tập sáng tạo cho bạn bè",
+        "Thiết kế giao diện ứng dụng (UI/UX) thân thiện cho lứa tuổi học sinh"
+      ]
+    },
+    "Trường học và lớp học": {
+      primary: [
+        "Bộ poster và tranh cổ động số trang trí lớp học tươi sáng, thân thiện",
+        "Video hoạt hình ngắn tuyên truyền phòng chống bạo lực và xây dựng tình bạn",
+        "Infographic trực quan hóa các kiến thức khoa học và lịch sử dễ hiểu"
+      ],
+      secondary: [
+        "Bộ nhận diện thương hiệu số cho sự kiện và câu lạc bộ nghệ thuật trường học",
+        "Phim tài liệu số ngắn ghi lại hành trình học tập và khoảnh khắc đáng nhớ",
+        "Bản thiết kế không gian kiến trúc 3D cho thư viện và sân trường tương lai"
+      ]
+    },
+    "Bảo vệ môi trường & Động vật": {
+      primary: [
+        "Chiến dịch tranh vẽ số và video hoạt hình kêu gọi bảo vệ động vật quý hiếm",
+        "Mô hình 3D khu rừng nhiệt đới và thế giới san hô dưới lòng đại dương",
+        "Bộ tranh truyện số kể về hành trình của một chú rùa biển tìm lại biển xanh"
+      ],
+      secondary: [
+        "Chiến dịch truyền thông thị giác đa phương tiện về rác thải nhựa và đại dương",
+        "Triển lãm nghệ thuật số 3D Diorama tôn vinh vẻ đẹp thiên nhiên hoang dã",
+        "Video hoạt hình ngắn giáo dục nâng cao nhận thức biến đổi khí hậu toàn cầu"
+      ]
+    },
+    "Cộng đồng xung quanh": {
+      primary: [
+        "Mô hình Diorama 3D tái hiện các di sản văn hóa và danh lam thắng cảnh Việt Nam",
+        "Bộ tranh minh họa số giới thiệu ẩm thực và nét đẹp con người quê hương",
+        "Video hoạt hình ngắn lan tỏa thông điệp tử tế và tinh thần tương thân tương ái"
+      ],
+      secondary: [
+        "Phim ngắn đồ họa 3D tôn vinh các giá trị văn hóa và di sản phi vật thể",
+        "Chiến dịch thiết kế truyền thông thị giác vì cộng đồng văn minh, an toàn",
+        "Trải nghiệm di sản số tương tác 3D phục vụ du lịch và giáo dục cộng đồng"
+      ]
+    }
   }
 };
 
-const ALL_PURPOSE_SUGGESTIONS = Object.values(AUDIENCE_PURPOSE_SUGGESTIONS).flatMap(item => [
-  ...item.primary,
-  ...item.secondary
-]);
+function getPurposeSuggestions(
+  domain: string = "robotics",
+  audience: string = "Gia đình và người thân",
+  isPrimary: boolean = true
+): string[] {
+  const domKey = domain === "multimedia" ? "multimedia" : domain === "game_programming" ? "game_programming" : "robotics";
+  const audMap = DOMAIN_AUDIENCE_PURPOSE_SUGGESTIONS[domKey] || DOMAIN_AUDIENCE_PURPOSE_SUGGESTIONS.robotics;
+  const entry = audMap[audience] || audMap["Gia đình và người thân"];
+  return isPrimary ? entry.primary : entry.secondary;
+}
+
+const ALL_PURPOSE_SUGGESTIONS = Object.values(DOMAIN_AUDIENCE_PURPOSE_SUGGESTIONS).flatMap(domMap =>
+  Object.values(domMap).flatMap(item => [...item.primary, ...item.secondary])
+);
+
+const REFLECTION_OPTIONS_BY_DOMAIN: Record<string, { id: string; label: string }[]> = {
+  robotics: [
+    { id: "mechanic", label: "Cách lắp ráp cơ khí và kết nối các khớp chuyển động thật mượt mà" },
+    { id: "sensor_circuit", label: "Cách kết nối cảm biến và đấu nối vi mạch thông minh" },
+    { id: "code_logic", label: "Cách viết code điều khiển để máy tự xử lý tình huống" },
+    { id: "story", label: "Cách kể câu chuyện dự án và thuyết trình sản phẩm trước mọi người" }
+  ],
+  game_programming: [
+    { id: "code_logic", label: "Cách viết code logic thông minh để nhân vật di chuyển và tính điểm mượt mà" },
+    { id: "game_mechanics", label: "Cách sáng tạo luật chơi, các chướng ngại vật và màn đấu thử thách" },
+    { id: "ui_visual", label: "Cách thiết kế hình ảnh nhân vật, bản đồ và hiệu ứng âm thanh sống động" },
+    { id: "story", label: "Cách kể câu chuyện dự án truyền cảm hứng cho người chơi" }
+  ],
+  multimedia: [
+    { id: "3d_modeling", label: "Cách dựng hình 3D và tạo khối nhân vật không gian sống động" },
+    { id: "ui_visual", label: "Cách phối màu sắc, hiệu ứng ánh sáng và góc quay bắt mắt" },
+    { id: "script_story", label: "Cách viết kịch bản và kể câu chuyện truyền cảm hứng cho người xem" },
+    { id: "story", label: "Cách dựng phim, lồng tiếng và xuất bản tác phẩm số hoàn chỉnh" }
+  ]
+};
 
 const APPEARANCE_SUGGESTIONS_MAP: Record<string, string[]> = {
   robotics: [
@@ -137,7 +305,7 @@ const initialAnswers: JourneyAnswers = {
   gradeBand: "3-5",
   grade: "4",
   avatar: "creator",
-  projectName: "Robot Trợ Lý Gia Đình",
+  projectName: "",
   futureSelf: "",
   favoriteColor: "",
   characterStyle: "",
@@ -152,17 +320,17 @@ const initialAnswers: JourneyAnswers = {
   domain: "robotics",
   branch: "robot_build_and_block_control",
   dreamAudience: "Gia đình và người thân",
-  dreamPurpose: "Hỗ trợ làm việc nhà thông minh (tưới cây tự động, bật tắt đèn, dọn phòng mini)",
-  dreamFeatures: ["Tự động nhận biết vật cản", "Điều khiển bằng nút bấm"],
-  dreamAppearance: "Vỏ màu xanh dương, mắt đèn LED phát sáng, 4 bánh xe cao su chống trượt",
-  knowledgeResponse: "Kiểm tra pin và xem động cơ có bị kẹt bánh răng không.",
-  skillResponse: "Lắp ráp khung xe trước, gắn động cơ, sau đó kết nối mạch điều khiển.",
-  problemResponse: "Nếu robot đi lệch hướng, con sẽ chỉnh lại tốc độ của 2 bánh xe cho đều nhau.",
-  parentObservedTask: "independent",
-  parentObservedExample: "Bé rất thích tự mày mò tháo lắp các khối Lego và tìm cách làm xe chạy xa hơn.",
+  dreamPurpose: "",
+  dreamFeatures: [],
+  dreamAppearance: "",
+  knowledgeResponse: "",
+  skillResponse: "",
+  problemResponse: "",
+  parentObservedTask: "",
+  parentObservedExample: "",
   hoursPerWeek: 2,
-  availableResources: ["Máy tính", "Vật liệu đơn giản"],
-  supportMode: ["Lắng nghe và khích lệ", "Cùng con thử một việc nhỏ"],
+  availableResources: ["Máy tính / Thiết bị sẵn có"],
+  supportMode: ["Lắng nghe và khích lệ"],
   familyConflict: "agree",
   familyReviewConfirmed: true,
   parentApprovesExternalTransfer: false
@@ -202,10 +370,27 @@ export function FutureJourney() {
 
       if (typeof parsed.current === "number") setCurrent(Math.min(parsed.current, 19));
       if (parsed.answers) {
+        const loadedAnswers = { ...parsed.answers };
+        // Clean out legacy hardcoded mocks if present
+        if (loadedAnswers.projectName === "Robot Trợ Lý Gia Đình" && loadedAnswers.domain !== "robotics") {
+          loadedAnswers.projectName = "";
+        }
+        if (loadedAnswers.knowledgeResponse?.includes("bánh răng") && loadedAnswers.domain !== "robotics") {
+          loadedAnswers.knowledgeResponse = "";
+        }
+        if (loadedAnswers.skillResponse?.includes("khung xe") && loadedAnswers.domain !== "robotics") {
+          loadedAnswers.skillResponse = "";
+        }
+        if (loadedAnswers.problemResponse?.includes("lệch hướng") && loadedAnswers.domain !== "robotics") {
+          loadedAnswers.problemResponse = "";
+        }
+        if (loadedAnswers.parentObservedExample?.includes("Lego") && loadedAnswers.domain !== "robotics") {
+          loadedAnswers.parentObservedExample = "";
+        }
         setAnswers(prev => ({
           ...prev,
-          ...parsed.answers,
-          selections: parsed.answers.selections ?? {}
+          ...loadedAnswers,
+          selections: loadedAnswers.selections ?? {}
         }));
       }
     } catch {
@@ -282,6 +467,16 @@ export function FutureJourney() {
     [isPrimary, answers.branch]
   );
 
+  // Prune invalid dreamFeatures if not matching active branchData
+  useEffect(() => {
+    if (branchData?.featureChoices && answers.dreamFeatures && answers.dreamFeatures.length > 0) {
+      const validFeatures = answers.dreamFeatures.filter(f => branchData.featureChoices.includes(f));
+      if (validFeatures.length !== answers.dreamFeatures.length) {
+        setAnswers(a => ({ ...a, dreamFeatures: validFeatures }));
+      }
+    }
+  }, [branchData?.featureChoices, answers.dreamFeatures]);
+
   // Validation
   function canContinue(): boolean {
     if (current === 0) {
@@ -295,9 +490,6 @@ export function FutureJourney() {
     }
     if (current === 5) {
       return Boolean(answers.branch);
-    }
-    if (current === 8) {
-      return Boolean(answers.projectName?.trim());
     }
     if (current >= 16) {
       return true;
@@ -675,12 +867,27 @@ export function FutureJourney() {
                               : dom.id === 'game_programming'
                               ? (isPrimary ? 'Nhà sáng tạo game nhí' : 'Kỹ sư lập trình phần mềm')
                               : (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Kỹ sư Robotics & Tự động hóa');
-                            setAnswers(a => ({
-                              ...a,
-                              domain: dom.id,
-                              branch: nextBranch,
-                              futureSelf: nextRole
-                            }));
+                            setAnswers(a => {
+                              const isChanged = a.domain !== dom.id;
+                              return {
+                                ...a,
+                                domain: dom.id,
+                                branch: nextBranch,
+                                futureSelf: nextRole,
+                                ...(isChanged ? {
+                                  projectName: "",
+                                  dreamPurpose: "",
+                                  dreamFeatures: [],
+                                  dreamAppearance: "",
+                                  knowledgeResponse: "",
+                                  skillResponse: "",
+                                  problemResponse: "",
+                                  parentObservedTask: "",
+                                  parentObservedExample: "",
+                                  selfReflection: []
+                                } : {})
+                              };
+                            });
                           }}
                           className={`group flex flex-col justify-between overflow-hidden rounded-3xl border text-left transition-all duration-200 ${
                             active
@@ -897,12 +1104,27 @@ export function FutureJourney() {
                               : d.id === 'game_programming'
                               ? (isPrimary ? 'Nhà sáng tạo game nhí' : 'Kỹ sư lập trình phần mềm')
                               : (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Kỹ sư Robotics & Tự động hóa');
-                            setAnswers(a => ({
-                              ...a,
-                              domain: d.id,
-                              branch: nextBranch,
-                              futureSelf: nextRole
-                            }));
+                            setAnswers(a => {
+                              const isChanged = a.domain !== d.id;
+                              return {
+                                ...a,
+                                domain: d.id,
+                                branch: nextBranch,
+                                futureSelf: nextRole,
+                                ...(isChanged ? {
+                                  projectName: "",
+                                  dreamPurpose: "",
+                                  dreamFeatures: [],
+                                  dreamAppearance: "",
+                                  knowledgeResponse: "",
+                                  skillResponse: "",
+                                  problemResponse: "",
+                                  parentObservedTask: "",
+                                  parentObservedExample: "",
+                                  selfReflection: []
+                                } : {})
+                              };
+                            });
                           }}
                           className={`group overflow-hidden rounded-2xl border text-left transition-all ${
                             active
@@ -967,7 +1189,21 @@ export function FutureJourney() {
                         <button
                           type="button"
                           key={branchKey}
-                          onClick={() => setAnswers(a => ({ ...a, branch: branchKey }))}
+                          onClick={() => {
+                            setAnswers(a => {
+                              const isBranchChanged = a.branch !== branchKey;
+                              return {
+                                ...a,
+                                branch: branchKey,
+                                ...(isBranchChanged ? {
+                                  dreamFeatures: [],
+                                  knowledgeResponse: "",
+                                  skillResponse: "",
+                                  problemResponse: ""
+                                } : {})
+                              };
+                            });
+                          }}
                           className={`flex flex-col justify-between rounded-2xl border p-5 text-left transition ${
                             active
                               ? "border-tek-500 bg-tek-50/70 ring-2 ring-tek-300 shadow-xs"
@@ -1006,17 +1242,15 @@ export function FutureJourney() {
                       {isPrimary ? "Con muốn sản phẩm trong mơ giúp đỡ ai?" : "Ai là đối tượng người dùng bạn muốn hướng đến?"}
                     </label>
                     <div className="mt-2.5 flex flex-wrap gap-2">
-                      {Object.keys(AUDIENCE_PURPOSE_SUGGESTIONS).map(aud => {
-                        const active = answers.dreamAudience === aud;
+                      {AUDIENCE_KEYS.map(aud => {
+                        const active = (answers.dreamAudience || "Gia đình và người thân") === aud;
                         return (
                           <button
                             type="button"
                             key={aud}
                             onClick={() => {
-                              const suggs = isPrimary
-                                ? AUDIENCE_PURPOSE_SUGGESTIONS[aud]?.primary
-                                : AUDIENCE_PURPOSE_SUGGESTIONS[aud]?.secondary;
-                              const firstSugg = suggs?.[0] || "";
+                              const suggs = getPurposeSuggestions(answers.domain, aud, Boolean(isPrimary));
+                              const firstSugg = suggs[0] || "";
                               setAnswers(a => {
                                 const shouldUpdatePurpose =
                                   !a.dreamPurpose || ALL_PURPOSE_SUGGESTIONS.includes(a.dreamPurpose);
@@ -1050,10 +1284,10 @@ export function FutureJourney() {
 
                     {/* Dynamic Purpose Suggestion Chips for Selected Audience */}
                     <div className="mt-2.5 flex flex-wrap gap-1.5">
-                      {(
-                        (isPrimary
-                          ? AUDIENCE_PURPOSE_SUGGESTIONS[answers.dreamAudience || "Gia đình và người thân"]?.primary
-                          : AUDIENCE_PURPOSE_SUGGESTIONS[answers.dreamAudience || "Gia đình và người thân"]?.secondary) || []
+                      {getPurposeSuggestions(
+                        answers.domain,
+                        answers.dreamAudience || "Gia đình và người thân",
+                        Boolean(isPrimary)
                       ).map((sug, sIdx) => {
                         const isSelected = answers.dreamPurpose === sug;
                         return (
@@ -1172,9 +1406,22 @@ export function FutureJourney() {
                 const sampleProjects: string[] = (branchData?.projects || [])
                   .map((p: any) => p.title || p.name)
                   .filter(Boolean);
-                const defaultNames = isPrimary
-                  ? ["Robot Hỗ Trợ Đời Sống", "Trạm Công Nghệ Mini", "Cỗ Máy Thông Minh Vui Nhộn"]
-                  : ["Hệ Thống Tự Động Hóa Thông Minh", "Ứng Dụng Đa Năng Thông Minh", "Mô Hình Công Nghệ Số"];
+                const defaultNamesByDomain: Record<string, { primary: string[]; secondary: string[] }> = {
+                  robotics: {
+                    primary: ["Robot Hỗ Trợ Đời Sống", "Trạm Công Nghệ Mini", "Cỗ Máy Thông Minh Vui Nhộn"],
+                    secondary: ["Hệ Thống Tự Động Hóa Thông Minh", "Thiết Bị IoT Giám Sát Môi Trường", "Cánh Tay Robot Công Nghiệp"]
+                  },
+                  game_programming: {
+                    primary: ["Thế Giới Phiêu Lưu Ký", "Chiến Binh Giải Đố", "Hành Trình Ngôi Sao Diệu Kỳ"],
+                    secondary: ["Vương Quốc Huyền Thoại RPG", "Siêu Ứng Dụng Học Tập Tương Tác", "Đấu Trường Logic & Chiến Thuật"]
+                  },
+                  multimedia: {
+                    primary: ["Cuốn Phim Hoạt Hình Vui Nhộn", "Thế Giới 3D Kỳ Diệu", "Triển Lãm Nghệ Thuật Số Của Bé"],
+                    secondary: ["Bộ Phim Hoạt Hình Kỹ Xảo 3D", "Không Gian Kiến Trúc Thực Tế Ảo", "Bộ Nhận Diện Sáng Tạo Đa Phương Tiện"]
+                  }
+                };
+                const domNames = defaultNamesByDomain[answers.domain || "robotics"] || defaultNamesByDomain.robotics;
+                const defaultNames = isPrimary ? domNames.primary : domNames.secondary;
                 const projectSuggestions = Array.from(new Set([...sampleProjects, ...defaultNames])).slice(0, 4);
 
                 return (
@@ -1531,12 +1778,10 @@ export function FutureJourney() {
                     Trong hành trình vừa qua, điều gì khiến {isPrimary ? "con" : "bạn"} muốn học hỏi thêm nhất?
                   </p>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    {[
-                      { id: "mechanic", label: "Cách lắp ráp và kết nối các bộ phận thật mượt mà" },
-                      { id: "code_logic", label: "Cách viết code thông minh để máy tự xử lý tình huống" },
-                      { id: "ui_visual", label: "Cách thiết kế giao diện bắt mắt và thu hút người xem" },
-                      { id: "story", label: "Cách kể câu chuyện dự án truyền cảm hứng cho mọi người" }
-                    ].map(ref => {
+                    {(
+                      REFLECTION_OPTIONS_BY_DOMAIN[answers.domain || "robotics"] ||
+                      REFLECTION_OPTIONS_BY_DOMAIN.robotics
+                    ).map(ref => {
                       const active = (answers.selfReflection ?? []).includes(ref.id);
                       return (
                         <button
@@ -2000,7 +2245,17 @@ export function FutureJourney() {
                 <button
                   type="button"
                   disabled={!canContinue()}
-                  onClick={() => setCurrent(c => Math.min(19, c + 1))}
+                  onClick={() => {
+                    if (current === 8 && !answers.projectName?.trim()) {
+                      const fallbackName = branchData?.projects?.[0]?.title || (
+                        answers.domain === "game_programming" ? "Thế Giới Phiêu Lưu Ký" :
+                        answers.domain === "multimedia" ? "Cuốn Phim Hoạt Hình Vui Nhộn" :
+                        "Robot Hỗ Trợ Đời Sống"
+                      );
+                      setAnswers(a => ({ ...a, projectName: fallbackName }));
+                    }
+                    setCurrent(c => Math.min(19, c + 1));
+                  }}
                   className={`focus-ring inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-extrabold text-white shadow-card transition ${
                     canContinue()
                       ? "bg-tek-500 hover:bg-tek-600"
