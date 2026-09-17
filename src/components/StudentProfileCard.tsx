@@ -281,52 +281,52 @@ export function StudentProfileCard({
           {/* Row 2: 4 Attribute Badges (Mint, Pink, Amber, Blue) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
             {/* 1. Khối lớp */}
-            <div className="flex items-center gap-2.5 rounded-2xl bg-[#E8F8F5] border border-[#C8EFE6] p-3 shadow-xs">
-              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#1a8a7d] shrink-0 shadow-xs">
+            <div className="flex items-start gap-2.5 rounded-2xl bg-[#E8F8F5] border border-[#C8EFE6] p-3 shadow-xs">
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#1a8a7d] shrink-0 shadow-xs mt-0.5">
                 <GraduationCap className="h-4 w-4" />
               </span>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Khối lớp</p>
-                <p className="text-xs sm:text-sm font-extrabold text-[#1a8a7d] leading-tight">
+                <p className="text-xs sm:text-sm font-extrabold text-[#1a8a7d] leading-snug break-words">
                   Lớp {displayGrade}
                 </p>
               </div>
             </div>
 
             {/* 2. Sở thích */}
-            <div className="flex items-center gap-2.5 rounded-2xl bg-[#FCEBEB] border border-[#FAD7D7] p-3 shadow-xs">
-              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#e05260] shrink-0 shadow-xs">
+            <div className="flex items-start gap-2.5 rounded-2xl bg-[#FCEBEB] border border-[#FAD7D7] p-3 shadow-xs">
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#e05260] shrink-0 shadow-xs mt-0.5">
                 <Heart className="h-4 w-4" />
               </span>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Sở thích</p>
-                <p className="text-xs sm:text-sm font-extrabold text-[#e05260] leading-tight truncate">
+                <p className="text-xs sm:text-sm font-extrabold text-[#e05260] leading-snug break-words">
                   {displayInterest}
                 </p>
               </div>
             </div>
 
             {/* 3. Phong cách */}
-            <div className="flex items-center gap-2.5 rounded-2xl bg-[#FEF7E6] border border-[#FDEAC4] p-3 shadow-xs">
-              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#d97706] shrink-0 shadow-xs">
+            <div className="flex items-start gap-2.5 rounded-2xl bg-[#FEF7E6] border border-[#FDEAC4] p-3 shadow-xs">
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#d97706] shrink-0 shadow-xs mt-0.5">
                 <Star className="h-4 w-4" />
               </span>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Phong cách</p>
-                <p className="text-xs sm:text-sm font-extrabold text-[#d97706] leading-tight truncate">
+                <p className="text-xs sm:text-sm font-extrabold text-[#d97706] leading-snug break-words">
                   {displayStyle}
                 </p>
               </div>
             </div>
 
             {/* 4. Ước mơ */}
-            <div className="flex items-center gap-2.5 rounded-2xl bg-[#EDF4FD] border border-[#D5E6FA] p-3 shadow-xs">
-              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#2563eb] shrink-0 shadow-xs">
+            <div className="flex items-start gap-2.5 rounded-2xl bg-[#EDF4FD] border border-[#D5E6FA] p-3 shadow-xs">
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white text-[#2563eb] shrink-0 shadow-xs mt-0.5">
                 <Users className="h-4 w-4" />
               </span>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Ước mơ</p>
-                <p className="text-xs sm:text-sm font-extrabold text-[#2563eb] leading-tight truncate">
+                <p className="text-xs sm:text-sm font-extrabold text-[#2563eb] leading-snug break-words">
                   {displayDream}
                 </p>
               </div>
@@ -384,7 +384,7 @@ export function StudentProfileCard({
               <div className="rounded-2xl bg-white p-3 border border-teal-100/90 shadow-2xs flex items-center justify-between">
                 <div className="min-w-0">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Điểm mạnh tự nhiên</span>
-                  <span className="text-xs font-extrabold text-slate-700 truncate block">
+                  <span className="text-xs font-extrabold text-slate-700 leading-tight break-words block">
                     {riasec.naturalTraits[0] || "Tư duy sáng tạo"}
                   </span>
                 </div>
@@ -633,11 +633,11 @@ export function StudentProfileCard({
                       </span>
                       <ChevronRight className="h-4 w-4 text-slate-400 group-hover:translate-x-0.5 transition" />
                     </div>
-                    <strong className="text-xs sm:text-sm font-extrabold text-[#1a3a4a] block truncate group-hover:text-[#1a8a7d] transition">
+                    <strong className="text-xs sm:text-sm font-extrabold text-[#1a3a4a] block leading-snug group-hover:text-[#1a8a7d] transition break-words">
                       {proj.name}
                     </strong>
                     <div className="mt-2 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
-                      <span className="font-semibold text-slate-600 truncate max-w-[210px]">
+                      <span className="font-semibold text-slate-600 break-words flex-1 mr-2">
                         📦 {proj.deliverable}
                       </span>
                       <span className="text-[#1a8a7d] font-bold shrink-0">Chi tiết →</span>

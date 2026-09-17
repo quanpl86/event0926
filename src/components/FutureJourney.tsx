@@ -1998,29 +1998,29 @@ export function FutureJourney() {
 
                         {/* Visual Summary Badges */}
                         <div className="mt-3.5 space-y-2">
-                          <div className="flex items-center gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
-                            <span className="text-base shrink-0">✨</span>
+                          <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                            <span className="text-base shrink-0 mt-0.5">✨</span>
                             <div className="min-w-0 flex-1">
                               <span className="text-[10px] font-bold text-slate-400 uppercase block">Dự án mơ ước:</span>
-                              <p className="text-xs font-extrabold text-ink truncate">{answers.projectName || "Dự án sáng tạo"}</p>
+                              <p className="text-xs font-extrabold text-ink leading-snug break-words">{answers.projectName || "Dự án sáng tạo"}</p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
-                            <span className="text-base shrink-0">🎯</span>
+                          <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                            <span className="text-base shrink-0 mt-0.5">🎯</span>
                             <div className="min-w-0 flex-1">
                               <span className="text-[10px] font-bold text-slate-400 uppercase block">Giúp đỡ & Mục đích:</span>
-                              <p className="text-xs font-bold text-slate-700 truncate">
+                              <p className="text-xs font-bold text-slate-700 leading-snug break-words">
                                 {answers.dreamAudience || "Gia đình"} · {answers.dreamPurpose || "Giải quyết bài toán thực tế"}
                               </p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
-                            <span className="text-base shrink-0">💡</span>
+                          <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                            <span className="text-base shrink-0 mt-0.5">💡</span>
                             <div className="min-w-0 flex-1">
                               <span className="text-[10px] font-bold text-slate-400 uppercase block">Phản xạ khi gặp thử thách:</span>
-                              <p className="text-xs font-medium text-slate-700 truncate">
+                              <p className="text-xs font-medium text-slate-700 leading-snug break-words">
                                 {answers.problemResponse || answers.knowledgeResponse || "Kiên trì thử từng phần và tìm giải pháp"}
                               </p>
                             </div>
@@ -2073,11 +2073,11 @@ export function FutureJourney() {
 
                         {/* Visual Summary Badges */}
                         <div className="mt-3.5 space-y-2">
-                          <div className="flex items-center gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
-                            <span className="text-base shrink-0">🌟</span>
+                          <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                            <span className="text-base shrink-0 mt-0.5">🌟</span>
                             <div className="min-w-0 flex-1">
                               <span className="text-[10px] font-bold text-slate-400 uppercase block">Thói quen tự lập:</span>
-                              <p className="text-xs font-extrabold text-ink truncate">
+                              <p className="text-xs font-extrabold text-ink leading-snug break-words">
                                 {answers.parentObservedTask === "independent"
                                   ? "Chủ động tự mày mò thực hiện"
                                   : answers.parentObservedTask === "shared"
@@ -2087,21 +2087,21 @@ export function FutureJourney() {
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
-                            <span className="text-base shrink-0">⏱️</span>
+                          <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                            <span className="text-base shrink-0 mt-0.5">⏱️</span>
                             <div className="min-w-0 flex-1">
                               <span className="text-[10px] font-bold text-slate-400 uppercase block">Thời gian đồng hành:</span>
-                              <p className="text-xs font-bold text-slate-700 truncate">
+                              <p className="text-xs font-bold text-slate-700 leading-snug break-words">
                                 {answers.hoursPerWeek ? `${answers.hoursPerWeek} giờ / tuần` : "Linh hoạt cuối tuần"}
                               </p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
-                            <span className="text-base shrink-0">🤝</span>
+                          <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                            <span className="text-base shrink-0 mt-0.5">🤝</span>
                             <div className="min-w-0 flex-1">
                               <span className="text-[10px] font-bold text-slate-400 uppercase block">Cách hỗ trợ mong muốn:</span>
-                              <p className="text-xs font-medium text-slate-700 truncate">
+                              <p className="text-xs font-medium text-slate-700 leading-snug break-words">
                                 {(answers.supportMode && answers.supportMode[0]) || "Lắng nghe và khích lệ con tự làm"}
                               </p>
                             </div>

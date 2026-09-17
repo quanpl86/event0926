@@ -355,7 +355,7 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] font-bold text-[#1a8a7d] uppercase tracking-wider">Ước mơ của con</p>
-                    <p className="text-sm sm:text-base font-extrabold text-[#1a3a4a] mt-0.5 leading-snug truncate">
+                    <p className="text-sm sm:text-base font-extrabold text-[#1a3a4a] mt-0.5 leading-snug break-words">
                       {activeAnswers.projectName || "Robot Thủ Thư Nhí"}
                     </p>
                     <p className="text-[11px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
