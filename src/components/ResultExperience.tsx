@@ -273,6 +273,12 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
           onOpenStandardsModal={(code) => setModalCode(code)}
           evidenceCards={evidenceCards}
           onUpdateName={handleUpdateName}
+          projects={personalizedProjects}
+          onSelectProject={(projectIdx) => {
+            setSelectedStageIndex(projectIdx);
+            setActiveMainTab("dashboard");
+            window.scrollTo({ top: 300, behavior: "smooth" });
+          }}
         />
       )}
 

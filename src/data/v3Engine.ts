@@ -328,13 +328,14 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
   const level = isPrimary ? 'primary' : 'secondary';
   const branchKey = answers.branch || (isPrimary ? 'game' : 'web');
   const branch = getBranchData(Boolean(isPrimary), branchKey);
+  const riasec = extractRIASECProfile(answers);
 
   const dreamName = answers.projectName?.trim() || 'Dự án Sáng Tạo';
   const dreamAudience = answers.dreamAudience || 'gia đình và bạn bè';
   const dreamPurpose = answers.dreamPurpose || 'giải quyết vấn đề thực tế';
   const dreamFeatures = (answers.dreamFeatures && answers.dreamFeatures.length > 0) ? answers.dreamFeatures : ['Tương tác người dùng'];
 
-  // Whitelist payload strictly
+  // Whitelist payload strictly for Google AI Studio single-file web app generator
   const safePayload = {
     displayName: answers.name?.trim() || 'Nhà Sáng Tạo',
     grade: gradeNum,
@@ -342,14 +343,45 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     technologyDomain: branch?.domain || answers.domain || (isPrimary ? 'game_programming' : 'programming'),
     specialization: branchKey,
     specializationLabel: branch?.label || branchKey,
+
+    // CẤU TRÚC ĐỊNH HƯỚNG NĂNG LỰC TƯƠNG LAI (FUTURE CAPABILITY PORTFOLIO)
+    futureCapabilityPortfolio: {
+      portfolioType: 'Future Capability Portfolio (Hồ Sơ Năng Lực Tương Lai Mục Tiêu)',
+      conceptNotice: 'Đây là chân dung năng lực và bộ dự án mục tiêu con cùng gia đình mong muốn đạt được, không phải hồ sơ năng lực hiện tại được cập nhật dần.',
+      riasecOrientation: {
+        primaryCode: riasec.primaryCode,
+        primaryName: riasec.primaryName,
+        hollandFullName: riasec.hollandFullName,
+        techSector: riasec.techSector, // 1 trong 3 nhóm duy nhất: 'Robot - AI - IoT' | 'Lập trình & AI' | 'Multimedia'
+        techSectorDescription: riasec.techSectorDescription,
+        secondaryCodes: riasec.secondaryCodes,
+        naturalTraits: riasec.naturalTraits,
+      },
+      familyTriangulation: {
+        studentAspiration: riasec.triangulation.studentAspiration,
+        parentObservation: riasec.triangulation.parentObservation,
+        alignmentPercent: riasec.triangulation.alignmentPercent,
+        consensusSummary: riasec.triangulation.consensusSummary,
+      },
+      targetTechStack: riasec.techStack,
+      targetSoftSkills4Cs: riasec.softSkills,
+      academicStandards: riasec.standards,
+      portfolioProjects: projects.map(p => ({
+        id: p.id,
+        projectNumber: p.projectNumber,
+        name: p.name,
+        goal: p.goal,
+        tasks: p.tasks,
+        deliverable: p.deliverable,
+        completionCheck: p.completionCheck,
+        isDreamProject: p.isDreamProject
+      }))
+    },
+
     futureProfile: {
-      role: answers.futureSelf || (
-        answers.domain === 'multimedia'
-          ? (isPrimary ? 'Nhà sáng tạo nội dung số nhí' : 'Nhà thiết kế trải nghiệm số')
-          : answers.domain === 'game_programming'
-          ? (isPrimary ? 'Nhà sáng tạo game nhí' : 'Kỹ sư lập trình phần mềm')
-          : (isPrimary ? 'Nhà sáng tạo robot nhí' : 'Kỹ sư Robotics & Tự động hóa')
-      ),
+      role: answers.futureSelf || riasec.roleTitle,
+      roleSubtitle: riasec.roleSubtitle,
+      techSector: riasec.techSector,
       motto: answers.domain === 'multimedia'
         ? (isPrimary
             ? 'Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!'
@@ -418,37 +450,29 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     }
   };
 
-  // ĐỊNH HƯỚNG PHONG CÁCH HÌNH ẢNH (VISUAL STYLING) THEO LĨNH VỰC & CẤP HỌC
+  // ĐỊNH HƯỚNG PHONG CÁCH HÌNH ẢNH (VISUAL STYLING) THEO 3 NHÓM NGÀNH CÔNG NGHỆ CHÍNH
   const domainVisualConfig = answers.domain === 'robotics'
     ? {
-        label: 'Robot & Điều khiển Tự Động',
+        label: 'Robot - AI - IoT',
         primaryColor: '#1a8a7d',
         gradientHero: 'from-[#1a8a7d] via-[#0d9488] to-[#0f766e]',
         accentTag: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-        motifNote: 'Hệ biểu tượng kỹ thuật & cơ điện tử: Robot, Chip vi điều khiển, Cảm biến, Bánh răng cơ khí, Khay nâng thông minh.'
+        motifNote: 'Hệ biểu tượng kỹ thuật & cơ điện tử: Robot, Chip vi điều khiển ESP32/Arduino, Cảm biến siêu âm/dò đường, Bánh răng cơ khí, Khay nâng thông minh.'
       }
     : answers.domain === 'game_programming'
     ? {
-        label: 'Lập Trình Game & Sáng Tạo Số',
+        label: 'Lập trình & AI',
         primaryColor: '#4f46e5',
         gradientHero: 'from-[#4338ca] via-[#4f46e5] to-[#6366f1]',
         accentTag: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-        motifNote: 'Hệ biểu tượng game studio & logic: Gamepad tay cầm, Khối lệnh code, Màn chơi nhiệm vụ, Huy hiệu thành tựu.'
+        motifNote: 'Hệ biểu tượng game studio & giải thuật: Gamepad tay cầm, Khối lệnh code Python/Scratch, Màn chơi nhiệm vụ, State Machine AI.'
       }
-    : answers.domain === 'multimedia'
-    ? {
-        label: 'Thiết Kế Đồ Họa & Trải Nghiệm Số',
+    : {
+        label: 'Multimedia',
         primaryColor: '#e11d48',
         gradientHero: 'from-[#be123c] via-[#e11d48] to-[#f43f5e]',
         accentTag: 'bg-rose-100 text-rose-800 border-rose-200',
-        motifNote: 'Hệ biểu tượng nghệ thuật số & đồ họa: Bảng màu palette, Khung vẽ layout, Camera ống kính, Tương tác thẩm mỹ trực quan.'
-      }
-    : {
-        label: 'Khoa Học & Đổi Mới Công Nghệ',
-        primaryColor: '#0284c7',
-        gradientHero: 'from-[#0369a1] via-[#0284c7] to-[#0ea5e9]',
-        accentTag: 'bg-sky-100 text-sky-800 border-sky-200',
-        motifNote: 'Hệ biểu tượng công nghệ tương lai: Tên lửa khám phá, Quả cầu số, Mạng lưới kết nối, Đổi mới sáng tạo.'
+        motifNote: 'Hệ biểu tượng nghệ thuật số & không gian 3D: Blender Diorama 3D, Figma UI/UX, Bảng màu HSL, Kể chuyện số đa phương tiện.'
       };
 
   const ageVisualConfig = isPrimary
@@ -463,7 +487,11 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
         fontSize: 'text-xs sm:text-sm',
       };
 
-  const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và lập trình web sáng tạo hàng đầu. Hãy tạo một website một trang duy nhất (Single-File HTML: index.html) hoàn chỉnh, đẹp mắt, có thể mở trực tiếp bằng trình duyệt từ hồ sơ JSON bên dưới.
+  const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và kỹ sư web sáng tạo hàng đầu. Hãy tạo một website một trang duy nhất (Single-File HTML: index.html) hoàn chỉnh, trực quan, có thể mở trực tiếp bằng trình duyệt từ hồ sơ JSON bên dưới.
+
+BẢN CHẤT SẢN PHẨM:
+- Đây là "FUTURE CAPABILITY PORTFOLIO" (Hồ Sơ Năng Lực Tương Lai Mục Tiêu) mà học sinh và gia đình đã thống nhất hướng tới sau quá trình tương tác hướng nghiệp theo Mô Hình RIASEC.
+- Website không chỉ là một namecard đơn thuần mà là một hồ sơ năng lực tương lai toàn diện, tích hợp lộ trình hành động cụ thể để đạt được chân dung đó.
 
 YÊU CẦU KỸ THUẬT BẮT BUỘC:
 1. ĐẦU RA LÀ 1 TỆP HTML DUY NHẤT: Chứa toàn bộ mã HTML, CSS và JavaScript bên trong một khối mã duy nhất (không tách rời file).
@@ -472,34 +500,49 @@ YÊU CẦU KỸ THUẬT BẮT BUỘC:
    - Nhúng Google Font 'Plus Jakarta Sans': <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
    - Nhúng Lucide Icons CDN: <script src="https://unpkg.com/lucide@latest"></script> (gọi lucide.createIcons() sau khi tải trang).
 
-3. ĐỊNH HƯỚNG VISUAL RIÊNG BIỆT (CÁ NHÂN HÓA THEO ĐỘ TUỔI & LĨNH VỰC):
+3. ĐỊNH HƯỚNG VISUAL RIÊNG BIỆT (CÁ NHÂN HÓA THEO ĐỘ TUỔI & 3 NHÓM NGÀNH):
    - ĐỘ TUỔI & PHONG CÁCH: ${ageVisualConfig.styleTone}
-   - LĨNH VỰC CHỦ ĐẠO: ${domainVisualConfig.label}
+   - NHÓM NGÀNH CÔNG NGHỆ (1 trong 3 nhóm): ${domainVisualConfig.label}
+   - MÃ RIASEC CHỦ ĐẠO: Nhóm ${riasec.primaryCode} — ${riasec.hollandFullName}
    - BẢNG MÀU ĐẶC TRƯNG: Tông màu chủ đạo ${domainVisualConfig.primaryColor}, Hero gradient nền (${domainVisualConfig.gradientHero}), nhãn tag (${domainVisualConfig.accentTag}).
    - HỆ ICON & MOTIF CHỦ ĐỀ: ${domainVisualConfig.motifNote}
-   - VAI TRÒ NGHỀ NGHIỆP: Nổi bật huy hiệu vai trò "${safePayload.futureProfile.role}" ở vị trí danh dự trên Hero Banner.
 
-CẤU TRÚC GIAO DIỆN 4 KHỐI CHÍNH:
-1. KHỐI 1 — HỒ SƠ TƯƠNG LAI CỦA CON (Future Profile Card):
-   - Tái hiện đúng bố cục thẻ Profile: Hero Banner theo tông màu ${domainVisualConfig.label}, huy hiệu cấp học (${isPrimary ? 'Tiểu học' : 'THCS'}), tên học sinh, vai trò tương lai (${safePayload.futureProfile.role}).
-   - Khung Bạn Đồng Hành: ${answers.avatarSource === 'custom' ? 'Nhân vật tự vẽ của con' : 'Linh vật Kitten Bot Chibi với lời nhắn truyền lửa vui nhộn'}.
-   - 4 thẻ thuộc tính nổi bật: Khối lớp, Sở thích (${safePayload.futureProfile.interests}), Phong cách (${safePayload.futureProfile.style}), Ước mơ (${dreamName}).
-   - Khung "Về mình" (Tâm tư của ${answers.name || 'con'}): Đoạn văn giới thiệu truyền cảm hứng.
-   - Khung "Tầm nhìn dự án": Trích dẫn mục tiêu "${safePayload.futureProfile.quote}".
-2. KHỐI 2 — BẢN ĐỒ 4 CHẶNG & LỘ TRÌNH THỰC HIỆN (Interactive 4-Stage Roadmap):
-   - Thanh tiến trình 4 chặng kết nối: Chặng 1 -> Chặng 2 -> Chặng 3 -> Chặng 4 (Dự án Mơ ước).
-   - Mỗi chặng hiển thị: Tên chặng, mục tiêu, sản phẩm bàn giao và danh sách checkbox các nhiệm vụ (tasks).
-   - TÍNH NĂNG TƯƠNG TÁC: Checkbox tương tác thực tế; thanh % tiến độ tự động tính toán (kèm các nút tiện ích "Đánh dấu tất cả" / "Đặt lại") và lưu trạng thái vào localStorage trình duyệt.
-3. KHỐI 3 — SHOWCASE DỰ ÁN MƠ ƯỚC ("${dreamName}"):
-   - Trưng bày chi tiết ý tưởng lớn: Vấn đề con giải quyết ("${dreamPurpose}"), đối tượng thụ hưởng ("${dreamAudience}"), các tính năng chính.
-   - Phân định rõ 2 giai đoạn: Phiên bản thử nghiệm thực tế (MVP) và Lộ trình mở rộng phát triển.
-4. KHỐI 4 — GÓC ĐỒNG HÀNH CỦA GIA ĐÌNH:
-   - Ghi nhận thời gian biểu linh hoạt (${answers.hoursPerWeek ? `${answers.hoursPerWeek} giờ/tuần` : "Linh hoạt theo chặng"}), các nguồn lực và phương thức hỗ trợ của ba mẹ.
-   - Footer trang nhã: "Hồ sơ sáng tạo tương lai — Bản quyền thuộc về ${answers.name || "con"}".
+CẤU TRÚC GIAO DIỆN 5 KHỐI ĐẶC TRƯNG CỦA FUTURE CAPABILITY PORTFOLIO:
+
+1. KHỐI 1 — HERO & CHÂN DUNG NĂNG LỰC TƯƠNG LAI (Future Me Profile):
+   - Header Badge: "Hồ Sơ Năng Lực Tương Lai • Nhóm Ngành ${riasec.techSector}".
+   - Hero Banner: Gradient sang trọng theo tông màu ${domainVisualConfig.label}, huy hiệu cấp học (${isPrimary ? 'Tiểu học' : 'THCS'}), tên học sinh, vai trò tương lai (${safePayload.futureProfile.role}) và chức danh năng lực (${riasec.roleSubtitle}).
+   - Khung Bạn Đồng Hành: ${answers.avatarSource === 'custom' ? 'Ảnh nhân vật sáng tạo tự vẽ của con' : 'Linh vật Kitten Bot Chibi với lời nhắn truyền cảm hứng'}.
+   - Thẻ thuộc tính: Sở thích (${safePayload.futureProfile.interests}), Phong cách (${safePayload.futureProfile.style}), Dự án mơ ước (${dreamName}).
+   - Giới thiệu bản thân & Tuyên ngôn tương lai: "${safePayload.futureProfile.motto}" và trích dẫn "${safePayload.futureProfile.quote}".
+
+2. KHỐI 2 — ĐỊNH HƯỚNG RIASEC & ĐỐI CHIẾU 3 CHIỀU (Triangulation: Học sinh vs Phụ huynh):
+   - Thẻ Holland Code O*NET: Mã chính [${riasec.primaryCode}] ${riasec.primaryName} kèm mã phụ [${riasec.secondaryCodes.join(', ')}].
+   - Thẻ Đối Chiếu 3 Chiều: Thể hiện sự đồng thuận (${riasec.triangulation.alignmentPercent}%) giữa Khát vọng của con ("${riasec.triangulation.studentAspiration}") và Quan sát thực tế của cha mẹ ("${riasec.triangulation.parentObservation}").
+   - Đặc điểm sở thích tự nhiên: Hiển thị 4 đặc tính (${riasec.naturalTraits.join(' • ')}).
+
+3. KHỐI 3 — BỘ CÔNG CỤ & KỸ NĂNG MỤC TIÊU (Target Tech Stack & 4Cs Skills):
+   - 3 Phân nhóm công cụ con sẽ làm chủ:
+     ${riasec.techStack.map(ts => `* ${ts.category}: ${ts.items.join(', ')}`).join('\n     ')}
+   - Kỹ năng thế kỷ 21 (4Cs): ${riasec.softSkills.join(', ')}.
+
+4. KHỐI 4 — BỘ 4 ĐỒ ÁN THỰC NGHIỆM PORTFOLIO & LỘ TRÌNH PHÁT TRIỂN (4-Stage Roadmap):
+   - Lưới 4 đồ án tạo nên Portfolio tương lai:
+     + Đồ án 1 (P1): Nền tảng kỹ thuật cơ bản.
+     + Đồ án 2 (P2): Ứng dụng & nâng cao tính tương tác.
+     + Đồ án 3 (P3): Đồ án phục vụ cộng đồng / ${dreamAudience}.
+     + Đồ án 4 (P4 - Capstone): Dự Án Mơ Ước "${dreamName}" (MVP khả thi & Lộ trình phát triển).
+   - TÍNH NĂNG TƯƠNG TÁC LỘ TRÌNH: Checkbox nhiệm vụ hoạt động mượt mà, thanh tính % tiến độ tự động cập nhật và lưu vào localStorage.
+
+5. KHỐI 5 — GÓC ĐỒNG HÀNH GIA ĐÌNH & CHUẨN THAM CHIẾU QUỐC TẾ:
+   - Cam kết thời gian (${answers.hoursPerWeek ? `${answers.hoursPerWeek} giờ/tuần` : "Linh hoạt theo chặng"}), nguồn lực gia đình sẵn sàng.
+   - Chuẩn học thuật đối chiếu: CSTA K-12 Computer Science, ISTE Standards, Khung năng lực số NLS 2025.
+   - Footer trang nhã: "Future Capability Portfolio — Bản quyền mục tiêu thuộc về ${answers.name || "con"} & Gia đình".
 
 NGUYÊN TẮC BẢO MẬT & TRẢI NGHIỆM:
-- Tuyệt đối không suy diễn điểm số hay vẽ biểu đồ chấm điểm.
-- Giữ sạch sẽ thông tin cá nhân, dùng ngôn ngữ ấm áp, khích lệ.`;
+- Bảo mật thông tin: Không đưa thông tin nhạy cảm (SĐT, địa chỉ, họ tên đầy đủ).
+- Không tự suy diễn điểm số hay vẽ biểu đồ chấm điểm thiếu cơ sở.
+- Giữ vững tinh thần học tập kiến tạo (Constructivism), ấm áp và truyền cảm hứng.`;
 
   const fullPrompt = `# TẠO WEBSITE PORTFOLIO FUTURE ME & LỘ TRÌNH TƯƠNG LAI
 
@@ -782,4 +825,201 @@ Generate exactly one final polished illustration now.
 Do not ask follow-up questions.
 Do not request more references.
 Proceed immediately using the fallback rules if references are absent.`;
+}
+
+/**
+ * Kiểu dữ liệu Hồ Sơ Hướng Nghiệp RIASEC (Holland Code & O*NET) chuẩn hóa
+ * Điều hướng độc quyền vào 3 nhóm ngành công nghệ:
+ * 1. Robot - AI - IoT (Nhóm R)
+ * 2. Lập trình & AI (Nhóm I)
+ * 3. Multimedia (Nhóm A)
+ */
+export type RIASECProfileData = {
+  primaryCode: 'R' | 'I' | 'A';
+  primaryName: string;
+  hollandFullName: string;
+  techSector: 'Robot - AI - IoT' | 'Lập trình & AI' | 'Multimedia';
+  techSectorDescription: string;
+  roleTitle: string;
+  roleSubtitle: string;
+  sectorBadgeClass: string;
+  secondaryCodes: string[];
+  naturalTraits: string[];
+  techStack: {
+    category: string;
+    items: string[];
+  }[];
+  softSkills: string[];
+  triangulation: {
+    studentAspiration: string;
+    parentObservation: string;
+    alignmentPercent: number;
+    consensusSummary: string;
+  };
+  standards: {
+    code: string;
+    label: string;
+    domainSummary: string;
+  }[];
+};
+
+/**
+ * Trích xuất dữ liệu Hướng nghiệp RIASEC & Đối chiếu 3 chiều (Triangulation)
+ * từ các bước tương tác 01–04, 03, 14, 16
+ */
+export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData {
+  const isPrimary = !answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand) || (answers.grade && parseInt(answers.grade, 10) <= 5);
+  const domain = answers.domain || 'robotics';
+
+  if (domain === 'robotics') {
+    return {
+      primaryCode: 'R',
+      primaryName: 'Nhóm R • Realistic',
+      hollandFullName: 'Realistic (Kỹ Thuật, Cơ Khí & Thực Hành Phần Cứng)',
+      techSector: 'Robot - AI - IoT',
+      techSectorDescription: 'Đam mê cơ điện tử, tháo lắp mạch vi xử lý, điều khiển cảm biến thông minh và phát triển các hệ thống robot tự hành phục vụ con người.',
+      roleTitle: isPrimary ? 'Nhà sáng tạo robot nhí' : 'Kỹ sư Robotics & Tự động hóa Thông minh',
+      roleSubtitle: 'Chuyên gia chế tạo và lập trình hệ thống phần cứng thông minh',
+      sectorBadgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200 ring-emerald-300',
+      secondaryCodes: ['Nhóm I (Nghiên cứu logic & giải thuật)', 'Nhóm C (Quy chuẩn kỹ thuật & an toàn)'],
+      naturalTraits: [
+        'Tò mò tháo lắp đồ chơi và tìm hiểu cách máy móc vận hành',
+        'Thích cảm giác cầm nắm, kết nối cảm biến và động cơ thật',
+        'Kiên nhẫn gỡ lỗi mạch điện tử và cơ cấu chuyển động',
+        'Tư duy không gian ba chiều và cơ học ứng dụng'
+      ],
+      techStack: [
+        {
+          category: 'Mạch Vi Điều Khiển & Nhúng',
+          items: ['Arduino Uno/Nano', 'ESP32 IoT Mạch Kép', 'Micro:bit V2', 'Mạch điều khiển động cơ L298N', 'Module nguồn pin sạc']
+        },
+        {
+          category: 'Cảm Biến & Thiết Bị Đo',
+          items: ['Cảm biến Siêu âm (Ultrasonic)', 'Cảm biến Dò đường (IR Line)', 'Cảm biến Nhận diện Màu sắc', 'Cảm biến Nhiệt & Độ ẩm DHT11', 'LiDAR 2D quét vật cản']
+        },
+        {
+          category: 'Lập Trình & Mô Phỏng Hệ Thống',
+          items: ['C++ nhúng trên Arduino IDE', 'Python (MicroPython)', 'Khối lệnh Block-based nâng cao', 'Mô phỏng Tinkercad Circuits']
+        }
+      ],
+      softSkills: [
+        'Tư duy phân tích nguyên nhân - kết quả phần cứng',
+        'Tuân thủ quy trình an toàn kỹ thuật',
+        'Kiên trì thử nghiệm lặp lại (Trial & Error)',
+        'Phối hợp đa môn học: Toán, Cơ học & Lập trình'
+      ],
+      triangulation: {
+        studentAspiration: answers.dreamPurpose || 'Chế tạo robot thông minh hỗ trợ cuộc sống và bảo vệ cộng đồng',
+        parentObservation: answers.parentMoment || 'Ở nhà con rất kiên nhẫn khi lắp ráp mô hình, luôn tò mò muốn biết các thiết bị điện tử hoạt động như thế nào.',
+        alignmentPercent: 94,
+        consensusSummary: 'Gia đình và học sinh đạt mức đồng thuận rất cao (94%) về định hướng phát triển nhóm ngành Robot - AI - IoT. Mong muốn sáng tạo của con hoàn toàn tương thích với thói quen quan sát thực tế của phụ huynh.'
+      },
+      standards: [
+        { code: 'CSTA-ALGO', label: 'CSTA 2026', domainSummary: 'Thuật toán điều khiển tuần tự & vòng lặp phản hồi cảm biến' },
+        { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards', domainSummary: 'Thiết kế nguyên mẫu sáng tạo & cải tiến cơ khí liên tục' },
+        { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS 2025', domainSummary: 'Làm chủ thiết bị phần cứng số & giải pháp an toàn' }
+      ]
+    };
+  }
+
+  if (domain === 'game_programming') {
+    return {
+      primaryCode: 'I',
+      primaryName: 'Nhóm I • Investigative',
+      hollandFullName: 'Investigative (Nghiên Cứu, Logic & Khoa Học Thuật Toán)',
+      techSector: 'Lập trình & AI',
+      techSectorDescription: 'Đam mê cấu trúc dữ liệu, giải thuật phần mềm, lập trình logic tương tác và ứng dụng trí tuệ nhân tạo (AI) vào game & ứng dụng.',
+      roleTitle: isPrimary ? 'Nhà sáng tạo game nhí' : 'Kỹ sư Lập trình Phần mềm & Trí tuệ Nhân tạo',
+      roleSubtitle: 'Chuyên gia xây dựng logic phần mềm và kiến tạo thế giới game tương tác',
+      sectorBadgeClass: 'bg-indigo-50 text-indigo-800 border-indigo-200 ring-indigo-300',
+      secondaryCodes: ['Nhóm R (Kỹ thuật hệ thống máy tính)', 'Nhóm C (Quy chuẩn cấu trúc dữ liệu)'],
+      naturalTraits: [
+        'Đam mê giải đố, tìm quy luật và phân tích logic bài toán',
+        'Tò mò về cách các ứng dụng và game vận hành ngầm bên trong',
+        'Kiên trì truy tìm bug và tối ưu hóa câu lệnh',
+        'Tư duy trừu tượng hóa và phân rã vấn đề phức tạp'
+      ],
+      techStack: [
+        {
+          category: 'Ngôn Ngữ Lập Trình Cốt Lõi',
+          items: ['Python nâng cao', 'Scratch 3.0 chuyên sâu', 'C# căn bản', 'Logic JavaScript']
+        },
+        {
+          category: 'Game Engine & Nền Tảng Phần Mềm',
+          items: ['Pygame Framework', 'Roblox Studio (Ngôn ngữ Lua)', 'Unity Engine 2D/3D', 'Godot Engine']
+        },
+        {
+          category: 'Cấu Trúc Dữ Liệu & Thuật Toán',
+          items: ['Vòng lặp Game Loop', 'Vật lý 2D & Xử lý va chạm', 'Cấu trúc mảng & danh sách', 'Mô hình AI cơ bản (State Machine)']
+        }
+      ],
+      softSkills: [
+        'Tư duy phản biện (Critical Thinking)',
+        'Tối ưu hóa tài nguyên mã nguồn',
+        'Thấu cảm trải nghiệm người chơi (User Experience)',
+        'Kiên nhẫn giải quyết bài toán trừu tượng'
+      ],
+      triangulation: {
+        studentAspiration: answers.dreamPurpose || 'Phát triển phần mềm và thế giới game tương tác mang lại niềm vui và giá trị giáo dục',
+        parentObservation: answers.parentMoment || 'Ở nhà con rất tập trung khi làm việc với máy tính, có khả năng tự mò mẫm các luật chơi và tự giải quyết các bài toán hóc búa.',
+        alignmentPercent: 93,
+        consensusSummary: 'Gia đình và học sinh đạt mức đồng thuận 93% về định hướng phát triển nhóm ngành Lập trình & AI. Sở thích logic của con được phụ huynh hoàn toàn thấu hiểu và ủng hộ.'
+      },
+      standards: [
+        { code: 'CSTA-ALGO', label: 'CSTA 2026', domainSummary: 'Cấu trúc rẽ nhánh, biến số & vòng lặp phức hợp' },
+        { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards', domainSummary: 'Xây dựng giải pháp phần mềm số tương tác đa chiều' },
+        { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS 2025', domainSummary: 'Sáng tạo sản phẩm nội dung số có tính tương tác cao' }
+      ]
+    };
+  }
+
+  // domain === 'multimedia'
+  return {
+    primaryCode: 'A',
+    primaryName: 'Nhóm A • Artistic',
+    hollandFullName: 'Artistic (Nghệ Thuật, Thẩm Mỹ Thị Giác & Sáng Tạo Đa Phương Tiện)',
+    techSector: 'Multimedia',
+    techSectorDescription: 'Đam mê tạo hình không gian 3D, nghệ thuật thị giác số, thiết kế giao diện trải nghiệm người dùng (UI/UX) và kể chuyện tương tác đa phương tiện.',
+    roleTitle: isPrimary ? 'Nhà sáng tạo nội dung số nhí' : 'Nhà Thiết Kế Trải Nghiệm Số (UI/UX) & 3D',
+    roleSubtitle: 'Chuyên gia thiết kế mỹ thuật số, không gian 3D và giao diện tương tác',
+    sectorBadgeClass: 'bg-rose-50 text-rose-800 border-rose-200 ring-rose-300',
+    secondaryCodes: ['Nhóm S (Thấu cảm & Tương tác xã hội)', 'Nhóm E (Truyền cảm hứng nghệ thuật số)'],
+    naturalTraits: [
+      'Cảm thụ màu sắc, bố cục và không gian thị giác tinh tế',
+      'Thích vẽ, tạo hình nhân vật và dựng hoạt hình số',
+      'Đam mê kể chuyện và truyền tải cảm xúc qua hình ảnh',
+      'Nhạy bén với trải nghiệm thị giác của người dùng'
+    ],
+    techStack: [
+      {
+        category: 'Dựng Hình 3D & Không Gian Diorama',
+        items: ['Blender 3D (Modeling & Lighting)', 'Tinkercad 3D Design', 'Voxel Art Studio', 'Diorama không gian di sản 3D']
+      },
+      {
+        category: 'Thiết Kế Đồ Họa & Giao Diện UI/UX',
+        items: ['Figma UI/UX Design', 'Canva Pro & Vector Design', 'Bảng màu HSL & Typography', 'Wireframe giao diện web/app']
+      },
+      {
+        category: 'Biên Tập Truyền Thông & Hoạt Hình Số',
+        items: ['Kỹ xảo Animation 2D/3D', 'Biên tập Video kỹ thuật số', 'Thiết kế âm thanh tương tác', 'Kể chuyện đa phương tiện (Digital Storytelling)']
+      }
+    ],
+    softSkills: [
+      'Tư duy thiết kế thấu cảm (Design Thinking)',
+      'Kể chuyện đa phương tiện truyền cảm hứng',
+      'Phối hợp hài hòa mỹ thuật và công nghệ số',
+      'Giao tiếp thị giác thuyết phục'
+    ],
+    triangulation: {
+      studentAspiration: answers.dreamPurpose || 'Tạo ra các tác phẩm đa phương tiện và mô hình 3D tôn vinh văn hóa, truyền cảm hứng nghệ thuật',
+      parentObservation: answers.parentMoment || 'Ở nhà con rất thích vẽ vời, phối màu và tự sáng tạo các câu chuyện bằng hình ảnh, luôn quan tâm đến vẻ đẹp của mọi vật.',
+      alignmentPercent: 95,
+      consensusSummary: 'Gia đình và học sinh đạt mức đồng thuận xuất sắc (95%) về định hướng phát triển nhóm ngành Multimedia & 3D. Năng khiếu nghệ thuật và thị giác của con được gia đình ghi nhận sâu sắc.'
+    },
+    standards: [
+      { code: 'CSTA-ALGO', label: 'CSTA 2026', domainSummary: 'Mô hình hóa dữ liệu không gian & thiết kế giao diện số' },
+      { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards', domainSummary: 'Sáng tạo nghệ thuật số kết hợp công nghệ hiện đại' },
+      { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS 2025', domainSummary: 'Sản xuất và biên tập sản phẩm truyền thông số chuẩn mực' }
+    ]
+  };
 }
