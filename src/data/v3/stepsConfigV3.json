@@ -1,0 +1,2443 @@
+{
+  "schemaVersion": "3.1.0",
+  "notes": "20 màn có đủ câu hỏi, kiểu tương tác, lựa chọn, ràng buộc, chuyển bước và cơ sở tham chiếu. Branch-specific competency items nằm ở 01_noi_dung_webapp_hoan_chinh.json/branches.",
+  "steps": [
+    {
+      "id": "00-identity",
+      "stageId": "setup",
+      "actor": "student",
+      "uiType": "identity",
+      "standardRefs": [
+        "FM-INTEREST"
+      ],
+      "decisionMode": "collect_only",
+      "outputFields": [
+        "student.displayName",
+        "student.grade",
+        "educationLevel"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Con muốn Kitten gọi mình là gì?",
+          "intro": "Chọn tên gọi và lớp của con. Không cần nhập họ tên thật.",
+          "cta": "Bắt đầu nào!"
+        },
+        "secondary": {
+          "title": "Bạn muốn dùng tên nào trên hồ sơ?",
+          "intro": "Chọn tên hiển thị và lớp. Không cần chia sẻ tên thật hoặc trường học.",
+          "cta": "Bắt đầu khám phá"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "displayName",
+          "inputType": "short_text",
+          "prompt": {
+            "primary": "Kitten nên gọi con là gì?",
+            "secondary": "Bạn muốn dùng tên nào trên hành trình?"
+          },
+          "required": true,
+          "maxLength": 24,
+          "placeholder": "Ví dụ: Mây / Nova",
+          "privacy": "bí danh, không hỏi họ tên thật"
+        },
+        {
+          "key": "grade",
+          "inputType": "grade_select",
+          "prompt": {
+            "primary": "Con học lớp mấy?",
+            "secondary": "Bạn đang học lớp nào?"
+          },
+          "required": true,
+          "choices": [
+            {
+              "value": "1",
+              "label": {
+                "primary": "Lớp 1",
+                "secondary": "Lớp 1"
+              }
+            },
+            {
+              "value": "2",
+              "label": {
+                "primary": "Lớp 2",
+                "secondary": "Lớp 2"
+              }
+            },
+            {
+              "value": "3",
+              "label": {
+                "primary": "Lớp 3",
+                "secondary": "Lớp 3"
+              }
+            },
+            {
+              "value": "4",
+              "label": {
+                "primary": "Lớp 4",
+                "secondary": "Lớp 4"
+              }
+            },
+            {
+              "value": "5",
+              "label": {
+                "primary": "Lớp 5",
+                "secondary": "Lớp 5"
+              }
+            },
+            {
+              "value": "6",
+              "label": {
+                "primary": "Lớp 6",
+                "secondary": "Lớp 6"
+              }
+            },
+            {
+              "value": "7",
+              "label": {
+                "primary": "Lớp 7",
+                "secondary": "Lớp 7"
+              }
+            },
+            {
+              "value": "8",
+              "label": {
+                "primary": "Lớp 8",
+                "secondary": "Lớp 8"
+              }
+            },
+            {
+              "value": "9",
+              "label": {
+                "primary": "Lớp 9",
+                "secondary": "Lớp 9"
+              }
+            }
+          ],
+          "branchOn": "1–5:primary;6–9:secondary"
+        }
+      ],
+      "nextGuard": "displayName && validGrade",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Xác định cấp học và quyền tự chủ, không chấm điểm.",
+        "referenceEntries": [
+          {
+            "id": "FM-INTEREST",
+            "title": "Future Me – Taxonomy sở thích công nghệ nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ba bộ môn và nhánh chuyên môn dùng để phân luồng khám phá sở thích, không phải ba thang RIASEC.",
+            "scopeLimit": "Chưa có nghiên cứu kiểm định; kết quả là gợi ý và do gia đình xác nhận.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "01-student-interest",
+      "stageId": "interest",
+      "actor": "student",
+      "uiType": "visual-multi",
+      "standardRefs": [
+        "FM-INTEREST",
+        "RIASEC"
+      ],
+      "decisionMode": "interest_only",
+      "outputFields": [
+        "interest.studentChoices"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Con thích tạo ra điều gì?",
+          "intro": "Nhìn ba bức tranh và chọn những điều con muốn thử. Có thể chọn hơn một.",
+          "cta": "Chọn điều con thích"
+        },
+        "secondary": {
+          "title": "Bạn muốn tạo sản phẩm gì?",
+          "intro": "Chọn những sản phẩm khiến bạn tò mò, kể cả khi bạn chưa từng làm thử.",
+          "cta": "Lưu lựa chọn"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": true,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "studentChoices",
+          "inputType": "picture_multi",
+          "prompt": {
+            "primary": "Nhìn ba bức tranh, con muốn thử tạo gì?",
+            "secondary": "Bạn muốn trực tiếp tạo dạng sản phẩm nào?"
+          },
+          "required": true,
+          "minChoices": 1,
+          "maxChoices": 2,
+          "choicesByGrade": {
+            "primary": [
+              {
+                "domain": "programming",
+                "title": "Tạo trò chơi hoặc ứng dụng",
+                "scenario": "Một nhân vật phản hồi khi con chọn lệnh hoặc bấm nút.",
+                "icon": "gamepad-2",
+                "imageBrief": "Nhân vật game và màn hình ứng dụng thân thiện, minh họa phẳng, không chữ."
+              },
+              {
+                "domain": "robotics_iot",
+                "title": "Lắp một chú robot",
+                "scenario": "Một chú robot có bánh xe làm theo cách con chỉ dẫn.",
+                "icon": "bot",
+                "imageBrief": "Robot chibi có bánh xe và cơ cấu nhận biết, không chữ."
+              },
+              {
+                "domain": "multimedia",
+                "title": "Sáng tạo hình và phim",
+                "scenario": "Một bức tranh, mô hình 3D hoặc đoạn phim do con tạo.",
+                "icon": "palette",
+                "imageBrief": "Bức tranh 2D, mô hình 3D, hoạt hình và máy quay, không chữ."
+              }
+            ],
+            "secondary": [
+              {
+                "domain": "programming",
+                "title": "Xây trò chơi và phần mềm",
+                "scenario": "Thiết kế cách một sản phẩm phản hồi người sử dụng.",
+                "icon": "code-2",
+                "imageBrief": "Game, web và ứng dụng trên màn hình, hiện đại, không chữ."
+              },
+              {
+                "domain": "robotics_iot",
+                "title": "Chế tạo thiết bị thông minh",
+                "scenario": "Dùng tín hiệu để thiết bị phản hồi hoặc kết nối nhiều bộ phận.",
+                "icon": "cpu",
+                "imageBrief": "Mô hình cảm biến, mạch và thiết bị, không chữ."
+              },
+              {
+                "domain": "multimedia",
+                "title": "Kể chuyện bằng hình và chuyển động",
+                "scenario": "Thiết kế hình ảnh, mô hình hoặc video cho người xem.",
+                "icon": "clapperboard",
+                "imageBrief": "Poster, 3D, animation, timeline video, không chữ."
+              }
+            ]
+          },
+          "allowOther": true,
+          "otherLabel": "Ý tưởng khác của con",
+          "showEqualSizeVisuals": true
+        }
+      ],
+      "nextGuard": "studentChoices.length>=1",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Chọn 1 trong 3 bộ môn và nhánh, không đánh giá kỹ năng.",
+        "referenceEntries": [
+          {
+            "id": "FM-INTEREST",
+            "title": "Future Me – Taxonomy sở thích công nghệ nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ba bộ môn và nhánh chuyên môn dùng để phân luồng khám phá sở thích, không phải ba thang RIASEC.",
+            "scopeLimit": "Chưa có nghiên cứu kiểm định; kết quả là gợi ý và do gia đình xác nhận.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "RIASEC",
+            "title": "RIASEC – Holland / O*NET",
+            "sourceUrl": "https://www.onetcenter.org/reports/IP_Manual.html",
+            "summaryVi": "Sáu nhóm sở thích hoạt động; dùng làm nền tảng lý thuyết khám phá, không là thang đo RIASEC chuẩn hóa của Future Me.",
+            "scopeLimit": "O*NET khuyến nghị thận trọng với trẻ từ 14 tuổi trở xuống; người nhỏ tuổi chỉ dùng để khám phá, không gán mã nghề hay nhãn cố định.",
+            "classification": "interest_theory",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "02-interest-scenarios",
+      "stageId": "interest",
+      "actor": "student",
+      "uiType": "balanced-scenarios",
+      "standardRefs": [
+        "FM-INTEREST",
+        "RIASEC"
+      ],
+      "decisionMode": "interest_only",
+      "outputFields": [
+        "interest.studentScenarioPreferences"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Một buổi sáng tạo của con",
+          "intro": "Nếu được dành cả buổi để làm một sản phẩm, con muốn làm phần nào nhất?",
+          "cta": "Chọn việc con muốn làm"
+        },
+        "secondary": {
+          "title": "Bạn thích phần nào của quá trình sáng tạo?",
+          "intro": "Giả sử cùng nhóm thực hiện một sản phẩm, bạn muốn đảm nhận công việc nào?",
+          "cta": "Chọn hoạt động"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": true,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "scenarioPreferences",
+          "inputType": "scenario_preference_multi",
+          "prompt": {
+            "primary": "Nếu có một buổi sáng tạo, con chọn những việc nào?",
+            "secondary": "Giả sử có một ngày làm dự án, phần việc nào làm bạn tò mò?"
+          },
+          "required": true,
+          "maxChoices": 2,
+          "choices": [
+            {
+              "value": "programming",
+              "label": {
+                "primary": "Đặt luật cho nhân vật trong một trò chơi",
+                "secondary": "Thiết kế quy tắc tương tác cho một sản phẩm số"
+              }
+            },
+            {
+              "value": "robotics_iot",
+              "label": {
+                "primary": "Lắp và thử một mô hình di chuyển",
+                "secondary": "Tạo thiết bị nhận biết và phản hồi"
+              }
+            },
+            {
+              "value": "multimedia",
+              "label": {
+                "primary": "Vẽ nhân vật rồi kể một câu chuyện",
+                "secondary": "Thiết kế hình ảnh, chuyển động hoặc video"
+              }
+            }
+          ],
+          "shuffleVisibleOrder": true,
+          "noCorrectAnswer": true,
+          "additionalPrompt": {
+            "primary": "Con thích điều đó ở điểm nào?",
+            "secondary": "Điều gì trong hoạt động đó làm bạn muốn tìm hiểu thêm?"
+          }
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Chọn 1 trong 3 bộ môn và nhánh, không đánh giá kỹ năng.",
+        "referenceEntries": [
+          {
+            "id": "FM-INTEREST",
+            "title": "Future Me – Taxonomy sở thích công nghệ nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ba bộ môn và nhánh chuyên môn dùng để phân luồng khám phá sở thích, không phải ba thang RIASEC.",
+            "scopeLimit": "Chưa có nghiên cứu kiểm định; kết quả là gợi ý và do gia đình xác nhận.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "RIASEC",
+            "title": "RIASEC – Holland / O*NET",
+            "sourceUrl": "https://www.onetcenter.org/reports/IP_Manual.html",
+            "summaryVi": "Sáu nhóm sở thích hoạt động; dùng làm nền tảng lý thuyết khám phá, không là thang đo RIASEC chuẩn hóa của Future Me.",
+            "scopeLimit": "O*NET khuyến nghị thận trọng với trẻ từ 14 tuổi trở xuống; người nhỏ tuổi chỉ dùng để khám phá, không gán mã nghề hay nhãn cố định.",
+            "classification": "interest_theory",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "03-parent-interest",
+      "stageId": "interest",
+      "actor": "parent",
+      "uiType": "parent-observation",
+      "standardRefs": [
+        "FM-INTEREST",
+        "FM-PARENT"
+      ],
+      "decisionMode": "reported_observation",
+      "outputFields": [
+        "interest.parentObservations"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Ba mẹ thấy con thích làm gì?",
+          "intro": "Trong vài tuần gần đây, con hay tự chọn hoạt động nào? Ba mẹ kể một ví dụ thật nhé.",
+          "cta": "Gửi lời chia sẻ"
+        },
+        "secondary": {
+          "title": "Phụ huynh quan sát điều gì?",
+          "intro": "Gần đây con chủ động làm hoạt động nào? Hãy nêu một tình huống cụ thể, không cần đánh giá con giỏi hay chưa.",
+          "cta": "Lưu quan sát"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": true,
+        "noScoreOnPreference": true,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "parentPreferredActivities",
+          "inputType": "multi_select",
+          "prompt": {
+            "primary": "Ba mẹ đã thấy con tự chọn việc nào gần đây?",
+            "secondary": "Trong vài tuần gần đây, bạn quan sát con tự chọn hoạt động nào?"
+          },
+          "required": false,
+          "choices": [
+            {
+              "value": "programming",
+              "label": {
+                "primary": "Nghĩ luật chơi hoặc ứng dụng",
+                "secondary": "Thử làm game, ứng dụng hoặc sản phẩm số"
+              }
+            },
+            {
+              "value": "robotics_iot",
+              "label": {
+                "primary": "Lắp, tháo, thử đồ vật chuyển động",
+                "secondary": "Tìm hiểu cơ cấu hoặc thiết bị"
+              }
+            },
+            {
+              "value": "multimedia",
+              "label": {
+                "primary": "Vẽ, làm mô hình, kể chuyện bằng hình",
+                "secondary": "Thiết kế hình ảnh, 3D, hoạt hình hoặc video"
+              }
+            },
+            {
+              "value": "not_observed",
+              "label": {
+                "primary": "Chưa có dịp quan sát",
+                "secondary": "Chưa có dịp quan sát"
+              }
+            }
+          ],
+          "allowOther": true,
+          "optionExclusivity": {
+            "not_observed": "exclusive"
+          }
+        },
+        {
+          "key": "parentInterestStory",
+          "inputType": "optional_text",
+          "prompt": {
+            "primary": "Ba mẹ nhớ một lần cụ thể không?",
+            "secondary": "Hãy kể ngắn một tình huống thật, không cần nhận xét con giỏi hay chưa."
+          },
+          "required": false,
+          "maxLength": 450,
+          "privacy": "giữ riêng lời kể, không đưa nguyên văn vào prompt"
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Chọn 1 trong 3 bộ môn và nhánh, không đánh giá kỹ năng.",
+        "referenceEntries": [
+          {
+            "id": "FM-INTEREST",
+            "title": "Future Me – Taxonomy sở thích công nghệ nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ba bộ môn và nhánh chuyên môn dùng để phân luồng khám phá sở thích, không phải ba thang RIASEC.",
+            "scopeLimit": "Chưa có nghiên cứu kiểm định; kết quả là gợi ý và do gia đình xác nhận.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-PARENT",
+            "title": "Future Me – Phiếu quan sát phụ huynh nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Thu thập quan sát kèm ví dụ, phân biệt lời kể và bằng chứng từ bài tương tác.",
+            "scopeLimit": "Không là thang tâm lý đã được kiểm định; phụ huynh không chấm trình độ kỹ thuật.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "04-domain-choice",
+      "stageId": "interest",
+      "actor": "family",
+      "uiType": "confirm",
+      "standardRefs": [
+        "FM-INTEREST",
+        "RIASEC"
+      ],
+      "decisionMode": "family_choice",
+      "outputFields": [
+        "technologyDomain",
+        "alternativeDomains"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Cả nhà chọn điểm đến đầu tiên",
+          "intro": "Con muốn bắt đầu với lập trình, robot hay sáng tạo hình ảnh? Mình vẫn có thể khám phá hướng khác sau này.",
+          "cta": "Con chọn hướng này"
+        },
+        "secondary": {
+          "title": "Chọn hướng công nghệ muốn khám phá",
+          "intro": "Xem lại điều bạn chọn và nhận xét từ gia đình. Quyết định hướng thử sức trước; hướng khác vẫn được giữ lại.",
+          "cta": "Xác nhận hướng khám phá"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": true,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "technologyDomain",
+          "inputType": "choice_confirm",
+          "prompt": {
+            "primary": "Con muốn bắt đầu ở thế giới nào?",
+            "secondary": "Bạn chọn hướng công nghệ nào để trải nghiệm trước?"
+          },
+          "required": true,
+          "choicesFrom": "interestCards",
+          "decisionOwner": "student",
+          "showStudentChoices": true,
+          "showParentObservationSeparately": true,
+          "allowOverrideSuggestion": true,
+          "alternativeField": "alternativeInterests",
+          "allowAlternatives": true,
+          "notice": {
+            "primary": "Con có thể đổi hướng sau này.",
+            "secondary": "Đây là hướng khám phá ban đầu, không phải kết luận nghề nghiệp."
+          }
+        }
+      ],
+      "nextGuard": "studentConfirmsDomain",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Chọn 1 trong 3 bộ môn và nhánh, không đánh giá kỹ năng.",
+        "referenceEntries": [
+          {
+            "id": "FM-INTEREST",
+            "title": "Future Me – Taxonomy sở thích công nghệ nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ba bộ môn và nhánh chuyên môn dùng để phân luồng khám phá sở thích, không phải ba thang RIASEC.",
+            "scopeLimit": "Chưa có nghiên cứu kiểm định; kết quả là gợi ý và do gia đình xác nhận.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "RIASEC",
+            "title": "RIASEC – Holland / O*NET",
+            "sourceUrl": "https://www.onetcenter.org/reports/IP_Manual.html",
+            "summaryVi": "Sáu nhóm sở thích hoạt động; dùng làm nền tảng lý thuyết khám phá, không là thang đo RIASEC chuẩn hóa của Future Me.",
+            "scopeLimit": "O*NET khuyến nghị thận trọng với trẻ từ 14 tuổi trở xuống; người nhỏ tuổi chỉ dùng để khám phá, không gán mã nghề hay nhãn cố định.",
+            "classification": "interest_theory",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "05-specialization",
+      "stageId": "interest",
+      "actor": "student",
+      "uiType": "conditional-branch",
+      "standardRefs": [
+        "FM-INTEREST"
+      ],
+      "decisionMode": "interest_only",
+      "outputFields": [
+        "specialization"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Con muốn tạo sản phẩm nào?",
+          "intro": "Trong thế giới vừa chọn, điều gì làm con muốn bắt tay vào làm nhất?",
+          "cta": "Chọn sản phẩm"
+        },
+        "secondary": {
+          "title": "Bạn muốn đi sâu vào sản phẩm nào?",
+          "intro": "Trong lĩnh vực đã chọn, bạn muốn xây dựng loại sản phẩm nào?",
+          "cta": "Chọn nhánh sản phẩm"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": true,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "specialization",
+          "inputType": "choice_by_domain",
+          "prompt": {
+            "primary": "Trong thế giới này con muốn tạo sản phẩm gì?",
+            "secondary": "Bạn muốn đi sâu vào dạng sản phẩm nào?"
+          },
+          "required": true,
+          "choicesFrom": "branches[educationLevel] filtered by selected technologyDomain",
+          "displayFields": [
+            "label",
+            "about",
+            "visualBrief"
+          ],
+          "allowNone": "Con muốn xem thêm hình minh họa"
+        }
+      ],
+      "nextGuard": "validSpecializationForGradeAndDomain",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Chọn 1 trong 3 bộ môn và nhánh, không đánh giá kỹ năng.",
+        "referenceEntries": [
+          {
+            "id": "FM-INTEREST",
+            "title": "Future Me – Taxonomy sở thích công nghệ nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ba bộ môn và nhánh chuyên môn dùng để phân luồng khám phá sở thích, không phải ba thang RIASEC.",
+            "scopeLimit": "Chưa có nghiên cứu kiểm định; kết quả là gợi ý và do gia đình xác nhận.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "06-dream-purpose",
+      "stageId": "dream",
+      "actor": "student",
+      "uiType": "visual-scenario",
+      "standardRefs": [
+        "FM-DREAM",
+        "ISTE-1.4.a",
+        "NLS25-5.2"
+      ],
+      "decisionMode": "dream_only",
+      "outputFields": [
+        "dreamProject.purpose",
+        "dreamProject.audience"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Mình làm sản phẩm này để làm gì?",
+          "intro": "Con muốn giúp ai? Người đó đang cần điều gì?",
+          "cta": "Tiếp tục tưởng tượng"
+        },
+        "secondary": {
+          "title": "Dự án này giải quyết việc gì?",
+          "intro": "Hãy nghĩ về người sẽ dùng sản phẩm và điều bạn muốn giúp họ làm tốt hơn.",
+          "cta": "Tiếp tục"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "audience",
+          "inputType": "choice_or_text",
+          "prompt": {
+            "primary": "Con muốn sản phẩm giúp ai?",
+            "secondary": "Ai sẽ sử dụng sản phẩm của bạn?"
+          },
+          "required": true,
+          "choices": [
+            {
+              "value": "friends",
+              "label": {
+                "primary": "Các bạn cùng tuổi",
+                "secondary": "Các bạn cùng tuổi"
+              }
+            },
+            {
+              "value": "family",
+              "label": {
+                "primary": "Gia đình",
+                "secondary": "Gia đình"
+              }
+            },
+            {
+              "value": "school",
+              "label": {
+                "primary": "Trường học",
+                "secondary": "Trường học"
+              }
+            },
+            {
+              "value": "environment",
+              "label": {
+                "primary": "Mọi người muốn bảo vệ môi trường",
+                "secondary": "Mọi người muốn bảo vệ môi trường"
+              }
+            },
+            {
+              "value": "community",
+              "label": {
+                "primary": "Người trong cộng đồng",
+                "secondary": "Người trong cộng đồng"
+              }
+            }
+          ],
+          "allowOther": true
+        },
+        {
+          "key": "purpose",
+          "inputType": "guided_text",
+          "prompt": {
+            "primary": "Con muốn giúp họ làm điều gì?",
+            "secondary": "Vấn đề cụ thể mà bạn muốn sản phẩm giải quyết là gì?"
+          },
+          "required": true,
+          "minLength": 5,
+          "maxLength": 400,
+          "contextFrom": "selectedBranch.dreamPurposePrompt"
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Ghi nhận ước mơ và lý do; các chuẩn ngoài chỉ định hướng nội dung, không chứng nhận đạt.",
+        "referenceEntries": [
+          {
+            "id": "FM-DREAM",
+            "title": "Future Me – Dream Project Brief nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ghi nhận mục đích, người dùng, chức năng, phong cách và mong muốn của học sinh.",
+            "scopeLimit": "Ghi nhận ước mơ, không chấm năng lực.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.4.a",
+            "title": "ISTE Students 1.4.a – Design Process",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Sử dụng quy trình thiết kế để tạo ý tưởng, giải quyết vấn đề.",
+            "scopeLimit": "Bước hình dung dự án chỉ ghi nhận dự định; chưa xác nhận thành thạo thiết kế.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-5.2",
+            "title": "Khung NLS Việt Nam 2025 – 5.2 Nhu cầu và giải pháp công nghệ",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Xác định nhu cầu và lựa chọn giải pháp công nghệ phù hợp.",
+            "scopeLimit": "Ở bước ước mơ chỉ sử dụng để tham chiếu nội dung; không chấm năng lực.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "07-dream-features",
+      "stageId": "dream",
+      "actor": "student",
+      "uiType": "visual-builder",
+      "standardRefs": [
+        "FM-DREAM",
+        "ISTE-1.6.c"
+      ],
+      "decisionMode": "dream_only",
+      "outputFields": [
+        "dreamProject.features",
+        "dreamProject.appearance",
+        "dreamProject.story"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Cho ý tưởng của con thêm phép màu!",
+          "intro": "Chọn hình dáng, câu chuyện và những việc con muốn sản phẩm làm được.",
+          "cta": "Xem ý tưởng của con"
+        },
+        "secondary": {
+          "title": "Phác họa dự án bạn muốn làm",
+          "intro": "Chọn tính năng, cách sử dụng, hình thức và mô tả ngắn về trải nghiệm mong muốn.",
+          "cta": "Xem bản phác thảo"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "features",
+          "inputType": "feature_builder",
+          "prompt": {
+            "primary": "Con muốn sản phẩm làm được những gì?",
+            "secondary": "Sản phẩm cần có những chức năng hay đặc điểm gì?"
+          },
+          "required": true,
+          "minChoices": 1,
+          "maxChoices": 3,
+          "choicesFrom": "selectedBranch.featureChoices",
+          "allowOther": true
+        },
+        {
+          "key": "appearance",
+          "inputType": "visual_or_text",
+          "prompt": {
+            "primary": "Con muốn sản phẩm trông thế nào?",
+            "secondary": "Bạn hình dung bố cục, hình dáng và phong cách ra sao?"
+          },
+          "required": false,
+          "maxLength": 400,
+          "contextFrom": "selectedBranch.appearancePrompt"
+        },
+        {
+          "key": "story",
+          "inputType": "optional_text",
+          "prompt": {
+            "primary": "Con kể một câu về sản phẩm nhé.",
+            "secondary": "Hãy mô tả ngắn trải nghiệm bạn muốn tạo ra."
+          },
+          "required": false,
+          "maxLength": 400
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Ghi nhận ước mơ và lý do; các chuẩn ngoài chỉ định hướng nội dung, không chứng nhận đạt.",
+        "referenceEntries": [
+          {
+            "id": "FM-DREAM",
+            "title": "Future Me – Dream Project Brief nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ghi nhận mục đích, người dùng, chức năng, phong cách và mong muốn của học sinh.",
+            "scopeLimit": "Ghi nhận ước mơ, không chấm năng lực.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.6.c",
+            "title": "ISTE Students 1.6.c – Communicate Complex Ideas",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Truyền đạt ý tưởng phức tạp bằng đối tượng trực quan.",
+            "scopeLimit": "Hữu ích cho phác họa ý tưởng và mô tả sản phẩm.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "08-dream-confirm",
+      "stageId": "dream",
+      "actor": "student",
+      "uiType": "project-brief",
+      "standardRefs": [
+        "FM-DREAM",
+        "ISTE-1.1.a"
+      ],
+      "decisionMode": "dream_only",
+      "outputFields": [
+        "dreamProject.name",
+        "dreamProject.confirmed"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Đây có đúng là ý tưởng của con?",
+          "intro": "Đặt tên cho dự án. Nếu muốn đổi điều gì, con cứ sửa nhé.",
+          "cta": "Giữ ý tưởng này"
+        },
+        "secondary": {
+          "title": "Chốt ý tưởng của bạn",
+          "intro": "Đặt tên, đọc lại mục đích và các chức năng. Điều chỉnh trước khi lưu.",
+          "cta": "Xác nhận ý tưởng"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "name",
+          "inputType": "short_text",
+          "prompt": {
+            "primary": "Con đặt tên sản phẩm là gì?",
+            "secondary": "Bạn muốn đặt tên dự án là gì?"
+          },
+          "required": true,
+          "maxLength": 70
+        },
+        {
+          "key": "dreamConfirmed",
+          "inputType": "confirm_summary",
+          "prompt": {
+            "primary": "Ý tưởng trên có đúng với ước mơ của con không?",
+            "secondary": "Bạn có đồng ý với bản mô tả ý tưởng này?"
+          },
+          "required": true,
+          "summaryFrom": [
+            "name",
+            "audience",
+            "purpose",
+            "features",
+            "appearance",
+            "story"
+          ],
+          "requiresStudentConfirmation": true,
+          "allowEditAll": true
+        }
+      ],
+      "nextGuard": "dreamConfirmed && dreamName",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Ghi nhận ước mơ và lý do; các chuẩn ngoài chỉ định hướng nội dung, không chứng nhận đạt.",
+        "referenceEntries": [
+          {
+            "id": "FM-DREAM",
+            "title": "Future Me – Dream Project Brief nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ghi nhận mục đích, người dùng, chức năng, phong cách và mong muốn của học sinh.",
+            "scopeLimit": "Ghi nhận ước mơ, không chấm năng lực.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.1.a",
+            "title": "ISTE Students 1.1.a – Learning Goals",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Kết nối sở thích, nhu cầu và điểm mạnh với mục tiêu học tập.",
+            "scopeLimit": "Chỉ đối sánh, không chứng nhận đạt chuẩn qua một lựa chọn sở thích.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Ở bước sở thích/ước mơ chỉ ghi lựa chọn hoặc ý định, không chấm năng lực."
+      }
+    },
+    {
+      "id": "09-self-experience",
+      "stageId": "competency",
+      "actor": "student",
+      "uiType": "experience-select",
+      "standardRefs": [
+        "FM-ULO-SIO",
+        "NLS25-5.4"
+      ],
+      "decisionMode": "self_report",
+      "outputFields": [
+        "selfReport.priorActivities"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Con đã từng thử làm gì rồi?",
+          "intro": "Con đã từng vẽ ý tưởng, làm mô hình hay tạo sản phẩm nào? Chưa thử cũng không sao.",
+          "cta": "Kể về trải nghiệm"
+        },
+        "secondary": {
+          "title": "Bạn đã có trải nghiệm nào?",
+          "intro": "Bạn từng làm, thử sửa, thiết kế hoặc giới thiệu sản phẩm nào? Hãy ghi đúng mức độ bạn tự thực hiện.",
+          "cta": "Lưu trải nghiệm"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "self_report",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "priorActivities",
+          "inputType": "multi_select",
+          "prompt": {
+            "primary": "Con đã từng làm những việc nào?",
+            "secondary": "Bạn từng thực hiện những hoạt động nào?"
+          },
+          "required": false,
+          "choices": [
+            {
+              "value": "sketch",
+              "label": {
+                "primary": "Vẽ một ý tưởng",
+                "secondary": "Vẽ một ý tưởng"
+              }
+            },
+            {
+              "value": "make",
+              "label": {
+                "primary": "Làm một sản phẩm nhỏ",
+                "secondary": "Làm một sản phẩm nhỏ"
+              }
+            },
+            {
+              "value": "explain",
+              "label": {
+                "primary": "Kể cách sản phẩm hoạt động",
+                "secondary": "Kể cách sản phẩm hoạt động"
+              }
+            },
+            {
+              "value": "revise",
+              "label": {
+                "primary": "Thử lại và sửa một chi tiết",
+                "secondary": "Thử lại và sửa một chi tiết"
+              }
+            },
+            {
+              "value": "share",
+              "label": {
+                "primary": "Giới thiệu sản phẩm cho người khác",
+                "secondary": "Giới thiệu sản phẩm cho người khác"
+              }
+            },
+            {
+              "value": "not_yet",
+              "label": {
+                "primary": "Chưa từng thử",
+                "secondary": "Chưa từng thử"
+              }
+            }
+          ],
+          "optionExclusivity": {
+            "not_yet": "exclusive"
+          },
+          "allowOther": true
+        },
+        {
+          "key": "independence",
+          "inputType": "single_select",
+          "prompt": {
+            "primary": "Lần trước con làm cùng ai?",
+            "secondary": "Bạn tự thực hiện đến mức nào?"
+          },
+          "choices": [
+            {
+              "value": "independent",
+              "label": {
+                "primary": "Con tự làm",
+                "secondary": "Con tự làm"
+              }
+            },
+            {
+              "value": "shared",
+              "label": {
+                "primary": "Có người làm cùng",
+                "secondary": "Có người làm cùng"
+              }
+            },
+            {
+              "value": "guided",
+              "label": {
+                "primary": "Có người hướng dẫn từng bước",
+                "secondary": "Có người hướng dẫn từng bước"
+              }
+            },
+            {
+              "value": "unknown",
+              "label": {
+                "primary": "Con không nhớ / chưa thử",
+                "secondary": "Con không nhớ / chưa thử"
+              }
+            }
+          ],
+          "required": false,
+          "evidenceType": "self_report"
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Thu thập bằng chứng giới hạn từ tình huống, phân biệt tự báo cáo và kết quả tương tác.",
+        "referenceEntries": [
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-5.4",
+            "title": "Khung NLS Việt Nam 2025 – 5.4 Tự xác định nhu cầu phát triển năng lực số",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Xác định điều cần cải thiện trong năng lực số cá nhân.",
+            "scopeLimit": "Thông tin tự báo cáo chỉ là tín hiệu ban đầu.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "10-knowledge-sio",
+      "stageId": "competency",
+      "actor": "student",
+      "uiType": "scenario",
+      "standardRefs": [
+        "FM-ULO-SIO",
+        "CSTA26-ALG",
+        "CSTA26-PROG",
+        "CSTA26-SYSTEM",
+        "NLS25-3.1",
+        "NLS25-3.4"
+      ],
+      "decisionMode": "limited_task_evidence",
+      "outputFields": [
+        "evidence.knowledge"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Cùng xem con hiểu thế nào nhé",
+          "intro": "Xem một tình huống nhỏ và chọn điều con nghĩ sẽ xảy ra. Không cần dùng phần mềm.",
+          "cta": "Trả lời câu hỏi"
+        },
+        "secondary": {
+          "title": "Thử giải thích một tình huống",
+          "intro": "Đọc tình huống liên quan đến dự án và giải thích cách bạn hiểu vấn đề. Không cần dùng công cụ lập trình.",
+          "cta": "Gửi câu trả lời"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "short_task_observation",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "knowledgeResponse",
+          "inputType": "branch_scenario",
+          "prompt": {
+            "primary": "Con nghĩ sao khi gặp tình huống này?",
+            "secondary": "Bạn hiểu tình huống này như thế nào?"
+          },
+          "required": false,
+          "questionFrom": "selectedBranch.sioInteractions[0].question",
+          "allowVoiceOrText": true,
+          "optionalSkip": true,
+          "storeSioIdFrom": "selectedBranch.sioInteractions[0].id",
+          "evidenceType": "short_task_observation",
+          "noAutoPass": true
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Thu thập bằng chứng giới hạn từ tình huống, phân biệt tự báo cáo và kết quả tương tác.",
+        "referenceEntries": [
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "CSTA26-ALG",
+            "title": "CSTA PK–12 2026 – Algorithms & Design",
+            "sourceUrl": "https://csteachers.org/pk12standards/view/",
+            "summaryVi": "Nhóm khái niệm thuật toán và thiết kế; chọn chuẩn chi tiết theo đúng lớp trong bảng tra cứu CSTA.",
+            "scopeLimit": "Đây là nhóm khái niệm, KHÔNG phải mã chuẩn chi tiết.",
+            "classification": "concept_area",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "CSTA26-PROG",
+            "title": "CSTA PK–12 2026 – Programming",
+            "sourceUrl": "https://csteachers.org/pk12standards/view/",
+            "summaryVi": "Nhóm khái niệm phát triển, đọc, kiểm thử và cải tiến chương trình.",
+            "scopeLimit": "Đây là nhóm khái niệm, KHÔNG phải mã chuẩn chi tiết.",
+            "classification": "concept_area",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "CSTA26-SYSTEM",
+            "title": "CSTA PK–12 2026 – Systems & Security",
+            "sourceUrl": "https://csteachers.org/pk12standards/view/",
+            "summaryVi": "Nhóm khái niệm phần cứng–phần mềm, hệ thống, mạng và bảo mật.",
+            "scopeLimit": "Đây là nhóm khái niệm, KHÔNG phải mã chuẩn chi tiết.",
+            "classification": "concept_area",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-3.1",
+            "title": "Khung NLS Việt Nam 2025 – 3.1 Phát triển nội dung số",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Sáng tạo và chỉnh sửa nội dung số.",
+            "scopeLimit": "Chỉ chấm bậc năng lực chính thức nếu nhiệm vụ và minh chứng bao phủ mô tả bậc tương ứng.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-3.4",
+            "title": "Khung NLS Việt Nam 2025 – 3.4 Lập trình",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Lập kế hoạch và xây dựng chuỗi hướng dẫn cho hệ thống máy tính.",
+            "scopeLimit": "Đánh giá tư duy trình tự, không hỏi cú pháp hay công cụ.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "11-skill-sio",
+      "stageId": "competency",
+      "actor": "student",
+      "uiType": "sort-drag-or-visual-builder",
+      "standardRefs": [
+        "FM-ULO-SIO",
+        "ISTE-1.5.c",
+        "ISTE-1.5.d",
+        "ISTE-1.6.c",
+        "NLS25-3.1",
+        "NLS25-3.4"
+      ],
+      "decisionMode": "limited_task_evidence",
+      "outputFields": [
+        "evidence.skills"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Con thử sắp xếp cách làm nhé",
+          "intro": "Kéo các tấm thẻ vào thứ tự con muốn làm. Con có thể đổi lại.",
+          "cta": "Kiểm tra cách làm"
+        },
+        "secondary": {
+          "title": "Sắp xếp phương án thực hiện",
+          "intro": "Sắp các bước hoặc bộ phận thành một cách làm có lý do. Bạn có thể chỉnh sửa trước khi gửi.",
+          "cta": "Kiểm tra phương án"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "short_task_observation",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "skillResponse",
+          "inputType": "branch_visual_plan",
+          "prompt": {
+            "primary": "Con thử sắp xếp hoặc vẽ cách làm nhé.",
+            "secondary": "Hãy trình bày các bước hoặc bộ phận theo phương án của bạn."
+          },
+          "required": false,
+          "questionFrom": "selectedBranch.sioInteractions[1].question",
+          "allowVoiceTextOrCardSort": true,
+          "optionalSkip": true,
+          "storeSioIdFrom": "selectedBranch.sioInteractions[1].id",
+          "evidenceType": "short_task_observation",
+          "noAutoPass": true
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Thu thập bằng chứng giới hạn từ tình huống, phân biệt tự báo cáo và kết quả tương tác.",
+        "referenceEntries": [
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.5.c",
+            "title": "ISTE Students 1.5.c – Decompose Problems",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Phân rã vấn đề và mô hình hóa các thành phần.",
+            "scopeLimit": "Chỉ đánh giá ở phạm vi tình huống tương tác.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.5.d",
+            "title": "ISTE Students 1.5.d – Algorithmic Thinking",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Hình thành trình tự giải pháp có thể kiểm thử.",
+            "scopeLimit": "Không đòi hỏi phần mềm hay cú pháp.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.6.c",
+            "title": "ISTE Students 1.6.c – Communicate Complex Ideas",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Truyền đạt ý tưởng phức tạp bằng đối tượng trực quan.",
+            "scopeLimit": "Hữu ích cho phác họa ý tưởng và mô tả sản phẩm.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-3.1",
+            "title": "Khung NLS Việt Nam 2025 – 3.1 Phát triển nội dung số",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Sáng tạo và chỉnh sửa nội dung số.",
+            "scopeLimit": "Chỉ chấm bậc năng lực chính thức nếu nhiệm vụ và minh chứng bao phủ mô tả bậc tương ứng.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-3.4",
+            "title": "Khung NLS Việt Nam 2025 – 3.4 Lập trình",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Lập kế hoạch và xây dựng chuỗi hướng dẫn cho hệ thống máy tính.",
+            "scopeLimit": "Đánh giá tư duy trình tự, không hỏi cú pháp hay công cụ.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "12-problem-sio",
+      "stageId": "competency",
+      "actor": "student",
+      "uiType": "scenario-explain",
+      "standardRefs": [
+        "FM-ULO-SIO",
+        "ISTE-1.4.c",
+        "ISTE-1.5.c",
+        "NLS25-5.1",
+        "NGSS-K2-ETS1-1",
+        "NGSS-35-ETS1-2",
+        "NGSS-MS-ETS1-2"
+      ],
+      "decisionMode": "limited_task_evidence",
+      "outputFields": [
+        "evidence.problemSolving"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Nếu sản phẩm chưa như ý thì sao?",
+          "intro": "Hãy chọn điều con sẽ kiểm tra hoặc thay đổi đầu tiên, rồi nói vì sao.",
+          "cta": "Gửi cách của con"
+        },
+        "secondary": {
+          "title": "Bạn sẽ xử lý thế nào khi gặp lỗi?",
+          "intro": "Chọn một giả thuyết, cách kiểm tra và điều bạn sẽ quan sát để biết giải pháp có hiệu quả.",
+          "cta": "Gửi cách giải quyết"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "short_task_observation",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "problemResponse",
+          "inputType": "branch_scenario_explain",
+          "prompt": {
+            "primary": "Nếu sản phẩm chưa hoạt động đúng, con muốn thử gì?",
+            "secondary": "Bạn giả định nguyên nhân nào và sẽ kiểm tra bằng cách gì?"
+          },
+          "required": false,
+          "questionFrom": "selectedBranch.sioInteractions[2].question",
+          "allowVoiceOrText": true,
+          "optionalSkip": true,
+          "storeSioIdFrom": "selectedBranch.sioInteractions[2].id",
+          "evidenceType": "short_task_observation",
+          "noAutoPass": true
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Thu thập bằng chứng giới hạn từ tình huống, phân biệt tự báo cáo và kết quả tương tác.",
+        "referenceEntries": [
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.4.c",
+            "title": "ISTE Students 1.4.c – Prototypes",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Phát triển, thử và tinh chỉnh nguyên mẫu.",
+            "scopeLimit": "Dùng cho outcome/roadmap; bài khám phá ngắn không đủ chứng minh năng lực toàn diện.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.5.c",
+            "title": "ISTE Students 1.5.c – Decompose Problems",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Phân rã vấn đề và mô hình hóa các thành phần.",
+            "scopeLimit": "Chỉ đánh giá ở phạm vi tình huống tương tác.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-5.1",
+            "title": "Khung NLS Việt Nam 2025 – 5.1 Giải quyết vấn đề kỹ thuật",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Nhận diện và khắc phục vấn đề kỹ thuật.",
+            "scopeLimit": "Tình huống ngắn cho bằng chứng hạn chế.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NGSS-K2-ETS1-1",
+            "title": "NGSS K-2-ETS1-1 – Xác định vấn đề đơn giản",
+            "sourceUrl": "https://www.nextgenscience.org/pe/k-2-ets1-1-engineering-design",
+            "summaryVi": "Hỏi, quan sát và xác định vấn đề cần cải thiện.",
+            "scopeLimit": "Chỉ dùng khi nhiệm vụ gắn thiết kế kỹ thuật, lớp 1–2.",
+            "classification": "performance_expectation",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NGSS-35-ETS1-2",
+            "title": "NGSS 3-5-ETS1-2 – So sánh giải pháp",
+            "sourceUrl": "https://www.nextgenscience.org/search-standards?keys=3-5-ETS1-2",
+            "summaryVi": "Đề xuất và so sánh giải pháp theo tiêu chí/giới hạn.",
+            "scopeLimit": "Không đánh giá nếu chỉ hỏi em thích sản phẩm nào.",
+            "classification": "performance_expectation",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NGSS-MS-ETS1-2",
+            "title": "NGSS MS-ETS1-2 – Đánh giá giải pháp có hệ thống",
+            "sourceUrl": "https://www.nextgenscience.org/dci-arrangement/ms-ets1-engineering-design",
+            "summaryVi": "Đánh giá phương án dựa trên tiêu chí và giới hạn.",
+            "scopeLimit": "Không suy luận đạt từ lựa chọn sở thích.",
+            "classification": "performance_expectation",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "13-self-reflection",
+      "stageId": "competency",
+      "actor": "student",
+      "uiType": "reflection",
+      "standardRefs": [
+        "ISTE-1.1.c",
+        "NLS25-5.4",
+        "FM-ULO-SIO"
+      ],
+      "decisionMode": "self_report",
+      "outputFields": [
+        "selfReport.reflection",
+        "selfReport.supportNeeded"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Điều nào con muốn học thêm?",
+          "intro": "Con thấy phần nào dễ hình dung? Phần nào con muốn có người giúp?",
+          "cta": "Hoàn thành phần của con"
+        },
+        "secondary": {
+          "title": "Nhìn lại phần mình vừa làm",
+          "intro": "Điều nào bạn thấy rõ nhất? Kiến thức hoặc kỹ năng nào bạn muốn được hỗ trợ thêm?",
+          "cta": "Lưu tự nhận xét"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "self_report",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "easyPart",
+          "inputType": "optional_text",
+          "prompt": {
+            "primary": "Phần nào con thấy dễ hình dung nhất?",
+            "secondary": "Bạn thấy mình nắm rõ nhất phần nào?"
+          },
+          "maxLength": 300,
+          "required": false
+        },
+        {
+          "key": "supportNeeded",
+          "inputType": "optional_text",
+          "prompt": {
+            "primary": "Con muốn có người giúp ở phần nào?",
+            "secondary": "Bạn muốn tìm hiểu thêm hoặc nhờ hỗ trợ phần nào?"
+          },
+          "maxLength": 300,
+          "required": false
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Thu thập bằng chứng giới hạn từ tình huống, phân biệt tự báo cáo và kết quả tương tác.",
+        "referenceEntries": [
+          {
+            "id": "ISTE-1.1.c",
+            "title": "ISTE Students 1.1.c – Feedback to Improve Practice",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Sử dụng phản hồi để cải thiện và thể hiện việc học.",
+            "scopeLimit": "Chỉ xác nhận khi có hành vi hoặc sản phẩm phản tư.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-5.4",
+            "title": "Khung NLS Việt Nam 2025 – 5.4 Tự xác định nhu cầu phát triển năng lực số",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Xác định điều cần cải thiện trong năng lực số cá nhân.",
+            "scopeLimit": "Thông tin tự báo cáo chỉ là tín hiệu ban đầu.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "14-parent-competency",
+      "stageId": "family_evidence",
+      "actor": "parent",
+      "uiType": "observation-with-example",
+      "standardRefs": [
+        "FM-PARENT",
+        "FM-ULO-SIO"
+      ],
+      "decisionMode": "reported_observation",
+      "outputFields": [
+        "parentEvidence.observations",
+        "parentEvidence.examples"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Ba mẹ đã thấy con làm được gì?",
+          "intro": "Ba mẹ nhớ một việc cụ thể con đã thử: con tự làm, làm cùng người khác, hay chưa có dịp thử?",
+          "cta": "Lưu điều ba mẹ quan sát"
+        },
+        "secondary": {
+          "title": "Phụ huynh bổ sung trải nghiệm thực tế",
+          "intro": "Bạn từng quan sát con làm sản phẩm nào? Con thực hiện độc lập hay có hỗ trợ? Hãy đưa một ví dụ.",
+          "cta": "Lưu phản hồi"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": true,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "parentObservedTask",
+          "inputType": "single_select",
+          "prompt": {
+            "primary": "Ba mẹ đã thấy con hoàn thành một việc tương tự chưa?",
+            "secondary": "Bạn từng quan sát con thực hiện việc gần giống dự án này chưa?"
+          },
+          "choices": [
+            {
+              "value": "independent",
+              "label": {
+                "primary": "Con tự làm một phần hoặc toàn bộ",
+                "secondary": "Con tự làm một phần hoặc toàn bộ"
+              }
+            },
+            {
+              "value": "shared",
+              "label": {
+                "primary": "Con làm cùng người khác",
+                "secondary": "Con làm cùng người khác"
+              }
+            },
+            {
+              "value": "started",
+              "label": {
+                "primary": "Con đã thử nhưng chưa xong",
+                "secondary": "Con đã thử nhưng chưa xong"
+              }
+            },
+            {
+              "value": "not_observed",
+              "label": {
+                "primary": "Chưa có dịp quan sát",
+                "secondary": "Chưa có dịp quan sát"
+              }
+            }
+          ],
+          "required": false
+        },
+        {
+          "key": "parentObservedExample",
+          "inputType": "optional_text",
+          "prompt": {
+            "primary": "Ba mẹ kể một ví dụ ngắn nhé.",
+            "secondary": "Hãy ghi rõ việc con làm, phần hỗ trợ và điều chưa quan sát."
+          },
+          "maxLength": 500,
+          "required": false,
+          "privacy": "private_raw_feedback_not_for_export"
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Nhận xét có ví dụ, không cho phụ huynh chấm chuẩn kỹ thuật.",
+        "referenceEntries": [
+          {
+            "id": "FM-PARENT",
+            "title": "Future Me – Phiếu quan sát phụ huynh nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Thu thập quan sát kèm ví dụ, phân biệt lời kể và bằng chứng từ bài tương tác.",
+            "scopeLimit": "Không là thang tâm lý đã được kiểm định; phụ huynh không chấm trình độ kỹ thuật.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "15-parent-support",
+      "stageId": "family_evidence",
+      "actor": "parent",
+      "uiType": "multi-select",
+      "standardRefs": [
+        "FM-PARENT",
+        "ISTE-1.1.a"
+      ],
+      "decisionMode": "resource_input",
+      "outputFields": [
+        "familySupport.timePerWeek",
+        "familySupport.devices",
+        "familySupport.supportMode"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Nhà mình có thể dành bao nhiêu thời gian?",
+          "intro": "Chọn thời gian mỗi tuần, thiết bị có sẵn và cách ba mẹ muốn đồng hành.",
+          "cta": "Lưu kế hoạch gia đình"
+        },
+        "secondary": {
+          "title": "Chọn điều kiện học phù hợp với gia đình",
+          "intro": "Gia đình có thể dành bao nhiêu giờ mỗi tuần? Có thể sử dụng thiết bị nào? Ai có thể hỗ trợ khi cần?",
+          "cta": "Lưu điều kiện"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": true,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "hoursPerWeek",
+          "inputType": "number_or_unknown",
+          "prompt": {
+            "primary": "Nhà mình có thể dành bao nhiêu giờ mỗi tuần?",
+            "secondary": "Gia đình dự kiến có bao nhiêu giờ mỗi tuần cho dự án?"
+          },
+          "min": 0,
+          "max": 25,
+          "step": 0.5,
+          "required": false,
+          "unknownOption": true,
+          "doNotInfer": true
+        },
+        {
+          "key": "availableResources",
+          "inputType": "multi_select",
+          "prompt": {
+            "primary": "Nhà mình đang có gì để bắt đầu?",
+            "secondary": "Những điều kiện nào hiện có để triển khai?"
+          },
+          "choices": [
+            {
+              "value": "computer",
+              "label": {
+                "primary": "Máy tính",
+                "secondary": "Máy tính"
+              }
+            },
+            {
+              "value": "tablet",
+              "label": {
+                "primary": "Máy tính bảng",
+                "secondary": "Máy tính bảng"
+              }
+            },
+            {
+              "value": "shared_equipment",
+              "label": {
+                "primary": "Có thể mượn thiết bị của lớp/CLB",
+                "secondary": "Có thể mượn thiết bị của lớp/CLB"
+              }
+            },
+            {
+              "value": "simple_materials",
+              "label": {
+                "primary": "Vật liệu đơn giản",
+                "secondary": "Vật liệu đơn giản"
+              }
+            },
+            {
+              "value": "not_sure",
+              "label": {
+                "primary": "Chưa rõ",
+                "secondary": "Chưa rõ"
+              }
+            }
+          ],
+          "required": false,
+          "allowOther": true
+        },
+        {
+          "key": "supportMode",
+          "inputType": "multi_select",
+          "prompt": {
+            "primary": "Ba mẹ muốn đồng hành ra sao?",
+            "secondary": "Gia đình muốn hỗ trợ theo cách nào?"
+          },
+          "choices": [
+            {
+              "value": "listen",
+              "label": {
+                "primary": "Lắng nghe và góp ý",
+                "secondary": "Lắng nghe và góp ý"
+              }
+            },
+            {
+              "value": "together",
+              "label": {
+                "primary": "Cùng con thử một việc nhỏ",
+                "secondary": "Cùng con thử một việc nhỏ"
+              }
+            },
+            {
+              "value": "independent",
+              "label": {
+                "primary": "Để con tự khám phá",
+                "secondary": "Để con tự khám phá"
+              }
+            },
+            {
+              "value": "mentor",
+              "label": {
+                "primary": "Tìm người hướng dẫn",
+                "secondary": "Tìm người hướng dẫn"
+              }
+            }
+          ],
+          "maxChoices": 2,
+          "required": false
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Nhận xét có ví dụ, không cho phụ huynh chấm chuẩn kỹ thuật.",
+        "referenceEntries": [
+          {
+            "id": "FM-PARENT",
+            "title": "Future Me – Phiếu quan sát phụ huynh nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Thu thập quan sát kèm ví dụ, phân biệt lời kể và bằng chứng từ bài tương tác.",
+            "scopeLimit": "Không là thang tâm lý đã được kiểm định; phụ huynh không chấm trình độ kỹ thuật.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.1.a",
+            "title": "ISTE Students 1.1.a – Learning Goals",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Kết nối sở thích, nhu cầu và điểm mạnh với mục tiêu học tập.",
+            "scopeLimit": "Chỉ đối sánh, không chứng nhận đạt chuẩn qua một lựa chọn sở thích.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "16-family-review",
+      "stageId": "family_evidence",
+      "actor": "family",
+      "uiType": "reconcile",
+      "standardRefs": [
+        "FM-PARENT",
+        "FM-ULO-SIO"
+      ],
+      "decisionMode": "reconcile_not_override",
+      "outputFields": [
+        "familyReview.conflicts",
+        "familyReview.confirmed"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Cả nhà cùng xem lại nhé",
+          "intro": "Có điều nào con và ba mẹ nhớ khác nhau? Mình giữ cả hai lời kể và thử kiểm chứng trong dự án đầu tiên.",
+          "cta": "Xác nhận thông tin"
+        },
+        "secondary": {
+          "title": "Cùng đối chiếu thông tin",
+          "intro": "Nếu con và phụ huynh có cách nhớ khác nhau, hãy giữ cả hai và chọn một nhiệm vụ để kiểm chứng sau.",
+          "cta": "Xác nhận thông tin"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "familyConflict",
+          "inputType": "review_sources",
+          "prompt": {
+            "primary": "Cả nhà có nhớ khác nhau ở điều gì không?",
+            "secondary": "Có thông tin nào cần giữ hai cách nhìn để kiểm chứng sau?"
+          },
+          "required": false,
+          "displaySourcesSeparately": true,
+          "choices": [
+            {
+              "value": "agree",
+              "label": {
+                "primary": "Cả nhà thống nhất điều đã kể",
+                "secondary": "Cả nhà thống nhất điều đã kể"
+              }
+            },
+            {
+              "value": "different",
+              "label": {
+                "primary": "Có điểm cần thử thêm",
+                "secondary": "Có điểm cần thử thêm"
+              }
+            },
+            {
+              "value": "not_sure",
+              "label": {
+                "primary": "Chưa rõ",
+                "secondary": "Chưa rõ"
+              }
+            }
+          ],
+          "neverOverwriteSource": true
+        },
+        {
+          "key": "familyReviewConfirmed",
+          "inputType": "confirm",
+          "prompt": {
+            "primary": "Con và ba mẹ muốn lưu thông tin này chứ?",
+            "secondary": "Bạn và phụ huynh xác nhận hồ sơ ghi nhận này?"
+          },
+          "required": true
+        }
+      ],
+      "nextGuard": "responsesStoredOrExplicitlySkipped",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Nhận xét có ví dụ, không cho phụ huynh chấm chuẩn kỹ thuật.",
+        "referenceEntries": [
+          {
+            "id": "FM-PARENT",
+            "title": "Future Me – Phiếu quan sát phụ huynh nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Thu thập quan sát kèm ví dụ, phân biệt lời kể và bằng chứng từ bài tương tác.",
+            "scopeLimit": "Không là thang tâm lý đã được kiểm định; phụ huynh không chấm trình độ kỹ thuật.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "17-profile",
+      "stageId": "synthesis",
+      "actor": "family",
+      "uiType": "profile",
+      "standardRefs": [
+        "FM-INTEREST",
+        "FM-DREAM",
+        "FM-ULO-SIO",
+        "ISTE-1.1.a"
+      ],
+      "decisionMode": "profile_derived",
+      "outputFields": [
+        "currentProfile",
+        "futureProfile",
+        "evidenceSummary"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Con hôm nay và ước mơ mai sau",
+          "intro": "Xem điều con thích, điều đã thể hiện và ước mơ con muốn hướng tới. Con được đổi mục tiêu.",
+          "cta": "Xem hành trình của con"
+        },
+        "secondary": {
+          "title": "Hồ sơ hiện tại và mục tiêu của bạn",
+          "intro": "Xem sở thích, những điều đã thể hiện qua tình huống, điều chưa có đủ thông tin và mục tiêu muốn đạt.",
+          "cta": "Xem kế hoạch phát triển"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "profileReview",
+          "inputType": "read_only_with_edit",
+          "prompt": {
+            "primary": "Đây là điều con thích, điều con vừa thể hiện và ước mơ của con.",
+            "secondary": "Xem hướng đã chọn, điều quan sát được và những phần chưa rõ."
+          },
+          "required": true,
+          "sections": [
+            "interest",
+            "dream",
+            "selfReport",
+            "taskObservation",
+            "parentObservation",
+            "unknown"
+          ],
+          "allowEditOriginFields": true,
+          "neverClaimCertification": true
+        }
+      ],
+      "nextGuard": "familyCanInspectAndEdit",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Phân tách current/future, truy vết từng nhận định tới dữ liệu và nguồn.",
+        "referenceEntries": [
+          {
+            "id": "FM-INTEREST",
+            "title": "Future Me – Taxonomy sở thích công nghệ nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ba bộ môn và nhánh chuyên môn dùng để phân luồng khám phá sở thích, không phải ba thang RIASEC.",
+            "scopeLimit": "Chưa có nghiên cứu kiểm định; kết quả là gợi ý và do gia đình xác nhận.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-DREAM",
+            "title": "Future Me – Dream Project Brief nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Ghi nhận mục đích, người dùng, chức năng, phong cách và mong muốn của học sinh.",
+            "scopeLimit": "Ghi nhận ước mơ, không chấm năng lực.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.1.a",
+            "title": "ISTE Students 1.1.a – Learning Goals",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Kết nối sở thích, nhu cầu và điểm mạnh với mục tiêu học tập.",
+            "scopeLimit": "Chỉ đối sánh, không chứng nhận đạt chuẩn qua một lựa chọn sở thích.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "18-project-roadmap",
+      "stageId": "synthesis",
+      "actor": "family",
+      "uiType": "roadmap",
+      "standardRefs": [
+        "FM-PATH",
+        "FM-ULO-SIO",
+        "ISTE-1.1.a",
+        "ISTE-1.1.c",
+        "ISTE-1.4.c",
+        "NLS25-5.4"
+      ],
+      "decisionMode": "planning_not_certification",
+      "outputFields": [
+        "projects",
+        "roadmap",
+        "milestones"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Bốn chặng để biến ước mơ thành thật",
+          "intro": "Mỗi chặng có việc nhỏ cần làm, sản phẩm mang về và cách biết mình đã hoàn thành.",
+          "cta": "Khám phá bốn chặng"
+        },
+        "secondary": {
+          "title": "Bốn dự án đưa bạn tới mục tiêu",
+          "intro": "Xem sản phẩm cần tạo, kiến thức cần học, từng việc phải làm, thời gian và cách kiểm tra kết quả.",
+          "cta": "Xem lộ trình"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "fourProjectApproval",
+          "inputType": "project_plan_review",
+          "prompt": {
+            "primary": "Mình cùng xem bốn chặng nhé.",
+            "secondary": "Kiểm tra bốn dự án và kế hoạch từng bước."
+          },
+          "required": true,
+          "projectsFrom": "approvedDreamAdaptedProjectTemplates",
+          "needFour": true,
+          "eachTaskCount": 3,
+          "studentCanEditDream": true,
+          "familyCanAdjustSchedule": true,
+          "noApprovedHours": "Chưa chốt lịch"
+        },
+        {
+          "key": "scheduleConfirmation",
+          "inputType": "confirm_or_defer",
+          "prompt": {
+            "primary": "Gia đình muốn chốt lịch bây giờ hay để sau?",
+            "secondary": "Bạn muốn xác nhận thời gian dự kiến hay bổ sung sau?"
+          },
+          "required": false,
+          "doNotInventTimeline": true
+        }
+      ],
+      "nextGuard": "fourProjectsApproved",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Phân tách current/future, truy vết từng nhận định tới dữ liệu và nguồn.",
+        "referenceEntries": [
+          {
+            "id": "FM-PATH",
+            "title": "Future Me – Roadmap & Evidence Rules nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Tạo 4 dự án từ ước mơ tới sản phẩm đích; theo dõi ULO/SIO với minh chứng và thời lượng dự kiến.",
+            "scopeLimit": "Timeline chỉ xác định khi có dữ liệu thời gian, điều kiện thiết bị, năng lực ban đầu.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-ULO-SIO",
+            "title": "Future Me – Ma trận ULO/SIO nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Mục tiêu học tập cấp tổng quát ULO, chỉ báo quan sát cụ thể SIO; mã/định nghĩa phải đối chiếu học liệu nội bộ.",
+            "scopeLimit": "Mã minh họa trong blueprint KHÔNG phải mã do CSTA/ISTE ban hành.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.1.a",
+            "title": "ISTE Students 1.1.a – Learning Goals",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Kết nối sở thích, nhu cầu và điểm mạnh với mục tiêu học tập.",
+            "scopeLimit": "Chỉ đối sánh, không chứng nhận đạt chuẩn qua một lựa chọn sở thích.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.1.c",
+            "title": "ISTE Students 1.1.c – Feedback to Improve Practice",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Sử dụng phản hồi để cải thiện và thể hiện việc học.",
+            "scopeLimit": "Chỉ xác nhận khi có hành vi hoặc sản phẩm phản tư.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.4.c",
+            "title": "ISTE Students 1.4.c – Prototypes",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Phát triển, thử và tinh chỉnh nguyên mẫu.",
+            "scopeLimit": "Dùng cho outcome/roadmap; bài khám phá ngắn không đủ chứng minh năng lực toàn diện.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-5.4",
+            "title": "Khung NLS Việt Nam 2025 – 5.4 Tự xác định nhu cầu phát triển năng lực số",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Xác định điều cần cải thiện trong năng lực số cá nhân.",
+            "scopeLimit": "Thông tin tự báo cáo chỉ là tín hiệu ban đầu.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    },
+    {
+      "id": "19-privacy-prompt",
+      "stageId": "export",
+      "actor": "family",
+      "uiType": "privacy-export",
+      "standardRefs": [
+        "ISTE-1.2.a",
+        "ISTE-1.2.d",
+        "NLS25-4.2",
+        "NLS25-6.2",
+        "NLS25-6.3",
+        "UNESCO-AI24",
+        "FM-PATH"
+      ],
+      "decisionMode": "safety_gate",
+      "outputFields": [
+        "prompt.safeProfile",
+        "prompt.generated"
+      ],
+      "copy": {
+        "primary": {
+          "title": "Mang hành trình của con về nhà",
+          "intro": "Ba mẹ xem lại thông tin sẽ chia sẻ. Sau đó sao chép lời hướng dẫn để tạo website riêng cho con.",
+          "cta": "Xem và sao chép lời hướng dẫn"
+        },
+        "secondary": {
+          "title": "Tạo website hành trình của bạn",
+          "intro": "Kiểm tra thông tin cá nhân, xem lại nội dung sẽ đưa sang Google AI Studio rồi sao chép hướng dẫn.",
+          "cta": "Kiểm tra và sao chép"
+        }
+      },
+      "displayStandards": {
+        "primary": "Vì sao mình hỏi câu này?",
+        "secondary": "Vì sao có câu hỏi này?",
+        "parent": "Xem cơ sở tham chiếu"
+      },
+      "assessmentMode": "collect_only",
+      "optionRules": {
+        "allowSkipWhenNoObservation": false,
+        "noScoreOnPreference": false,
+        "noToolQuestions": true
+      },
+      "fields": [
+        {
+          "key": "safePreview",
+          "inputType": "redacted_preview",
+          "prompt": {
+            "primary": "Ba mẹ cùng xem thông tin sắp được chia sẻ nhé.",
+            "secondary": "Kiểm tra những dữ liệu sẽ chuyển sang Google AI Studio."
+          },
+          "required": true,
+          "exclude": [
+            "fullName",
+            "dateOfBirth",
+            "school",
+            "address",
+            "phone",
+            "email",
+            "photo",
+            "parentRawNote"
+          ]
+        },
+        {
+          "key": "guardianConsent",
+          "inputType": "explicit_parent_consent",
+          "prompt": {
+            "primary": "Ba mẹ đồng ý chuyển nội dung đã xem để tạo website chứ?",
+            "secondary": "Phụ huynh xác nhận đã xem và đồng ý sao chép dữ liệu được chọn?"
+          },
+          "required": true,
+          "default": false,
+          "consentRequiredForCopy": true
+        },
+        {
+          "key": "copyPrompt",
+          "inputType": "copy_action",
+          "prompt": {
+            "primary": "Sao chép hướng dẫn tạo website",
+            "secondary": "Sao chép hướng dẫn tạo website"
+          },
+          "enabledWhen": "safePreview && guardianConsent && dreamConfirmed && fourProjectApproval",
+          "noServerAction": true
+        }
+      ],
+      "nextGuard": "guardianConsent && safePreviewConfirmed",
+      "backNavigation": "Trở lại và chỉnh; khi đổi hướng công nghệ, lưu dữ liệu cũ riêng nhưng làm mới dự án/tình huống theo hướng mới sau khi người dùng xác nhận.",
+      "fallback": "Nếu học sinh chưa biết hoặc phụ huynh chưa quan sát, cho phép “Chưa rõ” và ghi thiếu thông tin; không chấm là yếu.",
+      "standardDetail": {
+        "parentTitle": "Vì sao chúng tôi hỏi điều này?",
+        "purpose": "Chỉ xuất dữ liệu tối thiểu, không xuất thông tin phụ huynh nhạy cảm.",
+        "referenceEntries": [
+          {
+            "id": "ISTE-1.2.a",
+            "title": "ISTE Students 1.2.a – Digital Footprint",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Nhận biết tác động của danh tính và hành vi công khai trên mạng.",
+            "scopeLimit": "Dùng làm mục tiêu an toàn khi tạo portfolio.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "ISTE-1.2.d",
+            "title": "ISTE Students 1.2.d – Digital Privacy",
+            "sourceUrl": "https://iste.org/standards/students",
+            "summaryVi": "Bảo vệ dữ liệu cá nhân và quyền riêng tư.",
+            "scopeLimit": "Đưa vào bước xác nhận dữ liệu trước khi gửi prompt.",
+            "classification": "student_learning_standard",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-4.2",
+            "title": "Khung NLS Việt Nam 2025 – 4.2 Bảo vệ dữ liệu cá nhân",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Bảo vệ dữ liệu cá nhân và quyền riêng tư khi trực tuyến.",
+            "scopeLimit": "Không tự tuyên bố đạt bậc chính thức qua một câu hỏi.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-6.2",
+            "title": "Khung NLS Việt Nam 2025 – 6.2 Sử dụng AI có đạo đức và trách nhiệm",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Ứng dụng AI có trách nhiệm, giải thích giới hạn và bảo vệ người dùng.",
+            "scopeLimit": "Gắn với hoạt động tạo portfolio; không thi sử dụng Google AI Studio.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "NLS25-6.3",
+            "title": "Khung NLS Việt Nam 2025 – 6.3 Đánh giá công cụ AI",
+            "sourceUrl": "https://vbpl.moj.gov.vn/bogiaoducdaotao/Pages/vbpq-van-ban-goc.aspx?ItemID=175173",
+            "summaryVi": "Kiểm tra độ tin cậy và an toàn của thông tin, kết quả AI.",
+            "scopeLimit": "Chỉ báo mục tiêu khi kiểm tra web AI tạo.",
+            "classification": "competency_component",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "UNESCO-AI24",
+            "title": "UNESCO AI Competency Framework for Students 2024",
+            "sourceUrl": "https://www.unesco.org/en/articles/ai-competency-framework-students",
+            "summaryVi": "Bốn chiều, ba mức Understand–Apply–Create; định hướng năng lực AI an toàn và sáng tạo.",
+            "scopeLimit": "Chỉ làm chuẩn tham chiếu trong giai đoạn tạo và kiểm tra website, không bắt buộc đưa vào bài test sở thích.",
+            "classification": "curriculum_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          },
+          {
+            "id": "FM-PATH",
+            "title": "Future Me – Roadmap & Evidence Rules nội bộ",
+            "sourceUrl": null,
+            "summaryVi": "Tạo 4 dự án từ ước mơ tới sản phẩm đích; theo dõi ULO/SIO với minh chứng và thời lượng dự kiến.",
+            "scopeLimit": "Timeline chỉ xác định khi có dữ liệu thời gian, điều kiện thiết bị, năng lực ban đầu.",
+            "classification": "internal_framework",
+            "disclaimer": "Tên chuẩn xuất hiện không có nghĩa con đã đạt chuẩn, hoặc tổ chức ban hành đã chứng nhận bài test."
+          }
+        ],
+        "interpretationLimit": "Kết quả chỉ tương ứng với dữ liệu được hỏi và quan sát, không tự động chứng nhận học sinh đạt một chuẩn đầy đủ."
+      }
+    }
+  ]
+}

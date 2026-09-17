@@ -1,175 +1,329 @@
 [
   {
     "id": "identity",
-    "phase": "Bắt đầu",
-    "title": "Kitten Bot nên gọi {you} là gì?",
-    "description": "Cho mình biết tên {you} muốn dùng và nhóm lớp đang học, để hành trình vừa với {you}.",
+    "stageIndex": 1,
+    "phase": "Giai đoạn 1",
+    "phasePrimary": "Làm quen",
+    "phaseSecondary": "Khởi tạo hồ sơ",
+    "title": "Kitten Bot nên gọi con là gì?",
+    "titleSecondary": "Tên đại diện và cấp học của bạn?",
+    "description": "Chọn tên và nhóm lớp để hành trình phù hợp với con.",
+    "descriptionSecondary": "Thiết lập danh xưng và khối lớp để cá nhân hóa lộ trình công nghệ.",
     "type": "identity",
     "minutes": 1,
-    "buddy": "Xin chào, mình là Kitten Bot! Mình cần tên và lớp để đồng hành cho đúng với {you}."
+    "buddy": "Hồ sơ này là của riêng con. Mình bắt đầu bằng một cái tên thật ngầu nhé!",
+    "buddySecondary": "Chào bạn! Hãy khởi tạo hồ sơ cá nhân để bắt đầu thiết kế lộ trình sáng tạo.",
+    "standard": {
+      "code": "UNESCO-AI",
+      "label": "Quyền riêng tư & Bảo vệ trẻ em",
+      "whyWeAsk": "Chỉ dùng tên gọi thân mật, tuyệt đối không yêu cầu thông tin cá nhân nhạy cảm."
+    }
   },
   {
     "id": "interest",
-    "phase": "Sở thích",
-    "title": "Nếu được tự làm một thứ mới, {you} muốn làm gì nhất?",
-    "description": "Chọn những thế giới {you} đang tò mò. Có thể chọn một hoặc nhiều, không có đáp án đúng sai.",
+    "stageIndex": 2,
+    "phase": "Giai đoạn 2",
+    "phasePrimary": "Con thích điều gì?",
+    "phaseSecondary": "Khám phá hướng công nghệ",
+    "title": "Nếu được tạo một điều mới, con muốn tạo gì?",
+    "titleSecondary": "Lĩnh vực công nghệ nào thu hút sự tò mò của bạn nhất?",
+    "description": "Con có thể chọn nhiều thế giới khiến mình tò mò.",
+    "descriptionSecondary": "Lựa chọn các nhánh công nghệ bạn muốn tìm hiểu sâu hơn.",
     "type": "multi",
     "minutes": 2,
-    "buddy": "Nhiều thứ hay lắm. {You} cứ chọn thứ làm mình thấy háo hức nha.",
+    "buddy": "Có rất nhiều cánh cửa! Con cứ chọn những gì làm con thấy háo hức.",
+    "buddySecondary": "Mỗi nhánh công nghệ đều mở ra những sản phẩm kỳ diệu trong tương lai.",
+    "standard": {
+      "code": "RIASEC-FUTURE",
+      "label": "Mô hình Sở thích RIASEC & Taxonomy",
+      "whyWeAsk": "Khám phá điều làm con tò mò nhất để mở ra các trải nghiệm phù hợp, chưa vội gò bó ngành nghề."
+    },
     "options": [
-      { "id": "game", "title": "Game", "description": "Tạo nhân vật, màn chơi và luật chơi", "icon": "Gamepad2", "tags": ["game", "storytelling"] },
-      { "id": "robot", "title": "Robot", "description": "Lắp máy móc biết cử động và giúp việc", "icon": "Bot", "tags": ["robotics", "engineering"] },
-      { "id": "design", "title": "Thiết kế", "description": "Vẽ hình, nhân vật và câu chuyện", "icon": "Palette", "tags": ["design", "creativity"] },
-      { "id": "digital-world", "title": "Thế giới số", "description": "Xây một thế giới trên máy tính", "icon": "Globe2", "tags": ["digital", "community"] }
+      { "id": "game", "title": "Game", "description": "Tạo thế giới và nhân vật", "icon": "Gamepad2", "tags": ["game", "storytelling"] },
+      { "id": "robot", "title": "Robot & IoT", "description": "Làm máy móc thông minh", "icon": "Bot", "tags": ["robotics", "engineering"] },
+      { "id": "design", "title": "Multimedia", "description": "Tạo hình ảnh và câu chuyện", "icon": "Palette", "tags": ["design", "creativity"] },
+      { "id": "digital-world", "title": "Thế giới số", "description": "Kết nối và xây điều mới", "icon": "Globe2", "tags": ["digital", "community"] }
     ]
   },
   {
     "id": "strength",
-    "phase": "Sở thích",
-    "title": "Khi {you} làm một thứ mới, {you} thường làm theo cách nào?",
-    "description": "Đây là cách {you} hay bắt đầu và làm tiếp khi khám phá. Chọn 2–3 điều thấy đúng với mình.",
+    "stageIndex": 2,
+    "phase": "Giai đoạn 2",
+    "phasePrimary": "Con thích điều gì?",
+    "phaseSecondary": "Khám phá hướng công nghệ",
+    "title": "Con muốn mang gì trong balo khám phá?",
+    "titleSecondary": "Thế mạnh nào đại diện cho phong cách làm việc của bạn?",
+    "description": "Chọn 2–3 món giống con nhất.",
+    "descriptionSecondary": "Chọn 2–3 đặc điểm bạn cảm thấy tự tin và muốn phát huy.",
     "type": "bag",
     "minutes": 1,
-    "buddy": "Không phải chọn nghề, cũng không có đáp án đúng sai. Cứ chọn cách {you} hay làm khi khám phá nha.",
+    "buddy": "Balo của mỗi nhà sáng tạo đều khác nhau. Món nào giống con nhất?",
+    "buddySecondary": "Đây là những hành trang quan trọng để chinh phục các thử thách dự án.",
+    "standard": {
+      "code": "RIASEC-FUTURE",
+      "label": "Tín hiệu hành vi & Thế mạnh",
+      "whyWeAsk": "Nhận biết điểm tự tin ban đầu của con để xây dựng tinh thần học tập chủ động."
+    },
     "options": [
-      { "id": "creative", "title": "Sáng tạo", "description": "Hay nghĩ ra ý tưởng mới", "icon": "Sparkles", "tags": ["creativity"] },
-      { "id": "experiment", "title": "Thích thử", "description": "Làm thử, chưa được thì làm lại", "icon": "Wrench", "tags": ["experimentation"] },
-      { "id": "solve", "title": "Gặp khó thì tìm cách", "description": "Không bỏ cuộc khi bị kẹt", "icon": "Puzzle", "tags": ["problem-solving"] },
-      { "id": "team", "title": "Thích làm cùng mọi người", "description": "Làm chung thì vui và xong hơn", "icon": "Users", "tags": ["collaboration"] }
+      { "id": "creative", "title": "Sáng tạo", "description": "Nghĩ ra điều mới", "icon": "Sparkles", "tags": ["creativity"] },
+      { "id": "experiment", "title": "Thử nghiệm", "description": "Làm thử và chỉnh lại", "icon": "Wrench", "tags": ["experimentation"] },
+      { "id": "solve", "title": "Giải quyết vấn đề", "description": "Tìm ra cách giải", "icon": "Puzzle", "tags": ["problem-solving"] },
+      { "id": "team", "title": "Đồng đội", "description": "Cùng nhau hoàn thành", "icon": "Users", "tags": ["collaboration"] }
     ]
   },
   {
     "id": "creation-style",
-    "phase": "Cách {you} làm",
-    "title": "Khi vừa có một ý tưởng mới, {you} thường làm gì trước?",
-    "description": "Ai cũng có cách bắt đầu riêng. Chọn cách gần với {you} nhất.",
+    "stageIndex": 3,
+    "phase": "Giai đoạn 3",
+    "phasePrimary": "Sản phẩm trong mơ",
+    "phaseSecondary": "Lên ý tưởng dự án",
+    "title": "Khi có ý tưởng mới, con bắt đầu thế nào?",
+    "titleSecondary": "Quy trình hiện thực hóa ý tưởng của bạn là gì?",
+    "description": "Cách nào cũng có điểm hay. Hãy chọn cách gần với con nhất.",
+    "descriptionSecondary": "Phương pháp bạn thường sử dụng để phác thảo và triển khai một concept.",
     "type": "single",
     "minutes": 1,
-    "buddy": "Có người vẽ trước, có người làm thử ngay, có người hỏi bạn bè. {You} thì sao?",
+    "buddy": "Có bạn vẽ trước, có bạn làm thử ngay. Cách của con là gì?",
+    "buddySecondary": "Hiểu cách tư duy giúp cá nhân hóa cách thức hướng dẫn dự án.",
+    "standard": {
+      "code": "ISTE-1.4",
+      "label": "ISTE 1.4 – Innovative Designer",
+      "whyWeAsk": "Khám phá thói quen hiện thực hóa ý tưởng của con: nhìn hình ảnh, bắt tay làm thử hay thảo luận."
+    },
     "options": [
-      { "id": "sketch", "title": "Vẽ ra giấy", "description": "Nhìn thấy ý tưởng trước khi làm", "icon": "Pencil", "tags": ["visual"] },
-      { "id": "make", "title": "Làm thử ngay", "description": "Cầm và thử luôn cho rõ", "icon": "Blocks", "tags": ["hands-on"] },
-      { "id": "research", "title": "Tìm hiểu trước", "description": "Xem người khác đã làm thế nào", "icon": "Search", "tags": ["research"] },
-      { "id": "talk", "title": "Kể cho ai đó", "description": "Nói ra để ý tưởng rõ hơn", "icon": "MessagesSquare", "tags": ["communication"] }
-    ]
-  },
-  {
-    "id": "problem-strategy",
-    "phase": "Cách {you} làm",
-    "title": "Úi, thứ {you} vừa làm chưa chạy…",
-    "description": "Khi gặp trục trặc như vậy, {you} thường làm gì trước?",
-    "type": "scenario",
-    "minutes": 2,
-    "buddy": "Bình thường mà! Làm gì cũng có lúc trục trặc. {You} hay xử lý thế nào?",
-    "options": [
-      { "id": "inspect", "title": "Kiểm tra từng phần", "description": "Xem lại từng chỗ có thể đang lỗi", "icon": "ScanSearch", "tags": ["analysis"] },
-      { "id": "retry", "title": "Thử cách khác", "description": "Đổi một chi tiết rồi làm lại", "icon": "RefreshCw", "tags": ["persistence"] },
-      { "id": "ask", "title": "Hỏi người đi cùng", "description": "Cùng nhau tìm ra chỗ đang kẹt", "icon": "UserRoundPlus", "tags": ["collaboration"] },
-      { "id": "guide", "title": "Tìm hướng dẫn", "description": "Xem gợi ý từ người đã làm rồi", "icon": "BookOpen", "tags": ["self-learning"] }
+      { "id": "sketch", "title": "Vẽ ra giấy", "description": "Nhìn thấy ý tưởng trước", "icon": "Pencil", "tags": ["visual"] },
+      { "id": "make", "title": "Làm thử ngay", "description": "Học bằng cách chạm và làm", "icon": "Blocks", "tags": ["hands-on"] },
+      { "id": "research", "title": "Tìm hiểu", "description": "Xem người khác đã làm gì", "icon": "Search", "tags": ["research"] },
+      { "id": "talk", "title": "Kể cho ai đó", "description": "Trao đổi để ý tưởng rõ hơn", "icon": "MessagesSquare", "tags": ["communication"] }
     ]
   },
   {
     "id": "impact",
-    "phase": "Cách {you} làm",
-    "title": "Dự án tương lai mà {you} tạo ra sẽ giúp ai?",
-    "description": "Chọn một người hoặc một nơi {you} muốn dự án này giúp ích.",
+    "stageIndex": 3,
+    "phase": "Giai đoạn 3",
+    "phasePrimary": "Sản phẩm trong mơ",
+    "phaseSecondary": "Lên ý tưởng dự án",
+    "title": "Dự án tuyệt vời nhất sẽ giúp ai?",
+    "titleSecondary": "Dự án công nghệ của bạn hướng tới đối tượng người dùng nào?",
+    "description": "Chọn một câu chuyện mà con muốn góp sức.",
+    "descriptionSecondary": "Xác định mục tiêu tạo giá trị thực tế của sản phẩm số.",
     "type": "single",
     "minutes": 1,
-    "buddy": "Dự án của {you} sẽ ý nghĩa hơn khi giúp được ai đó.",
+    "buddy": "Công nghệ trở nên kỳ diệu nhất khi nó giúp một ai đó!",
+    "buddySecondary": "Một sản phẩm có ý nghĩa luôn giải quyết vấn đề của một nhóm người dùng cụ thể.",
+    "standard": {
+      "code": "NLS-5.1",
+      "label": "NLS 5.1 – Nhu cầu & Giải pháp Công nghệ",
+      "whyWeAsk": "Giúp con liên hệ công nghệ với giá trị nhân văn và mục đích giúp đỡ cộng đồng."
+    },
     "options": [
-      { "id": "family", "title": "Gia đình", "description": "Giúp việc ở nhà dễ hơn", "icon": "House", "tags": ["family"] },
-      { "id": "school", "title": "Trường học", "description": "Làm việc học và chơi ở trường vui hơn", "icon": "School", "tags": ["education"] },
-      { "id": "earth", "title": "Trái đất", "description": "Giúp chăm sóc môi trường", "icon": "Sprout", "tags": ["environment"] },
-      { "id": "community", "title": "Cộng đồng", "description": "Giúp mọi người kết nối với nhau", "icon": "HeartHandshake", "tags": ["community"] }
+      { "id": "family", "title": "Gia đình", "description": "Giúp việc hằng ngày dễ hơn", "icon": "House", "tags": ["family"] },
+      { "id": "school", "title": "Trường học", "description": "Học và chơi vui hơn", "icon": "School", "tags": ["education"] },
+      { "id": "earth", "title": "Trái đất", "description": "Bảo vệ môi trường", "icon": "Sprout", "tags": ["environment"] },
+      { "id": "community", "title": "Cộng đồng", "description": "Kết nối và chia sẻ", "icon": "HeartHandshake", "tags": ["community"] }
     ]
   },
   {
     "id": "project",
-    "phase": "Dự án tương lai",
-    "title": "Đặt tên cho dự án tương lai của {you}",
-    "description": "Gom những gì {you} vừa chọn thành một ý tưởng, rồi đặt một cái tên vui, dễ nhớ.",
+    "stageIndex": 3,
+    "phase": "Giai đoạn 3",
+    "phasePrimary": "Sản phẩm trong mơ",
+    "phaseSecondary": "Lên ý tưởng dự án",
+    "title": "Lắp ráp dự án trong mơ của con",
+    "titleSecondary": "Đặt tên cho concept dự án tương lai",
+    "description": "Đặt tên cho ý tưởng đang thành hình.",
+    "descriptionSecondary": "Tạo tên đại diện cho ý tưởng sản phẩm bạn muốn phát triển.",
     "type": "project",
     "minutes": 2,
-    "buddy": "Mình thấy ý tưởng đang thành hình rồi. Đặt tên như một dự án thật nha!"
+    "buddy": "Mình thấy một ý tưởng rất hay rồi. Con hãy đặt cho nó một cái tên!",
+    "buddySecondary": "Một cái tên sáng tạo sẽ truyền cảm hứng mạnh mẽ cho quá trình hoàn thiện sản phẩm.",
+    "standard": {
+      "code": "ISTE-1.4",
+      "label": "Dream Project Brief Concept",
+      "whyWeAsk": "Khuyến khích con đóng vai trò chủ nhân của ý tưởng sáng tạo."
+    }
+  },
+  {
+    "id": "problem-strategy",
+    "stageIndex": 4,
+    "phase": "Giai đoạn 4",
+    "phasePrimary": "Con đã biết gì rồi?",
+    "phaseSecondary": "Tìm hiểu điểm xuất phát",
+    "title": "Robot hoặc sản phẩm bỗng chưa chạy…",
+    "titleSecondary": "Chiến lược gỡ lỗi (Debugging) và xử lý sự cố kỹ thuật",
+    "description": "Con sẽ thử điều gì trước tiên?",
+    "descriptionSecondary": "Quy trình bạn sẽ ưu tiên để cô lập và xử lý sự cố trong hệ thống.",
+    "type": "scenario",
+    "minutes": 2,
+    "buddy": "Không sao đâu, nhà sáng tạo nào cũng gặp lúc sản phẩm chưa chạy ngay!",
+    "buddySecondary": "Lỗi (Bug) là một phần tự nhiên của lập trình và chế tạo phần cứng.",
+    "standard": {
+      "code": "CSTA-PROG",
+      "label": "CSTA 2026 – Programming & Debugging",
+      "whyWeAsk": "Tìm hiểu cách con đối diện với khó khăn kỹ thuật: bình tĩnh phân tích, thử cách khác hay chủ động tìm kiếm trợ giúp."
+    },
+    "options": [
+      { "id": "inspect", "title": "Kiểm tra từng phần", "description": "Xem dây, pin và bánh xe", "icon": "ScanSearch", "tags": ["analysis"] },
+      { "id": "retry", "title": "Thử cách khác", "description": "Đổi một chi tiết rồi thử lại", "icon": "RefreshCw", "tags": ["persistence"] },
+      { "id": "ask", "title": "Hỏi đồng đội", "description": "Cùng nhau tìm nguyên nhân", "icon": "UserRoundPlus", "tags": ["collaboration"] },
+      { "id": "guide", "title": "Tìm hướng dẫn", "description": "Xem gợi ý từ người đi trước", "icon": "BookOpen", "tags": ["self-learning"] }
+    ]
   },
   {
     "id": "handoff",
-    "phase": "Ba mẹ đồng hành",
-    "title": "Tới lượt ba mẹ cùng kể về {child}",
-    "description": "Mời {child} chia sẻ dự án vừa nghĩ. Ba mẹ hãy kể những điều thường thấy ở {child} hàng ngày.",
+    "stageIndex": 5,
+    "phase": "Giai đoạn 5",
+    "phasePrimary": "Ba mẹ cùng chia sẻ",
+    "phaseSecondary": "Gia đình bổ sung thông tin",
+    "title": "Đến lượt ba mẹ đồng hành",
+    "titleSecondary": "Góc nhìn quan sát độc lập từ phụ huynh",
+    "description": "Con kể về dự án vừa tạo. Ba mẹ sẽ bổ sung những điều mình thường quan sát thấy.",
+    "descriptionSecondary": "Phụ huynh chia sẻ những nét thói quen, điểm tự lập và sự kiên trì của con trong đời sống.",
     "type": "handoff",
     "minutes": 1,
-    "buddy": "{Child} đã làm rất tốt! Giờ mời ba mẹ kể thêm để bức chân dung được đủ hơn."
+    "buddy": "Con làm tuyệt lắm! Giờ mình mời ba mẹ cùng mở mảnh ghép tiếp theo nhé.",
+    "buddySecondary": "Góc nhìn từ gia đình là dữ liệu quý giá giúp hoàn thiện bức tranh năng lực thực tế.",
+    "standard": {
+      "code": "RIASEC-FUTURE",
+      "label": "Parent Observation Evidence",
+      "whyWeAsk": "Gia đình là môi trường quan sát trung thực nhất về sự tò mò và thói quen giải quyết vấn đề của con."
+    }
   },
   {
     "id": "parent",
-    "phase": "Ba mẹ đồng hành",
-    "title": "Trong đời thường, ba mẹ thường thấy {child} như thế nào?",
-    "description": "Chọn tối đa 3 điều ba mẹ hay bắt gặp ở nhà. Không cần rành công nghệ.",
+    "stageIndex": 5,
+    "phase": "Giai đoạn 5",
+    "phasePrimary": "Ba mẹ cùng chia sẻ",
+    "phaseSecondary": "Gia đình bổ sung thông tin",
+    "title": "Ba mẹ thường thấy con…",
+    "titleSecondary": "Đặc điểm nổi bật trong thói quen học tập & giải quyết vấn đề",
+    "description": "Chọn tối đa 3 điều xuất hiện thường xuyên trong cuộc sống hằng ngày.",
+    "descriptionSecondary": "Chọn tối đa 3 biểu hiện con bộc lộ rõ nhất ở nhà.",
     "type": "parent",
     "minutes": 1,
-    "buddy": "Ba mẹ không cần rành máy móc. Cứ chọn điều mình thấy ở {child} là được.",
+    "buddy": "Không cần biết công nghệ — chỉ cần chia sẻ điều ba mẹ hiểu về con.",
+    "buddySecondary": "Những quan sát đời thường giúp định hình phương pháp đồng hành phù hợp.",
+    "standard": {
+      "code": "CSTA-ALGO",
+      "label": "Quan sát hành vi thực tế",
+      "whyWeAsk": "Bổ sung bằng chứng quan sát thực tế ngoài bài tương tác ngắn hạn."
+    },
     "options": [
-      { "id": "curious", "title": "Hay đặt câu hỏi", "description": "Thường muốn hiểu vì sao", "icon": "CircleHelp", "tags": ["curiosity"] },
-      { "id": "persistent", "title": "Kiên trì", "description": "Cứ làm tiếp khi chưa thành", "icon": "Mountain", "tags": ["persistence"] },
+      { "id": "curious", "title": "Hay đặt câu hỏi", "description": "Muốn hiểu vì sao", "icon": "CircleHelp", "tags": ["curiosity"] },
+      { "id": "persistent", "title": "Kiên trì", "description": "Tiếp tục khi chưa thành công", "icon": "Mountain", "tags": ["persistence"] },
       { "id": "ideas", "title": "Nhiều ý tưởng", "description": "Hay nghĩ ra cách mới", "icon": "Lightbulb", "tags": ["creativity"] },
-      { "id": "share", "title": "Thích chia sẻ", "description": "Hay kể và giải thích cho người khác", "icon": "MessageCircleMore", "tags": ["communication"] }
+      { "id": "share", "title": "Thích chia sẻ", "description": "Kể và giải thích cho người khác", "icon": "MessageCircleMore", "tags": ["communication"] }
     ]
   },
   {
     "id": "parent-support",
-    "phase": "Ba mẹ đồng hành",
-    "title": "Ba mẹ muốn đồng hành với {child} theo cách nào?",
-    "description": "Chọn tối đa 2 cách vừa với gia đình ở thời điểm này.",
+    "stageIndex": 5,
+    "phase": "Giai đoạn 5",
+    "phasePrimary": "Ba mẹ cùng chia sẻ",
+    "phaseSecondary": "Gia đình bổ sung thông tin",
+    "title": "Ba mẹ muốn đồng hành với con theo cách nào?",
+    "titleSecondary": "Phương thức hỗ trợ học tập phù hợp với gia đình",
+    "description": "Chọn tối đa 2 cách phù hợp với gia đình ở thời điểm này.",
+    "descriptionSecondary": "Chọn 2 hình thức gia đình sẵn sàng tạo điều kiện cho con.",
     "type": "parent",
     "minutes": 1,
-    "buddy": "Một câu hỏi đúng lúc, hoặc một lần cùng {child} làm thử, cũng đã rất quý.",
+    "buddy": "Ba mẹ không cần biết công nghệ. Một câu hỏi đúng lúc hay một lần cùng làm thử đã là sự đồng hành quý giá.",
+    "buddySecondary": "Sự khích lệ từ gia đình là yếu tố quyết định sự tự tin của học sinh công nghệ.",
+    "standard": {
+      "code": "RIASEC-FUTURE",
+      "label": "Family Support Taxonomy",
+      "whyWeAsk": "Xác định môi trường hỗ trợ tại gia đình để lộ trình học tập có tính khả thi cao."
+    },
     "options": [
-      { "id": "encourage", "title": "Lắng nghe và khích lệ", "description": "Hỏi {child} đang hào hứng điều gì", "icon": "Heart", "tags": ["family-support"] },
-      { "id": "together", "title": "Cùng {child} làm thử", "description": "Chia dự án thành bước nhỏ rồi làm cùng", "icon": "Users", "tags": ["co-creation"] },
-      { "id": "space", "title": "Cho {child} tự khám phá", "description": "Để {child} thử, sai rồi thử lại", "icon": "Sprout", "tags": ["autonomy"] },
-      { "id": "connect", "title": "Tìm người hướng dẫn", "description": "Kết nối {child} với trải nghiệm phù hợp", "icon": "Compass", "tags": ["guidance"] }
+      { "id": "encourage", "title": "Lắng nghe và khích lệ", "description": "Hỏi con điều gì làm con hào hứng", "icon": "Heart", "tags": ["family-support"] },
+      { "id": "together", "title": "Cùng con làm thử", "description": "Chia một dự án thành bước nhỏ", "icon": "Users", "tags": ["co-creation"] },
+      { "id": "space", "title": "Cho con tự khám phá", "description": "Để con thử, sai và thử lại", "icon": "Sprout", "tags": ["autonomy"] },
+      { "id": "connect", "title": "Tìm người hướng dẫn", "description": "Kết nối con với trải nghiệm phù hợp", "icon": "Compass", "tags": ["guidance"] }
     ]
   },
   {
     "id": "family-mirror",
-    "phase": "Ba mẹ đồng hành",
-    "title": "Cả nhà cùng hoàn thiện chân dung của {child}",
-    "description": "Ba mẹ kể một khoảnh khắc thật về {child}. Rồi cả nhà chọn một việc nhỏ muốn làm cùng sau hôm nay.",
+    "stageIndex": 5,
+    "phase": "Giai đoạn 5",
+    "phasePrimary": "Ba mẹ cùng chia sẻ",
+    "phaseSecondary": "Gia đình bổ sung thông tin",
+    "title": "Cả nhà cùng ghép mảnh chân dung",
+    "titleSecondary": "Minh chứng thực tế & Cam kết bước đầu của gia đình",
+    "description": "Ba mẹ kể một khoảnh khắc thật; con chọn bước nhỏ cả nhà muốn làm cùng nhau.",
+    "descriptionSecondary": "Chia sẻ một tình huống cụ thể con từng say sưa và chọn hành động tiếp theo.",
     "type": "family",
     "minutes": 1,
-    "buddy": "Một câu chuyện thật sẽ làm chân dung của {child} ấm và đúng hơn.",
+    "buddy": "Một câu chuyện thật của ba mẹ sẽ giúp chân dung của con ấm áp và đúng với con hơn.",
+    "buddySecondary": "Minh chứng cụ thể là cơ sở đối chiếu đáng tin cậy nhất.",
+    "standard": {
+      "code": "RIASEC-FUTURE",
+      "label": "Evidence Narrative & Commitment",
+      "whyWeAsk": "Thu thập minh chứng câu chuyện thật từ đời sống, tránh kết luận phiến diện."
+    },
     "options": [
-      { "id": "try-project", "title": "Cùng làm một dự án nhỏ", "description": "Cả nhà bắt đầu trong tuần này", "icon": "Rocket", "tags": ["family-action"] },
-      { "id": "visit-class", "title": "Thử một buổi trải nghiệm", "description": "Xem {child} hứng thú điều gì", "icon": "School", "tags": ["family-action"] },
-      { "id": "talk-weekly", "title": "Có giờ kể chuyện mỗi tuần", "description": "Nghe {child} chia sẻ điều đã thử và muốn thử tiếp", "icon": "MessagesSquare", "tags": ["family-action"] }
+      { "id": "try-project", "title": "Chọn một dự án nhỏ", "description": "Cùng bắt đầu trong tuần này", "icon": "Rocket", "tags": ["family-action"] },
+      { "id": "visit-class", "title": "Thử một buổi trải nghiệm", "description": "Quan sát xem con hứng thú điều gì", "icon": "School", "tags": ["family-action"] },
+      { "id": "talk-weekly", "title": "Có giờ kể chuyện mỗi tuần", "description": "Con chia sẻ điều đã thử và muốn thử tiếp", "icon": "MessagesSquare", "tags": ["family-action"] }
     ]
   },
   {
     "id": "profile",
-    "phase": "Chân dung",
-    "title": "Đây là chân dung nhà sáng tạo mà Kitten Bot thấy ở {you}",
-    "description": "Cả nhà đọc lại. {You} chọn những nét đúng với mình, ba mẹ nói chân dung có giống con không, rồi hoàn thiện nhân vật.",
+    "stageIndex": 6,
+    "phase": "Giai đoạn 6",
+    "phasePrimary": "Hành trình của con",
+    "phaseSecondary": "Hồ sơ và lộ trình",
+    "title": "Kitten Bot hình dung chân dung của con là…",
+    "titleSecondary": "Hồ sơ năng lực & Hình tượng đại diện Future Me",
+    "description": "Cả nhà đọc, xác nhận những nét đúng với con rồi cùng hoàn thiện nhân vật Future Me.",
+    "descriptionSecondary": "Đối chiếu kết quả tổng hợp, xác nhận đặc trưng tính cách và chọn nhân vật thương hiệu.",
     "type": "profile",
     "minutes": 3,
-    "buddy": "Tada! Đây là {you}. {You} chọn nét đúng với mình, ba mẹ nói chân dung có giống con không nha."
+    "buddy": "Tada! Đây là chân dung nhà sáng tạo đang lớn lên từng ngày của con.",
+    "buddySecondary": "Hồ sơ được tổng hợp đa chiều từ sở thích, cách giải quyết vấn đề và chia sẻ của gia đình.",
+    "standard": {
+      "code": "CSTA-ALGO",
+      "label": "Tổng hợp Đa Chiều (ULO/SIO Signals)",
+      "whyWeAsk": "Tổng hợp các tín hiệu đã bộc lộ để hình thành chân dung học tập xuất phát điểm."
+    }
   },
   {
     "id": "pathway",
-    "phase": "Chân dung",
-    "title": "Từ chân dung này, {you} có thể thử những gì?",
-    "description": "Kitten Bot gợi ý vài dự án gần với những gì cả nhà vừa kể. Cả nhà xem, nhớ một ý thích, rồi sang bước làm website.",
+    "stageIndex": 6,
+    "phase": "Giai đoạn 6",
+    "phasePrimary": "Hành trình của con",
+    "phaseSecondary": "Hồ sơ và lộ trình",
+    "title": "Con có thể tạo ra những gì?",
+    "titleSecondary": "Dự án mẫu & Lộ trình phát triển 16 tuần",
+    "description": "Project showcase, hướng khám phá và roadmap linh hoạt dành riêng cho con.",
+    "descriptionSecondary": "Bốn dự án theo từng chặng và cơ chế theo dõi tiến độ cụ thể.",
     "type": "pathway",
     "minutes": 2,
-    "buddy": "Đây là gợi ý để thử, không phải danh sách phải làm hết. Cả nhà chọn một ý {you} thấy vui nhất nha."
+    "buddy": "Không có một con đường duy nhất. Mình chọn bước đầu tiên khiến con hào hứng nhất nhé!",
+    "buddySecondary": "Lộ trình được thiết kế linh hoạt, có các điểm dừng nhìn lại để điều chỉnh.",
+    "standard": {
+      "code": "ISTE-1.4",
+      "label": "Roadmap 4 Dự Án (16 Tuần)",
+      "whyWeAsk": "Cung cấp lộ trình thực hành có thể theo dõi tiến độ và đo lường sản phẩm thực tế."
+    }
   },
   {
     "id": "showcase",
-    "phase": "Chân dung",
-    "title": "Tạo website Future Me của {you}",
-    "description": "Sao chép lời gợi ý bên dưới, rồi dán vào Google AI Studio để làm website của {you}.",
+    "stageIndex": 7,
+    "phase": "Giai đoạn 7",
+    "phasePrimary": "Tạo góc riêng của con",
+    "phaseSecondary": "Tạo website cá nhân",
+    "title": "Tạo website Future Me của con",
+    "titleSecondary": "Tạo Portfolio Website trên Google AI Studio",
+    "description": "Sao chép prompt đã chứa chân dung, mô tả nhân vật, project và roadmap để tiếp tục trong Google AI Studio.",
+    "descriptionSecondary": "Sử dụng prompt tối ưu hóa để AI tạo trang web portfolio cá nhân hóa an toàn.",
     "type": "showcase",
     "minutes": 17,
-    "buddy": "Hôm nay tới đây thôi — nhưng câu chuyện của {you} mới bắt đầu."
+    "buddy": "Hành trình hôm nay kết thúc, nhưng thế giới sáng tạo của con mới chỉ bắt đầu!",
+    "buddySecondary": "Hãy tận dụng sức mạnh của GenAI để hiện thực hóa website cá nhân của bạn.",
+    "standard": {
+      "code": "UNESCO-AI",
+      "label": "Google AI Studio Prompt Integration",
+      "whyWeAsk": "Trang bị cho học sinh kỹ năng sử dụng AI có trách nhiệm để tạo ra sản phẩm số của riêng mình."
+    }
   }
 ]

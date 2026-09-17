@@ -1,264 +1,1065 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
-  Check, Clipboard, Clock3, ExternalLink, Flag, Heart, ImagePlus, MessageCircleMore, Palette, Pencil,
-  Rocket, RotateCcw, Sparkles, Star, Target
+  ArrowRight, ArrowLeft, Check, ExternalLink, Pencil, Rocket, Sparkles,
+  BookOpen, ShieldCheck, Target, Eye, CheckCircle2, User, UserCheck,
+  ChevronDown, ChevronUp, Trophy, Zap, Star, Brain, Cpu,
+  Palette, Code2, Award, Compass, TrendingUp, Clock,
+  Lightbulb, Wrench, GraduationCap, Heart, Layers, Flag,
+  Camera, BarChart3
 } from "lucide-react";
 import type { JourneyAnswers } from "@/types/journey";
 import type { DiscoveryProfile } from "@/lib/profile";
-import { avatarFor } from "@/lib/avatars";
-import { createPrompt } from "@/lib/profile";
-import { BOT_NAME, KittenBotAvatar } from "./FutureBuddy";
-import { AppSelect } from "./AppSelect";
+import {
+  extractSIOEvidenceCards,
+  generatePersonalizedProjects,
+  buildSafeAIStudioPrompt,
+  type SIOEvidenceCard,
+  type V3PersonalizedProject
+} from "@/data/v3Engine";
 import { WebsitePreview } from "./WebsitePreview";
-import { workshopStages } from "./JourneyProgress";
+import { StandardsModal } from "./StandardsModal";
+import { AvatarUploaderModal } from "./AvatarUploaderModal";
+import { RadarChart } from "./RadarChart";
+import { StudentProfileCard } from "./StudentProfileCard";
 
 type CommonProps = {
   answers: JourneyAnswers;
   setAnswers: React.Dispatch<React.SetStateAction<JourneyAnswers>>;
   profile: DiscoveryProfile;
+  saveState?: string;
+  initialTab?: "profile" | "dashboard" | "website";
 };
 
-export function ProfileResult({ answers, setAnswers, profile }: CommonProps) {
-  const candidates = profile.traitCandidates;
-  const avatar = avatarFor(answers.avatar);
-  const toggleTrait = (trait: string) => setAnswers(previous => {
-    const exists = previous.confirmedTraits.includes(trait);
-    const next = exists ? previous.confirmedTraits.filter(item => item !== trait) : [...previous.confirmedTraits, trait].slice(-4);
-    return { ...previous, confirmedTraits: next };
-  });
-  const parentFitNote = {
-    very: `Hay quá — ba mẹ và ${profile.learner} đang nhìn thấy cùng một hướng.`,
-    partly: "Cứ giữ những nét đúng, rồi thử thêm ở bước sau. Chân dung hôm nay không cần hoàn hảo.",
-    "not-yet": "Không sao. Chân dung hôm nay chỉ là điểm xuất phát, chưa phải kết luận về con."
-  } as const;
-  return <div className="space-y-6">
-    <div className="grid gap-5 rounded-2xl border border-tek-200 bg-tek-50 p-5 sm:grid-cols-[140px_1fr] sm:p-6">
-      <div className="mx-auto grid h-28 w-28 place-items-center overflow-hidden rounded-[28px] bg-tek-50 sm:mx-0 sm:h-auto sm:w-full sm:aspect-square">
-        <Image src={avatar.src} alt={avatar.label} width={160} height={160} className="h-full w-full object-contain p-2" priority unoptimized />
-      </div>
-      <div>
-        <p className="text-[10px] font-extrabold uppercase tracking-[.17em] text-tek-700">{BOT_NAME} thấy {profile.learner} là</p>
-        <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{answers.name || profile.Learner} — {profile.archetype}</h2>
-        <p className="mt-3 text-sm font-medium leading-6 text-slate-600">{profile.summary}</p>
-        <p className="mt-3 rounded-xl bg-white px-4 py-3 text-sm font-bold leading-6 text-tek-800">“{profile.Learner} muốn trở thành {profile.futureSelf}.”</p>
-        {profile.futureSelfSource === "student" && (
-          <p className="mt-2 text-[11px] font-semibold leading-5 text-tek-700">Câu {profile.learner} vừa viết sẽ được đưa vào website Future Me. Câu Kitten Bot gợi ý vẫn được lưu để đối chiếu.</p>
-        )}
-        <p className="mt-4 text-sm font-extrabold text-ink">{profile.Learner} thấy câu này đúng không?</p>
-        <p className="mt-1 text-xs leading-5 text-slate-500">Cứ nói thật. Chưa giống thì sửa lại cho đúng với mình.</p>
-        <ChoicePills
-          value={answers.portraitAgree}
-          onChange={portraitAgree => setAnswers(a => ({
-            ...a,
-            portraitAgree,
-            futureSelf: portraitAgree !== "yes" && !a.futureSelf.trim() ? profile.suggestedFutureSelf : a.futureSelf
-          }))}
-          options={[{ id: "yes", label: "Đúng rồi" }, { id: "almost", label: "Gần đúng" }, { id: "not-yet", label: "Chưa giống lắm" }]}
-        />
-        {answers.portraitAgree && answers.portraitAgree !== "yes" && (
-          <label className="mt-3 grid gap-2 text-xs font-extrabold text-slate-700">
-            {profile.Learner} muốn trở thành người như thế nào?
-            <input
-              value={answers.futureSelf}
-              onChange={event => setAnswers(a => ({ ...a, futureSelf: event.target.value }))}
-              placeholder={profile.suggestedFutureSelf}
-              maxLength={120}
-              className="focus-ring rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold outline-none"
-            />
-            <span className="text-right text-[10px] font-semibold text-slate-400">{answers.futureSelf.trim().length}/120</span>
-          </label>
-        )}
-      </div>
-    </div>
+/* ─────────────────────────────────────────────────────────────
+   DEMO PROFILES
+   ───────────────────────────────────────────────────────────── */
+const demoMayAnswers: JourneyAnswers = {
+  name: "Mây", grade: "4", gradeBand: "3-5", avatar: "builder",
+  domain: "robotics", branch: "robot_build_and_block_control",
+  projectName: "Chú robot Thủ Thư Nhí",
+  dreamAudience: "bạn đọc trong thư viện trường",
+  dreamPurpose: "mang sách, đi đúng đường và dừng trước vật cản",
+  dreamFeatures: ["Tự động nhận biết vật cản", "Điều khiển bằng nút bấm", "Khay chở sách an toàn"],
+  dreamAppearance: "Robot hình hộp mini màu xanh lá có khay chở sách",
+  knowledgeResponse: "Nhận biết chức năng bánh xe, động cơ và cảm biến khoảng cách.",
+  skillResponse: "Sắp xếp trình tự di chuyển: tiến thẳng, nhận diện vật cản và dừng lại.",
+  problemResponse: "Nếu robot đi lệch hướng, kiểm tra lại tốc độ động cơ 2 bánh xe.",
+  parentObservedTask: "independent",
+  parentObservedExample: "Mây rất thích tự tháo lắp mô hình Lego và kiên trì thử lại.",
+  hoursPerWeek: 2, availableResources: ["Máy tính", "Vật liệu đơn giản"],
+  supportMode: ["Lắng nghe và khích lệ", "Cùng con thử một việc nhỏ"],
+  familyConflict: "agree", familyReviewConfirmed: true, parentApprovesExternalTransfer: true,
+  avatarSource: "system", consent: true, selections: {},
+  futureSelf: "Nhà Chế Tạo Robot", favoriteColor: "Xanh lá",
+  characterStyle: "Nhanh nhẹn", signatureGear: "Kính bảo hộ",
+  confirmedTraits: ["Kiên trì", "Tò mò", "Khéo tay"],
+  portraitMode: "buddy", parentMoment: "Tự mày mò sửa bánh xe đồ chơi"
+};
 
-    <div className="rounded-2xl border border-slate-200 p-5">
-      <p className="text-sm font-extrabold text-ink">Những điều {profile.learner} đang hứng thú</p>
-      <div className="mt-3 flex flex-wrap gap-2">{profile.interestLabels.map(item => <span key={item} className="rounded-full bg-amber-50 px-3 py-2 text-xs font-bold text-amber-800">{item}</span>)}</div>
-      <p className="mt-5 text-sm font-extrabold text-ink">Điều nào giống {profile.learner} nhất?</p>
-      <p className="mt-1 text-xs leading-5 text-slate-500">{BOT_NAME} gợi ý từ những gì vừa chọn. {profile.Learner} chọn 2–4 nét thấy đúng với mình hôm nay nha.</p>
-      <div className="mt-3 flex flex-wrap gap-2">{candidates.map(trait => {
-        const active = answers.confirmedTraits.includes(trait);
-        return <button type="button" key={trait} onClick={() => toggleTrait(trait)} className={`focus-ring inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-bold transition ${active ? "border-tek-500 bg-tek-50 text-tek-800" : "border-slate-200 bg-white text-slate-600"}`}>{active && <Check className="h-3.5 w-3.5" />}{trait}</button>;
-      })}</div>
-      <p className="mt-3 text-[11px] font-semibold text-slate-400">Đã chọn {answers.confirmedTraits.length}/4 nét</p>
-    </div>
+const demoNovaAnswers: JourneyAnswers = {
+  name: "Nova", grade: "7", gradeBand: "6-7", avatar: "explorer",
+  domain: "game_programming", branch: "web",
+  projectName: "Website Hành Tinh Xanh",
+  dreamAudience: "học sinh các trường THCS trong quận",
+  dreamPurpose: "đổi rác tái chế lấy cây sen đá và tích điểm bảo vệ môi trường",
+  dreamFeatures: ["Bảng xếp hạng xanh", "Form quét mã nhận cây", "Giao diện di động responsive"],
+  dreamAppearance: "Tông màu xanh pastel, giao diện trực quan hiện đại",
+  knowledgeResponse: "Phân tích cấu trúc HTML, CSS cho bố cục và JS cho cơ chế tính điểm.",
+  skillResponse: "Tạo wireframe giao diện trước, dựng khung HTML/CSS rồi thêm tính năng.",
+  problemResponse: "Mở Console kiểm tra lỗi script và gỡ lỗi từng hàm chức năng.",
+  parentObservedTask: "independent",
+  parentObservedExample: "Nova tự tìm tòi xem các trang web và học cách làm layout.",
+  hoursPerWeek: 3, availableResources: ["Máy tính cá nhân", "Mạng Internet"],
+  supportMode: ["Tạo không gian tự do", "Tìm môi trường chuyên sâu"],
+  familyConflict: "agree", familyReviewConfirmed: true, parentApprovesExternalTransfer: true,
+  avatarSource: "system", consent: true, selections: {},
+  futureSelf: "Kỹ Sư Phần Mềm", favoriteColor: "Xanh dương",
+  characterStyle: "Hiện đại", signatureGear: "Balo công nghệ",
+  confirmedTraits: ["Logic", "Sáng tạo", "Chủ động"],
+  portraitMode: "buddy", parentMoment: "Tự học làm trang web đầu tiên"
+};
 
-    <div className="rounded-2xl border border-slate-200 p-5">
-      <p className="text-sm font-extrabold text-ink">Ai sẽ thiết kế nhân vật Future Me của {profile.learner}?</p>
-      <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        <button type="button" onClick={() => setAnswers(a => ({ ...a, portraitMode: "buddy" }))} data-selected={answers.portraitMode === "buddy"} className="choice-card focus-ring flex items-start gap-3 rounded-2xl border border-slate-200 p-4 text-left"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-tek-50"><KittenBotAvatar size={36} className="h-9 w-9" /></span><span><strong className="block text-sm text-ink">Để {BOT_NAME} gợi ý</strong><span className="mt-1 block text-xs leading-5 text-slate-500">Dựa trên những gì cả nhà vừa chọn.</span></span></button>
-        <button type="button" onClick={() => setAnswers(a => ({ ...a, portraitMode: "self" }))} data-selected={answers.portraitMode === "self"} className="choice-card focus-ring flex items-start gap-3 rounded-2xl border border-slate-200 p-4 text-left"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-600"><Pencil className="h-5 w-5" /></span><span><strong className="block text-sm text-ink">{profile.Learner} tự chọn nhân vật</strong><span className="mt-1 block text-xs leading-5 text-slate-500">{profile.Learner} chọn hình dáng, màu sắc và vật phẩm của mình.</span></span></button>
-      </div>
+/* ─────────────────────────────────────────────────────────────
+   HELPERS
+   ───────────────────────────────────────────────────────────── */
+type ProjectProgressStatus = "not_started" | "in_progress" | "submitted" | "verified";
 
-      {answers.portraitMode === "buddy" ? <div className="mt-4 rounded-2xl bg-slate-50 p-4"><div className="flex items-center gap-2 text-xs font-extrabold text-tek-700"><Sparkles className="h-4 w-4" /> Figurine 3D Pixar cho {profile.characterBrief.ageGroup}</div><p className="mt-2 text-xs leading-5 text-slate-600">Vì {profile.learner} thích <strong>{profile.interestLabels[0]?.toLocaleLowerCase("vi")}</strong> và muốn làm <strong>{profile.projects[0].title.toLocaleLowerCase("vi")}</strong>, {BOT_NAME} gợi ý mô hình chibi vinyl: {profile.characterBrief.style} · {profile.characterBrief.palette} · {profile.characterBrief.signatureGear}.</p><p className="mt-2 text-[11px] leading-5 text-slate-500">Ảnh sẽ là figurine 3D trên đế trưng bày, không phải hình ghép 2D.</p></div> : <CharacterBuilder answers={answers} setAnswers={setAnswers} profile={profile} />}
-    </div>
-
-    <div className="rounded-2xl border border-violet-100 bg-violet-50 p-5">
-      <p className="flex items-center gap-2 text-sm font-extrabold text-violet-900"><Heart className="h-4 w-4" /> Góc nhìn từ ba mẹ</p>
-      <p className="mt-2 text-sm leading-6 text-violet-800">{profile.parentSummary}</p>
-      {profile.familyReflection.moment && <p className="mt-3 border-t border-violet-200 pt-3 text-xs italic leading-5 text-violet-700">“{profile.familyReflection.moment}”</p>}
-      <p className="mt-4 text-sm font-extrabold text-violet-900">Ba mẹ thấy chân dung này giống con không?</p>
-      <p className="mt-1 text-xs leading-5 text-violet-700">Ba mẹ chọn một ý — không cần giải thích dài.</p>
-      <ChoicePills
-        value={answers.parentPortraitFit}
-        onChange={parentPortraitFit => setAnswers(a => ({ ...a, parentPortraitFit }))}
-        options={[{ id: "very", label: "Rất giống con" }, { id: "partly", label: "Giống một phần" }, { id: "not-yet", label: "Chưa giống con lắm" }]}
-        tone="violet"
-      />
-      {answers.parentPortraitFit && <p className="mt-3 text-xs font-semibold leading-5 text-violet-800">{parentFitNote[answers.parentPortraitFit]}</p>}
-    </div>
-    <p className="text-center text-[11px] leading-5 text-slate-400">Đây là những gì cả nhà vừa kể — không phải kết luận về năng lực hay nghề nghiệp.</p>
-  </div>;
+function mapEvidenceToRadar(cards: SIOEvidenceCard[]) {
+  if (cards.length < 3) {
+    return [
+      { key: "k", label: "Nhận thức", value: 3, fullMark: 10 },
+      { key: "s", label: "Kỹ năng", value: 3, fullMark: 10 },
+      { key: "p", label: "Giải quyết VĐ", value: 3, fullMark: 10 },
+      { key: "o", label: "Quan sát", value: 3, fullMark: 10 },
+    ];
+  }
+  return cards.map(card => ({
+    key: card.id,
+    label: card.stageName.length > 12 ? card.stageName.split(" & ")[0].split(" ")[0] : card.stageName.split(" & ")[0],
+    value: card.sourceType === "student_situation" ? 8
+      : card.sourceType === "parent_observation" ? 7
+      : card.sourceType === "student_self_report" ? 6 : 2,
+    fullMark: 10
+  }));
 }
 
-function ChoicePills<T extends string>({
-  value,
-  onChange,
-  options,
-  tone = "tek"
-}: {
-  value: T | "";
-  onChange: (value: T) => void;
-  options: { id: T; label: string }[];
-  tone?: "tek" | "violet";
-}) {
-  const activeClass = tone === "violet" ? "border-violet-400 bg-white text-violet-900" : "border-tek-500 bg-tek-50 text-tek-800";
-  const idleClass = tone === "violet" ? "border-violet-200 bg-white/70 text-violet-800" : "border-slate-200 bg-white text-slate-600";
+function getStageSkills(domain: string | undefined, idx: number): string[] {
+  const d = domain || "robotics";
+  const m: Record<string, string[][]> = {
+    robotics: [
+      ["Lắp ráp cơ khí", "Nhận biết linh kiện", "Kết nối mạch"],
+      ["Lập trình khối", "Điều khiển động cơ", "Vòng lặp"],
+      ["Cảm biến nâng cao", "Xử lý tín hiệu", "Tự động hóa"],
+      ["Tích hợp hệ thống", "Trình diễn", "Tối ưu"]
+    ],
+    game_programming: [
+      ["HTML/CSS cơ bản", "Bố cục UI", "Thiết kế"],
+      ["JavaScript logic", "Xử lý sự kiện", "DOM"],
+      ["Responsive design", "Tương tác nâng cao", "API"],
+      ["Deploy & Test", "UX tối ưu", "Portfolio"]
+    ],
+    multimedia: [
+      ["Bố cục", "Lý thuyết màu", "Typography"],
+      ["Thiết kế vector", "Minh họa số", "Branding"],
+      ["Animation", "Motion graphics", "Storyboard"],
+      ["Mô hình 3D", "Rendering", "Trình bày"]
+    ]
+  };
+  return m[d]?.[idx] || m.robotics[idx] || ["Khám phá", "Thực hành", "Sáng tạo"];
+}
+
+const stageIcons = [Lightbulb, Cpu, Wrench, Rocket];
+
+/* ─────────────────────────────────────────────────────────────
+   MAIN COMPONENT — Future Profile Dashboard
+   Reference design: clean flat pastel, illustration hero,
+   2-column layout, horizontal timeline, icon-rich cards
+   ───────────────────────────────────────────────────────────── */
+export function ProfileResult({ answers, setAnswers, profile, initialTab }: CommonProps) {
+  /* ── State ────────────────────────────────── */
+  const [activeMainTab, setActiveMainTab] = useState<"profile" | "dashboard" | "website">(
+    initialTab || "profile"
+  );
+  const [viewMode, setViewMode] = useState<"student" | "parent">("student");
+  const [activeProfileTab, setActiveProfileTab] = useState<"current" | "may" | "nova">("current");
+  const [selectedStageIndex, setSelectedStageIndex] = useState<number>(0);
+  const [expandedEvidence, setExpandedEvidence] = useState<string | null>(null);
+  const [expandedProject, setExpandedProject] = useState<number | null>(null);
+  const [projectStatuses, setProjectStatuses] = useState<Record<string, ProjectProgressStatus>>({
+    P1: "not_started", P2: "not_started", P3: "not_started", P4: "not_started"
+  });
+  const [taskChecks, setTaskChecks] = useState<Record<string, boolean>>({});
+  const [modalCode, setModalCode] = useState<string | null>(null);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
+  const [guideStep, setGuideStep] = useState<number>(0); // 0=CTA, 1=copy, 2=open, 3=build, 4=refine
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveMainTab(initialTab);
+    }
+  }, [initialTab]);
+
+  /* ── Derived Data ─────────────────────────── */
+  const activeAnswers = activeProfileTab === "may" ? demoMayAnswers
+    : activeProfileTab === "nova" ? demoNovaAnswers : answers;
+  const isPrimary = !activeAnswers.grade || parseInt(activeAnswers.grade, 10) <= 5;
+
+  const personalizedProjects = useMemo(() => generatePersonalizedProjects(activeAnswers), [activeAnswers]);
+  const evidenceCards = useMemo(() => extractSIOEvidenceCards(activeAnswers), [activeAnswers]);
+  const radarData = useMemo(() => mapEvidenceToRadar(evidenceCards), [evidenceCards]);
+  const selectedProject = personalizedProjects[selectedStageIndex] || personalizedProjects[0];
+  const hoursPerWeek = activeAnswers.hoursPerWeek || (isPrimary ? 2 : 3);
+  const totalWeeks = Math.ceil(12 / hoursPerWeek);
+
+  const resolvedProfileBanner = useMemo(() => {
+    if (activeProfileTab === "may") return "/assets/profile-may-banner.png";
+    if (activeProfileTab === "nova") return "/assets/profile-nova-banner.png";
+    if (activeAnswers.customAvatarData) return activeAnswers.customAvatarData;
+    return isPrimary ? "/assets/profile-may-banner.png" : "/assets/profile-nova-banner.png";
+  }, [activeProfileTab, activeAnswers.customAvatarData, isPrimary]);
+
+  const resolvedAvatarSrc =
+    activeAnswers.avatarSource === "custom" && activeAnswers.customAvatarData
+      ? activeAnswers.customAvatarData
+      : activeAnswers.avatar === "builder" ? "/assets/kittenbot-builder.png"
+      : activeAnswers.avatar === "explorer" ? "/assets/kittenbot-explorer.png"
+      : "/assets/kittenbot-creator.png";
+
+  const { safePayload, fullPrompt } = useMemo(
+    () => buildSafeAIStudioPrompt(activeAnswers, personalizedProjects),
+    [activeAnswers, personalizedProjects]
+  );
+
+  const traits = activeAnswers.confirmedTraits || [];
+  const futureSelf = activeAnswers.futureSelf || "Nhà Sáng Tạo Tương Lai";
+
+  /* ── Handlers ─────────────────────────────── */
+  const handleStatusChange = (pid: string, s: ProjectProgressStatus) =>
+    setProjectStatuses(prev => ({ ...prev, [pid]: s }));
+  const toggleTask = (tid: string) =>
+    setTaskChecks(prev => ({ ...prev, [tid]: !prev[tid] }));
+  const handleSaveAvatar = (source: "system" | "custom", customData?: string, systemAvatar?: string) =>
+    setAnswers(prev => ({ ...prev, avatarSource: source, customAvatarData: customData, avatar: systemAvatar || prev.avatar }));
+  const handleUpdateName = (name: string) => {
+    setAnswers(prev => ({ ...prev, name }));
+  };
+  const copyPromptToClipboard = async () => {
+    await navigator.clipboard.writeText(fullPrompt);
+    setCopiedPrompt(true);
+    window.setTimeout(() => setCopiedPrompt(false), 2400);
+  };
+
+  /* ─────────────────────────────────────────────────────────
+     RENDER — Flat pastel dashboard inspired by reference
+     ───────────────────────────────────────────────────────── */
   return (
-    <div className="mt-3 flex flex-wrap gap-2">
-      {options.map(option => {
-        const active = value === option.id;
-        return (
+    <div className="min-h-screen space-y-5 pb-16" style={{ background: "linear-gradient(180deg, #EFF8F6 0%, #F5F9FE 40%, #FFFDF7 100%)" }}>
+
+      {/* ═══════════════════════════════════════════════════════
+          TOP BAR — Navigation Tabs + Profile Presets + View Mode Toggle
+         ═══════════════════════════════════════════════════════ */}
+      <div className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/80 p-3 sm:p-4 shadow-xs space-y-3">
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+          {/* Main Navigation Tabs */}
+          <div className="flex items-center gap-1 overflow-x-auto p-1 rounded-2xl bg-[#e8f5f2]/80 border border-[#c8e6df]/50">
+            <button
+              type="button"
+              onClick={() => setActiveMainTab("profile")}
+              className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-extrabold transition shrink-0 ${
+                activeMainTab === "profile"
+                  ? "bg-white text-[#1a8a7d] shadow-sm"
+                  : "text-slate-600 hover:text-[#1a8a7d]"
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+              <span>Hồ Sơ Tương Lai (Profile)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveMainTab("dashboard")}
+              className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-extrabold transition shrink-0 ${
+                activeMainTab === "dashboard"
+                  ? "bg-white text-[#1a8a7d] shadow-sm"
+                  : "text-slate-600 hover:text-[#1a8a7d]"
+              }`}
+            >
+              <BarChart3 className="h-3.5 w-3.5 text-[#1a8a7d]" />
+              <span>Báo Cáo & Lộ Trình 4 Chặng</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveMainTab("website")}
+              className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-extrabold transition shrink-0 ${
+                activeMainTab === "website"
+                  ? "bg-white text-[#1a8a7d] shadow-sm"
+                  : "text-slate-600 hover:text-[#1a8a7d]"
+              }`}
+            >
+              <Rocket className="h-3.5 w-3.5 text-sky-500" />
+              <span>Website Future Me</span>
+            </button>
+          </div>
+
+          {/* View Mode Toggle: Học sinh vs Phụ huynh */}
+          <div className="flex items-center gap-1 self-start sm:self-auto rounded-full bg-[#e8f5f2] p-0.5">
+            <button
+              type="button"
+              onClick={() => setViewMode("student")}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${
+                viewMode === "student" ? "bg-white text-[#1a8a7d] shadow-xs" : "text-slate-500"
+              }`}
+            >
+              <User className="h-3.5 w-3.5" /> Học sinh
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("parent")}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold transition ${
+                viewMode === "parent" ? "bg-white text-amber-700 shadow-xs" : "text-slate-500"
+              }`}
+            >
+              <UserCheck className="h-3.5 w-3.5" /> Phụ huynh
+            </button>
+          </div>
+        </div>
+
+        {/* Profile Preset Switcher Row */}
+        <div className="flex items-center justify-between border-t border-slate-100 pt-2.5 text-xs">
+          <div className="flex items-center gap-1.5 overflow-x-auto">
+            <span className="text-[11px] font-bold text-slate-400 mr-1 shrink-0">Hồ sơ mẫu:</span>
+            {([
+              { key: "current" as const, label: `Bé ${answers.name || "Minh Anh"} (con)` },
+              { key: "may" as const, label: "Mây (Tiểu học)" },
+              { key: "nova" as const, label: "Nova (THCS)" },
+            ]).map(t => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setActiveProfileTab(t.key)}
+                className={`rounded-full px-3 py-1 text-[11px] font-bold transition shrink-0 ${
+                  activeProfileTab === t.key
+                    ? "bg-[#1a8a7d] text-white shadow-xs"
+                    : "bg-slate-50 text-slate-500 border border-slate-200 hover:bg-slate-100"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
           <button
             type="button"
-            key={option.id}
-            onClick={() => onChange(option.id)}
-            className={`focus-ring inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-bold transition ${active ? activeClass : idleClass}`}
+            onClick={() => setShowAvatarModal(true)}
+            className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1a8a7d] hover:underline shrink-0"
           >
-            {active && <Check className="h-3.5 w-3.5" />}
-            {option.label}
+            <Camera className="h-3.5 w-3.5" /> Thay ảnh đại diện
           </button>
-        );
-      })}
-    </div>
-  );
-}
+        </div>
+      </div>
 
-function CharacterBuilder({ answers, setAnswers, profile }: CommonProps) {
-  const fields = [
-    { key: "characterStyle", label: "Phong cách nhân vật", icon: Palette, options: profile.portraitSuggestions.styles },
-    { key: "favoriteColor", label: "Màu chủ đạo", icon: Sparkles, options: profile.portraitSuggestions.colors },
-    { key: "signatureGear", label: "Vật phẩm đặc trưng", icon: ImagePlus, options: profile.portraitSuggestions.gear }
-  ] as const;
-  return <div className="mt-4 grid gap-4 rounded-2xl bg-slate-50 p-4">
-    <div><p className="text-xs font-extrabold text-slate-700">Từ ý tưởng vừa chọn, {BOT_NAME} nghĩ {profile.learner} có thể là…</p><div className="mt-2 flex flex-wrap gap-2">{profile.portraitSuggestions.futureSelf.map(suggestion => <button type="button" key={suggestion} onClick={() => setAnswers(a => ({...a, futureSelf: suggestion}))} className={`focus-ring rounded-full border px-3 py-2 text-left text-[11px] font-bold ${answers.futureSelf === suggestion ? "border-tek-500 bg-tek-50 text-tek-800" : "border-slate-200 bg-white text-slate-600"}`}>{suggestion}</button>)}</div></div>
-    <label className="grid gap-2 text-xs font-extrabold text-slate-700">Hoặc {profile.learner} tự kể theo cách của mình<input value={answers.futureSelf} onChange={event => setAnswers(a => ({ ...a, futureSelf: event.target.value }))} placeholder={profile.tier === "g12" ? "Ví dụ: người làm robot giúp ba mẹ" : "Ví dụ: người tạo robot giúp mọi người"} className="focus-ring rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold outline-none" /></label>
-    <div className="grid gap-3 sm:grid-cols-3">{fields.map(field => <div key={field.key} className="grid gap-2 text-xs font-extrabold text-slate-700"><span className="flex items-center gap-2"><field.icon className="h-4 w-4 text-tek-600" />{field.label}</span><AppSelect value={answers[field.key]} placeholder="Chọn một kiểu" options={field.options.map(option => ({ value: option, label: option }))} onChange={value => setAnswers(a => ({ ...a, [field.key]: value }))} aria-label={field.label} /></div>)}</div>
-    <p className="text-[11px] leading-5 text-slate-500">AI sẽ tạo figurine 3D Pixar (vinyl, mắt to, đế tròn) cho {profile.learner} — không dùng ảnh thật, không ghép shape 2D.</p>
-  </div>;
-}
+      {/* ═══════════════════════════════════════════════════════
+          VIEW 1: FULL FUTURE PROFILE CARD
+          Exact match for ChatGPT Image 14_01_20 17 thg 9, 2026.png
+         ═══════════════════════════════════════════════════════ */}
+      {activeMainTab === "profile" && (
+        <StudentProfileCard
+          answers={activeAnswers}
+          isPrimary={isPrimary}
+          activeProfileTab={activeProfileTab}
+          viewMode={viewMode}
+          onEditAvatar={() => setShowAvatarModal(true)}
+          onGoToRoadmap={() => setActiveMainTab("dashboard")}
+          onGoToWebsite={() => setActiveMainTab("website")}
+          onOpenStandardsModal={(code) => setModalCode(code)}
+          evidenceCards={evidenceCards}
+          onUpdateName={handleUpdateName}
+        />
+      )}
 
-export function ProjectsJourneyResult({ profile }: Pick<CommonProps, "profile">) {
-  const todaySteps = [
-    { title: "Xem các dự án gợi ý", body: `${profile.Learner} đang ở bước này. Cứ xem ý nào thấy muốn thử.` },
-    { title: "Làm website Future Me", body: "Bước sau, cả nhà tạo trang của bạn từ những gì vừa kể." },
-    { title: "Khoe với cả nhà", body: "Cuối buổi, kể phần nào trên website thấy giống mình nhất." }
-  ];
-  const directions = [
-    { label: "Gần nhất hôm nay", value: profile.directions.featured, icon: Star, tone: "border-amber-200 bg-amber-50 text-amber-800" },
-    { label: "Cũng hợp để thử", value: profile.directions.tryNext, icon: Target, tone: "border-tek-200 bg-tek-50 text-tek-800" },
-    { label: "Nếu muốn đổi món", value: profile.directions.exploreMore, icon: Flag, tone: "border-sky-200 bg-sky-50 text-sky-800" }
-  ];
-  return (
-    <div className="space-y-7">
-      <section>
-        <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-tek-600">Gợi ý cho {profile.learner}</p>
-        <h2 className="mt-2 text-xl font-extrabold text-ink">Những dự án gần với chân dung của {profile.learner}</h2>
-        <p className="mt-2 max-w-2xl text-xs leading-5 text-slate-500">Bốn ý dưới đây lấy từ những gì cả nhà vừa chọn. Không cần làm hết — chỉ cần để ý ý nào thấy muốn thử.</p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">{profile.projects.map(project => (
-          <article key={project.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-            <div className="relative aspect-[16/9] w-full bg-tek-50"><Image src={project.image} alt={project.title} fill sizes="(max-width: 640px) 100vw, 50vw" className="object-cover object-center" unoptimized /></div>
-            <div className="p-4">
-              <h3 className="text-sm font-extrabold text-ink">{project.title}</h3>
-              <p className="mt-2 text-xs leading-5 text-slate-500">{project.description}</p>
-              <div className="mt-3 flex flex-wrap gap-1.5">{project.actions.map(action => <span key={action} className="rounded-full bg-tek-50 px-2.5 py-1.5 text-[10px] font-bold text-tek-700">{action}</span>)}</div>
+      {/* ═══════════════════════════════════════════════════════
+          VIEW 2: RESULT NOTIFICATION & 4-STAGE ROADMAP DASHBOARD
+          Exact match for ChatGPT Image 13_58_21 17 thg 9, 2026.png
+         ═══════════════════════════════════════════════════════ */}
+      {activeMainTab !== "profile" && (
+        <>
+          {/* HERO — "Hành trình của con" */}
+          <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#e0f5ef] via-[#eaf7f4] to-[#f0f4ff] border border-[#c8e6df]/50 p-6 sm:p-8">
+            {/* Decorative sparkles */}
+            <div className="pointer-events-none absolute top-4 left-6 text-amber-400 opacity-60">✦</div>
+            <div className="pointer-events-none absolute top-8 right-20 text-tek-400 opacity-40 text-2xl">✧</div>
+
+            <div className="relative z-10 grid gap-6 md:grid-cols-[auto_1fr] items-center">
+              {/* Left: Illustration Character with Laptop & Cat */}
+              <div className="relative flex flex-col items-center justify-center">
+                <div className="relative w-64 sm:w-72 md:w-80 h-44 sm:h-48 md:h-52 rounded-2xl overflow-hidden drop-shadow-md bg-white border border-[#c8e6df]/50">
+                  <img
+                    src={resolvedProfileBanner}
+                    alt="Hành trình của con"
+                    className="h-full w-full object-cover object-center transition duration-500"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAvatarModal(true)}
+                  className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 px-3 py-1 text-[11px] font-bold text-slate-600 shadow-xs hover:bg-white transition"
+                >
+                  <Camera className="h-3 w-3" /> Chỉnh sửa ảnh đại diện
+                </button>
+              </div>
+
+              {/* Right: Info & Dream Project Card */}
+              <div className="flex flex-col justify-center">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="rounded-full bg-[#1a8a7d] px-3 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-white">
+                        {isPrimary ? "Tiểu học" : "THCS"}
+                      </span>
+                      <span className="text-[11px] text-slate-400 font-semibold">
+                        {isPrimary ? "Khám phá · Tạo ra · Vui học mỗi ngày!" : "Học sáng tạo · Làm dự án · Kiến tạo tương lai!"}
+                      </span>
+                    </div>
+                    <h1 className="text-2xl font-extrabold text-[#1a3a4a] sm:text-3xl tracking-tight">
+                      Hành trình của {activeAnswers.name || "con"}
+                    </h1>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Mỗi ý tưởng nhỏ hôm nay sẽ tạo nên một tương lai tuyệt vời!
+                    </p>
+                  </div>
+                  <div className="hidden sm:block text-right">
+                    <span className="inline-block text-xs font-bold text-amber-600 italic">
+                      Con làm được rất tốt! ☀️
+                    </span>
+                  </div>
+                </div>
+
+                {/* Dream Project Mini Card — with robot book illustration */}
+                <div className="mt-4 flex items-start gap-3.5 rounded-2xl bg-white/90 backdrop-blur-sm border border-[#c8e6df]/70 p-4 shadow-xs">
+                  <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-xl overflow-hidden bg-[#e0f5ef] shrink-0 border border-[#c8e6df]/50">
+                    <img src="/assets/dashboard-robot-book.png" alt="Robot Thủ Thư Nhí" className="h-full w-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-bold text-[#1a8a7d] uppercase tracking-wider">Ước mơ của con</p>
+                    <p className="text-sm sm:text-base font-extrabold text-[#1a3a4a] mt-0.5 leading-snug truncate">
+                      {activeAnswers.projectName || "Robot Thủ Thư Nhí"}
+                    </p>
+                    <p className="text-[11px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                      {activeAnswers.dreamPurpose || "Tạo một robot giúp sắp xếp sách, gợi ý sách hay và lan tỏa niềm vui đọc sách cho mọi người."}
+                    </p>
+
+                    {/* Metrics Row */}
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {[
+                        { icon: Target, value: "4 dự án", sub: "trong hành trình" },
+                        { icon: Clock, value: `${totalWeeks} tuần`, sub: "dự kiến hoàn thành" },
+                        { icon: Zap, value: `${hoursPerWeek} giờ/tuần`, sub: "thời gian gợi ý" },
+                      ].map(m => (
+                        <div key={m.sub} className="inline-flex items-center gap-1.5 rounded-full bg-[#fafdfb] border border-[#c8e6df]/60 px-2.5 py-1 text-[10px] font-bold shadow-2xs">
+                          <m.icon className="h-3 w-3 text-[#1a8a7d]" />
+                          <span className="text-[#1a3a4a] font-extrabold">{m.value}</span>
+                          <span className="text-slate-400 font-normal">{m.sub}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </article>
-        ))}</div>
-      </section>
-      <section>
-        <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-tek-600">Cùng hướng</p>
-        <h2 className="mt-2 text-xl font-extrabold text-ink">Ba hướng gần với những gì {profile.learner} vừa chọn</h2>
-        <p className="mt-2 max-w-2xl text-xs leading-5 text-slate-500">Đây là cách gọi các hướng đó — không phải môn phải học hay nghề phải chọn.</p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">{directions.map(item => (
-          <div key={item.label} className={`rounded-2xl border p-4 ${item.tone}`}>
-            <item.icon className="h-5 w-5" />
-            <p className="mt-3 text-[10px] font-extrabold uppercase tracking-[.1em] opacity-70">{item.label}</p>
-            <p className="mt-2 text-sm font-extrabold leading-5">{item.value}</p>
+          </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          ROW 2 — TWO COLUMNS: Evidence + Roadmap Map
+          (Inspired by reference: "Điều con đã thể hiện" + "Bản đồ 4 chặng")
+         ═══════════════════════════════════════════════════════ */}
+      <div className="grid gap-5 lg:grid-cols-2">
+
+        {/* ── LEFT: Điều con đã thể hiện ── */}
+        <section className="rounded-3xl bg-white border border-[#e2ede9] p-5 sm:p-6 shadow-xs">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-amber-500 text-lg">⭐</span>
+            <div>
+              <h2 className="text-base font-extrabold text-[#1a3a4a]">Điều con đã thể hiện</h2>
+              <p className="text-[10px] text-slate-400">Năng lực nổi bật qua các hoạt động và sản phẩm</p>
+            </div>
           </div>
-        ))}</div>
-      </section>
-      <section>
-        <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-tek-600">Việc tiếp theo hôm nay</p>
-        <h2 className="mt-2 text-xl font-extrabold text-ink">Cả nhà làm tiếp trong buổi này</h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">{todaySteps.map((item, index) => (
-          <div key={item.title} className={`relative rounded-2xl border p-4 ${index === 0 ? "border-tek-300 bg-tek-50" : "border-slate-200"}`}>
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-xs font-extrabold text-slate-600">{index + 1}</span>
-            <p className="mt-4 text-[10px] font-extrabold uppercase tracking-[.1em] text-tek-600">{index === 0 ? "Đang làm" : index === 1 ? "Bước sau" : "Cuối buổi"}</p>
-            <h3 className="mt-1 text-sm font-extrabold text-ink">{item.title}</h3>
-            <p className="mt-2 text-xs leading-5 text-slate-500">{item.body}</p>
+
+          <div className="grid gap-2.5 sm:grid-cols-3">
+            {evidenceCards.slice(0, 3).map(card => {
+              const isExp = expandedEvidence === card.id;
+              const hasData = card.sourceType !== "insufficient_evidence";
+              const icons = [
+                { icon: Cpu, bg: "bg-[#e0f5ef]", color: "text-[#1a8a7d]" },
+                { icon: Layers, bg: "bg-[#e8ecfb]", color: "text-[#5b6abf]" },
+                { icon: Lightbulb, bg: "bg-[#fef3e2]", color: "text-amber-600" },
+              ];
+              const ic = icons[evidenceCards.indexOf(card)] || icons[0];
+
+              return (
+                <button key={card.id} type="button" onClick={() => setExpandedEvidence(isExp ? null : card.id)}
+                  className={`group text-left rounded-2xl border p-4 transition-all duration-300 ${
+                    isExp ? "border-[#1a8a7d] bg-[#f5fbfa] shadow-md ring-1 ring-[#c8e6df]" : "border-[#e8f0ed] bg-[#fafcfb] hover:border-[#c8e6df] hover:shadow-sm"
+                  }`}>
+                  <span className={`grid h-9 w-9 place-items-center rounded-xl ${ic.bg} ${ic.color} shadow-xs mb-3`}>
+                    <ic.icon className="h-4 w-4" />
+                  </span>
+                  <p className="text-xs font-extrabold text-[#1a3a4a] leading-snug">{card.stageName.split(" & ")[0]}</p>
+                  <p className="text-[10px] text-slate-400 mt-1 leading-4 line-clamp-2">
+                    {hasData
+                      ? card.responsePreview.replace(/^Học sinh (đã trả lời|đã trình bày|đề xuất cách giải quyết): "/, "").replace(/"$/, "").slice(0, 60) + "..."
+                      : "Chưa ghi nhận"
+                    }
+                  </p>
+
+                  {/* Expanded */}
+                  <div className={`overflow-hidden transition-all duration-400 ${isExp ? "max-h-60 opacity-100 mt-3" : "max-h-0 opacity-0"}`}>
+                    <div className="rounded-xl bg-white p-3 border border-[#e2ede9] text-[11px] text-slate-600 leading-5">
+                      <p className="font-bold text-[#1a3a4a] mb-1">{card.questionPrompt}</p>
+                      <p>{card.responsePreview}</p>
+                    </div>
+                    <p className="mt-1.5 text-[9px] text-slate-400 italic">*{card.caveat}</p>
+                  </div>
+                </button>
+              );
+            })}
           </div>
-        ))}</div>
+        </section>
+
+        {/* ── RIGHT: Bản đồ 4 chặng ── */}
+        <section className="rounded-3xl bg-white border border-[#e2ede9] p-5 sm:p-6 shadow-xs">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 className="text-base font-extrabold text-[#1a3a4a]">Bản đồ 4 chặng</h2>
+              <p className="text-[10px] text-slate-400">Hành trình chinh phục ước mơ của con</p>
+            </div>
+          </div>
+
+          {/* Horizontal Timeline */}
+          <div className="relative">
+            {/* Connection line */}
+            <div className="absolute top-5 left-[10%] right-[10%] h-[3px] rounded-full bg-gradient-to-r from-[#1a8a7d] via-[#fbbf24] to-[#1a8a7d] opacity-20" />
+
+            <div className="flex justify-between relative z-10">
+              {personalizedProjects.map((p, idx) => {
+                const isDream = p.isDreamProject;
+                const status = projectStatuses[p.id] || "not_started";
+                const isActive = selectedStageIndex === idx;
+                const StageIcon = stageIcons[idx] || Rocket;
+
+                return (
+                  <button key={p.id} type="button"
+                    onClick={() => setSelectedStageIndex(idx)}
+                    className="group flex flex-col items-center w-1/4 text-center">
+                    {/* Node */}
+                    <div className={`relative grid place-items-center rounded-full border-[3px] transition-all duration-300 ${
+                      isDream
+                        ? "h-10 w-10 sm:h-12 sm:w-12 border-amber-400 bg-gradient-to-br from-amber-50 to-amber-100"
+                        : isActive
+                        ? "h-10 w-10 sm:h-12 sm:w-12 border-[#1a8a7d] bg-[#e0f5ef] ring-4 ring-[#c8e6df]/40"
+                        : status === "verified"
+                        ? "h-10 w-10 sm:h-12 sm:w-12 border-emerald-400 bg-emerald-50"
+                        : "h-10 w-10 sm:h-12 sm:w-12 border-slate-300 bg-white group-hover:border-[#1a8a7d]/60"
+                    }`}>
+                      {isDream ? <Star className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600" />
+                        : status === "verified" ? <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                        : <StageIcon className="h-4 w-4 sm:h-5 sm:w-5 text-slate-500 group-hover:text-[#1a8a7d]" />}
+                    </div>
+
+                    {/* Label */}
+                    <p className="mt-2 text-[10px] font-extrabold text-[#1a3a4a] sm:text-[11px] leading-tight">
+                      {isDream ? "Chặng Ước Mơ" : `Chặng ${idx + 1}`}
+                    </p>
+                    <p className="text-[9px] text-slate-400 mt-0.5 hidden sm:block">
+                      {p.name.length > 20 ? p.name.slice(0, 18) + "…" : p.name}
+                    </p>
+
+                    {/* Status badge */}
+                    <span className={`mt-1.5 inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[8px] font-bold ${
+                      status === "verified" ? "bg-emerald-100 text-emerald-700"
+                        : status === "in_progress" ? "bg-sky-100 text-sky-700"
+                        : status === "submitted" ? "bg-amber-100 text-amber-700"
+                        : "bg-slate-100 text-slate-500"
+                    }`}>
+                      {status === "verified" ? "✓ Hoàn thành"
+                        : status === "in_progress" ? "● Đang làm"
+                        : status === "submitted" ? "✓ Đã nộp"
+                        : "○ Chưa bắt đầu"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════
+          ROW 3 — TWO COLUMNS: Chi tiết dự án + Góc phụ huynh/Profile
+         ═══════════════════════════════════════════════════════ */}
+      <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr]">
+
+        {/* ── LEFT: Chi tiết dự án ── */}
+        <section className="rounded-3xl bg-white border border-[#e2ede9] p-5 sm:p-6 shadow-xs">
+          {/* Header with nav */}
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-base font-extrabold text-[#1a3a4a]">Chi tiết dự án</h2>
+              <p className="text-[10px] text-slate-400">Nội dung và tiến độ dự án con đang thực hiện</p>
+            </div>
+            {/* Project Nav */}
+            <div className="flex items-center gap-1">
+              <button type="button" disabled={selectedStageIndex === 0}
+                onClick={() => setSelectedStageIndex(i => Math.max(0, i - 1))}
+                className={`rounded-lg p-1.5 ${selectedStageIndex === 0 ? "text-slate-300" : "text-slate-500 hover:bg-slate-50"}`}>
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <select value={selectedStageIndex} onChange={e => setSelectedStageIndex(Number(e.target.value))}
+                className="rounded-xl border border-[#e2ede9] bg-[#fafcfb] px-3 py-1.5 text-[11px] font-bold text-[#1a3a4a] outline-none focus:border-[#1a8a7d]">
+                {personalizedProjects.map((p, i) => (
+                  <option key={p.id} value={i}>Dự án {i + 1}: {p.name.slice(0, 25)}…</option>
+                ))}
+              </select>
+              <button type="button" disabled={selectedStageIndex === 3}
+                onClick={() => setSelectedStageIndex(i => Math.min(3, i + 1))}
+                className={`rounded-lg p-1.5 ${selectedStageIndex === 3 ? "text-slate-300" : "text-slate-500 hover:bg-slate-50"}`}>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Project Detail Card */}
+          <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4 sm:p-5">
+            <div className="flex items-start gap-4">
+              {/* Project illustration placeholder */}
+              <div className="hidden sm:flex shrink-0 w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-[#e0f5ef] to-[#d4eee7] items-center justify-center border border-[#c8e6df]/40 shadow-xs">
+                <img
+                  src={selectedStageIndex === 1 ? "/assets/dashboard-robot-track.png" : (selectedProject.image || "/assets/dashboard-robot-track.png")}
+                  alt="Project"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-extrabold text-[#1a3a4a] leading-snug">
+                    {selectedProject.name}
+                  </h3>
+                  {selectedProject.isDreamProject && (
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-extrabold text-amber-700">★ Dream</span>
+                  )}
+                </div>
+                <p className="text-[11px] text-slate-500 mt-1 leading-5">{selectedProject.goal.slice(0, 100)}…</p>
+
+                {/* Tasks Checklist */}
+                <div className="mt-3 space-y-1.5">
+                  {selectedProject.tasks.map((task, ti) => {
+                    const taskId = `${selectedProject.id}-${ti}`;
+                    const checked = Boolean(taskChecks[taskId]);
+                    return (
+                      <label key={ti} className="flex items-start gap-2 cursor-pointer group">
+                        <input type="checkbox" checked={checked} onChange={() => toggleTask(taskId)}
+                          className="mt-0.5 h-4 w-4 rounded-md accent-[#1a8a7d]" />
+                        <span className={`text-[11px] leading-5 ${checked ? "text-slate-400 line-through" : "text-slate-700"}`}>
+                          {task}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Deliverable + Completion in compact row */}
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              <div className="rounded-xl bg-white border border-[#c8e6df]/50 p-3 flex items-start gap-2">
+                <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#e0f5ef] text-[#1a8a7d] shrink-0">
+                  <Target className="h-3.5 w-3.5" />
+                </span>
+                <div>
+                  <p className="text-[9px] font-bold text-[#1a8a7d] uppercase tracking-wider">Sản phẩm</p>
+                  <p className="text-[11px] font-bold text-[#1a3a4a] mt-0.5 leading-4">{selectedProject.deliverable}</p>
+                </div>
+              </div>
+              <div className="rounded-xl bg-white border border-[#c8e6df]/50 p-3 flex items-start gap-2">
+                <span className="grid h-7 w-7 place-items-center rounded-lg bg-amber-50 text-amber-600 shrink-0">
+                  <Flag className="h-3.5 w-3.5" />
+                </span>
+                <div>
+                  <p className="text-[9px] font-bold text-amber-600 uppercase tracking-wider">Hoàn thành khi</p>
+                  <p className="text-[11px] font-bold text-[#1a3a4a] mt-0.5 leading-4">{selectedProject.completionCheck}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Status selector */}
+            <div className="mt-3 flex items-center justify-between">
+              <select value={projectStatuses[selectedProject.id] || "not_started"}
+                onChange={e => handleStatusChange(selectedProject.id, e.target.value as ProjectProgressStatus)}
+                className="rounded-full border border-[#e2ede9] bg-white px-3 py-1 text-[11px] font-bold text-slate-600 outline-none focus:border-[#1a8a7d]">
+                <option value="not_started">○ Chưa bắt đầu</option>
+                <option value="in_progress">● Đang làm</option>
+                <option value="submitted">✓ Đã nộp</option>
+                <option value="verified">✓ Đã xác nhận</option>
+              </select>
+              <button type="button"
+                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1a8a7d] hover:underline">
+                Xem sản phẩm mẫu <ArrowRight className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* ── RIGHT: Góc phụ huynh / Profile Card ── */}
+        <section className="rounded-3xl bg-white border border-[#e2ede9] p-5 sm:p-6 shadow-xs">
+          {viewMode === "parent" ? (
+            /* ── PARENT VIEW ── */
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="grid h-8 w-8 place-items-center rounded-xl bg-amber-50 text-amber-600">
+                  <Heart className="h-4 w-4" />
+                </span>
+                <div>
+                  <h2 className="text-base font-extrabold text-[#1a3a4a]">Góc dành cho ba mẹ</h2>
+                  <p className="text-[10px] text-slate-400">Thông tin tham chiếu và nhận xét từ quá trình học</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {/* Standards reference */}
+                <div className="flex items-center justify-between rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-3.5">
+                  <div className="flex items-start gap-2.5">
+                    <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#e0f5ef] text-[#1a8a7d] shrink-0">
+                      <BookOpen className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-extrabold text-[#1a3a4a]">Cơ sở tham chiếu</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Dựa trên khung năng lực quốc tế & chương trình Tin học phổ thông</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 shrink-0">
+                    <button type="button" onClick={() => setModalCode("CSTA-ALGO")}
+                      className="rounded-full border border-[#1a8a7d] px-2 py-0.5 text-[9px] font-bold text-[#1a8a7d] hover:bg-[#e0f5ef] transition">CSTA</button>
+                    <button type="button" onClick={() => setModalCode("NLS-3.4")}
+                      className="rounded-full border border-[#1a8a7d] px-2 py-0.5 text-[9px] font-bold text-[#1a8a7d] hover:bg-[#e0f5ef] transition">NLS 3.4</button>
+                  </div>
+                </div>
+
+                {/* Parent insights */}
+                <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-3.5 flex items-start gap-2.5">
+                  <span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-50 text-emerald-600 shrink-0">
+                    <BarChart3 className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-extrabold text-[#1a3a4a]">Điều con đang làm tốt</p>
+                    <p className="text-[10px] text-slate-500 mt-0.5 leading-4">
+                      {evidenceCards.filter(c => c.sourceType === "student_situation").length > 0
+                        ? "Con có tư duy logic tốt, kiên trì thử nghiệm và rất hứng thú với công nghệ."
+                        : "Con đang trong giai đoạn khám phá ban đầu."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-3.5 flex items-start gap-2.5">
+                  <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50 text-amber-600 shrink-0">
+                    <Compass className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-extrabold text-[#1a3a4a]">Cần quan sát thêm</p>
+                    <p className="text-[10px] text-slate-500 mt-0.5 leading-4">
+                      Con có thể luyện thêm kỹ năng ghi chép và trình bày ý tưởng rõ ràng hơn.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Family resources */}
+                <div className="rounded-2xl bg-gradient-to-r from-[#e0f5ef]/30 to-amber-50/20 border border-[#e2ede9] p-3.5">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nguồn lực gia đình</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    <span className="rounded-full bg-white border border-[#c8e6df]/60 px-2.5 py-0.5 text-[10px] font-bold text-[#1a3a4a]">
+                      ⏰ {hoursPerWeek}h/tuần
+                    </span>
+                    {activeAnswers.supportMode?.map(sm => (
+                      <span key={sm} className="rounded-full bg-white border border-[#c8e6df]/60 px-2.5 py-0.5 text-[10px] font-bold text-[#1a3a4a]">
+                        🤝 {sm}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* ── STUDENT PROFILE MINI PREVIEW IN DASHBOARD ── */
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🌟</span>
+                  <div>
+                    <h2 className="text-base font-extrabold text-[#1a3a4a]">Hồ Sơ Tương Lai Của Con</h2>
+                    <p className="text-[10px] text-slate-400">Xem thành quả và profile hoàn thiện sau 4 chặng</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveMainTab("profile")}
+                  className="inline-flex items-center gap-1 text-xs font-extrabold text-[#1a8a7d] hover:underline"
+                >
+                  Xem toàn bộ <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              {/* Compact Card Preview with Cover Banner Image */}
+              <div
+                onClick={() => setActiveMainTab("profile")}
+                className="group cursor-pointer rounded-2xl border border-[#c8e6df] bg-white overflow-hidden shadow-xs transition hover:shadow-md hover:border-[#1a8a7d]"
+              >
+                <div className="relative aspect-[16/9] w-full bg-slate-100 overflow-hidden">
+                  <img
+                    src={resolvedProfileBanner}
+                    alt="Profile Preview"
+                    className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute top-2.5 left-2.5 rounded-full bg-[#1a8a7d] px-2.5 py-0.5 text-[9px] font-extrabold text-white shadow-xs">
+                    {isPrimary ? "Tiểu học" : "THCS"}
+                  </div>
+                </div>
+
+                <div className="p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-base font-extrabold text-[#1a3a4a] group-hover:text-[#1a8a7d] transition">
+                        {activeAnswers.name || (isPrimary ? "Mây" : "Nova")}
+                      </h3>
+                      <p className="text-xs font-bold text-[#1a8a7d]">
+                        {isPrimary ? "🌱 Nhà sáng tạo robot nhí" : "🍃 Lập trình vì môi trường"}
+                      </p>
+                    </div>
+                    <span className="rounded-xl bg-[#e0f5ef] text-[#1a8a7d] px-2.5 py-1 text-xs font-extrabold">
+                      Lớp {activeAnswers.grade || (isPrimary ? "4" : "7")}
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-slate-500 italic line-clamp-2">
+                    &ldquo;{isPrimary ? "Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!" : "Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn."}&rdquo;
+                  </p>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-[#1a8a7d]">
+                    <span>Bấm để mở toàn bộ hồ sơ</span>
+                    <span className="group-hover:translate-x-1 transition">→</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════
+          ROW 4 — TẠO WEBSITE FUTURE ME (Guided Step Flow)
+         ═══════════════════════════════════════════════════════ */}
+      <section className="rounded-3xl bg-white border border-[#e2ede9] p-5 sm:p-6 shadow-xs">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#1a8a7d] to-[#158070] text-white shadow-xs">
+              <Rocket className="h-4.5 w-4.5" />
+            </span>
+            <div>
+              <h2 className="text-base font-extrabold text-[#1a3a4a]">Tạo website Future Me</h2>
+              <p className="text-[10px] text-slate-400">4 bước đơn giản để biến hành trình thành trang web</p>
+            </div>
+          </div>
+          {guideStep > 0 && (
+            <button type="button" onClick={() => setGuideStep(0)}
+              className="text-[10px] font-bold text-slate-400 hover:text-slate-600 transition">← Quay lại</button>
+          )}
+        </div>
+
+        {/* Step Indicators */}
+        <div className="flex items-center gap-1 mb-5">
+          {["Bắt đầu", "Sao chép", "Mở AI Studio", "Build web", "Hiệu chỉnh"].map((label, i) => (
+            <div key={i} className="flex items-center gap-1 flex-1">
+              <button type="button" onClick={() => i <= guideStep ? setGuideStep(i) : undefined}
+                className={`shrink-0 grid h-6 w-6 place-items-center rounded-full text-[9px] font-extrabold transition ${
+                  i < guideStep ? "bg-[#1a8a7d] text-white" :
+                  i === guideStep ? "bg-[#1a8a7d] text-white ring-4 ring-[#c8e6df]/40" :
+                  "bg-slate-100 text-slate-400"
+                }`}>
+                {i < guideStep ? <Check className="h-3 w-3" /> : i + 1}
+              </button>
+              <span className={`text-[9px] font-bold hidden sm:block ${i === guideStep ? "text-[#1a3a4a]" : "text-slate-400"}`}>{label}</span>
+              {i < 4 && <div className={`flex-1 h-[2px] rounded-full mx-1 ${i < guideStep ? "bg-[#1a8a7d]" : "bg-slate-100"}`} />}
+            </div>
+          ))}
+        </div>
+
+        {/* ── STEP 0: CTA Card ── */}
+        {guideStep === 0 && (
+          <div className="rounded-2xl bg-gradient-to-br from-[#e0f5ef] to-[#f0f4ff] border border-[#c8e6df]/40 p-5 text-center">
+            <div className="flex justify-center mb-3">
+              <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-white shadow-card">
+                {activeAnswers.avatarSource === "custom" && activeAnswers.customAvatarData ? (
+                  <img src={activeAnswers.customAvatarData} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <Image src={resolvedAvatarSrc} alt="" width={56} height={56} className="object-contain" />
+                )}
+              </div>
+            </div>
+            <p className="text-sm font-extrabold text-[#1a3a4a]">Website "Future Me" của {activeAnswers.name || "con"}</p>
+            <p className="text-[11px] text-slate-500 mt-1 max-w-sm mx-auto leading-4">
+              Trang web giới thiệu hành trình, dự án <strong>{activeAnswers.projectName || "Ước Mơ"}</strong> và profile tương lai — được tạo bằng AI trong vài phút!
+            </p>
+            <button type="button" onClick={() => setGuideStep(1)}
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#1a8a7d] px-6 py-2.5 text-[11px] font-extrabold text-white shadow-card hover:bg-[#158070] transition">
+              Bắt đầu tạo web <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* ── STEP 1: Sao chép Prompt ── */}
+        {guideStep === 1 && (
+          <div className="space-y-3">
+            {/* Safety notice */}
+            <div className="rounded-xl bg-emerald-50 border border-emerald-200/60 p-3 flex items-start gap-2">
+              <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+              <p className="text-[10px] text-emerald-800 leading-4">
+                <strong>An toàn dữ liệu:</strong> Họ tên thật, SĐT, email đã được loại bỏ. Chỉ xuất bí danh và dữ liệu học tập.
+              </p>
+            </div>
+
+            {/* Consent + Copy */}
+            <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4">
+              <label className="flex items-start gap-2.5 cursor-pointer mb-3">
+                <input type="checkbox" checked={Boolean(answers.parentApprovesExternalTransfer)}
+                  onChange={e => setAnswers(a => ({ ...a, parentApprovesExternalTransfer: e.target.checked }))}
+                  className="mt-0.5 h-4 w-4 rounded accent-[#1a8a7d]" />
+                <span className="text-[11px] text-[#1a3a4a] font-semibold leading-4">
+                  Tôi (Phụ huynh) đã xem và đồng ý cho sao chép dữ liệu sang Google AI Studio.
+                </span>
+              </label>
+
+              <button type="button"
+                disabled={!answers.parentApprovesExternalTransfer}
+                onClick={async () => { await copyPromptToClipboard(); setGuideStep(2); }}
+                className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-2.5 text-[11px] font-extrabold transition shadow-xs ${
+                  answers.parentApprovesExternalTransfer
+                    ? copiedPrompt ? "bg-emerald-500 text-white" : "bg-[#1a8a7d] text-white hover:bg-[#158070]"
+                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                }`}>
+                {copiedPrompt
+                  ? <><Check className="h-4 w-4" /> Đã sao chép! Tiếp tục →</>
+                  : <><Eye className="h-4 w-4" /> Sao chép Prompt ({fullPrompt.length.toLocaleString("vi-VN")} ký tự)</>}
+              </button>
+            </div>
+
+            {/* Preview toggle */}
+            <details className="rounded-xl border border-[#e8f0ed] bg-[#fafcfb]">
+              <summary className="px-4 py-2.5 text-[10px] font-bold text-slate-500 cursor-pointer hover:text-[#1a8a7d]">Xem nội dung Prompt ▾</summary>
+              <pre className="max-h-40 overflow-auto border-t border-[#e8f0ed] bg-[#0f1715] p-4 font-mono text-[10px] text-emerald-300 leading-5 rounded-b-xl">
+                {fullPrompt}
+              </pre>
+            </details>
+          </div>
+        )}
+
+        {/* ── STEP 2: Mở Google AI Studio ── */}
+        {guideStep === 2 && (
+          <div className="space-y-3">
+            <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4">
+              <p className="text-xs font-extrabold text-[#1a3a4a] mb-2">📋 Hướng dẫn nhanh:</p>
+              <div className="space-y-2">
+                {[
+                  { step: "1", text: 'Bấm nút bên dưới để mở Google AI Studio', highlight: false },
+                  { step: "2", text: 'Chọn "Create new app" hoặc "Build with Gemini"', highlight: false },
+                  { step: "3", text: 'Dán Prompt đã sao chép vào ô nhập liệu (Ctrl+V / ⌘+V)', highlight: true },
+                ].map(item => (
+                  <div key={item.step} className={`flex items-start gap-2.5 rounded-xl p-2.5 ${item.highlight ? "bg-amber-50 border border-amber-200/40" : ""}`}>
+                    <span className="grid h-5 w-5 place-items-center rounded-full bg-[#1a8a7d] text-white text-[9px] font-extrabold shrink-0 mt-0.5">{item.step}</span>
+                    <p className="text-[11px] text-slate-700 leading-4">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <a href="https://aistudio.google.com/app/apps" target="_blank" rel="noopener noreferrer"
+              onClick={() => setGuideStep(3)}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#1a8a7d] py-2.5 text-[11px] font-extrabold text-white shadow-card hover:bg-[#158070] transition">
+              <ExternalLink className="h-4 w-4" /> Mở Google AI Studio
+            </a>
+
+            <button type="button" onClick={() => setGuideStep(3)}
+              className="w-full text-center text-[10px] font-bold text-slate-400 hover:text-[#1a8a7d] transition">
+              Đã mở rồi → Tiếp tục hướng dẫn Build
+            </button>
+          </div>
+        )}
+
+        {/* ── STEP 3: Build web ── */}
+        {guideStep === 3 && (
+          <div className="space-y-3">
+            <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4">
+              <p className="text-xs font-extrabold text-[#1a3a4a] mb-2">⚡ Tạo website bằng AI:</p>
+              <div className="space-y-2">
+                {[
+                  'Sau khi dán Prompt, bấm nút "Build" hoặc "Generate" để AI bắt đầu tạo web.',
+                  'Đợi AI xử lý — thường mất 30 giây đến 2 phút.',
+                  'Khi xong, AI sẽ hiển thị bản xem trước website. Kiểm tra xem nội dung có đúng không.',
+                  'Nếu hài lòng → Bấm "Publish" hoặc "Deploy" để xuất bản.',
+                ].map((text, i) => (
+                  <div key={i} className="flex items-start gap-2.5">
+                    <span className="grid h-5 w-5 place-items-center rounded-full bg-amber-100 text-amber-700 text-[9px] font-extrabold shrink-0 mt-0.5">{i + 1}</span>
+                    <p className="text-[11px] text-slate-700 leading-4">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button type="button" onClick={() => setGuideStep(4)}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#1a8a7d] py-2.5 text-[11px] font-extrabold text-white shadow-card hover:bg-[#158070] transition">
+              Xem gợi ý hiệu chỉnh <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* ── STEP 4: Gợi ý hiệu chỉnh ── */}
+        {guideStep === 4 && (
+          <div className="space-y-3">
+            <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4">
+              <p className="text-xs font-extrabold text-[#1a3a4a] mb-1">🎨 Gợi ý câu lệnh hiệu chỉnh</p>
+              <p className="text-[10px] text-slate-400 mb-3">Sao chép và gửi cho AI Agent nếu muốn thay đổi:</p>
+
+              <div className="space-y-2">
+                {[
+                  { label: "Đổi màu sắc", prompt: `Hãy đổi tông màu chủ đạo sang ${activeAnswers.favoriteColor || "xanh lá"} pastel, giữ nguyên bố cục.` },
+                  { label: "Thêm hình ảnh", prompt: "Hãy thêm nhiều hình minh họa dễ thương hơn cho từng phần dự án. Dùng emoji và icon." },
+                  { label: "Đơn giản hơn", prompt: `Hãy giảm bớt chữ, chỉ giữ tiêu đề và các bullet point ngắn gọn. Phù hợp cho học sinh ${isPrimary ? "tiểu học" : "THCS"}.` },
+                  { label: "Thêm animation", prompt: "Hãy thêm hiệu ứng chuyển động nhẹ nhàng khi cuộn trang: fade-in cho card, slide-in cho hình ảnh." },
+                  { label: "Đổi layout", prompt: "Hãy chuyển bố cục sang dạng card ngang (horizontal cards) thay vì dọc, để trang web trông hiện đại hơn." },
+                  { label: "Thêm trang mới", prompt: `Hãy thêm một trang riêng giới thiệu chi tiết dự án "${activeAnswers.projectName || "Ước Mơ"}" với timeline, hình ảnh sản phẩm và video demo placeholder.` },
+                ].map(item => (
+                  <div key={item.label} className="flex items-center justify-between gap-2 rounded-xl bg-white border border-[#e2ede9] px-3 py-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-extrabold text-[#1a3a4a]">{item.label}</p>
+                      <p className="text-[9px] text-slate-400 truncate">{item.prompt.slice(0, 50)}…</p>
+                    </div>
+                    <button type="button" onClick={async () => {
+                      await navigator.clipboard.writeText(item.prompt);
+                    }}
+                      className="shrink-0 rounded-full bg-[#e0f5ef] px-2.5 py-1 text-[9px] font-bold text-[#1a8a7d] hover:bg-[#c8e6df] transition">
+                      Sao chép
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick tips */}
+            <div className="rounded-xl bg-amber-50 border border-amber-200/40 p-3">
+              <p className="text-[10px] font-bold text-amber-800 mb-1">💡 Mẹo hay:</p>
+              <ul className="text-[10px] text-amber-700 space-y-0.5 leading-4">
+                <li>• Mỗi lần gửi 1 yêu cầu hiệu chỉnh để AI hiểu rõ hơn</li>
+                <li>• Nếu muốn đổi nhiều thứ, hãy nói cụ thể từng phần</li>
+                <li>• Có thể yêu cầu AI giải thích code nếu muốn học thêm</li>
+              </ul>
+            </div>
+
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setGuideStep(0)}
+                className="flex-1 rounded-full border border-[#e2ede9] py-2 text-[11px] font-bold text-slate-500 hover:bg-slate-50 transition">
+                Quay lại đầu
+              </button>
+              <a href="https://aistudio.google.com/app/apps" target="_blank" rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full bg-[#1a8a7d] py-2 text-[11px] font-extrabold text-white hover:bg-[#158070] transition">
+                <ExternalLink className="h-3.5 w-3.5" /> Quay lại AI Studio
+              </a>
+            </div>
+          </div>
+        )}
       </section>
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
-        <p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-slate-400">Sau buổi hôm nay</p>
-        <h2 className="mt-2 text-sm font-extrabold text-ink">Nếu cả nhà muốn học thêm tại TEKY</h2>
-        <p className="mt-2 text-xs leading-5 text-slate-500">Đây là vài lớp trải nghiệm gần với hướng vừa chọn. Không phải việc phải đăng ký lúc này.</p>
-        <div className="mt-3 flex flex-wrap gap-2">{profile.tekPrograms.map(program => <span key={program} className="rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600">{program}</span>)}</div>
-      </section>
+        </>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════
+          MODALS
+         ═══════════════════════════════════════════════════════ */}
+      {modalCode && (
+        <StandardsModal isOpen={Boolean(modalCode)} onClose={() => setModalCode(null)}
+          standardCode={modalCode} whyWeAsk="Bảo đảm tính minh bạch và giá trị thực chứng." isPrimary={isPrimary} />
+      )}
+
+      {showAvatarModal && (
+        <AvatarUploaderModal isOpen={showAvatarModal} onClose={() => setShowAvatarModal(false)}
+          currentAvatar={activeAnswers.avatar} avatarSource={activeAnswers.avatarSource}
+          customAvatarData={activeAnswers.customAvatarData} onSaveAvatar={handleSaveAvatar} />
+      )}
+
+      {/* Export modal removed — integrated into step guide above */}
     </div>
   );
 }
 
-export function FutureMeResult({ answers, setAnswers, profile, saveState, saveError, onConsent }: CommonProps & { saveState: string; saveError?: string; onConsent?: (consent: boolean) => void }) {
-  const [copied, setCopied] = useState(false);
-  const prompt = createPrompt(answers);
-  const copyPrompt = async () => { await navigator.clipboard.writeText(prompt); setCopied(true); window.setTimeout(() => setCopied(false), 2400); };
-  return <div className="space-y-5">
-    <div className="rounded-2xl border border-tek-200 bg-tek-50 p-5 text-center"><span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white text-tek-600 shadow-card"><Rocket className="h-6 w-6" /></span><h2 className="mt-3 text-xl font-extrabold text-ink">Cả nhà đã xong một hành trình vui!</h2><p className="mt-2 text-sm text-slate-600">Lời gợi ý bên dưới đã có chân dung, nhân vật, dự án và hướng đi của {answers.name || profile.learner}.</p></div>
-    <WebsitePreview name={answers.name} projectName={answers.projectName} gradeBand={answers.gradeBand} quote={`${profile.Learner} muốn trở thành ${profile.futureSelf}.`} />
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#101716] text-slate-100"><div className="flex items-center justify-between border-b border-white/10 px-4 py-3"><div><p className="text-[10px] font-extrabold uppercase tracking-[.15em] text-[#78dfca]">Lời gợi ý tạo website</p><p className="mt-1 text-xs font-bold">Dán vào Google AI Studio là được</p></div><span className="rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-bold">{prompt.length.toLocaleString("vi-VN")} ký tự</span></div><pre className="max-h-72 overflow-auto whitespace-pre-wrap p-4 text-[11px] leading-5 text-slate-300">{prompt}</pre></div>
-    <div className="grid gap-3 sm:grid-cols-2"><button type="button" onClick={copyPrompt} className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl bg-tek-500 px-5 py-4 text-sm font-extrabold text-white hover:bg-tek-600">{copied ? <Check className="h-5 w-5" /> : <Clipboard className="h-5 w-5" />}{copied ? "Đã sao chép rồi" : "Sao chép lời gợi ý"}</button><a href="https://aistudio.google.com/app/apps" target="_blank" rel="noopener noreferrer" className="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm font-extrabold text-ink hover:bg-slate-50">Mở Google AI Studio <ExternalLink className="h-4 w-4" /></a></div>
-    <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4"><p className="text-xs font-extrabold text-amber-900">Cả nhà làm tiếp thế này</p><p className="mt-1 text-xs leading-5 text-amber-800">Sao chép lời gợi ý → mở Google AI Studio → chọn New app → dán vào ô “Describe an app”.</p></div>
-    <WorkshopFinishGuide profile={profile} />
-    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4"><input type="checkbox" checked={answers.consent} onChange={event => { const consent = event.target.checked; if (onConsent) onConsent(consent); else setAnswers(a => ({ ...a, consent })); }} className="mt-1 h-4 w-4 accent-teal-600" /><span><strong className="block text-sm text-slate-700">Ba mẹ đồng ý lưu lại hành trình hôm nay</strong><span className="mt-1 block text-xs leading-5 text-slate-500">Gồm lựa chọn, chân dung và hướng con muốn thử. Nếu chưa đồng ý, mọi thứ chỉ lưu trên máy này.</span></span></label>
-    {saveState === "saving" && <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-600">Đang lưu hành trình lên hệ thống…</div>}
-    {saveState === "saved" && <div className="flex items-center gap-3 rounded-xl border border-tek-200 bg-tek-50 p-4 text-sm font-bold text-tek-800"><Check className="h-5 w-5" />Đã lưu hành trình của cả nhà lên hệ thống.</div>}
-    {saveState === "local" && <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold text-slate-600"><Check className="h-5 w-5" />Đã lưu trên máy này.</div>}
-    {saveState === "error" && <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-900">{saveError || "Chưa lưu được lên hệ thống. Hãy thử lại."}</div>}
-  </div>;
-}
-
-function WorkshopFinishGuide({ profile }: Pick<CommonProps, "profile">) {
-  const editPrompts = [
-    ["Đổi phong cách", `Hãy đổi website sang phong cách ${profile.characterBrief.style}, dùng ${profile.characterBrief.palette}.`],
-    ["Sửa điều chưa giống", `Hãy nhấn mạnh rằng ${profile.learner} thích ${profile.interestLabels[0]?.toLocaleLowerCase("vi")} và ${profile.strengthLabels[0]?.toLocaleLowerCase("vi")}. Giữ cách gọi "${profile.learner}" và nhân vật đúng ${profile.characterBrief.appearance}.`],
-    ["Đổi dự án nổi bật", `Hãy đưa dự án ${profile.projects[0].title} lên đầu và làm phần này nổi bật hơn.`],
-    ["Đổi thứ tự hành trình", `${profile.Learner} muốn thử ${profile.directions.featured} trước. Hãy đưa hướng này lên chặng đầu.`]
-  ];
-  return <section className="space-y-5 rounded-[24px] border border-slate-200 bg-white p-5 sm:p-6">
-    <div><p className="text-[10px] font-extrabold uppercase tracking-[.16em] text-tek-600">Phần còn lại của buổi hôm nay</p><h3 className="mt-2 text-xl font-extrabold text-ink">Tạo xong mới là bản đầu tiên</h3><p className="mt-2 text-xs leading-5 text-slate-500">Không cần đếm từng giây. Cả nhà làm theo nhịp chung là được.</p></div>
-    <div className="grid gap-2 sm:grid-cols-3">{workshopStages(profile.gradeBand, true).map((stage,index)=><div key={stage.label} className={`rounded-xl border p-3 ${index === 3 ? "border-tek-300 bg-tek-50" : "border-slate-200 bg-slate-50"}`}><p className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[.08em] text-slate-500"><Clock3 className="h-3.5 w-3.5" /> {stage.window}</p><p className="mt-1 text-xs font-extrabold text-ink">{index+1}. {stage.label}</p></div>)}</div>
-    <div className="grid gap-4 lg:grid-cols-3">
-      <div className="rounded-2xl border border-tek-200 bg-tek-50 p-4"><p className="text-[10px] font-extrabold uppercase tracking-[.12em] text-tek-700">30–44' · Làm website</p><p className="mt-2 text-sm font-extrabold text-ink">Sao chép, dán, rồi xem thử</p><p className="mt-2 text-xs leading-5 text-slate-600">Trong lúc AI làm, cả nhà đoán phần nào sẽ giống {profile.learner} nhất.</p></div>
-      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4"><p className="text-[10px] font-extrabold uppercase tracking-[.12em] text-amber-700">44–53' · Chỉnh cho giống</p><p className="mt-2 text-sm font-extrabold text-ink">Biến thành website của {profile.learner}</p><p className="mt-2 text-xs leading-5 text-slate-600">Chọn một điều muốn đổi, rồi dán câu chỉnh vào AI Studio.</p></div>
-      <div className="rounded-2xl border border-violet-200 bg-violet-50 p-4"><p className="text-[10px] font-extrabold uppercase tracking-[.12em] text-violet-700">53–60' · Khoe với cả nhà</p><p className="mt-2 text-sm font-extrabold text-ink">Nhìn lại và chọn việc nhỏ tiếp theo</p><p className="mt-2 text-xs leading-5 text-slate-600">{profile.Learner} kể phần thích nhất; ba mẹ kể điều hiểu thêm; cả nhà chọn một thứ muốn thử tiếp.</p></div>
-    </div>
-    <div><p className="flex items-center gap-2 text-sm font-extrabold text-ink"><Pencil className="h-4 w-4 text-tek-600" /> Chọn một câu để chỉnh thêm</p><div className="mt-3 grid gap-2 sm:grid-cols-2">{editPrompts.map(([title,text])=><div key={title} className="rounded-xl border border-slate-200 p-3"><p className="text-xs font-extrabold text-ink">{title}</p><p className="mt-1 text-[11px] leading-5 text-slate-500">“{text}”</p></div>)}</div></div>
-    <div className="grid gap-3 rounded-2xl bg-[#0c6c62] p-5 text-white sm:grid-cols-3"><p className="text-xs leading-5"><strong className="mb-1 flex items-center gap-1.5"><Sparkles className="h-4 w-4" /> {profile.Learner}</strong>Phần nào trên website {profile.learner} thích nhất?</p><p className="text-xs leading-5"><strong className="mb-1 flex items-center gap-1.5"><Heart className="h-4 w-4" /> Ba mẹ</strong>Hôm nay ba mẹ hiểu thêm điều gì về {profile.learner}?</p><p className="text-xs leading-5"><strong className="mb-1 flex items-center gap-1.5"><MessageCircleMore className="h-4 w-4" /> Cả nhà</strong>Điều nào {profile.learner} muốn thử tiếp theo?</p></div>
-    <p className="text-center text-xs font-bold leading-5 text-slate-500">Sở thích hôm nay không quyết định tương lai. Mỗi trải nghiệm mới sẽ giúp {profile.learner} hiểu mình hơn.</p>
-  </section>;
-}
+// Backward compatibility
+export const ProjectsJourneyResult = ProfileResult;
+export const FutureMeResult = ProfileResult;

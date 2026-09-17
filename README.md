@@ -6,7 +6,7 @@ Trải nghiệm khám phá tương lai dành cho học sinh và phụ huynh, đ�
 
 - Timeline workshop 60 phút: chào mừng, hiểu về con, Future Profile, tạo website, hiệu chỉnh và chia sẻ.
 - 14 mảnh ghép tương tác, gồm lượt của học sinh, hai lượt quan sát của phụ huynh và một lượt cả nhà cùng đối chiếu.
-- Future Buddy tổng hợp chân dung từ sở thích, cách sáng tạo, tình huống giải quyết vấn đề, dự án và quan sát thực tế của ba mẹ.
+- Kitten Bot tổng hợp chân dung từ sở thích, cách sáng tạo, tình huống giải quyết vấn đề, dự án và quan sát thực tế của ba mẹ.
 - Học sinh có thể dùng character brief được gợi ý hoặc tự chọn hình tượng, phong cách, màu và vật phẩm từ các phương án liên quan đến hành trình trước đó.
 - Kết quả gồm Future Creator Profile, Future Project Showcase, Exploration Journey và prompt tạo website Future Me trong Google AI Studio.
 

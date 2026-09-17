@@ -1,0 +1,7 @@
+# FUTURE ME — PROMPT TEMPLATE SỬ DỤNG THỰC TẾ
+Bản này dành cho Prompt Generator của webapp. Thay đúng các placeholder bằng hồ sơ đã duyệt; tuyệt đối không để dữ liệu mẫu Mây/Nova trong prompt thật.
+{{AGE_ADAPTIVE_INTRO}}
+{{COMMON_IMPLEMENTATION_RULES}}
+DỮ LIỆU ĐƯỢC GIA ĐÌNH XÁC NHẬN, ĐÃ LOẠI THÔNG TIN RIÊNG TƯ:
+{{SAFE_STUDENT_PROFILE_JSON}}
+QUY TẮC CHỐT: Giữ 4 dự án được gia đình xác nhận. Nếu thiếu thời gian hoặc mục tiêu chưa duyệt, hiển thị chỗ cần bổ sung, không điền ngẫu nhiên. Không xuất bản công khai khi chưa có lựa chọn rõ ràng của phụ huynh.

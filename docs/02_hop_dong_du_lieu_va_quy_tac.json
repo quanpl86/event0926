@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "3.0.0",
+  "required": [
+    "displayName",
+    "grade",
+    "educationLevel",
+    "studentInterest",
+    "parentInterest",
+    "domainConfirmation",
+    "dreamProject",
+    "studentObservations",
+    "parentCompetency",
+    "familySupport",
+    "familyReview",
+    "privacyConsent"
+  ],
+  "description": "User submission must contain actual responses, not simulated placeholders. If family resources or scores absent, system must not fill in.",
+  "studentInterest": {
+    "selectedDomains": "array of domain ids",
+    "scenarioPreferences": "array of free explanations"
+  },
+  "domainConfirmation": {
+    "selectedDomain": "one of 3",
+    "specialization": "one of allowed branch ids by grade",
+    "selectedByStudent": true,
+    "confirmedByFamily": true
+  },
+  "dreamProject": {
+    "name": "string",
+    "audience": "string",
+    "purpose": "string",
+    "features": "array of strings",
+    "appearance": "string",
+    "confirmedByStudent": true
+  },
+  "studentObservations": {
+    "selfReport": "self_report only",
+    "sioEvidence": "array {sioId,response,evidenceType,status,limits}"
+  },
+  "parentCompetency": {
+    "observations": "array: what observed",
+    "supports": "who helped, when, evidence optional"
+  },
+  "familySupport": {
+    "timePerWeek": "number or null",
+    "devices": "array or not_answered",
+    "parentMode": "string"
+  },
+  "privacyConsent": {
+    "reviewed": true,
+    "omitIdentifiers": true,
+    "parentApprovesExternalTransfer": "explicit boolean"
+  },
+  "output": {
+    "proposedProfile": "not certification",
+    "fourProjects": "exactly 4",
+    "roadmap": "weeks only if hours and estimates approved",
+    "prompt": "requires parentApprovesExternalTransfer true"
+  },
+  "validation": [
+    "domain in 3 fixed domains",
+    "branch exists for grade/domain",
+    "dream confirmed before competency",
+    "parent observations provenance preserved",
+    "no tool knowledge used for branching",
+    "no invented proficiency grade",
+    "no personal identifiers in external prompt",
+    "all standardRefs exist",
+    "no unapproved official grade-level codes"
+  ]
+}

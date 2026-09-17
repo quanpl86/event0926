@@ -51,7 +51,7 @@
 - Select parent observations with a maximum of three.
 - Select up to two concrete parent-support actions.
 - Enter a real parent observation and choose one shared family action.
-- Confirm 2–4 inferred traits and switch between Future Buddy suggestion and child-designed character modes.
+- Confirm 2–4 inferred traits and switch between Kitten Bot suggestion and child-designed character modes.
 - Verify that portrait style, palette, future identity, and signature gear are derived from earlier interest/project/impact selections.
 - View the four project recommendations, three exploration directions, three-stage roadmap, full website prompt, six-stage workshop timeline, Version 2 editing prompts, and family sharing prompts.
 - Complete without cloud consent and confirm local-save success.

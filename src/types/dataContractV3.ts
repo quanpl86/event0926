@@ -1,0 +1,147 @@
+/**
+ * Future Me Data Contract V3
+ * Tuân thủ nghiêm ngặt theo docs/02_hop_dong_du_lieu_va_quy_tac.json
+ */
+
+export type EducationLevel = "primary" | "secondary";
+export type PrimaryGrade = "1" | "2" | "3" | "4" | "5";
+export type SecondaryGrade = "6" | "7" | "8" | "9";
+export type GradeBand = "1-2" | "3-5" | "6-7" | "8-9";
+
+export type DomainId = "robotics" | "game_programming" | "multimedia";
+
+export type PrimaryBranchId =
+  | "game"
+  | "interactive_app"
+  | "robot_build_and_block_control"
+  | "design_2d"
+  | "design_3d"
+  | "animation_2d"
+  | "video_and_effects";
+
+export type SecondaryBranchId =
+  | "game_3d"
+  | "desktop_app"
+  | "web"
+  | "smart_device"
+  | "automation"
+  | "connected_system"
+  | "design_2d"
+  | "design_3d"
+  | "animation_2d"
+  | "video_and_effects";
+
+export type BranchId = PrimaryBranchId | SecondaryBranchId;
+
+export type EvidenceStatus = "observed" | "emerging" | "insufficient_evidence" | "parent_reported";
+
+export type SIOEvidenceRecord = {
+  sioId: string;
+  stepId: string;
+  questionId: string;
+  questionPrompt: string;
+  studentResponse: string;
+  evidenceCriteria: string;
+  evidenceType: "situation_response" | "self_report" | "parent_observation";
+  status: EvidenceStatus;
+  standardRefs: string[];
+  limitations: string;
+};
+
+export type DreamProjectBrief = {
+  name: string;
+  audience: string;
+  purpose: string;
+  features: string[];
+  appearance: string;
+  confirmedByStudent: boolean;
+};
+
+export type PersonalizedProject = {
+  projectNumber: 1 | 2 | 3 | 4;
+  title: string;
+  objective: string;
+  adaptedFromLibraryId: string;
+  tasks: [string, string, string]; // Đúng 3 việc cụ thể
+  expectedDeliverable: string;
+  isDreamProjectMilestone: boolean;
+};
+
+export type FamilySupportConfig = {
+  timePerWeekHours: number | null; // null = chưa chốt lịch
+  pacingMode: "flexible" | "weekly_scheduled";
+  supportRole: string[];
+  devicesAvailable: string[];
+};
+
+export type PrivacyConsentRecord = {
+  reviewed: boolean;
+  omitIdentifiers: true; // Bắt buộc true
+  parentApprovesExternalTransfer: boolean;
+  parentApprovesSupabaseStorage: boolean;
+  timestamp: string;
+};
+
+/**
+ * Payload xuất an toàn sang Google AI Studio
+ * BẮT BUỘC chỉ chứa các trường được phép, loại bỏ 100% PII
+ */
+export type AIStudioExportPayload = {
+  schemaVersion: "3.1.0";
+  displayName: string; // Tên thân mật/bí danh, KHÔNG họ tên thật
+  educationLevel: EducationLevel;
+  gradeBand: GradeBand;
+  archetype: string;
+  dreamProject: {
+    name: string;
+    purpose: string;
+    audience: string;
+    features: string[];
+    appearance: string;
+  };
+  fourPersonalizedProjects: PersonalizedProject[];
+  observedStrengths: {
+    criteria: string;
+    evidenceSource: string;
+  }[];
+  parentHighlight: string;
+  familyPacingNotice: string;
+  consentConfirmed: true;
+};
+
+/**
+ * Hợp đồng dữ liệu hoàn chỉnh của một phiên tương tác V3
+ */
+export type FutureMeSessionSubmissionV3 = {
+  schemaVersion: "3.0.0";
+  sessionId: string;
+  displayName: string;
+  grade: string;
+  educationLevel: EducationLevel;
+  studentInterest: {
+    selectedDomains: DomainId[];
+    scenarioPreferences: string[];
+  };
+  parentInterest: {
+    observedInterests: string[];
+  };
+  domainConfirmation: {
+    selectedDomain: DomainId;
+    specialization: BranchId;
+    selectedByStudent: boolean;
+    confirmedByFamily: boolean;
+  };
+  dreamProject: DreamProjectBrief;
+  studentObservations: {
+    selfReport: string[];
+    sioEvidence: SIOEvidenceRecord[];
+  };
+  parentCompetency: {
+    observations: string[];
+    supports: string[];
+    realLifeMoment: string;
+  };
+  familySupport: FamilySupportConfig;
+  fourProjects: [PersonalizedProject, PersonalizedProject, PersonalizedProject, PersonalizedProject];
+  privacyConsent: PrivacyConsentRecord;
+};
