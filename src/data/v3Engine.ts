@@ -445,9 +445,33 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     '/assets/activity-world-building.png'
   ];
 
-  const firstFeature = dreamFeatures[0] || 'Tính năng tương tác chính';
-  const secondFeature = dreamFeatures[1] || 'Cơ chế phản hồi người dùng';
-  const extraFeature = dreamFeatures[2] || 'Tính năng mở rộng nâng cao';
+  // ── XÁC ĐỊNH TÍNH NĂNG TƯƠNG TÁC VÀ CÁC TÍNH NĂNG ĐÃ DUYỆT TỪ DỮ LIỆU ──
+  const interactiveFeatureCandidate = dreamFeatures.find(f =>
+    f.toLowerCase().includes('bấm') ||
+    f.toLowerCase().includes('mở') ||
+    f.toLowerCase().includes('xoay') ||
+    f.toLowerCase().includes('chạm') ||
+    f.toLowerCase().includes('điều khiển') ||
+    f.toLowerCase().includes('tương tác') ||
+    f.toLowerCase().includes('nút') ||
+    f.toLowerCase().includes('chuyển cảnh')
+  );
+
+  const interactionFeature = interactiveFeatureCandidate || dreamFeatures[0] || (
+    answers.dreamPurpose?.toLowerCase().includes('thiệp') || answers.productFormat?.toLowerCase().includes('thiệp')
+      ? 'Bấm nút để mở thiệp và kích hoạt hiệu ứng 3D'
+      : domain === 'robotics'
+      ? 'Điều khiển vận hành qua nút bấm hoặc cảm biến'
+      : 'Tương tác phím bấm điều khiển chuyển động'
+  );
+
+  const remainingFeatures = dreamFeatures.filter(f => f !== interactionFeature);
+  const experienceFeature = remainingFeatures[0] || (dreamFeatures[1] && dreamFeatures[1] !== interactionFeature ? dreamFeatures[1] : (dreamFeatures[0] !== interactionFeature ? dreamFeatures[0] : 'Trải nghiệm thông điệp và nội dung'));
+  const extensionFeature = remainingFeatures[1] || (dreamFeatures[2] && dreamFeatures[2] !== interactionFeature && dreamFeatures[2] !== experienceFeature ? dreamFeatures[2] : 'Tính năng mở rộng và nâng cấp phiên bản');
+
+  const firstFeature = interactionFeature;
+  const secondFeature = experienceFeature;
+  const extraFeature = extensionFeature;
   const productFormat = answers.productFormat?.trim() || (
     answers.dreamPurpose?.toLowerCase().includes('thiệp') ? 'Thiệp điện tử 3D tương tác' :
     domain === 'multimedia' ? 'Tác phẩm đa phương tiện 3D' :
@@ -894,59 +918,88 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   const p4Features: ProjectFeature[] = [
     {
       id: 'F-P4-01',
-      name: `Bản Thử Nghiệm Khả Thi (MVP) - ${dreamName}`,
-      description: `Phiên bản hoàn thiện có thể vận hành thực tế, giải quyết mục tiêu "${dreamPurpose}" với các tính năng (${firstFeature}, ${secondFeature}).`,
+      name: `Chức năng tương tác: ${interactionFeature}`,
+      description: `Xây dựng và lập trình cơ chế tương tác trực tiếp "${interactionFeature}" cho sản phẩm ${dreamName}, giúp ${dreamAudience} có thể chủ động thao tác và kích hoạt phản hồi sinh động.`,
       knowledgeIds: ['K-02'],
       skillIds: ['S-02'],
       competencyIds: ['C-01', 'C-03'],
       tasks: [
         {
           id: 'T-P4-01-A',
-          description: `Tích hợp đồng bộ toàn bộ các tính năng cốt lõi đã hoàn thiện từ P1 đến P3 vào "${dreamName}".`,
+          description: `Thiết kế và gắn bộ điều khiển / sự kiện tương tác (click / chạm / cảm biến) để kích hoạt chuyển động "${interactionFeature}".`,
           knowledgeIds: ['K-02'],
           skillIds: ['S-02'],
           competencyIds: ['C-01']
         },
         {
           id: 'T-P4-01-B',
-          description: `Tổ chức buổi chạy thử hoàn chỉnh cho ${dreamAudience} và ghi nhận chỉ số thành công.`,
+          description: `Kiểm thử độ nhạy tương tác và tối ưu hóa phản hồi thị giác/chuyển động khi ${dreamAudience} thao tác.`,
           knowledgeIds: [],
           skillIds: ['S-02'],
           competencyIds: ['C-03']
         }
       ],
-      deliverable: `Sản phẩm hoàn chỉnh (MVP) của ${dreamName} kèm video demo thực tế`,
-      successCriteria: [`Sản phẩm vận hành đúng ý tưởng con mong muốn, ${dreamAudience} sử dụng được`],
-      evidenceArtifacts: ['Video sản phẩm hoạt động', 'Tài liệu hướng dẫn sử dụng sản phẩm'],
+      deliverable: `Mô-đun tương tác [${interactionFeature}] hoàn chỉnh vận hành trong ${dreamName}`,
+      successCriteria: [`Người dùng (${dreamAudience}) thao tác "${interactionFeature}" mượt mà và phản hồi diễn ra chính xác`],
+      evidenceArtifacts: ['Video quay lại thao tác tương tác thực tế', 'Tài liệu hướng dẫn thao tác tương tác cho người dùng'],
       scope: 'mvp',
       implementationMode: defaultMode
     },
     {
       id: 'F-P4-02',
-      name: `Lộ Trình Mở Rộng & Phát Triển Tương Lai (Extension)`,
-      description: `Kế hoạch nâng cấp phiên bản tiếp theo với các tính năng mở rộng (${extraFeature}), tự động hóa cao hơn và chuẩn bị trưng bày triển lãm.`,
+      name: `Chức năng trải nghiệm & nội dung: ${experienceFeature}`,
+      description: `Tích hợp nội dung thông điệp và hiệu ứng trải nghiệm "${experienceFeature}" vào ${dreamName}, giải quyết trọn vẹn mục tiêu "${dreamPurpose}".`,
+      knowledgeIds: ['K-02'],
+      skillIds: ['S-02'],
+      competencyIds: ['C-01'],
+      tasks: [
+        {
+          id: 'T-P4-02-A',
+          description: `Tích hợp dữ liệu nội dung, hiệu ứng hình ảnh và âm thanh cho "${experienceFeature}".`,
+          knowledgeIds: ['K-02'],
+          skillIds: ['S-02'],
+          competencyIds: ['C-01']
+        },
+        {
+          id: 'T-P4-02-B',
+          description: `Tổ chức buổi chạy thử nghiệm toàn diện cho ${dreamAudience} và ghi nhận chỉ số thành công.`,
+          knowledgeIds: [],
+          skillIds: ['S-02'],
+          competencyIds: ['C-03']
+        }
+      ],
+      deliverable: `Trải nghiệm nội dung [${experienceFeature}] hoàn thiện trong sản phẩm ${dreamName}`,
+      successCriteria: [`${dreamAudience} tiếp nhận rõ ràng thông điệp và đánh giá cao trải nghiệm sản phẩm mang lại`],
+      evidenceArtifacts: ['Ảnh chụp sản phẩm hoàn chỉnh chứa nội dung', 'Phiếu thu nhận ý kiến đánh giá của người trải nghiệm'],
+      scope: 'mvp',
+      implementationMode: defaultMode
+    },
+    {
+      id: 'F-P4-03',
+      name: `Tính năng mở rộng & nâng cấp: ${extensionFeature}`,
+      description: `Kế hoạch nâng cấp phiên bản tiếp theo với tính năng mở rộng "${extensionFeature}", tự động hóa cao hơn và chuẩn bị trưng bày triển lãm.`,
       knowledgeIds: ['K-03'],
       skillIds: ['S-03'],
       competencyIds: ['C-02', 'C-03'],
       tasks: [
         {
-          id: 'T-P4-02-A',
-          description: `Lập tài liệu lộ trình mở rộng tính năng nâng cao [${extraFeature}].`,
+          id: 'T-P4-03-A',
+          description: `Lập tài liệu thiết kế và kiến trúc mở rộng cho tính năng [${extensionFeature}].`,
           knowledgeIds: ['K-03'],
           skillIds: ['S-03'],
           competencyIds: ['C-02']
         },
         {
-          id: 'T-P4-02-B',
-          description: 'Chuẩn bị bài thuyết trình giới thiệu sản phẩm và hành trình sáng tạo của bản thân.',
+          id: 'T-P4-03-B',
+          description: `Chuẩn bị bài thuyết trình giới thiệu sản phẩm ${dreamName} và hành trình sáng tạo của bản thân.`,
           knowledgeIds: [],
           skillIds: ['S-03'],
           competencyIds: ['C-03']
         }
       ],
-      deliverable: 'Bản thiết kế mở rộng v2.0 và tài liệu thuyết trình Portfolio',
-      successCriteria: ['Xác định rõ các bước nâng cấp tiếp theo trong năm học tới'],
-      evidenceArtifacts: ['Slide thuyết trình sản phẩm', 'Bản vẽ thiết kế mở rộng tương lai'],
+      deliverable: `Bản thiết kế nâng cấp v2.0 cho [${extensionFeature}] và tài liệu thuyết trình Portfolio`,
+      successCriteria: [`Xác định rõ các bước nâng cấp tính năng "${extensionFeature}" trong kế hoạch học tập năm tới`],
+      evidenceArtifacts: ['Slide thuyết trình sản phẩm', 'Bản vẽ kỹ thuật / thiết kế tính năng nâng cấp'],
       scope: 'extension',
       implementationMode: defaultMode
     }
@@ -957,12 +1010,12 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     projectNumber: 4,
     name: answers.projectName?.trim() || 'Dự Án Sáng Tạo Ước Mơ',
     roleDescription: `Hoàn thiện phiên bản khả thi của ${productFormat} "${dreamName}" và xác định hướng mở rộng.`,
-    goal: `Hiện thực hóa ý tưởng "${dreamName}" (${productFormat}): Giải quyết mục đích "${dreamPurpose}" phục vụ "${dreamAudience}" với các đặc trưng (${dreamFeatures.join(', ')}). Chia làm bản thử nghiệm thực tế khả thi (MVP) và lộ trình mở rộng phát triển (Extension).`,
+    goal: `Hiện thực hóa ý tưởng "${dreamName}" (${productFormat}): Giải quyết mục đích "${dreamPurpose}" phục vụ "${dreamAudience}" với các đặc trưng (${dreamFeatures.join(', ')}). Chia làm các chức năng cốt lõi (MVP) và tính năng mở rộng phát triển (Extension).`,
     features: p4Features,
     tasks: [
-      `Xây dựng Bản Thử Nghiệm Thực Tế (MVP): Tập trung vào tính năng cốt lõi [${dreamFeatures.slice(0, 2).join(', ')}]`,
-      `Thử nghiệm người dùng thực tế: Trình diễn cho ${dreamAudience} và đo lường mức độ giải quyết mục tiêu "${dreamPurpose}"`,
-      `Lập kế hoạch nâng cấp mở rộng: Bổ sung tính năng nâng cao [${dreamFeatures.slice(2).join(', ') || 'nâng cao tính tự động'}] và chuẩn bị trưng bày`
+      `Lập trình & tích hợp chức năng tương tác cốt lõi: ${interactionFeature}`,
+      `Hoàn thiện chức năng nội dung & thử nghiệm cùng ${dreamAudience} để đạt mục đích "${dreamPurpose}"`,
+      `Xây dựng kế hoạch mở rộng & nâng cấp tính năng: ${extensionFeature}`
     ] as [string, string, string],
     deliverable: `Sản phẩm hoàn chỉnh "${dreamName}" (${productFormat}) kèm video demo và tài liệu lộ trình phát triển`,
     completionCheck: `Sản phẩm vận hành đúng ý tưởng con mong muốn, ${dreamAudience} có thể sử dụng và phản hồi`,
@@ -1446,8 +1499,8 @@ export function extractSIOEvidenceCards(answers: JourneyAnswers): SIOEvidenceCar
         sourceType: 'student_situation',
         standardRef: sc.standardRefs[0],
         caveat: isAssisted
-          ? 'Phản hồi được hỗ trợ từ gợi ý có sẵn, ghi nhận mức độ tiếp nhận thông tin, chưa coi là giải pháp độc lập.'
-          : 'Ghi nhận phản xạ tự nhiên của học sinh trong phạm vi câu hỏi tình huống mô phỏng.'
+          ? 'Học sinh chọn phương án gợi ý về ý tưởng trong tình huống mô phỏng. Cần quan sát thêm qua sản phẩm thực tế.'
+          : 'Học sinh tự chia sẻ ý tưởng thiết kế trong tình huống mô phỏng. Cần quan sát thêm qua sản phẩm thực tế.'
       });
     }
   }
@@ -1486,8 +1539,8 @@ export function extractSIOEvidenceCards(answers: JourneyAnswers): SIOEvidenceCar
         sourceType: 'student_situation',
         standardRef: sc.standardRefs[0],
         caveat: isAssisted
-          ? 'Phản hồi được hỗ trợ từ gợi ý có sẵn, ghi nhận mức độ tiếp nhận quy trình, chưa coi là giải pháp độc lập.'
-          : 'Ghi nhận phản xạ giải quyết vấn đề tại thời điểm làm bài, cần thêm trải nghiệm thực tế để củng cố.'
+          ? 'Học sinh chọn quy trình gợi ý trong tình huống mô phỏng. Cần quan sát thêm qua sản phẩm thực tế.'
+          : 'Học sinh tự đề xuất thứ tự các bước thực hiện trong tình huống mô phỏng. Cần quan sát thêm qua sản phẩm thực tế.'
       });
     }
   }
@@ -1526,8 +1579,10 @@ export function extractSIOEvidenceCards(answers: JourneyAnswers): SIOEvidenceCar
         sourceType: 'student_situation',
         standardRef: sc.standardRefs[0],
         caveat: isAssisted
-          ? 'Phản hồi được hỗ trợ từ gợi ý có sẵn, ghi nhận phương hướng khắc phục, chưa coi là giải pháp độc lập.'
-          : 'Biểu hiện tư duy logic tự nhiên khi phát hiện tình huống bất thường.'
+          ? 'Học sinh chọn phương án xử lý gợi ý trong tình huống mô phỏng. Cần quan sát thêm qua sản phẩm thực tế.'
+          : (answers.domain === 'multimedia' || sc.question?.toLowerCase().includes('mái nhà') || sc.question?.toLowerCase().includes('bố cục')
+              ? 'Học sinh tự đề xuất cách điều chỉnh bố cục trong tình huống mô phỏng. Cần quan sát thêm qua sản phẩm thực tế.'
+              : 'Học sinh tự đề xuất cách điều chỉnh vận hành trong tình huống mô phỏng. Cần quan sát thêm qua sản phẩm thực tế.')
       });
     }
   }
@@ -1587,14 +1642,11 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     futureCapabilityPortfolio: {
       portfolioType: 'Future Capability Portfolio (Hồ Sơ Năng Lực Tương Lai Mục Tiêu)',
       conceptNotice: 'Đây là chân dung năng lực và bộ dự án mục tiêu con cùng gia đình mong muốn đạt được, không phải bản đánh giá năng lực hiện tại.',
-      riasecOrientation: {
-        primaryCode: riasec.primaryCode,
-        primaryName: riasec.primaryName,
-        hollandFullName: riasec.hollandFullName,
+      curriculumOrientation: {
         techSector: riasec.techSector, // 1 trong 3 nhóm: 'Robot - AI - IoT' | 'Lập trình & AI' | 'Multimedia'
         techSectorDescription: riasec.techSectorDescription,
-        secondaryCodes: riasec.secondaryCodes,
-        naturalTraits: riasec.naturalTraits,
+        curriculumReferenceNotice: 'Hệ thống định hướng nội dung học tập theo lĩnh vực công nghệ con đã lựa chọn. Các khía cạnh sư phạm chỉ đóng vai trò tham khảo thiết kế hoạt động trải nghiệm nội bộ, không phân loại mã Holland cá nhân hay đánh giá tính cách học sinh khi chưa có công cụ đo lường chuyên biệt.',
+        targetSpecialization: branch?.label || branchKey,
       },
       targetCapabilities: riasec.targetCapabilities,
       familyAlignment: {
@@ -1731,7 +1783,7 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
   const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và kỹ sư phần mềm web frontend hàng đầu. Hãy tạo một website Single-Page Application (SPA) hoàn chỉnh sử dụng **React + TypeScript + Tailwind CSS** và Lucide Icons từ hồ sơ JSON bên dưới.
 
 BẢN CHẤT SẢN PHẨM:
-- Đây là "FUTURE CAPABILITY PORTFOLIO" (Hồ Sơ Năng Lực Tương Lai Mục Tiêu) mà học sinh và gia đình đã thống nhất hướng tới sau quá trình tương tác hướng nghiệp theo Mô Hình RIASEC.
+- Đây là "FUTURE CAPABILITY PORTFOLIO" (Hồ Sơ Năng Lực Tương Lai Mục Tiêu) mà học sinh và gia đình đã thống nhất hướng tới theo lĩnh vực công nghệ ${riasec.techSector}.
 - Đây KHÔNG phải là bảng đánh giá năng lực hiện tại hay cấp chứng chỉ, mà là hồ sơ mục tiêu năng lực và lộ trình thực hiện chi tiết đến từng chức năng sản phẩm.
 - Bốn dự án (P1 đến P4) phục vụ trực tiếp cho Dream Project, trong đó P4 giữ nguyên tên dự án "${dreamName}" đã được học sinh xác nhận.
 

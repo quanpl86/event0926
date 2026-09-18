@@ -386,14 +386,14 @@ export function StudentProfileCard({
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm sm:text-base font-extrabold text-[#1a3a4a]">
-                      Định Hướng Ngành Nghề Theo Mô Hình RIASEC
+                      Định Hướng Nhóm Ngành Công Nghệ Lựa Chọn
                     </h3>
                     <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-extrabold text-[#1a8a7d]">
-                      Holland Code / O*NET
+                      Tham khảo sư phạm
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Khám phá nhóm ngành công nghệ tương lai phù hợp nhất với con
+                    Nhóm ngành công nghệ tương lai con và gia đình lựa chọn
                   </p>
                 </div>
               </div>
@@ -410,8 +410,8 @@ export function StudentProfileCard({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <div className="rounded-2xl bg-white p-3 border border-teal-100/90 shadow-2xs flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Mã Holland</span>
-                  <span className="text-xs font-extrabold text-[#1a8a7d]">{riasec.primaryName}</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Lĩnh vực công nghệ</span>
+                  <span className="text-xs font-extrabold text-[#1a8a7d]">{riasec.techSector}</span>
                 </div>
                 <span className="grid h-7 w-7 place-items-center rounded-xl bg-teal-50 text-[#1a8a7d] border border-teal-200 shadow-2xs shrink-0">
                   <Target className="h-3.5 w-3.5" />
@@ -436,7 +436,7 @@ export function StudentProfileCard({
 
               <div className="rounded-2xl bg-white p-3 border border-teal-100/90 shadow-2xs flex items-center justify-between">
                 <div className="min-w-0">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Điểm mạnh tự nhiên</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Hứng thú học tập</span>
                   <span className="text-xs font-extrabold text-slate-700 leading-tight break-words block">
                     {riasec.naturalTraits[0] || "Tư duy sáng tạo"}
                   </span>
@@ -453,7 +453,7 @@ export function StudentProfileCard({
               onClick={() => setShowRiasecDetails(prev => !prev)}
               className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white hover:bg-teal-50/80 border border-teal-200/80 text-xs font-extrabold text-[#1a8a7d] transition shadow-2xs"
             >
-              <span>{showRiasecDetails ? "Thu gọn chi tiết phân tích ▴" : "Xem chi tiết phân tích RIASEC & Đối chiếu gia đình ▾"}</span>
+              <span>{showRiasecDetails ? "Thu gọn chi tiết ▴" : "Xem chi tiết định hướng chuyên môn & Đối chiếu gia đình ▾"}</span>
               {showRiasecDetails ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </button>
 
@@ -465,33 +465,28 @@ export function StudentProfileCard({
                   <div className="rounded-2xl bg-white p-4 border border-teal-100/80 shadow-2xs space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                        Nhóm Sở Thích Chủ Đạo
+                        Định Hướng Lĩnh Vực Học Tập
                       </span>
                       <span className="rounded-lg bg-teal-50 px-2 py-0.5 text-[11px] font-extrabold text-[#1a8a7d]">
-                        {riasec.primaryName}
+                        {riasec.techSector}
                       </span>
                     </div>
                     <p className="text-xs font-bold text-[#1a3a4a] leading-snug">
-                      {riasec.hollandFullName}
+                      Chương trình STEAM định hướng: {riasec.techSector}
                     </p>
                     <p className="text-[11px] text-slate-600 leading-relaxed">
                       {riasec.techSectorDescription}
                     </p>
                     <div className="pt-2 border-t border-slate-100">
-                      <span className="text-[10px] font-bold text-slate-400 block mb-1">Mã bổ trợ phối hợp:</span>
-                      <div className="flex flex-wrap gap-1">
-                        {riasec.secondaryCodes.map((code, idx) => (
-                          <span key={idx} className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
-                            {code}
-                          </span>
-                        ))}
-                      </div>
+                      <span className="text-[10px] text-slate-500 block leading-relaxed italic">
+                        * Tài liệu tham khảo sư phạm: Các khía cạnh sư phạm chỉ đóng vai trò tham khảo thiết kế hoạt động trải nghiệm nội bộ, không phân loại mã Holland cá nhân hay đánh giá tính cách học sinh.
+                      </span>
                     </div>
                   </div>
 
                   <div className="rounded-2xl bg-white p-4 border border-teal-100/80 shadow-2xs space-y-2">
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">
-                      Phản Xạ Sở Thích Tự Nhiên Được Ghi Nhận
+                      Nhu Cầu Trải Nghiệm & Hứng Thú Học Tập
                     </span>
                     <ul className="space-y-1.5 text-[11px] text-slate-600">
                       {riasec.naturalTraits.map((trait, idx) => (

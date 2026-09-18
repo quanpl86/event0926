@@ -468,16 +468,6 @@ export function FutureJourney() {
     [isPrimary, answers.branch]
   );
 
-  // Prune invalid dreamFeatures if not matching active branchData
-  useEffect(() => {
-    if (branchData?.featureChoices && answers.dreamFeatures && answers.dreamFeatures.length > 0) {
-      const validFeatures = answers.dreamFeatures.filter(f => branchData.featureChoices.includes(f));
-      if (validFeatures.length !== answers.dreamFeatures.length) {
-        setAnswers(a => ({ ...a, dreamFeatures: validFeatures }));
-      }
-    }
-  }, [branchData?.featureChoices, answers.dreamFeatures]);
-
   // Validation
   function canContinue(): boolean {
     if (current === 0) {
@@ -1314,37 +1304,77 @@ export function FutureJourney() {
                       Chọn 1–3 tính năng tuyệt vời nhất cho sản phẩm:
                     </label>
                     <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2">
-                      {(branchData?.featureChoices || [
-                        "Tự động nhận biết vật cản",
-                        "Điều khiển bằng giọng nói hoặc nút bấm",
-                        "Giao diện màn hình cảm ứng",
-                        "Tích hợp còi báo và đèn hiệu thông minh"
-                      ]).map((feat: string) => {
-                        const active = (answers.dreamFeatures ?? []).includes(feat);
-                        return (
-                          <button
-                            type="button"
-                            key={feat}
-                            onClick={() => {
-                              const list = answers.dreamFeatures ?? [];
-                              const next = list.includes(feat)
-                                ? list.filter(f => f !== feat)
-                                : [...list, feat].slice(-3);
-                              setAnswers(a => ({ ...a, dreamFeatures: next }));
-                            }}
-                            className={`flex items-center gap-2.5 rounded-xl border p-3 text-left text-xs font-bold transition ${
-                              active ? "border-tek-500 bg-tek-50 text-tek-800 ring-1 ring-tek-400" : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
-                            }`}
-                          >
-                            <span className={`grid h-4 w-4 shrink-0 place-items-center rounded-md border ${
-                              active ? "border-tek-600 bg-tek-600 text-white" : "border-slate-300"
-                            }`}>
-                              {active && <Check className="h-3 w-3" />}
-                            </span>
-                            <span>{feat}</span>
-                          </button>
-                        );
-                      })}
+                      {(() => {
+                        const format = answers.productFormat?.toLowerCase() || '';
+                        const purpose = answers.dreamPurpose?.toLowerCase() || '';
+                        const isCardOr3D = format.includes('thiệp') || purpose.includes('thiệp') || format.includes('3d') || answers.branch?.includes('3d');
+                        
+                        const choices: string[] = isCardOr3D
+                          ? [
+                              "Bấm nút mở thiệp tương tác (Hiệu ứng mở 3D)",
+                              "Xoay mô hình 3D 360 độ để khám phá",
+                              "Bấm nút phát lời chúc & âm nhạc nhẹ nhàng",
+                              "Hiệu ứng chuyển cảnh (trái tim bay / pháo hoa)",
+                              "Tùy chỉnh đổi màu sắc mô hình theo ý thích"
+                            ]
+                          : answers.domain === 'multimedia'
+                          ? [
+                              "Xoay mô hình 3D đa góc nhìn",
+                              "Bấm tương tác để chuyển động nhân vật",
+                              "Lồng ghép thông điệp văn bản và âm nhạc",
+                              "Hiệu ứng ánh sáng và chuyển màu sắc",
+                              "Bố cục không gian 3D sinh động"
+                            ]
+                          : answers.domain === 'robotics'
+                          ? [
+                              "Tự động nhận biết và né tránh vật cản",
+                              "Điều khiển bằng nút bấm hoặc giọng nói",
+                              "Giao diện màn hình hiển thị cảm ứng",
+                              "Tích hợp còi báo và đèn LED thông minh",
+                              "Cơ cấu gắp / khay đỡ chuyển động tự động"
+                            ]
+                          : answers.domain === 'game_programming'
+                          ? [
+                              "Phím bấm điều khiển nhân vật di chuyển 3D",
+                              "Hệ thống nhiệm vụ và chướng ngại vật tương tác",
+                              "Bảng điểm số và âm thanh chiến thắng",
+                              "Nút bấm chuyển đổi góc nhìn hoặc màn chơi",
+                              "Hiệu ứng hoạt họa khi nhân vật tương tác"
+                            ]
+                          : (branchData?.featureChoices || [
+                              "Tự động nhận biết vật cản",
+                              "Điều khiển bằng nút bấm hoặc tương tác",
+                              "Giao diện hiển thị trực quan",
+                              "Tích hợp tín hiệu âm thanh và ánh sáng"
+                            ]);
+
+                        return choices.map((feat: string) => {
+                          const active = (answers.dreamFeatures ?? []).includes(feat);
+                          return (
+                            <button
+                              type="button"
+                              key={feat}
+                              onClick={() => {
+                                const list = answers.dreamFeatures ?? [];
+                                const next = list.includes(feat)
+                                  ? list.filter(f => f !== feat)
+                                  : [...list, feat].slice(-3);
+                                setAnswers(a => ({ ...a, dreamFeatures: next }));
+                              }}
+                              className={`flex items-center gap-2.5 rounded-xl border p-3 text-left text-xs font-bold transition ${
+                                active ? "border-tek-500 bg-tek-50 text-tek-800 ring-1 ring-tek-400" : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
+                              }`}
+                            >
+                              <span className={`grid h-4 w-4 shrink-0 place-items-center rounded-md border ${
+                                active ? "border-tek-600 bg-tek-600 text-white" : "border-slate-300"
+                              }`}>
+                                {active && <Check className="h-3 w-3" />}
+                              </span>
+                              <span>{feat}</span>
+                            </button>
+                          );
+                        });
+                      })()}
                     </div>
                   </div>
 
