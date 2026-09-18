@@ -1,16 +1,19 @@
 import contentData from './v3/contentV3.json';
 import stepsConfigData from './v3/stepsConfigV3.json';
 import type { JourneyAnswers } from '@/types/journey';
+import type {
+  CapabilityTarget,
+  ProjectFeature,
+  ProjectFeatureTask,
+  DetailedPersonalizedProject,
+  FutureCapabilityPortfolioData
+} from '@/types/dataContractV3';
 
 export type V3Step = typeof stepsConfigData.steps[number];
 
 export const v3Steps = stepsConfigData.steps;
 export const v3Content = contentData;
 
-/**
- * Bảng ánh xạ bộ môn công nghệ (Domain) sang các nhánh chuyên sâu (Branch) theo cấp học
- * Tuân thủ theo docs/02_hop_dong_du_lieu_va_quy_tac.json
- */
 export const DOMAIN_BRANCH_MAP: Record<"primary" | "secondary", Record<string, string[]>> = {
   primary: {
     robotics: ["robot_build_and_block_control", "smart_device_primary", "automation_primary"],
@@ -66,27 +69,365 @@ export function getStandardDetail(code: string) {
   return registry.find(s => s.id === code) || null;
 }
 
-export type V3PersonalizedProject = {
-  id: string;
-  projectNumber: number;
-  name: string;
-  goal: string;
-  tasks: [string, string, string];
-  deliverable: string;
-  completionCheck: string;
-  isDreamProject: boolean;
-  adaptedFrom?: string;
-  sioIds?: string[];
-  image: string;
-};
+/**
+ * Ma trận mục tiêu năng lực mục tiêu (Target Capabilities: Knowledge, Skills, Competencies)
+ * Liên kết đa chiều (multilateral) với các dự án P1-P4 và chức năng F-xx
+ */
+export function getDomainCapabilityTargets(domain: string = 'robotics', isPrimary: boolean = true): {
+  knowledge: CapabilityTarget[];
+  skills: CapabilityTarget[];
+  competencies: CapabilityTarget[];
+} {
+  if (domain === 'robotics') {
+    return {
+      knowledge: [
+        {
+          id: 'K-01',
+          type: 'knowledge',
+          name: 'Nguyên lý Mạch Điện & Khối Vi Điều Khiển',
+          description: isPrimary
+            ? 'Hiểu cách dòng điện cung cấp năng lượng và cách khối điều khiển gửi tín hiệu đến động cơ.'
+            : 'Hiểu cấu tạo mạch vi điều khiển (ESP32/Arduino), tín hiệu GPIO, nguồn pin và logic điều khiển số.',
+          projectIds: ['P1', 'P2'],
+          featureIds: ['F-P1-01', 'F-P2-01'],
+          outcomeCriteria: ['Nhận biết đúng cực âm/dương nguồn điện', 'Giải thích được vai trò khối điều khiển'],
+          standardRef: 'CSTA-ALGO'
+        },
+        {
+          id: 'K-02',
+          type: 'knowledge',
+          name: 'Cảm Biến & Thuật Toán Phản Hồi Môi Trường',
+          description: isPrimary
+            ? 'Hiểu cách cảm biến siêu âm phát hiện vật cản và cảm biến dò đường nhận biết vạch kẻ.'
+            : 'Thuật toán đọc tín hiệu cảm biến (Analog/Digital), xử lý chống nhiễu và thuật toán phản hồi điều khiển kín.',
+          projectIds: ['P2', 'P3', 'P4'],
+          featureIds: ['F-P2-01', 'F-P3-01', 'F-P4-01'],
+          outcomeCriteria: ['Lập trình robot dừng cách vật cản an toàn', 'Robot bám vạch kẻ chính xác'],
+          standardRef: 'CSTA-ALGO'
+        },
+        {
+          id: 'K-03',
+          type: 'knowledge',
+          name: 'Cơ Học Chuyển Động & Tỷ Số Truyền Động Cơ',
+          description: isPrimary
+            ? 'Hiểu bánh răng truyền chuyển động giúp robot di chuyển nhanh hay khỏe hơn.'
+            : 'Tính toán tỷ số truyền động cơ Servo/DC, phân bố trọng tâm và mô-men xoắn cho tay gắp.',
+          projectIds: ['P1', 'P3', 'P4'],
+          featureIds: ['F-P1-02', 'F-P3-02', 'F-P4-02'],
+          outcomeCriteria: ['Khung xe chuyển động vững vàng', 'Cơ cấu tay gắp/khay nâng giữ vật không rơi'],
+          standardRef: 'ISTE-INNOVATIVE'
+        }
+      ],
+      skills: [
+        {
+          id: 'S-01',
+          type: 'skill',
+          name: 'Lắp Ráp & Kết Nối Phần Cứng An Toàn',
+          description: isPrimary
+            ? 'Lắp ghép khung cơ khí chắc chắn, cắm dây nối đúng cổng màu sắc an toàn.'
+            : 'Đấu nối mạch điện tử đúng sơ đồ, sử dụng module cầu H an toàn và bố trí dây gọn gàng.',
+          projectIds: ['P1', 'P3'],
+          featureIds: ['F-P1-01', 'F-P3-02'],
+          outcomeCriteria: ['Mạch kết nối đúng không bị chập', 'Khung mô hình đạt độ ổn định cơ học'],
+          standardRef: 'NLS-DIGITAL-MASTERY'
+        },
+        {
+          id: 'S-02',
+          type: 'skill',
+          name: 'Lập Trình Khối Lệnh / Mã Nguồn Điều Khiển',
+          description: isPrimary
+            ? 'Kéo thả khối lệnh logic tuần tự, vòng lặp liên tục và rẽ nhánh điều kiện Nếu - Thì.'
+            : 'Viết mã kịch bản điều khiển phần cứng đa luồng, xử lý ngắt và truyền nhận dữ liệu IoT.',
+          projectIds: ['P2', 'P3', 'P4'],
+          featureIds: ['F-P2-01', 'F-P3-01', 'F-P4-01'],
+          outcomeCriteria: ['Chương trình nạp thành công vào robot', 'Robot phản hồi chính xác theo tình huống'],
+          standardRef: 'CSTA-ALGO'
+        },
+        {
+          id: 'S-03',
+          type: 'skill',
+          name: 'Đo Kiểm, Thử Nghiệm & Sửa Lỗi Kỹ Thuật (Debug)',
+          description: isPrimary
+            ? 'Quan sát robot khi chạy sai, kiểm tra từng dây cắm hoặc câu lệnh để sửa lỗi.'
+            : 'Đo điện áp, đọc log tín hiệu cổng Serial và hiệu chỉnh thông số thuật toán.',
+          projectIds: ['P1', 'P2', 'P3', 'P4'],
+          featureIds: ['F-P1-02', 'F-P2-02', 'F-P3-02', 'F-P4-02'],
+          outcomeCriteria: ['Xác định được đúng vị trí gây ra lỗi', 'Thử nghiệm lặp lại cho đến khi hoạt động trơn tru'],
+          standardRef: 'ISTE-INNOVATIVE'
+        }
+      ],
+      competencies: [
+        {
+          id: 'C-01',
+          type: 'competency',
+          name: 'Tư Duy Thiết Kế Hệ Thống Tích Hợp (Phần Cứng & Phần Mềm)',
+          description: 'Khả năng phối hợp đồng bộ giữa cơ khí, điện tử và mã lệnh điều khiển để tạo thành sản phẩm thông minh.',
+          projectIds: ['P2', 'P4'],
+          featureIds: ['F-P2-02', 'F-P4-01'],
+          outcomeCriteria: ['Sản phẩm vận hành hài hòa giữa thân máy và phần mềm', 'Tối ưu hóa nguồn pin và hiệu suất'],
+          standardRef: 'ISTE-INNOVATIVE'
+        },
+        {
+          id: 'C-02',
+          type: 'competency',
+          name: 'Thử Nghiệm Lặp Lại & Tối Ưu Hóa An Toàn Thực Tế',
+          description: 'Thái độ kiên trì đối mặt với sự cố kỹ thuật, cải tiến thiết kế và ưu tiên tiêu chuẩn an toàn cho người dùng.',
+          projectIds: ['P1', 'P2', 'P3', 'P4'],
+          featureIds: ['F-P1-02', 'F-P2-02', 'F-P3-01', 'F-P4-02'],
+          outcomeCriteria: ['Có ghi chép nhật ký thử nghiệm', 'Trang bị cơ chế dừng an toàn trước vật cản'],
+          standardRef: 'ISTE-INNOVATIVE'
+        },
+        {
+          id: 'C-03',
+          type: 'competency',
+          name: 'Giải Quyết Bài Toán Thực Tế Phục Vụ Cộng Đồng',
+          description: 'Vận dụng sáng tạo tự động hóa để hỗ trợ con người, giải quyết nhu cầu đời sống thiết thực.',
+          projectIds: ['P3', 'P4'],
+          featureIds: ['F-P3-01', 'F-P4-01', 'F-P4-02'],
+          outcomeCriteria: ['Sản phẩm phục vụ đúng đối tượng mục tiêu', 'Nhận được phản hồi tích cực khi thử nghiệm'],
+          standardRef: 'NLS-DIGITAL-MASTERY'
+        }
+      ]
+    };
+  }
+
+  if (domain === 'game_programming') {
+    return {
+      knowledge: [
+        {
+          id: 'K-01',
+          type: 'knowledge',
+          name: 'Cấu Trúc Dữ Liệu & Biến Số Trạng Thái Game',
+          description: isPrimary
+            ? 'Hiểu cách dùng biến số để lưu điểm số, mạng chơi và trạng thái thắng/thua.'
+            : 'Quản lý mảng danh sách vật phẩm, biến toàn cục/cục bộ và luồng dữ liệu người chơi.',
+          projectIds: ['P1', 'P2'],
+          featureIds: ['F-P1-01', 'F-P2-01'],
+          outcomeCriteria: ['Điểm số cập nhật đúng khi thu thập vật phẩm', 'Game kết thúc chính xác khi hết mạng'],
+          standardRef: 'CSTA-ALGO'
+        },
+        {
+          id: 'K-02',
+          type: 'knowledge',
+          name: 'Vòng Lặp Game Loop & Xử Lý Va Chạm Vật Lý (Collision)',
+          description: isPrimary
+            ? 'Hiểu nguyên lý chuyển động theo tọa độ X-Y và cơ chế chạm vào nhân vật hoặc chướng ngại vật.'
+            : 'Vòng lặp Update/Render trong Game Loop, tính toán hitbox, trọng lực và phản lực va chạm.',
+          projectIds: ['P1', 'P2', 'P3'],
+          featureIds: ['F-P1-02', 'F-P2-01', 'F-P3-01'],
+          outcomeCriteria: ['Nhân vật chuyển động mượt mà', 'Va chạm kích hoạt chính xác hiệu ứng tương ứng'],
+          standardRef: 'CSTA-ALGO'
+        },
+        {
+          id: 'K-03',
+          type: 'knowledge',
+          name: 'Thuật Toán Máy Trạng Thái (FSM) & Hành Vi Đối Thủ AI',
+          description: isPrimary
+            ? 'Lập trình cho đối thủ tự động di chuyển tuần tra và đổi hướng khi gặp chướng ngại vật.'
+            : 'Xây dựng Finite State Machine (Idle, Patrol, Chase, Attack) và thuật toán tìm đường căn bản.',
+          projectIds: ['P3', 'P4'],
+          featureIds: ['F-P3-01', 'F-P4-01'],
+          outcomeCriteria: ['Đối thủ AI có phản xạ linh hoạt', 'Tăng độ hấp dẫn thử thách cho màn chơi'],
+          standardRef: 'ISTE-INNOVATIVE'
+        }
+      ],
+      skills: [
+        {
+          id: 'S-01',
+          type: 'skill',
+          name: 'Thiết Kế Cơ Chế Điều Khiển & Phản Hồi Trải Nghiệm',
+          description: isPrimary
+            ? 'Lập trình phím mũi tên / chuột để điều khiển nhân vật nhảy, né và hành động nhạy bén.'
+            : 'Xây dựng Input Controller đa nền tảng (bàn phím, gamepad, cảm ứng) với phản hồi tức thì.',
+          projectIds: ['P1', 'P2'],
+          featureIds: ['F-P1-01', 'F-P2-02'],
+          outcomeCriteria: ['Nhân vật không bị trễ lệnh điều khiển', 'Cảm giác nhảy/di chuyển tự nhiên'],
+          standardRef: 'CSTA-ALGO'
+        },
+        {
+          id: 'S-02',
+          type: 'skill',
+          name: 'Lập Trình Logic Kịch Bản Nhiệm Vụ & Màn Chơi',
+          description: isPrimary
+            ? 'Thiết lập các màn chơi (Level) với độ khó tăng dần và thông báo nhiệm vụ rõ ràng.'
+            : 'Quản lý Scene Transition, Spawn Manager phát sinh quái ngẫu nhiên và hệ thống lưu điểm.',
+          projectIds: ['P2', 'P3', 'P4'],
+          featureIds: ['F-P2-01', 'F-P3-01', 'F-P4-01'],
+          outcomeCriteria: ['Chuyển màn chơi mượt mà không lỗi', 'Độ khó cân bằng tạo động lực cho người chơi'],
+          standardRef: 'ISTE-INNOVATIVE'
+        },
+        {
+          id: 'S-03',
+          type: 'skill',
+          name: 'Kiểm Thử Gameplay, Cân Bằng & Sửa Lỗi Logic (Bug Tracking)',
+          description: isPrimary
+            ? 'Chơi thử nhiều lần để tìm các tình huống nhân vật bị kẹt màn hình hoặc nhảy xuyên tường.'
+            : 'Sử dụng console debug, đo FPS và tối ưu hóa tài nguyên tránh giật lag khi chơi game.',
+          projectIds: ['P1', 'P2', 'P3', 'P4'],
+          featureIds: ['F-P1-02', 'F-P2-02', 'F-P3-02', 'F-P4-02'],
+          outcomeCriteria: ['Không có lỗi nghiêm trọng crash game', 'Gameplay ổn định ở tốc độ 30-60 FPS'],
+          standardRef: 'ISTE-INNOVATIVE'
+        }
+      ],
+      competencies: [
+        {
+          id: 'C-01',
+          type: 'competency',
+          name: 'Tư Duy Thuật Toán & Trừu Tượng Hóa Bài Toán',
+          description: 'Khả năng phân tích một ý tưởng trò chơi phức tạp thành các khối lệnh logic rõ ràng và tối ưu.',
+          projectIds: ['P2', 'P3', 'P4'],
+          featureIds: ['F-P2-01', 'F-P3-01', 'F-P4-01'],
+          outcomeCriteria: ['Cấu trúc code ngăn nắp, dễ đọc hiểu', 'Giải quyết được vấn đề logic tương tác đa phần tử'],
+          standardRef: 'CSTA-ALGO'
+        },
+        {
+          id: 'C-02',
+          type: 'competency',
+          name: 'Thấu Cảm Trải Nghiệm Người Dùng (UX & Game Design)',
+          description: 'Thiết kế luật chơi công bằng, giao diện dễ tiếp cận và khích lệ người chơi vượt qua thử thách.',
+          projectIds: ['P1', 'P3', 'P4'],
+          featureIds: ['F-P1-01', 'F-P3-02', 'F-P4-02'],
+          outcomeCriteria: ['Người mới chơi hiểu được cách chơi trong 1 phút', 'Giao diện điểm số và hướng dẫn rõ ràng'],
+          standardRef: 'NLS-DIGITAL-MASTERY'
+        },
+        {
+          id: 'C-03',
+          type: 'competency',
+          name: 'Hiện Thực Hóa Sản Phẩm Phần Mềm Hoàn Chỉnh',
+          description: 'Hoàn thiện sản phẩm từ ý tưởng ban đầu đến bản phát hành cho bạn bè và cộng đồng trải nghiệm.',
+          projectIds: ['P3', 'P4'],
+          featureIds: ['F-P3-02', 'F-P4-01', 'F-P4-02'],
+          outcomeCriteria: ['Đóng gói sản phẩm chạy độc lập', 'Thu nhận và lắng nghe đóng góp để nâng cấp bản tiếp theo'],
+          standardRef: 'ISTE-INNOVATIVE'
+        }
+      ]
+    };
+  }
+
+  // multimedia
+  return {
+    knowledge: [
+      {
+        id: 'K-01',
+        type: 'knowledge',
+        name: 'Nguyên Lý Bố Cục, Phối Cảnh & Tỷ Lệ Thị Giác',
+        description: isPrimary
+          ? 'Hiểu cách sắp xếp nhân vật và cảnh vật theo tỷ lệ cân đối, làm nổi bật điểm nhìn chính.'
+          : 'Quy tắc 1/3, phối cảnh điểm tụ 3D, chiều sâu không gian và phân cấp thị giác (Visual Hierarchy).',
+        projectIds: ['P1', 'P2'],
+        featureIds: ['F-P1-01', 'F-P2-01'],
+        outcomeCriteria: ['Bố cục tranh/mô hình cân đối', 'Người xem nhận ra ngay chủ thể nổi bật'],
+        standardRef: 'CSTA-ALGO'
+      },
+      {
+        id: 'K-02',
+        type: 'knowledge',
+        name: 'Lý Thuyết Màu Sắc HSL & Ánh Sáng Tạo Hình Số',
+        description: isPrimary
+          ? 'Phối hợp màu sắc tương phản và hài hòa để thể hiện cảm xúc vui tươi hay bí ẩn.'
+          : 'Không gian màu HSL/RGB, chiếu sáng 3 điểm (Key, Fill, Rim Light) và đổ bóng tạo khối 3D.',
+        projectIds: ['P1', 'P2', 'P3'],
+        featureIds: ['F-P1-02', 'F-P2-01', 'F-P3-01'],
+        outcomeCriteria: ['Bảng màu chủ đạo đồng nhất', 'Ánh sáng tôn lên đường nét của công trình/nhân vật'],
+        standardRef: 'ISTE-INNOVATIVE'
+      },
+      {
+        id: 'K-03',
+        type: 'knowledge',
+        name: 'Dựng Hình 3D & Không Gian Di Sản Số Văn Hóa',
+        description: isPrimary
+          ? 'Ghép nối các khối hình học cơ bản trong Tinkercad thành công trình di sản quen thuộc.'
+          : 'Dựng lưới đa giác 3D (Polygon Mesh), áp vật liệu Texture và kết xuất hình ảnh chất lượng cao.',
+        projectIds: ['P2', 'P3', 'P4'],
+        featureIds: ['F-P2-02', 'F-P3-02', 'F-P4-01'],
+        outcomeCriteria: ['Mô hình 3D hoàn chỉnh các góc nhìn', 'Thể hiện được đặc trưng văn hóa công trình'],
+        standardRef: 'NLS-DIGITAL-MASTERY'
+      }
+    ],
+    skills: [
+      {
+        id: 'S-01',
+        type: 'skill',
+        name: 'Tạo Hình & Mô Hình Hóa Bằng Công Cụ Số',
+        description: isPrimary
+          ? 'Thao tác kéo thả khối 3D, xoay góc nhìn và nhóm khối để tạo hình sản phẩm mỹ thuật số.'
+          : 'Sử dụng phím tắt Blender/Tinkercad, Extrude khối và tinh chỉnh các đỉnh/cạnh chính xác.',
+        projectIds: ['P1', 'P2'],
+        featureIds: ['F-P1-01', 'F-P2-01'],
+        outcomeCriteria: ['Mô hình không bị rách lưới hay lộn xộn', 'Kích thước cân xứng hài hòa'],
+        standardRef: 'NLS-DIGITAL-MASTERY'
+      },
+      {
+        id: 'S-02',
+        type: 'skill',
+        name: 'Biên Tập Hoạt Hình Keyframe & Hiệu Ứng Chuyển Động',
+        description: isPrimary
+          ? 'Tạo chuyển động mượt mà cho nhân vật bước đi, biểu cảm vẫy tay hoặc đổi góc nhìn.'
+          : 'Làm chủ Timeline, đường cong chuyển động Graph Editor và hiệu ứng ánh sáng động.',
+        projectIds: ['P2', 'P3', 'P4'],
+        featureIds: ['F-P2-02', 'F-P3-01', 'F-P4-01'],
+        outcomeCriteria: ['Chuyển động tự nhiên không bị giật cục', 'Hiệu ứng hoạt hình ăn khớp với nhịp điệu'],
+        standardRef: 'ISTE-INNOVATIVE'
+      },
+      {
+        id: 'S-03',
+        type: 'skill',
+        name: 'Thiết Kế Trải Nghiệm Thị Giác & Xuất Bản Đa Phương Tiện',
+        description: isPrimary
+          ? 'Lồng ghép phụ đề, âm thanh nền và xuất file video hoạt hình chia sẻ cùng bạn bè.'
+          : 'Phối hợp âm thanh Sound FX, thiết kế giao diện tương tác UI/UX và Render video độ phân giải cao.',
+        projectIds: ['P3', 'P4'],
+        featureIds: ['F-P3-02', 'F-P4-02'],
+        outcomeCriteria: ['Video âm thanh rõ nét không vỡ hạt', 'Trình bày tác phẩm tự tin và ấn tượng'],
+        standardRef: 'NLS-DIGITAL-MASTERY'
+      }
+    ],
+    competencies: [
+      {
+        id: 'C-01',
+        type: 'competency',
+        name: 'Kể Chuyện Bằng Hình Ảnh Số (Visual Storytelling)',
+        description: 'Truyền tải thông điệp ý nghĩa và cảm xúc nhân văn thông qua hình ảnh, ánh sáng và chuyển động.',
+        projectIds: ['P1', 'P3', 'P4'],
+        featureIds: ['F-P1-02', 'F-P3-01', 'F-P4-01'],
+        outcomeCriteria: ['Tác phẩm có cốt truyện mạch lạc', 'Khơi gợi được cảm xúc tích cực ở người xem'],
+        standardRef: 'ISTE-INNOVATIVE'
+      },
+      {
+        id: 'C-02',
+        type: 'competency',
+        name: 'Thẩm Mỹ Thị Giác & Tinh Tế Trong Chi Tiết',
+        description: 'Tôn trọng chuẩn mực thị giác, kiên nhẫn trau chuốt từng đường nét để tạo ra sản phẩm nghệ thuật hoàn chỉnh.',
+        projectIds: ['P1', 'P2', 'P4'],
+        featureIds: ['F-P1-01', 'F-P2-01', 'F-P4-02'],
+        outcomeCriteria: ['Màu sắc và tỷ lệ đạt độ thẩm mỹ cao', 'Chú ý đến các chi tiết nhỏ tinh tế'],
+        standardRef: 'ISTE-INNOVATIVE'
+      },
+      {
+        id: 'C-03',
+        type: 'competency',
+        name: 'Lan Tỏa Giá Trị Văn Hóa & Phục Vụ Cộng Đồng',
+        description: 'Ứng dụng công nghệ đồ họa để tôn vinh nét đẹp văn hóa, lịch sử và giáo dục cho mọi người.',
+        projectIds: ['P3', 'P4'],
+        featureIds: ['F-P3-02', 'F-P4-01', 'F-P4-02'],
+        outcomeCriteria: ['Tác phẩm có chủ đề văn hóa/xã hội rõ ràng', 'Được thầy cô và bạn bè đón nhận nồng nhiệt'],
+        standardRef: 'NLS-DIGITAL-MASTERY'
+      }
+    ]
+  };
+}
+
+export type V3PersonalizedProject = DetailedPersonalizedProject;
 
 /**
  * Cá nhân hóa 4 dự án theo đúng Ước mơ (Dream Project), cấp học và nhánh chuyên sâu của học sinh
- * Tuân thủ P0: Dự án 4 giữ nguyên tên và ước mơ của học sinh, chia làm bản thử nghiệm v1 và mở rộng v2
+ * Tuân thủ P0: Dự án 4 giữ nguyên tên và ước mơ của học sinh, chia làm bản thử nghiệm v1 (MVP) và mở rộng v2
+ * Mỗi dự án có danh sách các chức năng (ProjectFeature) với nhiệm vụ, tiêu chí và liên kết mục tiêu năng lực.
  */
-export function generatePersonalizedProjects(answers: JourneyAnswers): V3PersonalizedProject[] {
+export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedPersonalizedProject[] {
   const isPrimary = !answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand) || (answers.grade && parseInt(answers.grade, 10) <= 5);
-  const branchKey = answers.branch || (isPrimary ? 'game' : 'web');
+  const domain = answers.domain || 'robotics';
+  const branchKey = answers.branch || (isPrimary ? (domain === 'robotics' ? 'robot_build_and_block_control' : 'game') : 'web');
   const branch = getBranchData(Boolean(isPrimary), branchKey);
 
   const dreamName = answers.projectName?.trim() || 'Dự Án Sáng Tạo Ước Mơ';
@@ -104,23 +445,96 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): V3Persona
     '/assets/activity-world-building.png'
   ];
 
-  // Dự án 1: Nền tảng & Khám phá cơ chế
+  const firstFeature = dreamFeatures[0] || 'Tính năng tương tác chính';
+  const secondFeature = dreamFeatures[1] || 'Cơ chế phản hồi người dùng';
+  const extraFeature = dreamFeatures[2] || 'Tính năng mở rộng nâng cao';
+
+  const defaultMode: "physical" | "simulation" | "software" | "design" =
+    domain === 'robotics' ? (isPrimary ? 'physical' : 'physical') :
+    domain === 'multimedia' ? 'design' : 'software';
+
+  // ── DỰ ÁN 1 (P1): Xây dựng nền tảng trực tiếp phục vụ Dream Project ──
   const p1Base = libraryProjects[0] || {
-    title: 'Khám phá nền tảng sáng tạo',
-    name: 'Khám phá nền tảng sáng tạo',
+    title: 'Khởi động nền tảng kỹ thuật',
+    name: 'Khởi động nền tảng kỹ thuật',
     goal: 'Làm quen với các công cụ cơ bản và hoàn thiện thử nghiệm đầu tiên',
     tasks: ['Tìm hiểu bộ công cụ', 'Thực hành tính năng cơ bản', 'Thử nghiệm sản phẩm nhỏ'],
     deliverable: 'Bản phác thảo thử nghiệm đầu tiên',
     completionCheck: 'Hoàn thành các bước hướng dẫn cơ bản',
     sioIds: []
   };
-  const p1Title = (p1Base as any).title || p1Base.name || 'Khám phá nền tảng';
+  const p1Title = (p1Base as any).title || p1Base.name || 'Khởi động nền tảng';
 
-  const project1: V3PersonalizedProject = {
+  const p1Features: ProjectFeature[] = [
+    {
+      id: 'F-P1-01',
+      name: 'Khởi tạo môi trường & Cơ chế vận hành cơ bản',
+      description: `Thiết lập môi trường làm việc ban đầu và làm chủ các thao tác kỹ thuật nền tảng để sẵn sàng cho ${dreamName}.`,
+      knowledgeIds: ['K-01'],
+      skillIds: ['S-01'],
+      competencyIds: [],
+      tasks: [
+        {
+          id: 'T-P1-01-A',
+          description: isPrimary
+            ? 'Làm quen với bảng điều khiển và kiểm tra kết nối thiết bị / phần mềm.'
+            : 'Thiết lập môi trường phát triển và cấu hình thông số kỹ thuật ban đầu.',
+          knowledgeIds: ['K-01'],
+          skillIds: ['S-01'],
+          competencyIds: []
+        },
+        {
+          id: 'T-P1-01-B',
+          description: 'Thực hành thao tác mẫu và chạy thử lệnh khởi động cơ bản.',
+          knowledgeIds: ['K-01'],
+          skillIds: ['S-01'],
+          competencyIds: []
+        }
+      ],
+      deliverable: 'Mô hình / Bản chạy thử nghiệm đầu tiên hoạt động ổn định',
+      successCriteria: ['Thiết bị/phần mềm nhận lệnh chính xác', 'Không có cảnh báo lỗi kết nối'],
+      evidenceArtifacts: ['Ảnh chụp hoặc video ghi lại thao tác khởi động thành công'],
+      scope: 'mvp',
+      implementationMode: defaultMode
+    },
+    {
+      id: 'F-P1-02',
+      name: `Thử nghiệm nguyên mẫu ban đầu cho ${dreamName}`,
+      description: `Tạo phiên bản phác thảo kỹ thuật mô phỏng ý tưởng cốt lõi của "${dreamName}".`,
+      knowledgeIds: ['K-03'],
+      skillIds: ['S-03'],
+      competencyIds: ['C-02'],
+      tasks: [
+        {
+          id: 'T-P1-02-A',
+          description: `Vẽ phác thảo hoặc sơ đồ khối cơ chế phục vụ mục tiêu "${dreamPurpose}".`,
+          knowledgeIds: ['K-03'],
+          skillIds: ['S-03'],
+          competencyIds: ['C-02']
+        },
+        {
+          id: 'T-P1-02-B',
+          description: 'Chạy thử nghiệm bản phác thảo và ghi chép nhật ký các điểm cần hoàn thiện.',
+          knowledgeIds: ['K-03'],
+          skillIds: ['S-03'],
+          competencyIds: ['C-02']
+        }
+      ],
+      deliverable: 'Bản mô hình nguyên mẫu thử nghiệm sơ bộ',
+      successCriteria: ['Vận hành được luồng thao tác căn bản', 'Ghi nhận được nhật ký thử nghiệm ban đầu'],
+      evidenceArtifacts: ['Sơ đồ khối thiết kế', 'Nhật ký thử nghiệm bản v0.1'],
+      scope: 'mvp',
+      implementationMode: defaultMode
+    }
+  ];
+
+  const project1: DetailedPersonalizedProject = {
     id: 'P1',
     projectNumber: 1,
     name: `${p1Title} (Khởi động cho ${dreamName})`,
+    roleDescription: 'Xây dựng nền tảng trực tiếp phục vụ Dream Project.',
     goal: `${p1Base.goal} — Đặt nền tảng tư duy và kỹ thuật phục vụ ý tưởng "${dreamName}".`,
+    features: p1Features,
     tasks: [
       p1Base.tasks?.[0] || 'Làm quen môi trường sáng tạo',
       p1Base.tasks?.[1] || 'Thử nghiệm các thao tác kỹ thuật cốt lõi',
@@ -129,12 +543,12 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): V3Persona
     deliverable: `${p1Base.deliverable} có liên hệ với chủ đề ${dreamName}`,
     completionCheck: p1Base.completionCheck || 'Vận hành thành công bản mẫu đầu tiên',
     isDreamProject: false,
-    adaptedFrom: p1Title,
+    adaptedFromLibraryId: p1Title,
     sioIds: (p1Base as any).sioIds || [],
     image: projectImages[0]
   };
 
-  // Dự án 2: Phát triển kỹ năng & tính năng cốt lõi
+  // ── DỰ ÁN 2 (P2): Phát triển chức năng cốt lõi đầu tiên ──
   const p2Base = libraryProjects[1] || {
     title: 'Xây dựng cơ chế tương tác',
     name: 'Xây dựng cơ chế tương tác',
@@ -146,70 +560,380 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): V3Persona
   };
   const p2Title = (p2Base as any).title || p2Base.name || 'Xây dựng cơ chế tương tác';
 
-  const firstFeature = dreamFeatures[0] || 'tính năng chính';
-  const project2: V3PersonalizedProject = {
+  const p2Features: ProjectFeature[] = [
+    {
+      id: 'F-P2-01',
+      name: `Phát triển chức năng cốt lõi: ${firstFeature}`,
+      description: `Hiện thực hóa chức năng quan trọng nhất "${firstFeature}" cho sản phẩm với độ chính xác cao.`,
+      knowledgeIds: ['K-01', 'K-02'],
+      skillIds: ['S-02'],
+      competencyIds: [],
+      tasks: [
+        {
+          id: 'T-P2-01-A',
+          description: `Xây dựng giải thuật / cơ chế điều khiển cho chức năng "${firstFeature}".`,
+          knowledgeIds: ['K-01', 'K-02'],
+          skillIds: ['S-02'],
+          competencyIds: []
+        },
+        {
+          id: 'T-P2-01-B',
+          description: 'Ghép nối tín hiệu và kiểm tra dữ liệu phản hồi trong tình huống chuẩn.',
+          knowledgeIds: ['K-02'],
+          skillIds: ['S-02'],
+          competencyIds: []
+        }
+      ],
+      deliverable: `Mô-đun chức năng ${firstFeature} hoàn chỉnh`,
+      successCriteria: [`Tính năng ${firstFeature} phản hồi đúng yêu cầu đề ra`],
+      evidenceArtifacts: ['Đoạn mã kịch bản hoặc mô hình vật lý hoạt động'],
+      scope: 'mvp',
+      implementationMode: defaultMode
+    },
+    {
+      id: 'F-P2-02',
+      name: 'Kiểm soát phản hồi & Đo độ ổn định tương tác',
+      description: 'Đảm bảo chức năng cốt lõi vận hành mượt mà, phản xạ nhanh và không bị nghẽn lệnh.',
+      knowledgeIds: [],
+      skillIds: ['S-03'],
+      competencyIds: ['C-01', 'C-02'],
+      tasks: [
+        {
+          id: 'T-P2-02-A',
+          description: 'Thực hiện 5 lần thử nghiệm liên tiếp trong các điều kiện khác nhau.',
+          knowledgeIds: [],
+          skillIds: ['S-03'],
+          competencyIds: ['C-01', 'C-02']
+        },
+        {
+          id: 'T-P2-02-B',
+          description: 'Sửa các lỗi phát sinh (debug) để tối ưu thời gian phản hồi.',
+          knowledgeIds: [],
+          skillIds: ['S-03'],
+          competencyIds: ['C-01', 'C-02']
+        }
+      ],
+      deliverable: 'Bản kiểm thử độ ổn định (Test Report)',
+      successCriteria: ['Tỷ lệ thực thi chuẩn xác đạt trên 80% trong các lần thử'],
+      evidenceArtifacts: ['Bảng thống kê kết quả thử nghiệm'],
+      scope: 'mvp',
+      implementationMode: defaultMode
+    }
+  ];
+
+  const project2: DetailedPersonalizedProject = {
     id: 'P2',
     projectNumber: 2,
     name: `${p2Title} • Tích hợp ${firstFeature}`,
+    roleDescription: 'Phát triển chức năng cốt lõi đầu tiên.',
     goal: `${p2Base.goal} — Ứng dụng kỹ thuật để thử nghiệm tính năng "${firstFeature}" cho sản phẩm.`,
+    features: p2Features,
     tasks: [
       p2Base.tasks?.[0] || 'Thiết kế cấu trúc logic',
       `Lập trình / thiết kế cơ chế mô phỏng tính năng "${firstFeature}"`,
-      `Chạy thử và tối ưu phản hồi khi tương tác với người dùng`
+      'Chạy thử và tối ưu phản hồi khi tương tác với người dùng'
     ] as [string, string, string],
     deliverable: `Mô-đun chức năng ${firstFeature} vận hành ổn định`,
     completionCheck: p2Base.completionCheck || 'Mô-đun chạy trơn tru không lỗi',
     isDreamProject: false,
-    adaptedFrom: p2Title,
+    adaptedFromLibraryId: p2Title,
     sioIds: (p2Base as any).sioIds || [],
     image: projectImages[1]
   };
 
-  // Dự án 3: Tích hợp hoàn thiện trải nghiệm
-  const p3Base = libraryProjects[2] || {
-    title: 'Tối ưu trải nghiệm và thử nghiệm thực tế',
-    name: 'Tối ưu trải nghiệm và thử nghiệm thực tế',
-    goal: 'Hoàn thiện trải nghiệm người dùng và chuẩn bị cho sản phẩm lớn',
-    tasks: ['Ghép nối các phần sản phẩm', 'Lấy ý kiến đóng góp', 'Cải tiến độ hoàn thiện'],
-    deliverable: 'Sản phẩm tương tác hoàn chỉnh',
-    completionCheck: 'Người dùng thử nghiệm đưa ra đánh giá tích cực',
-    sioIds: []
-  };
-  const p3Title = (p3Base as any).title || p3Base.name || 'Tối ưu trải nghiệm';
+  // ── DỰ ÁN 3 (P3): Phát triển chức năng bổ sung, tích hợp hoặc thử nghiệm phù hợp ──
+  // Cá nhân hóa theo chuyên môn, KHÔNG cố định là "tối ưu giao diện"
+  const p3Title = domain === 'robotics'
+    ? 'Hệ thống Cảm biến Thông minh & Dừng An Toàn'
+    : domain === 'game_programming'
+    ? 'Tích hợp Trí tuệ Nhân tạo Đối thủ & Gameplay Loop'
+    : 'Tạo hình Không gian 3D & Kể chuyện Đa phương tiện';
 
-  const project3: V3PersonalizedProject = {
+  const p3Features: ProjectFeature[] = domain === 'robotics'
+    ? [
+        {
+          id: 'F-P3-01',
+          name: 'Cảm biến né chướng ngại vật & Dừng khẩn cấp an toàn',
+          description: 'Tích hợp cảm biến siêu âm / dò đường để tự động dừng hoặc chuyển hướng an toàn.',
+          knowledgeIds: ['K-02'],
+          skillIds: ['S-02'],
+          competencyIds: ['C-02', 'C-03'],
+          tasks: [
+            {
+              id: 'T-P3-01-A',
+              description: 'Gắn và hiệu chuẩn cảm biến đo khoảng cách trước vật cản 10-15cm.',
+              knowledgeIds: ['K-02'],
+              skillIds: ['S-02'],
+              competencyIds: ['C-02']
+            },
+            {
+              id: 'T-P3-01-B',
+              description: 'Viết logic phanh khẩn cấp để bảo vệ người xung quanh.',
+              knowledgeIds: ['K-02'],
+              skillIds: ['S-02'],
+              competencyIds: ['C-02', 'C-03']
+            }
+          ],
+          deliverable: 'Cơ chế né vật cản an toàn hoạt động tự động',
+          successCriteria: ['Robot luôn dừng cách chướng ngại vật an toàn, không va chạm'],
+          evidenceArtifacts: ['Video quay cảnh robot né vật cản'],
+          scope: 'mvp',
+          implementationMode: 'physical'
+        },
+        {
+          id: 'F-P3-02',
+          name: `Thử nghiệm cơ cấu chuyên dụng phục vụ ${dreamAudience}`,
+          description: `Hoàn thiện tay gắp / khay đỡ và chạy thử quy trình hỗ trợ thực tế cho ${dreamAudience}.`,
+          knowledgeIds: ['K-03'],
+          skillIds: ['S-01', 'S-03'],
+          competencyIds: [],
+          tasks: [
+            {
+              id: 'T-P3-02-A',
+              description: 'Ráp nối cơ cấu chuyển động phụ (tay gắp hoặc còi báo hiệu).',
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            },
+            {
+              id: 'T-P3-02-B',
+              description: `Mời ${dreamAudience} quan sát và kiểm tra độ tiện lợi khi nhận hỗ trợ từ robot.`,
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: []
+            }
+          ],
+          deliverable: `Nguyên mẫu robot tích hợp hoàn chỉnh dành cho ${dreamAudience}`,
+          successCriteria: ['Người dùng thực tế thao tác thuận tiện và an tâm'],
+          evidenceArtifacts: ['Phiếu nhận xét đóng góp từ người dùng thử'],
+          scope: 'mvp',
+          implementationMode: 'physical'
+        }
+      ]
+    : domain === 'game_programming'
+    ? [
+        {
+          id: 'F-P3-01',
+          name: 'Máy trạng thái đối thủ AI (Finite State Machine) & Màn chơi thử thách',
+          description: 'Lập trình hành vi đối thủ tự động tuần tra, truy đuổi và tính điểm số tương tác.',
+          knowledgeIds: ['K-02', 'K-03'],
+          skillIds: ['S-02'],
+          competencyIds: ['C-01', 'C-02'],
+          tasks: [
+            {
+              id: 'T-P3-01-A',
+              description: 'Xây dựng thuật toán tuần tra và đổi hướng khi gặp tường/vực thẳm.',
+              knowledgeIds: ['K-02', 'K-03'],
+              skillIds: ['S-02'],
+              competencyIds: ['C-01']
+            },
+            {
+              id: 'T-P3-01-B',
+              description: 'Cân bằng độ khó để màn chơi vừa kích thích vừa công bằng cho người chơi.',
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-02'],
+              competencyIds: ['C-02']
+            }
+          ],
+          deliverable: 'Màn chơi hoàn chỉnh có đối thủ AI thông minh',
+          successCriteria: ['AI đối thủ phản xạ tự nhiên, không bị giật lag'],
+          evidenceArtifacts: ['Bản demo gameplay màn chơi thử thách'],
+          scope: 'mvp',
+          implementationMode: 'software'
+        },
+        {
+          id: 'F-P3-02',
+          name: `Trải nghiệm người chơi (UX) & Thử nghiệm thực tế với ${dreamAudience}`,
+          description: `Mời ${dreamAudience} chơi thử, tinh chỉnh cảm giác điều khiển và âm thanh sống động.`,
+          knowledgeIds: [],
+          skillIds: ['S-03'],
+          competencyIds: ['C-02', 'C-03'],
+          tasks: [
+            {
+              id: 'T-P3-02-A',
+              description: `Quan sát ${dreamAudience} chơi thử lần đầu mà không hướng dẫn trước.`,
+              knowledgeIds: [],
+              skillIds: ['S-03'],
+              competencyIds: ['C-02']
+            },
+            {
+              id: 'T-P3-02-B',
+              description: 'Hiệu chỉnh lại các nút bấm và hướng dẫn dựa trên phản hồi thực tế.',
+              knowledgeIds: [],
+              skillIds: ['S-03'],
+              competencyIds: ['C-03']
+            }
+          ],
+          deliverable: 'Bản game tối ưu hóa trải nghiệm người dùng',
+          successCriteria: ['Người chơi hiểu luật chơi ngay trong 60 giây đầu tiên'],
+          evidenceArtifacts: ['Video ghi lại màn chơi thử nghiệm thực tế'],
+          scope: 'mvp',
+          implementationMode: 'software'
+        }
+      ]
+    : [
+        {
+          id: 'F-P3-01',
+          name: 'Hoạt họa chuyển động 3D & Hiệu ứng ánh sáng môi trường',
+          description: 'Tạo hoạt hình keyframe sinh động và bố trí ánh sáng tôn vinh chủ đề tác phẩm.',
+          knowledgeIds: ['K-02', 'K-03'],
+          skillIds: ['S-02'],
+          competencyIds: ['C-01', 'C-02'],
+          tasks: [
+            {
+              id: 'T-P3-01-A',
+              description: 'Thiết lập Timeline chuyển động cho các nhân vật và mô hình.',
+              knowledgeIds: ['K-02'],
+              skillIds: ['S-02'],
+              competencyIds: ['C-01']
+            },
+            {
+              id: 'T-P3-01-B',
+              description: 'Tinh chỉnh nguồn sáng 3 điểm (Key, Fill, Rim) để tạo chiều sâu ấn tượng.',
+              knowledgeIds: ['K-02', 'K-03'],
+              skillIds: ['S-02'],
+              competencyIds: ['C-02']
+            }
+          ],
+          deliverable: 'Đoạn hoạt hình 3D hoàn chỉnh hiệu ứng chuyển động',
+          successCriteria: ['Khung hình chuyển động mượt mà và ánh sáng hài hòa'],
+          evidenceArtifacts: ['Video kết xuất Render 3D độ nét cao'],
+          scope: 'mvp',
+          implementationMode: 'design'
+        },
+        {
+          id: 'F-P3-02',
+          name: `Kể chuyện đa phương tiện & Thử nghiệm tiếp nhận cùng ${dreamAudience}`,
+          description: `Lồng ghép âm thanh, thuyết minh và trình chiếu thử nghiệm cho ${dreamAudience}.`,
+          knowledgeIds: ['K-03'],
+          skillIds: ['S-03'],
+          competencyIds: ['C-01', 'C-03'],
+          tasks: [
+            {
+              id: 'T-P3-02-A',
+              description: 'Biên tập âm nhạc nền và hiệu ứng âm thanh Sound FX phù hợp câu chuyện.',
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: ['C-01']
+            },
+            {
+              id: 'T-P3-02-B',
+              description: `Thu nhận cảm xúc và ý kiến đánh giá từ ${dreamAudience}.`,
+              knowledgeIds: [],
+              skillIds: ['S-03'],
+              competencyIds: ['C-03']
+            }
+          ],
+          deliverable: 'Tác phẩm đa phương tiện hoàn chỉnh âm thanh và hình ảnh',
+          successCriteria: ['Thông điệp văn hóa/giáo dục được truyền tải rõ ràng'],
+          evidenceArtifacts: ['Bản trình chiếu tương tác kèm nhận xét'],
+          scope: 'mvp',
+          implementationMode: 'design'
+        }
+      ];
+
+  const project3: DetailedPersonalizedProject = {
     id: 'P3',
     projectNumber: 3,
-    name: `${p3Title} dành cho ${dreamAudience}`,
-    goal: `${p3Base.goal} — Tối ưu hóa trải nghiệm phù hợp với nhu cầu của ${dreamAudience}.`,
+    name: `${p3Title} (Phục vụ ${dreamAudience})`,
+    roleDescription: 'Phát triển chức năng bổ sung, tích hợp hoặc thử nghiệm phù hợp với sản phẩm.',
+    goal: `Tích hợp chức năng nâng cao và thử nghiệm thực tế phục vụ nhu cầu của ${dreamAudience}.`,
+    features: p3Features,
     tasks: [
-      p3Base.tasks?.[0] || 'Ghép nối các thành phần chức năng',
+      domain === 'robotics'
+        ? 'Lắp đặt cụm cảm biến và thiết lập khoảng cách an toàn'
+        : domain === 'game_programming'
+        ? 'Lập trình logic máy trạng thái đối thủ AI'
+        : 'Thiết lập hoạt họa keyframe và ánh sáng 3D',
       `Mời ${dreamAudience} trải nghiệm thử và ghi nhận phản hồi`,
-      'Điều chỉnh giao diện và cơ chế dựa trên góp ý thực tế'
+      'Điều chỉnh cơ chế vận hành dựa trên góp ý thực tế'
     ] as [string, string, string],
     deliverable: `Bản hoàn thiện thử nghiệm thực tế với ${dreamAudience}`,
-    completionCheck: `Ít nhất một người thuộc nhóm ${dreamAudience} thử nghiệm và hiểu cách sử dụng`,
+    completionCheck: `Ít nhất một người thuộc nhóm ${dreamAudience} thử nghiệm và đánh giá tích cực`,
     isDreamProject: false,
-    adaptedFrom: p3Title,
-    sioIds: (p3Base as any).sioIds || [],
+    adaptedFromLibraryId: p3Title,
+    sioIds: (p1Base as any).sioIds || [],
     image: projectImages[2]
   };
 
-  // Dự án 4: DỰ ÁN ƯỚC MƠ (DREAM PROJECT) — GIỮ NGUYÊN ƯỚC MƠ CỦA HỌC SINH!
-  const project4: V3PersonalizedProject = {
+  // ── DỰ ÁN 4 (P4): DỰ ÁN ƯỚC MƠ (DREAM PROJECT) — GIỮ NGUYÊN TÊN ƯỚC MƠ! ──
+  const p4Features: ProjectFeature[] = [
+    {
+      id: 'F-P4-01',
+      name: `Bản Thử Nghiệm Khả Thi (MVP) - ${dreamName}`,
+      description: `Phiên bản hoàn thiện có thể vận hành thực tế, giải quyết mục tiêu "${dreamPurpose}" với các tính năng (${firstFeature}, ${secondFeature}).`,
+      knowledgeIds: ['K-02'],
+      skillIds: ['S-02'],
+      competencyIds: ['C-01', 'C-03'],
+      tasks: [
+        {
+          id: 'T-P4-01-A',
+          description: `Tích hợp đồng bộ toàn bộ các tính năng cốt lõi đã hoàn thiện từ P1 đến P3 vào "${dreamName}".`,
+          knowledgeIds: ['K-02'],
+          skillIds: ['S-02'],
+          competencyIds: ['C-01']
+        },
+        {
+          id: 'T-P4-01-B',
+          description: `Tổ chức buổi chạy thử hoàn chỉnh cho ${dreamAudience} và ghi nhận chỉ số thành công.`,
+          knowledgeIds: [],
+          skillIds: ['S-02'],
+          competencyIds: ['C-03']
+        }
+      ],
+      deliverable: `Sản phẩm hoàn chỉnh (MVP) của ${dreamName} kèm video demo thực tế`,
+      successCriteria: [`Sản phẩm vận hành đúng ý tưởng con mong muốn, ${dreamAudience} sử dụng được`],
+      evidenceArtifacts: ['Video sản phẩm hoạt động', 'Tài liệu hướng dẫn sử dụng sản phẩm'],
+      scope: 'mvp',
+      implementationMode: defaultMode
+    },
+    {
+      id: 'F-P4-02',
+      name: `Lộ Trình Mở Rộng & Phát Triển Tương Lai (Extension)`,
+      description: `Kế hoạch nâng cấp phiên bản tiếp theo với các tính năng mở rộng (${extraFeature}), tự động hóa cao hơn và chuẩn bị trưng bày triển lãm.`,
+      knowledgeIds: ['K-03'],
+      skillIds: ['S-03'],
+      competencyIds: ['C-02', 'C-03'],
+      tasks: [
+        {
+          id: 'T-P4-02-A',
+          description: `Lập tài liệu lộ trình mở rộng tính năng nâng cao [${extraFeature}].`,
+          knowledgeIds: ['K-03'],
+          skillIds: ['S-03'],
+          competencyIds: ['C-02']
+        },
+        {
+          id: 'T-P4-02-B',
+          description: 'Chuẩn bị bài thuyết trình giới thiệu sản phẩm và hành trình sáng tạo của bản thân.',
+          knowledgeIds: [],
+          skillIds: ['S-03'],
+          competencyIds: ['C-03']
+        }
+      ],
+      deliverable: 'Bản thiết kế mở rộng v2.0 và tài liệu thuyết trình Portfolio',
+      successCriteria: ['Xác định rõ các bước nâng cấp tiếp theo trong năm học tới'],
+      evidenceArtifacts: ['Slide thuyết trình sản phẩm', 'Bản vẽ thiết kế mở rộng tương lai'],
+      scope: 'extension',
+      implementationMode: defaultMode
+    }
+  ];
+
+  const project4: DetailedPersonalizedProject = {
     id: 'P4',
     projectNumber: 4,
-    name: `Dự Án Mơ Ước: ${dreamName}`,
-    goal: `Hiện thực hóa ý tưởng "${dreamName}": Giải quyết vấn đề "${dreamPurpose}" phục vụ "${dreamAudience}" với các tính năng (${dreamFeatures.join(', ')}). Chia làm bản thử nghiệm thực tế khả thi và lộ trình mở rộng phát triển.`,
+    name: answers.projectName?.trim() || 'Dự Án Sáng Tạo Ước Mơ',
+    roleDescription: 'Hoàn thiện phiên bản khả thi của Dream Project và xác định hướng mở rộng.',
+    goal: `Hiện thực hóa ý tưởng "${dreamName}": Giải quyết vấn đề "${dreamPurpose}" phục vụ "${dreamAudience}" với các tính năng (${dreamFeatures.join(', ')}). Chia làm bản thử nghiệm thực tế khả thi (MVP) và lộ trình mở rộng phát triển (Extension).`,
+    features: p4Features,
     tasks: [
       `Xây dựng Bản Thử Nghiệm Thực Tế (MVP): Tập trung vào tính năng cốt lõi [${dreamFeatures.slice(0, 2).join(', ')}]`,
       `Thử nghiệm người dùng thực tế: Trình diễn cho ${dreamAudience} và đo lường mức độ giải quyết mục tiêu "${dreamPurpose}"`,
       `Lập kế hoạch nâng cấp mở rộng: Bổ sung tính năng nâng cao [${dreamFeatures.slice(2).join(', ') || 'nâng cao tính tự động'}] và chuẩn bị trưng bày`
     ] as [string, string, string],
-    deliverable: `Bản sản phẩm thực tế hoạt động được (Sản phẩm hoàn chỉnh) kèm video demo và tài liệu lộ trình phát triển`,
+    deliverable: 'Bản sản phẩm thực tế hoạt động được (Sản phẩm hoàn chỉnh) kèm video demo và tài liệu lộ trình phát triển',
     completionCheck: `Sản phẩm vận hành đúng ý tưởng con mong muốn, ${dreamAudience} có thể sử dụng và phản hồi`,
     isDreamProject: true,
-    adaptedFrom: 'Ý tưởng gốc từ học sinh (Dream Project Brief)',
+    adaptedFromLibraryId: 'Ý tưởng gốc từ học sinh (Dream Project Brief)',
     sioIds: branch?.sioInteractions?.map((s: any) => s.id) || [],
     image: projectImages[3]
   };
@@ -335,7 +1059,7 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
   const dreamPurpose = answers.dreamPurpose || 'giải quyết vấn đề thực tế';
   const dreamFeatures = (answers.dreamFeatures && answers.dreamFeatures.length > 0) ? answers.dreamFeatures : ['Tương tác người dùng'];
 
-  // Whitelist payload strictly for Google AI Studio single-file web app generator
+  // Whitelist payload strictly for Google AI Studio React + TypeScript + Tailwind SPA generator
   const safePayload = {
     displayName: answers.name?.trim() || 'Nhà Sáng Tạo',
     grade: gradeNum,
@@ -344,34 +1068,40 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     specialization: branchKey,
     specializationLabel: branch?.label || branchKey,
 
-    // CẤU TRÚC ĐỊNH HƯỚNG NĂNG LỰC TƯƠNG LAI (FUTURE CAPABILITY PORTFOLIO)
+    // CẤU TRÚC ĐỊNH HƯỚNG NĂNG LỰC TƯƠNG LAI (FUTURE CAPABILITY PORTFOLIO - 9 NHÓM CANONICAL)
     futureCapabilityPortfolio: {
       portfolioType: 'Future Capability Portfolio (Hồ Sơ Năng Lực Tương Lai Mục Tiêu)',
-      conceptNotice: 'Đây là chân dung năng lực và bộ dự án mục tiêu con cùng gia đình mong muốn đạt được, không phải hồ sơ năng lực hiện tại được cập nhật dần.',
+      conceptNotice: 'Đây là chân dung năng lực và bộ dự án mục tiêu con cùng gia đình mong muốn đạt được, không phải bản đánh giá năng lực hiện tại.',
       riasecOrientation: {
         primaryCode: riasec.primaryCode,
         primaryName: riasec.primaryName,
         hollandFullName: riasec.hollandFullName,
-        techSector: riasec.techSector, // 1 trong 3 nhóm duy nhất: 'Robot - AI - IoT' | 'Lập trình & AI' | 'Multimedia'
+        techSector: riasec.techSector, // 1 trong 3 nhóm: 'Robot - AI - IoT' | 'Lập trình & AI' | 'Multimedia'
         techSectorDescription: riasec.techSectorDescription,
         secondaryCodes: riasec.secondaryCodes,
         naturalTraits: riasec.naturalTraits,
       },
-      familyTriangulation: {
-        studentAspiration: riasec.triangulation.studentAspiration,
-        parentObservation: riasec.triangulation.parentObservation,
-        alignmentPercent: riasec.triangulation.alignmentPercent,
-        consensusSummary: riasec.triangulation.consensusSummary,
+      targetCapabilities: riasec.targetCapabilities,
+      familyAlignment: {
+        studentAspiration: riasec.familyAlignment.studentAspiration,
+        parentObservation: riasec.familyAlignment.parentObservation,
+        agreedPoints: riasec.familyAlignment.agreedPoints,
+        differingPoints: riasec.familyAlignment.differingPoints,
+        confirmedDecision: riasec.familyAlignment.confirmedDecision,
+        confirmedDecisionLabel: riasec.familyAlignment.confirmedDecisionLabel,
+        consensusSummary: riasec.familyAlignment.consensusSummary,
       },
       targetTechStack: riasec.techStack,
       targetSoftSkills4Cs: riasec.softSkills,
-      academicStandards: riasec.standards,
+      academicStandardsReferences: riasec.standards,
       portfolioProjects: projects.map(p => ({
         id: p.id,
         projectNumber: p.projectNumber,
         name: p.name,
+        roleDescription: p.roleDescription,
         goal: p.goal,
         tasks: p.tasks,
+        features: p.features || [],
         deliverable: p.deliverable,
         completionCheck: p.completionCheck,
         isDreamProject: p.isDreamProject
@@ -414,15 +1144,6 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       features: dreamFeatures,
       appearance: answers.dreamAppearance || 'Giao diện sinh động, dễ nhìn'
     },
-    approvedProjects: projects.map(p => ({
-      id: p.id,
-      name: p.name,
-      goal: p.goal,
-      tasks: p.tasks,
-      deliverable: p.deliverable,
-      completionCheck: p.completionCheck,
-      isDreamProject: p.isDreamProject
-    })),
     schedule: answers.hoursPerWeek && answers.hoursPerWeek > 0
       ? {
           hoursPerWeek: answers.hoursPerWeek,
@@ -487,64 +1208,36 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
         fontSize: 'text-xs sm:text-sm',
       };
 
-  const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và kỹ sư web sáng tạo hàng đầu. Hãy tạo một website một trang duy nhất (Single-File HTML: index.html) hoàn chỉnh, trực quan, có thể mở trực tiếp bằng trình duyệt từ hồ sơ JSON bên dưới.
+  const instructions = `Bạn là chuyên gia thiết kế trải nghiệm học tập và kỹ sư phần mềm web frontend hàng đầu. Hãy tạo một website Single-Page Application (SPA) hoàn chỉnh sử dụng **React + TypeScript + Tailwind CSS** và Lucide Icons từ hồ sơ JSON bên dưới.
 
 BẢN CHẤT SẢN PHẨM:
 - Đây là "FUTURE CAPABILITY PORTFOLIO" (Hồ Sơ Năng Lực Tương Lai Mục Tiêu) mà học sinh và gia đình đã thống nhất hướng tới sau quá trình tương tác hướng nghiệp theo Mô Hình RIASEC.
-- Website không chỉ là một namecard đơn thuần mà là một hồ sơ năng lực tương lai toàn diện, tích hợp lộ trình hành động cụ thể để đạt được chân dung đó.
+- Đây KHÔNG phải là bảng đánh giá năng lực hiện tại hay cấp chứng chỉ, mà là hồ sơ mục tiêu năng lực và lộ trình thực hiện chi tiết đến từng chức năng sản phẩm.
+- Bốn dự án (P1 đến P4) phục vụ trực tiếp cho Dream Project, trong đó P4 giữ nguyên tên dự án "${dreamName}" đã được học sinh xác nhận.
 
 YÊU CẦU KỸ THUẬT BẮT BUỘC:
-1. ĐẦU RA LÀ 1 TỆP HTML DUY NHẤT: Chứa toàn bộ mã HTML, CSS và JavaScript bên trong một khối mã duy nhất (không tách rời file).
-2. THƯ VIỆN & PHÔNG CHỮ:
-   - Nhúng Tailwind CSS CDN: <script src="https://cdn.tailwindcss.com"></script>
-   - Nhúng Google Font 'Plus Jakarta Sans': <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-   - Nhúng Lucide Icons CDN: <script src="https://unpkg.com/lucide@latest"></script> (gọi lucide.createIcons() sau khi tải trang).
+1. CÔNG NGHỆ: Single-page Web App xây dựng bằng React, TypeScript và Tailwind CSS. Sử dụng các component React tương tác mượt mà, lưu trạng thái hoàn thành vào state/localStorage.
+2. HỆ THỐNG BIỂU TƯỢNG & PHÔNG CHỮ:
+   - Sử dụng Lucide Icons (React: import { ... } from 'lucide-react').
+   - Phông chữ hiện đại Google Font 'Plus Jakarta Sans'.
+3. THIẾT KẾ THEO NGUYÊN TẮC PROGRESSIVE DISCLOSURE:
+   - Profile Hero nổi bật Chân dung Tương lai, Tuyên ngôn và Dream Project.
+   - Không nhồi nhét quá nhiều chữ trong một khối. Dùng các card tương tác, modal hoặc drawer để mở chi tiết sâu.
+4. LỘ TRÌNH 3 CẤP ĐỘ (FUNCTION-LEVEL ROADMAP NAVIGATION):
+   - Cấp 1: Overall Development Roadmap (P1 -> P2 -> P3 -> P4 với vai trò rõ ràng của từng chặng).
+   - Cấp 2: Project Roadmap (Chi tiết từng dự án, danh sách chức năng MVP và Phần mở rộng).
+   - Cấp 3: Function-Level Roadmap (Xem sâu từng chức năng: Mục tiêu K/S/C, Nhiệm vụ cụ thể, Sản phẩm đầu ra, Tiêu chí hoàn thành, Minh chứng cần nộp).
+5. ĐIỀU HƯỚNG HAI CHIỀU (BIDIRECTIONAL TRACING):
+   - Nhấn vào mục tiêu năng lực (K-xx, S-xx, C-xx) trong Future Profile sẽ mở/highlight đúng Dự án và Chức năng liên quan trong Roadmap.
+   - Chiều ngược lại: Xem chức năng trong Roadmap có thể xem các mục tiêu năng lực mà chức năng đó bồi dưỡng.
+6. FAMILY REVIEW THỰC CHẤT:
+   - Tuyệt đối không tự tạo tỷ lệ phần trăm đồng thuận hay tỷ lệ tương thích nghề nghiệp.
+   - Thể hiện 3 nội dung: Điểm thống nhất, Điểm nhìn khác biệt để kiểm chứng qua Dự án 1, và Quyết định hành động xác nhận ("${riasec.familyAlignment.confirmedDecisionLabel}").
+7. BẢO MẬT & CHUẨN THAM CHIẾU:
+   - Tuyệt đối không xuất thông tin cá nhân nhạy cảm (SĐT, họ tên đầy đủ thật, địa chỉ nhà).
+   - Không tuyên bố học sinh đạt chuẩn CSTA, ISTE hoặc NLS từ bài tương tác ngắn; chỉ dùng làm chuẩn tham chiếu mục tiêu bồi dưỡng.`;
 
-3. ĐỊNH HƯỚNG VISUAL RIÊNG BIỆT (CÁ NHÂN HÓA THEO ĐỘ TUỔI & 3 NHÓM NGÀNH):
-   - ĐỘ TUỔI & PHONG CÁCH: ${ageVisualConfig.styleTone}
-   - NHÓM NGÀNH CÔNG NGHỆ (1 trong 3 nhóm): ${domainVisualConfig.label}
-   - MÃ RIASEC CHỦ ĐẠO: Nhóm ${riasec.primaryCode} — ${riasec.hollandFullName}
-   - BẢNG MÀU ĐẶC TRƯNG: Tông màu chủ đạo ${domainVisualConfig.primaryColor}, Hero gradient nền (${domainVisualConfig.gradientHero}), nhãn tag (${domainVisualConfig.accentTag}).
-   - HỆ ICON & MOTIF CHỦ ĐỀ: ${domainVisualConfig.motifNote}
-
-CẤU TRÚC GIAO DIỆN 5 KHỐI ĐẶC TRƯNG CỦA FUTURE CAPABILITY PORTFOLIO:
-
-1. KHỐI 1 — HERO & CHÂN DUNG NĂNG LỰC TƯƠNG LAI (Future Me Profile):
-   - Header Badge: "Hồ Sơ Năng Lực Tương Lai • Nhóm Ngành ${riasec.techSector}".
-   - Hero Banner: Gradient sang trọng theo tông màu ${domainVisualConfig.label}, huy hiệu cấp học (${isPrimary ? 'Tiểu học' : 'THCS'}), tên học sinh, vai trò tương lai (${safePayload.futureProfile.role}) và chức danh năng lực (${riasec.roleSubtitle}).
-   - Khung Bạn Đồng Hành: ${answers.avatarSource === 'custom' ? 'Ảnh nhân vật sáng tạo tự vẽ của con' : 'Linh vật Kitten Bot Chibi với lời nhắn truyền cảm hứng'}.
-   - Thẻ thuộc tính: Sở thích (${safePayload.futureProfile.interests}), Phong cách (${safePayload.futureProfile.style}), Dự án mơ ước (${dreamName}).
-   - Giới thiệu bản thân & Tuyên ngôn tương lai: "${safePayload.futureProfile.motto}" và trích dẫn "${safePayload.futureProfile.quote}".
-
-2. KHỐI 2 — ĐỊNH HƯỚNG RIASEC & ĐỐI CHIẾU 3 CHIỀU (Triangulation: Học sinh vs Phụ huynh):
-   - Thẻ Holland Code O*NET: Mã chính [${riasec.primaryCode}] ${riasec.primaryName} kèm mã phụ [${riasec.secondaryCodes.join(', ')}].
-   - Thẻ Đối Chiếu 3 Chiều: Thể hiện sự đồng thuận (${riasec.triangulation.alignmentPercent}%) giữa Khát vọng của con ("${riasec.triangulation.studentAspiration}") và Quan sát thực tế của cha mẹ ("${riasec.triangulation.parentObservation}").
-   - Đặc điểm sở thích tự nhiên: Hiển thị 4 đặc tính (${riasec.naturalTraits.join(' • ')}).
-
-3. KHỐI 3 — BỘ CÔNG CỤ & KỸ NĂNG MỤC TIÊU (Target Tech Stack & 4Cs Skills):
-   - 3 Phân nhóm công cụ con sẽ làm chủ:
-     ${riasec.techStack.map(ts => `* ${ts.category}: ${ts.items.map(i => typeof i === 'string' ? i : `${i.name} [${i.level}]`).join(', ')}`).join('\n     ')}
-   - Kỹ năng thế kỷ 21 (4Cs): ${riasec.softSkills.join(', ')}.
-
-4. KHỐI 4 — BỘ 4 ĐỒ ÁN THỰC NGHIỆM PORTFOLIO & LỘ TRÌNH PHÁT TRIỂN (4-Stage Roadmap):
-   - Lưới 4 đồ án tạo nên Portfolio tương lai:
-     + Đồ án 1 (P1): Nền tảng kỹ thuật cơ bản.
-     + Đồ án 2 (P2): Ứng dụng & nâng cao tính tương tác.
-     + Đồ án 3 (P3): Đồ án phục vụ cộng đồng / ${dreamAudience}.
-     + Đồ án 4 (P4 - Capstone): Dự Án Mơ Ước "${dreamName}" (MVP khả thi & Lộ trình phát triển).
-   - TÍNH NĂNG TƯƠNG TÁC LỘ TRÌNH: Checkbox nhiệm vụ hoạt động mượt mà, thanh tính % tiến độ tự động cập nhật và lưu vào localStorage.
-
-5. KHỐI 5 — GÓC ĐỒNG HÀNH GIA ĐÌNH & CHUẨN THAM CHIẾU QUỐC TẾ:
-   - Cam kết thời gian (${answers.hoursPerWeek ? `${answers.hoursPerWeek} giờ/tuần` : "Linh hoạt theo chặng"}), nguồn lực gia đình sẵn sàng.
-   - Chuẩn học thuật đối chiếu: CSTA K-12 Computer Science, ISTE Standards, Khung năng lực số NLS 2025.
-   - Footer trang nhã: "Future Capability Portfolio — Bản quyền mục tiêu thuộc về ${answers.name || "con"} & Gia đình".
-
-NGUYÊN TẮC BẢO MẬT & TRẢI NGHIỆM:
-- Bảo mật thông tin: Không đưa thông tin nhạy cảm (SĐT, địa chỉ, họ tên đầy đủ).
-- Không tự suy diễn điểm số hay vẽ biểu đồ chấm điểm thiếu cơ sở.
-- Giữ vững tinh thần học tập kiến tạo (Constructivism), ấm áp và truyền cảm hứng.`;
-
-  const fullPrompt = `# TẠO WEBSITE PORTFOLIO FUTURE ME & LỘ TRÌNH TƯƠNG LAI
+  const fullPrompt = `# TẠO WEBSITE PORTFOLIO FUTURE ME & FUNCTION-LEVEL ROADMAP (REACT + TS + TAILWIND)
 
 ${instructions}
 
@@ -554,6 +1247,7 @@ ${JSON.stringify(safePayload, null, 2)}
 
   return { safePayload, fullPrompt };
 }
+
 
 /**
  * Xây dựng câu lệnh tạo ảnh AI (Image Generation Prompt) chuẩn 16:9 cho Hero Banner Profile
@@ -855,28 +1549,96 @@ export interface RIASECProfileData {
     items: (string | TechStackToolItem)[];
   }[];
   softSkills: string[];
+  targetCapabilities: {
+    knowledge: CapabilityTarget[];
+    skills: CapabilityTarget[];
+    competencies: CapabilityTarget[];
+  };
+  familyAlignment: {
+    studentAspiration: string;
+    parentObservation: string;
+    agreedPoints: string[];
+    differingPoints: string[];
+    confirmedDecision: "keep_direction" | "adjust_pacing" | "need_discussion";
+    confirmedDecisionLabel: string;
+    consensusSummary: string;
+  };
   triangulation: {
     studentAspiration: string;
     parentObservation: string;
-    alignmentPercent: number;
+    agreedPoints: string[];
+    differingPoints: string[];
+    confirmedDecision: "keep_direction" | "adjust_pacing" | "need_discussion";
+    confirmedDecisionLabel: string;
     consensusSummary: string;
+    alignmentPercent?: number;
   };
   standards: {
     code: string;
     label: string;
     domainSummary: string;
   }[];
-};
+}
 
 /**
- * Trích xuất dữ liệu Hướng nghiệp RIASEC & Đối chiếu 3 chiều (Triangulation)
- * từ các bước tương tác 01–04, 03, 14, 16
+ * Trích xuất dữ liệu Hướng nghiệp RIASEC & Đối chiếu Gia đình (Family Alignment)
+ * từ các bước tương tác 01–04, 03, 14, 16.
+ * Tuân thủ P0: Không tự tạo tỷ lệ % phù hợp nghề nghiệp hay % đồng thuận.
+ * Ghi nhận quyết định hành động thực tế của gia đình.
  */
 export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData {
-  const isPrimary = !answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand) || (answers.grade && parseInt(answers.grade, 10) <= 5);
-  const domain = answers.domain || 'robotics';
+  const isPrimary = Boolean(!answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand) || (answers.grade && parseInt(answers.grade, 10) <= 5));
+  const domain = (answers.domain as "robotics" | "game_programming" | "multimedia") || 'robotics';
+
+  // Xác định quyết định hành động thực tế từ bước Family Review (16-family-review)
+  const rawChoice = answers.familyConflict || 'keep_direction';
+  const confirmedDecision: "keep_direction" | "adjust_pacing" | "need_discussion" =
+    rawChoice === 'adjust_pacing' || rawChoice === 'different'
+      ? 'adjust_pacing'
+      : rawChoice === 'need_discussion' || rawChoice === 'not_sure'
+      ? 'need_discussion'
+      : 'keep_direction';
+
+  const confirmedDecisionLabel =
+    confirmedDecision === 'keep_direction'
+      ? 'Giữ hướng công nghệ và Dream Project con đã chọn'
+      : confirmedDecision === 'adjust_pacing'
+      ? 'Giữ ước mơ của con, điều chỉnh lộ trình hoặc điều kiện thực hiện'
+      : 'Còn thông tin cần trao đổi trước khi xác nhận lộ trình';
+
+  const targetCaps = getDomainCapabilityTargets(domain, isPrimary);
 
   if (domain === 'robotics') {
+    const studentAspiration = answers.dreamPurpose || 'Chế tạo robot thông minh hỗ trợ cuộc sống và bảo vệ cộng đồng';
+    const parentObservation = answers.parentMoment || 'Ở nhà con rất kiên nhẫn khi lắp ráp mô hình, luôn tò mò muốn biết các thiết bị điện tử hoạt động như thế nào.';
+    const agreedPoints = [
+      'Gia đình đồng thuận ủng hộ niềm đam mê chế tạo mô hình và khám phá thiết bị phần cứng của con',
+      `Ủng hộ ý tưởng sản phẩm "${answers.projectName || 'Robot Thông Minh'}" giải quyết mục tiêu thiết thực`
+    ];
+    const differingPoints =
+      confirmedDecision === 'keep_direction'
+        ? ['Cả nhà cùng góc nhìn; sẽ kiểm chứng mức độ chủ động làm việc độc lập của con trong Dự án 1']
+        : confirmedDecision === 'adjust_pacing'
+        ? ['Ba mẹ muốn cân đối lịch học hợp lý và hỗ trợ thêm khi con gặp bài toán cơ khí khó']
+        : ['Gia đình muốn trải nghiệm buổi học thực tế đầu tiên trước khi chốt lịch sinh hoạt công nghệ'];
+
+    const consensusSummary =
+      confirmedDecision === 'keep_direction'
+        ? 'Gia đình đã thống nhất giữ nguyên hướng đi Robot - AI - IoT và hỗ trợ con bắt đầu từ Dự án 1.'
+        : confirmedDecision === 'adjust_pacing'
+        ? 'Gia đình ủng hộ ước mơ robot của con, ưu tiên điều chỉnh thời gian và chuẩn bị thiết bị linh hoạt.'
+        : 'Gia đình lưu riêng hai góc nhìn để đối chiếu và trao đổi kỹ hơn qua buổi trải nghiệm đầu tiên.';
+
+    const familyAlignmentObj = {
+      studentAspiration,
+      parentObservation,
+      agreedPoints,
+      differingPoints,
+      confirmedDecision,
+      confirmedDecisionLabel,
+      consensusSummary
+    };
+
     return {
       primaryCode: 'R',
       primaryName: 'Nhóm R • Realistic',
@@ -931,21 +1693,48 @@ export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData
         'Kiên trì thử nghiệm lặp lại (Trial & Error)',
         'Phối hợp đa môn học: Toán, Cơ học & Lập trình'
       ],
-      triangulation: {
-        studentAspiration: answers.dreamPurpose || 'Chế tạo robot thông minh hỗ trợ cuộc sống và bảo vệ cộng đồng',
-        parentObservation: answers.parentMoment || 'Ở nhà con rất kiên nhẫn khi lắp ráp mô hình, luôn tò mò muốn biết các thiết bị điện tử hoạt động như thế nào.',
-        alignmentPercent: 94,
-        consensusSummary: 'Gia đình và học sinh đạt mức đồng thuận rất cao (94%) về định hướng phát triển nhóm ngành Robot - AI - IoT. Mong muốn sáng tạo của con hoàn toàn tương thích với thói quen quan sát thực tế của phụ huynh.'
-      },
+      targetCapabilities: targetCaps,
+      familyAlignment: familyAlignmentObj,
+      triangulation: familyAlignmentObj,
       standards: [
-        { code: 'CSTA-ALGO', label: 'CSTA 2026', domainSummary: 'Thuật toán điều khiển tuần tự & vòng lặp phản hồi cảm biến' },
-        { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards', domainSummary: 'Thiết kế nguyên mẫu sáng tạo & cải tiến cơ khí liên tục' },
-        { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS 2025', domainSummary: 'Làm chủ thiết bị phần cứng số & giải pháp an toàn' }
+        { code: 'CSTA-ALGO', label: 'CSTA K-12 (Tham chiếu mục tiêu)', domainSummary: 'Thuật toán điều khiển tuần tự & vòng lặp phản hồi cảm biến' },
+        { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards (Tham chiếu mục tiêu)', domainSummary: 'Thiết kế nguyên mẫu sáng tạo & cải tiến cơ khí liên tục' },
+        { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS (Tham chiếu mục tiêu)', domainSummary: 'Làm chủ thiết bị phần cứng số & giải pháp an toàn' }
       ]
     };
   }
 
   if (domain === 'game_programming') {
+    const studentAspiration = answers.dreamPurpose || 'Phát triển phần mềm và thế giới game tương tác mang lại niềm vui và giá trị giáo dục';
+    const parentObservation = answers.parentMoment || 'Ở nhà con rất tập trung khi làm việc với máy tính, có khả năng tự mò mẫm các luật chơi và giải quyết bài toán.';
+    const agreedPoints = [
+      'Gia đình đồng thuận ủng hộ sở thích tư duy logic và sáng tạo phần mềm tương tác của con',
+      `Đồng hành cùng mục tiêu phát triển dự án "${answers.projectName || 'Game Sáng Tạo'}" có tính giáo dục`
+    ];
+    const differingPoints =
+      confirmedDecision === 'keep_direction'
+        ? ['Gia đình thống nhất hướng đi; kiểm chứng khả năng tự phân bổ thời gian trước màn hình qua Dự án 1']
+        : confirmedDecision === 'adjust_pacing'
+        ? ['Ba mẹ muốn đặt giới hạn thời gian máy tính mỗi tuần và theo dõi nhịp độ học tập']
+        : ['Cần thảo luận thêm để thống nhất về thời gian biểu trước khi bước vào các dự án chính thức'];
+
+    const consensusSummary =
+      confirmedDecision === 'keep_direction'
+        ? 'Gia đình đã thống nhất giữ nguyên định hướng Lập trình & AI và bắt đầu xây dựng dự án đầu tiên.'
+        : confirmedDecision === 'adjust_pacing'
+        ? 'Gia đình ủng hộ ước mơ làm game của con, chủ động sắp xếp thời gian biểu cân bằng với việc học.'
+        : 'Gia đình lưu riêng hai góc nhìn để cùng con thống nhất kế hoạch cụ thể sau buổi trải nghiệm đầu tiên.';
+
+    const familyAlignmentObj = {
+      studentAspiration,
+      parentObservation,
+      agreedPoints,
+      differingPoints,
+      confirmedDecision,
+      confirmedDecisionLabel,
+      consensusSummary
+    };
+
     return {
       primaryCode: 'I',
       primaryName: 'Nhóm I • Investigative',
@@ -1000,21 +1789,48 @@ export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData
         'Thấu cảm trải nghiệm người chơi (User Experience)',
         'Kiên nhẫn giải quyết bài toán trừu tượng'
       ],
-      triangulation: {
-        studentAspiration: answers.dreamPurpose || 'Phát triển phần mềm và thế giới game tương tác mang lại niềm vui và giá trị giáo dục',
-        parentObservation: answers.parentMoment || 'Ở nhà con rất tập trung khi làm việc với máy tính, có khả năng tự mò mẫm các luật chơi và tự giải quyết các bài toán hóc búa.',
-        alignmentPercent: 93,
-        consensusSummary: 'Gia đình và học sinh đạt mức đồng thuận 93% về định hướng phát triển nhóm ngành Lập trình & AI. Sở thích logic của con được phụ huynh hoàn toàn thấu hiểu và ủng hộ.'
-      },
+      targetCapabilities: targetCaps,
+      familyAlignment: familyAlignmentObj,
+      triangulation: familyAlignmentObj,
       standards: [
-        { code: 'CSTA-ALGO', label: 'CSTA 2026', domainSummary: 'Cấu trúc rẽ nhánh, biến số & vòng lặp phức hợp' },
-        { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards', domainSummary: 'Xây dựng giải pháp phần mềm số tương tác đa chiều' },
-        { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS 2025', domainSummary: 'Sáng tạo sản phẩm nội dung số có tính tương tác cao' }
+        { code: 'CSTA-ALGO', label: 'CSTA K-12 (Tham chiếu mục tiêu)', domainSummary: 'Cấu trúc rẽ nhánh, biến số & vòng lặp phức hợp' },
+        { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards (Tham chiếu mục tiêu)', domainSummary: 'Xây dựng giải pháp phần mềm số tương tác đa chiều' },
+        { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS (Tham chiếu mục tiêu)', domainSummary: 'Sáng tạo sản phẩm nội dung số có tính tương tác cao' }
       ]
     };
   }
 
   // domain === 'multimedia'
+  const studentAspiration = answers.dreamPurpose || 'Tạo ra các tác phẩm đa phương tiện và mô hình 3D tôn vinh văn hóa, truyền cảm hứng nghệ thuật';
+  const parentObservation = answers.parentMoment || 'Ở nhà con rất thích vẽ vời, phối màu và tự sáng tạo các câu chuyện bằng hình ảnh, luôn quan tâm đến vẻ đẹp của mọi vật.';
+  const agreedPoints = [
+    'Gia đình đồng thuận ủng hộ năng khiếu mỹ thuật số và tư duy thẩm mỹ không gian 3D của con',
+    `Ủng hộ con hoàn thiện tác phẩm sáng tạo "${answers.projectName || 'Không Gian Di Sản 3D'}" mang giá trị văn hóa`
+  ];
+  const differingPoints =
+    confirmedDecision === 'keep_direction'
+      ? ['Cả nhà thống nhất; sẽ kiểm chứng độ kiên trì khi con chuyển từ vẽ tay sang dựng hình 3D ở Dự án 1']
+      : confirmedDecision === 'adjust_pacing'
+      ? ['Gia đình ưu tiên hỗ trợ thiết bị đồ họa và sắp xếp thời gian hợp lý']
+      : ['Cần trải nghiệm thêm công cụ thiết kế số để con tự tin lựa chọn lộ trình chuyên sâu'];
+
+  const consensusSummary =
+    confirmedDecision === 'keep_direction'
+      ? 'Gia đình đã thống nhất giữ nguyên định hướng Multimedia & 3D, sẵn sàng đồng hành cùng con.'
+      : confirmedDecision === 'adjust_pacing'
+      ? 'Gia đình ủng hộ khát vọng nghệ thuật số của con, linh hoạt nhịp học theo điều kiện thực tế.'
+      : 'Gia đình ghi nhận sự hào hứng của con và sẽ trao đổi kỹ lưỡng hơn qua buổi trải nghiệm đầu tiên.';
+
+  const familyAlignmentObj = {
+    studentAspiration,
+    parentObservation,
+    agreedPoints,
+    differingPoints,
+    confirmedDecision,
+    confirmedDecisionLabel,
+    consensusSummary
+  };
+
   return {
     primaryCode: 'A',
     primaryName: 'Nhóm A • Artistic',
@@ -1068,16 +1884,13 @@ export function extractRIASECProfile(answers: JourneyAnswers): RIASECProfileData
       'Phối hợp hài hòa mỹ thuật và công nghệ số',
       'Giao tiếp thị giác thuyết phục'
     ],
-    triangulation: {
-      studentAspiration: answers.dreamPurpose || 'Tạo ra các tác phẩm đa phương tiện và mô hình 3D tôn vinh văn hóa, truyền cảm hứng nghệ thuật',
-      parentObservation: answers.parentMoment || 'Ở nhà con rất thích vẽ vời, phối màu và tự sáng tạo các câu chuyện bằng hình ảnh, luôn quan tâm đến vẻ đẹp của mọi vật.',
-      alignmentPercent: 95,
-      consensusSummary: 'Gia đình và học sinh đạt mức đồng thuận xuất sắc (95%) về định hướng phát triển nhóm ngành Multimedia & 3D. Năng khiếu nghệ thuật và thị giác của con được gia đình ghi nhận sâu sắc.'
-    },
+    targetCapabilities: targetCaps,
+    familyAlignment: familyAlignmentObj,
+    triangulation: familyAlignmentObj,
     standards: [
-      { code: 'CSTA-ALGO', label: 'CSTA 2026', domainSummary: 'Mô hình hóa dữ liệu không gian & thiết kế giao diện số' },
-      { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards', domainSummary: 'Sáng tạo nghệ thuật số kết hợp công nghệ hiện đại' },
-      { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS 2025', domainSummary: 'Sản xuất và biên tập sản phẩm truyền thông số chuẩn mực' }
+      { code: 'CSTA-ALGO', label: 'CSTA K-12 (Tham chiếu mục tiêu)', domainSummary: 'Mô hình hóa dữ liệu không gian & thiết kế giao diện số' },
+      { code: 'ISTE-INNOVATIVE', label: 'ISTE Standards (Tham chiếu mục tiêu)', domainSummary: 'Sáng tạo nghệ thuật số kết hợp công nghệ hiện đại' },
+      { code: 'NLS-DIGITAL-MASTERY', label: 'Khung NLS (Tham chiếu mục tiêu)', domainSummary: 'Sản xuất và biên tập sản phẩm truyền thông số chuẩn mực' }
     ]
   };
 }

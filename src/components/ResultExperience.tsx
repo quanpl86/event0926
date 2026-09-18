@@ -8,7 +8,7 @@ import {
   ChevronDown, ChevronUp, Trophy, Zap, Star, Brain, Cpu,
   Palette, Code2, Award, Compass, TrendingUp, Clock,
   Lightbulb, Wrench, GraduationCap, Heart, Layers, Flag,
-  Camera, BarChart3
+  Camera, BarChart3, FileText, CheckSquare
 } from "lucide-react";
 import type { JourneyAnswers } from "@/types/journey";
 import type { DiscoveryProfile } from "@/lib/profile";
@@ -96,6 +96,7 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
   );
   const [viewMode, setViewMode] = useState<"student" | "parent">("student");
   const [selectedStageIndex, setSelectedStageIndex] = useState<number>(0);
+  const [selectedFeatureId, setSelectedFeatureId] = useState<string | null>(null);
   const [expandedEvidence, setExpandedEvidence] = useState<string | null>(null);
   const [expandedProject, setExpandedProject] = useState<number | null>(null);
   const [projectStatuses, setProjectStatuses] = useState<Record<string, ProjectProgressStatus>>({
@@ -276,8 +277,27 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
           projects={personalizedProjects}
           onSelectProject={(projectIdx) => {
             setSelectedStageIndex(projectIdx);
+            setSelectedFeatureId(null);
             setActiveMainTab("dashboard");
             window.scrollTo({ top: 300, behavior: "smooth" });
+          }}
+          onSelectCapability={(capId) => {
+            for (let pIdx = 0; pIdx < personalizedProjects.length; pIdx++) {
+              const proj = personalizedProjects[pIdx];
+              const feat = proj.features?.find(f =>
+                f.knowledgeIds?.includes(capId) ||
+                f.skillIds?.includes(capId) ||
+                f.competencyIds?.includes(capId)
+              );
+              if (feat) {
+                setSelectedStageIndex(pIdx);
+                setSelectedFeatureId(feat.id);
+                setActiveMainTab("dashboard");
+                window.scrollTo({ top: 350, behavior: "smooth" });
+                return;
+              }
+            }
+            setActiveMainTab("dashboard");
           }}
         />
       )}
@@ -462,7 +482,10 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
 
                 return (
                   <button key={p.id} type="button"
-                    onClick={() => setSelectedStageIndex(idx)}
+                    onClick={() => {
+                      setSelectedStageIndex(idx);
+                      setSelectedFeatureId(null);
+                    }}
                     className="group flex flex-col items-center w-1/4 text-center">
                     {/* Node */}
                     <div className={`relative grid place-items-center rounded-full border-[3px] transition-all duration-300 ${
@@ -512,60 +535,383 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
          ═══════════════════════════════════════════════════════ */}
       <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr]">
 
-        {/* ── LEFT: Chi tiết dự án ── */}
+        {/* ── LEFT: Chi tiết dự án & Lộ trình chức năng (3 cấp) ── */}
         <section className="rounded-3xl bg-white border border-[#e2ede9] p-5 sm:p-6 shadow-xs">
           {/* Header with nav */}
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-base font-extrabold text-[#1a3a4a]">Chi tiết dự án</h2>
-              <p className="text-[10px] text-slate-400">Nội dung và tiến độ dự án con đang thực hiện</p>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-extrabold text-[#1a3a4a]">
+                  {selectedFeatureId ? "Lộ trình Chức Năng (Cấp 3)" : "Lộ trình Dự Án (Cấp 2)"}
+                </h2>
+                <span className="rounded-md bg-[#e0f5ef] px-2 py-0.5 text-[10px] font-bold text-[#1a8a7d]">
+                  {selectedProject.id}
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-400">
+                {selectedFeatureId
+                  ? "Chi tiết nhiệm vụ học tập, tiêu chí hoàn thành & minh chứng của chức năng"
+                  : "Chức năng sản phẩm cần hoàn thành để phục vụ Dream Project"}
+              </p>
             </div>
             {/* Project Nav */}
             <div className="flex items-center gap-1">
               <button type="button" disabled={selectedStageIndex === 0}
-                onClick={() => setSelectedStageIndex(i => Math.max(0, i - 1))}
+                onClick={() => {
+                  setSelectedStageIndex(i => Math.max(0, i - 1));
+                  setSelectedFeatureId(null);
+                }}
                 className={`rounded-lg p-1.5 ${selectedStageIndex === 0 ? "text-slate-300" : "text-slate-500 hover:bg-slate-50"}`}>
                 <ArrowLeft className="h-4 w-4" />
               </button>
-              <select value={selectedStageIndex} onChange={e => setSelectedStageIndex(Number(e.target.value))}
+              <select value={selectedStageIndex} onChange={e => {
+                setSelectedStageIndex(Number(e.target.value));
+                setSelectedFeatureId(null);
+              }}
                 className="rounded-xl border border-[#e2ede9] bg-[#fafcfb] px-3 py-1.5 text-[11px] font-bold text-[#1a3a4a] outline-none focus:border-[#1a8a7d]">
                 {personalizedProjects.map((p, i) => (
                   <option key={p.id} value={i}>Dự án {i + 1}: {p.name.slice(0, 25)}…</option>
                 ))}
               </select>
               <button type="button" disabled={selectedStageIndex === 3}
-                onClick={() => setSelectedStageIndex(i => Math.min(3, i + 1))}
+                onClick={() => {
+                  setSelectedStageIndex(i => Math.min(3, i + 1));
+                  setSelectedFeatureId(null);
+                }}
                 className={`rounded-lg p-1.5 ${selectedStageIndex === 3 ? "text-slate-300" : "text-slate-500 hover:bg-slate-50"}`}>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* Project Detail Card */}
-          <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4 sm:p-5">
-            <div className="flex items-start gap-4">
-              {/* Project illustration placeholder */}
-              <div className="hidden sm:flex shrink-0 w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-[#e0f5ef] to-[#d4eee7] items-center justify-center border border-[#c8e6df]/40 shadow-xs">
-                <img
-                  src={selectedStageIndex === 1 ? "/assets/dashboard-robot-track.png" : (selectedProject.image || "/assets/dashboard-robot-track.png")}
-                  alt="Project"
-                  className="h-full w-full object-cover"
-                />
+          {/* CẤP 3: FUNCTION ROADMAP CHI TIẾT KHI ĐÃ CHỌN CHỨC NĂNG */}
+          {selectedFeatureId && selectedProject.features?.find(f => f.id === selectedFeatureId) ? (() => {
+            const activeFeature = selectedProject.features!.find(f => f.id === selectedFeatureId)!;
+            const modeLabels: Record<string, string> = {
+              physical: "Lắp ráp cơ khí / vật lý",
+              simulation: "Mô phỏng giả lập",
+              software: "Phần mềm & thuật toán",
+              design: "Thiết kế & mỹ thuật số"
+            };
+
+            return (
+              <div className="rounded-2xl bg-[#fafcfb] border border-[#c8e6df] p-4 sm:p-5 space-y-4">
+                {/* Back navigation */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedFeatureId(null)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a8a7d] hover:underline"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5" /> Trở lại danh sách chức năng của {selectedProject.id}
+                </button>
+
+                {/* Feature Header */}
+                <div className="rounded-xl bg-white border border-[#e2ede9] p-4">
+                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                    <span className="rounded-md bg-emerald-100 text-emerald-800 font-mono text-[10px] font-extrabold px-2 py-0.5">
+                      {activeFeature.id}
+                    </span>
+                    <h3 className="text-sm font-extrabold text-[#1a3a4a]">
+                      {activeFeature.name}
+                    </h3>
+                    <span className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${
+                      activeFeature.scope === "mvp" ? "bg-amber-100 text-amber-800" : "bg-purple-100 text-purple-800"
+                    }`}>
+                      {activeFeature.scope === "mvp" ? "MVP Cốt lõi" : "Phần Mở rộng"}
+                    </span>
+                    <span className="rounded-full bg-slate-100 text-slate-600 px-2 py-0.5 text-[9px] font-semibold">
+                      {modeLabels[activeFeature.implementationMode] || activeFeature.implementationMode}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed mt-2">
+                    {activeFeature.description}
+                  </p>
+
+                  {/* Target Capability Links */}
+                  <div className="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      Mục tiêu năng lực hỗ trợ:
+                    </span>
+                    {activeFeature.knowledgeIds?.map(kid => (
+                      <span key={kid} className="inline-flex items-center gap-1 rounded-md bg-sky-50 border border-sky-200 px-2 py-0.5 text-[10px] font-mono font-bold text-sky-700">
+                        <BookOpen className="h-2.5 w-2.5" /> {kid}
+                      </span>
+                    ))}
+                    {activeFeature.skillIds?.map(sid => (
+                      <span key={sid} className="inline-flex items-center gap-1 rounded-md bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-mono font-bold text-emerald-700">
+                        <Wrench className="h-2.5 w-2.5" /> {sid}
+                      </span>
+                    ))}
+                    {activeFeature.competencyIds?.map(cid => (
+                      <span key={cid} className="inline-flex items-center gap-1 rounded-md bg-purple-50 border border-purple-200 px-2 py-0.5 text-[10px] font-mono font-bold text-purple-700">
+                        <Brain className="h-2.5 w-2.5" /> {cid}
+                      </span>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setActiveMainTab("profile")}
+                      className="text-[10px] font-bold text-[#1a8a7d] hover:underline ml-auto"
+                    >
+                      Xem trong Profile ↗
+                    </button>
+                  </div>
+                </div>
+
+                {/* Function Learning Tasks */}
+                <div className="rounded-xl bg-white border border-[#e2ede9] p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-xs font-extrabold text-[#1a3a4a] flex items-center gap-1.5">
+                      <CheckSquare className="h-4 w-4 text-[#1a8a7d]" />
+                      Nhiệm vụ học tập để hoàn thành chức năng ({activeFeature.tasks?.length || 0})
+                    </h4>
+                    <span className="text-[10px] text-slate-400">Đánh dấu khi đã hoàn thành</span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {activeFeature.tasks?.map((task) => {
+                      const checkKey = `${activeFeature.id}-${task.id}`;
+                      const isChecked = Boolean(taskChecks[checkKey]);
+
+                      return (
+                        <div
+                          key={task.id}
+                          onClick={() => toggleTask(checkKey)}
+                          className={`flex items-start gap-2.5 p-2.5 rounded-xl border transition cursor-pointer ${
+                            isChecked
+                              ? "bg-slate-50 border-slate-200 text-slate-400"
+                              : "bg-white border-slate-200/80 hover:border-[#1a8a7d] text-[#1a3a4a]"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => {}}
+                            className="mt-0.5 h-4 w-4 rounded-md accent-[#1a8a7d]"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-xs leading-5 font-medium ${isChecked ? "line-through text-slate-400" : "text-slate-800"}`}>
+                              {task.description}
+                            </p>
+                            <div className="mt-1 flex flex-wrap gap-1">
+                              {task.knowledgeIds?.map(kid => (
+                                <span key={kid} className="text-[9px] font-mono font-bold bg-sky-50 text-sky-700 px-1.5 py-0.2 rounded border border-sky-100">
+                                  {kid}
+                                </span>
+                              ))}
+                              {task.skillIds?.map(sid => (
+                                <span key={sid} className="text-[9px] font-mono font-bold bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded border border-emerald-100">
+                                  {sid}
+                                </span>
+                              ))}
+                              {task.competencyIds?.map(cid => (
+                                <span key={cid} className="text-[9px] font-mono font-bold bg-purple-50 text-purple-700 px-1.5 py-0.2 rounded border border-purple-100">
+                                  {cid}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Deliverable, Success Criteria & Evidence Artifacts */}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl bg-white border border-[#c8e6df]/60 p-3.5 space-y-2">
+                    <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#1a3a4a]">
+                      <Target className="h-4 w-4 text-[#1a8a7d]" />
+                      Sản phẩm đầu ra chức năng
+                    </div>
+                    <p className="text-xs text-slate-700 font-semibold leading-relaxed">
+                      {activeFeature.deliverable}
+                    </p>
+                    <div className="mt-2 pt-2 border-t border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        Minh chứng thu thập:
+                      </p>
+                      <ul className="space-y-1">
+                        {activeFeature.evidenceArtifacts?.map((art, ai) => (
+                          <li key={ai} className="flex items-center gap-1.5 text-[11px] text-slate-600">
+                            <FileText className="h-3 w-3 text-emerald-600 shrink-0" />
+                            <span>{art}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-white border border-amber-200/60 p-3.5 space-y-2">
+                    <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#1a3a4a]">
+                      <CheckCircle2 className="h-4 w-4 text-amber-600" />
+                      Tiêu chí nghiệm thu chức năng
+                    </div>
+                    <ul className="space-y-1.5 text-xs text-slate-700">
+                      {activeFeature.successCriteria?.map((crit, ci) => (
+                        <li key={ci} className="flex items-start gap-1.5 text-[11px] leading-relaxed">
+                          <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{crit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            );
+          })() : (
+            /* CẤP 2: PROJECT ROADMAP & DANH SÁCH CHỨC NĂNG CỦA CHẶNG */
+            <div className="space-y-4">
+              {/* Project Role Banner */}
+              <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4 sm:p-5">
+                <div className="flex items-start gap-4">
+                  <div className="hidden sm:flex shrink-0 w-24 h-24 rounded-2xl overflow-hidden bg-gradient-to-br from-[#e0f5ef] to-[#d4eee7] items-center justify-center border border-[#c8e6df]/40 shadow-xs">
+                    <img
+                      src={selectedStageIndex === 1 ? "/assets/dashboard-robot-track.png" : (selectedProject.image || "/assets/dashboard-robot-track.png")}
+                      alt="Project"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-md bg-[#1a8a7d] text-white font-mono text-[10px] font-extrabold px-2 py-0.5">
+                        {selectedProject.id}
+                      </span>
+                      <h3 className="text-sm font-extrabold text-[#1a3a4a] leading-snug">
+                        {selectedProject.name}
+                      </h3>
+                      {selectedProject.isDreamProject && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-extrabold text-amber-700">★ Dream Project</span>
+                      )}
+                    </div>
+                    {/* Role description personalized */}
+                    <div className="mt-1.5 rounded-lg bg-emerald-50/70 border border-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-900 leading-snug">
+                      🎯 <span className="font-bold">Vai trò chặng:</span> {selectedProject.roleDescription}
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">{selectedProject.goal}</p>
+                  </div>
+                </div>
+
+                {/* Deliverable + Completion summary */}
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  <div className="rounded-xl bg-white border border-[#c8e6df]/50 p-3 flex items-start gap-2">
+                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#e0f5ef] text-[#1a8a7d] shrink-0">
+                      <Target className="h-3.5 w-3.5" />
+                    </span>
+                    <div>
+                      <p className="text-[9px] font-bold text-[#1a8a7d] uppercase tracking-wider">Sản phẩm chặng</p>
+                      <p className="text-[11px] font-bold text-[#1a3a4a] mt-0.5 leading-4">{selectedProject.deliverable}</p>
+                    </div>
+                  </div>
+                  <div className="rounded-xl bg-white border border-[#c8e6df]/50 p-3 flex items-start gap-2">
+                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-amber-50 text-amber-600 shrink-0">
+                      <Flag className="h-3.5 w-3.5" />
+                    </span>
+                    <div>
+                      <p className="text-[9px] font-bold text-amber-600 uppercase tracking-wider">Tiêu chí nghiệm thu</p>
+                      <p className="text-[11px] font-bold text-[#1a3a4a] mt-0.5 leading-4">{selectedProject.completionCheck}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Status selector */}
+                <div className="mt-3 flex items-center justify-between pt-2 border-t border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-500 font-medium">Trạng thái:</span>
+                    <select value={projectStatuses[selectedProject.id] || "not_started"}
+                      onChange={e => handleStatusChange(selectedProject.id, e.target.value as ProjectProgressStatus)}
+                      className="rounded-full border border-[#e2ede9] bg-white px-3 py-1 text-[11px] font-bold text-slate-600 outline-none focus:border-[#1a8a7d]">
+                      <option value="not_started">○ Chưa bắt đầu</option>
+                      <option value="in_progress">● Đang làm</option>
+                      <option value="submitted">✓ Đã nộp</option>
+                      <option value="verified">✓ Đã xác nhận</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-extrabold text-[#1a3a4a] leading-snug">
-                    {selectedProject.name}
-                  </h3>
-                  {selectedProject.isDreamProject && (
-                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[9px] font-extrabold text-amber-700">★ Dream</span>
-                  )}
+              {/* FUNCTION-LEVEL ROADMAP LIST (CẤP 2 -> CẤP 3) */}
+              <div className="rounded-2xl bg-white border border-[#e2ede9] p-4 sm:p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h4 className="text-xs font-extrabold text-[#1a3a4a] uppercase tracking-wider flex items-center gap-1.5">
+                      <Layers className="h-4 w-4 text-[#1a8a7d]" />
+                      Lộ trình chức năng sản phẩm ({selectedProject.features?.length || 0} chức năng)
+                    </h4>
+                    <p className="text-[10px] text-slate-400 mt-0.5">
+                      Bấm vào từng chức năng để xem chi tiết kiến thức, kỹ năng, nhiệm vụ và tiêu chí
+                    </p>
+                  </div>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1 leading-5">{selectedProject.goal.slice(0, 100)}…</p>
 
-                {/* Tasks Checklist */}
-                <div className="mt-3 space-y-1.5">
+                <div className="space-y-3">
+                  {(selectedProject.features || []).map((feature) => (
+                    <div
+                      key={feature.id}
+                      onClick={() => setSelectedFeatureId(feature.id)}
+                      className="group p-3.5 rounded-2xl border border-slate-200 bg-[#fafcfb] hover:bg-white hover:border-[#1a8a7d] hover:shadow-xs transition cursor-pointer"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-mono text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-slate-200 text-slate-800">
+                              {feature.id}
+                            </span>
+                            <span className="text-xs font-extrabold text-[#1a3a4a] group-hover:text-[#1a8a7d] transition">
+                              {feature.name}
+                            </span>
+                            <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${
+                              feature.scope === "mvp" ? "bg-amber-100 text-amber-800" : "bg-purple-100 text-purple-800"
+                            }`}>
+                              {feature.scope === "mvp" ? "MVP" : "Mở rộng"}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-600 mt-1.5 line-clamp-2 leading-relaxed">
+                            {feature.description}
+                          </p>
+
+                          {/* Associated Targets */}
+                          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                            {feature.knowledgeIds?.map(kid => (
+                              <span key={kid} className="text-[9px] font-mono font-bold bg-sky-50 text-sky-700 px-1.5 py-0.2 rounded border border-sky-100">
+                                {kid}
+                              </span>
+                            ))}
+                            {feature.skillIds?.map(sid => (
+                              <span key={sid} className="text-[9px] font-mono font-bold bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded border border-emerald-100">
+                                {sid}
+                              </span>
+                            ))}
+                            {feature.competencyIds?.map(cid => (
+                              <span key={cid} className="text-[9px] font-mono font-bold bg-purple-50 text-purple-700 px-1.5 py-0.2 rounded border border-purple-100">
+                                {cid}
+                              </span>
+                            ))}
+                            <span className="text-[10px] text-slate-400 ml-auto font-medium">
+                              {feature.tasks?.length || 0} nhiệm vụ · {feature.successCriteria?.length || 0} tiêu chí
+                            </span>
+                          </div>
+                        </div>
+
+                        <span className="mt-1 text-slate-400 group-hover:text-[#1a8a7d] group-hover:translate-x-0.5 transition-all">
+                          <ArrowRight className="h-4 w-4" />
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stage General Task Checklist */}
+              <div className="rounded-2xl bg-[#fafcfb] border border-[#e8f0ed] p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-xs font-extrabold text-[#1a3a4a] flex items-center gap-1.5">
+                    <CheckCircle2 className="h-4 w-4 text-[#1a8a7d]" />
+                    Tiến độ chặng {selectedProject.id}
+                  </h4>
+                  <span className="text-[10px] text-slate-400">Các mốc hoàn thành chính</span>
+                </div>
+                <div className="space-y-1.5">
                   {selectedProject.tasks.map((task, ti) => {
                     const taskId = `${selectedProject.id}-${ti}`;
                     const checked = Boolean(taskChecks[taskId]);
@@ -582,45 +928,7 @@ export function ProfileResult({ answers, setAnswers, profile, initialTab }: Comm
                 </div>
               </div>
             </div>
-
-            {/* Deliverable + Completion in compact row */}
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
-              <div className="rounded-xl bg-white border border-[#c8e6df]/50 p-3 flex items-start gap-2">
-                <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#e0f5ef] text-[#1a8a7d] shrink-0">
-                  <Target className="h-3.5 w-3.5" />
-                </span>
-                <div>
-                  <p className="text-[9px] font-bold text-[#1a8a7d] uppercase tracking-wider">Sản phẩm</p>
-                  <p className="text-[11px] font-bold text-[#1a3a4a] mt-0.5 leading-4">{selectedProject.deliverable}</p>
-                </div>
-              </div>
-              <div className="rounded-xl bg-white border border-[#c8e6df]/50 p-3 flex items-start gap-2">
-                <span className="grid h-7 w-7 place-items-center rounded-lg bg-amber-50 text-amber-600 shrink-0">
-                  <Flag className="h-3.5 w-3.5" />
-                </span>
-                <div>
-                  <p className="text-[9px] font-bold text-amber-600 uppercase tracking-wider">Hoàn thành khi</p>
-                  <p className="text-[11px] font-bold text-[#1a3a4a] mt-0.5 leading-4">{selectedProject.completionCheck}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Status selector */}
-            <div className="mt-3 flex items-center justify-between">
-              <select value={projectStatuses[selectedProject.id] || "not_started"}
-                onChange={e => handleStatusChange(selectedProject.id, e.target.value as ProjectProgressStatus)}
-                className="rounded-full border border-[#e2ede9] bg-white px-3 py-1 text-[11px] font-bold text-slate-600 outline-none focus:border-[#1a8a7d]">
-                <option value="not_started">○ Chưa bắt đầu</option>
-                <option value="in_progress">● Đang làm</option>
-                <option value="submitted">✓ Đã nộp</option>
-                <option value="verified">✓ Đã xác nhận</option>
-              </select>
-              <button type="button"
-                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#1a8a7d] hover:underline">
-                Xem sản phẩm mẫu <ArrowRight className="h-3 w-3" />
-              </button>
-            </div>
-          </div>
+          )}
         </section>
 
         {/* ── RIGHT: Góc phụ huynh / Profile Card ── */}

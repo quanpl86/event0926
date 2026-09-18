@@ -57,6 +57,40 @@ export type DreamProjectBrief = {
   confirmedByStudent: boolean;
 };
 
+export interface CapabilityTarget {
+  id: string; // "K-01", "S-01", "C-01"
+  type: "knowledge" | "skill" | "competency";
+  name: string;
+  description: string;
+  projectIds: Array<"P1" | "P2" | "P3" | "P4">;
+  featureIds: string[];
+  outcomeCriteria: string[];
+  standardRef?: string;
+}
+
+export interface ProjectFeatureTask {
+  id: string;
+  description: string;
+  knowledgeIds: string[];
+  skillIds: string[];
+  competencyIds: string[];
+}
+
+export interface ProjectFeature {
+  id: string;
+  name: string;
+  description: string;
+  knowledgeIds: string[];
+  skillIds: string[];
+  competencyIds: string[];
+  tasks: ProjectFeatureTask[];
+  deliverable: string;
+  successCriteria: string[];
+  evidenceArtifacts: string[];
+  scope: "mvp" | "extension";
+  implementationMode: "physical" | "simulation" | "software" | "design";
+}
+
 export type PersonalizedProject = {
   projectNumber: 1 | 2 | 3 | 4;
   title: string;
@@ -65,7 +99,24 @@ export type PersonalizedProject = {
   tasks: [string, string, string]; // Đúng 3 việc cụ thể
   expectedDeliverable: string;
   isDreamProjectMilestone: boolean;
+  features?: ProjectFeature[];
 };
+
+export interface DetailedPersonalizedProject {
+  id: "P1" | "P2" | "P3" | "P4";
+  projectNumber: 1 | 2 | 3 | 4;
+  name: string;
+  roleDescription: string;
+  goal: string;
+  features: ProjectFeature[];
+  tasks: [string, string, string];
+  deliverable: string;
+  completionCheck: string;
+  isDreamProject: boolean;
+  adaptedFromLibraryId?: string;
+  sioIds?: string[];
+  image: string;
+}
 
 export type FamilySupportConfig = {
   timePerWeekHours: number | null; // null = chưa chốt lịch
@@ -145,3 +196,51 @@ export type FutureMeSessionSubmissionV3 = {
   fourProjects: [PersonalizedProject, PersonalizedProject, PersonalizedProject, PersonalizedProject];
   privacyConsent: PrivacyConsentRecord;
 };
+
+export interface FutureCapabilityPortfolioData {
+  identity: {
+    roleTitle: string;
+    roleSubtitle: string;
+    avatarSource: string;
+    displayName: string;
+    grade: string;
+    educationLevel: EducationLevel;
+    motto: string;
+    aboutMe: string;
+  };
+  vision: {
+    techSector: string;
+    techSectorDescription: string;
+    dreamQuote: string;
+    confirmedTraits: string[];
+  };
+  dreamProject: DreamProjectBrief;
+  targetCapabilities: {
+    knowledge: CapabilityTarget[];
+    skills: CapabilityTarget[];
+    competencies: CapabilityTarget[];
+  };
+  targetTechStack: {
+    category: string;
+    items: { name: string; level: 'Tiểu học' | 'THCS' | 'Tiểu học & THCS' }[];
+  }[];
+  projects: DetailedPersonalizedProject[];
+  familyAlignment: {
+    studentAspiration: string;
+    parentObservation: string;
+    agreedPoints: string[];
+    differingPoints: string[];
+    confirmedDecision: "keep_direction" | "adjust_pacing" | "need_discussion";
+    confirmedDecisionLabel: string;
+  };
+  futureImpact: {
+    beneficiary: string;
+    socialPurpose: string;
+    appliedValue: string;
+  };
+  academicReferences: {
+    code: string;
+    label: string;
+    domainSummary: string;
+  }[];
+}

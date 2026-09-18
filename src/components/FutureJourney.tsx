@@ -2128,33 +2128,46 @@ export function FutureJourney() {
                     </div>
                   </div>
 
-                  {/* Reconcile Conflict Selector */}
+                  {/* Reconcile Action Decision Selector */}
                   <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
-                    <p className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
-                      Cả nhà có thấy điểm nào cần kiểm chứng thêm không?
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                        Quyết định đồng hành của Gia Đình
+                      </p>
+                      <span className="rounded-full bg-tek-50 px-2.5 py-0.5 text-[10px] font-extrabold text-tek-700 border border-tek-200">
+                        Xác nhận hành động
+                      </span>
+                    </div>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      Gia đình thống nhất hành động cụ thể để hiện thực hóa ước mơ của con, không áp đặt hay ghi đè góc nhìn của nhau:
                     </p>
                     <div className="mt-3 grid gap-2 sm:grid-cols-3">
                       {[
                         {
-                          val: "agree",
-                          icon: "✨",
-                          label: "Đồng thuận cao",
-                          desc: "Con và ba mẹ cùng nhìn nhận một hướng"
+                          val: "keep_direction",
+                          icon: "🚀",
+                          label: "Giữ hướng công nghệ & Dream Project",
+                          desc: "Đồng thuận giữ nguyên hướng đi và ước mơ con đã chọn"
                         },
                         {
-                          val: "different",
-                          icon: "⚖️",
-                          label: "Có điểm nhìn khác",
-                          desc: "Giữ 2 góc nhìn để kiểm chứng qua Dự án 1"
+                          val: "adjust_pacing",
+                          icon: "🌱",
+                          label: "Giữ ước mơ, điều chỉnh lộ trình",
+                          desc: "Ủng hộ ước mơ của con, linh hoạt thời gian & điều kiện thực hiện"
                         },
                         {
-                          val: "not_sure",
-                          icon: "🔍",
-                          label: "Cùng khám phá thêm",
-                          desc: "Sẽ trải nghiệm thêm trong buổi đầu tiên"
+                          val: "need_discussion",
+                          icon: "💬",
+                          label: "Trao đổi thêm trong buổi trải nghiệm",
+                          desc: "Lưu riêng hai góc nhìn để đối chiếu qua dự án đầu tiên"
                         }
                       ].map(choice => {
-                        const isSelected = answers.familyConflict === choice.val || (!answers.familyConflict && choice.val === "agree");
+                        const isSelected =
+                          answers.familyConflict === choice.val ||
+                          (choice.val === "keep_direction" && (answers.familyConflict === "agree" || !answers.familyConflict)) ||
+                          (choice.val === "adjust_pacing" && answers.familyConflict === "different") ||
+                          (choice.val === "need_discussion" && answers.familyConflict === "not_sure");
+
                         return (
                           <button
                             type="button"
@@ -2181,6 +2194,33 @@ export function FutureJourney() {
                           </button>
                         );
                       })}
+                    </div>
+
+                    {/* 3-Part Summary */}
+                    <div className="mt-4 rounded-xl bg-slate-50 border border-slate-200/80 p-3.5 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <span className="text-emerald-600 font-bold text-xs mt-0.5">✓</span>
+                        <div className="text-[11px] text-slate-700">
+                          <strong className="text-[#1a8a7d]">Điểm thống nhất:</strong> Gia đình ủng hộ niềm đam mê công nghệ của con và sản phẩm &ldquo;{answers.projectName || "Dự án Ước mơ"}&rdquo;.
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-amber-600 font-bold text-xs mt-0.5">⚖️</span>
+                        <div className="text-[11px] text-slate-700">
+                          <strong className="text-amber-700">Điểm nhìn cần trải nghiệm thêm:</strong> Sẽ cùng quan sát độ tự lập và phản xạ giải quyết vấn đề của con trong Dự án Chặng 1.
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-tek-600 font-bold text-xs mt-0.5">🎯</span>
+                        <div className="text-[11px] text-slate-700">
+                          <strong className="text-tek-800">Quyết định xác nhận:</strong>{" "}
+                          {(answers.familyConflict === "adjust_pacing" || answers.familyConflict === "different")
+                            ? "Giữ ước mơ của con, điều chỉnh lộ trình hoặc điều kiện thực hiện linh hoạt."
+                            : (answers.familyConflict === "need_discussion" || answers.familyConflict === "not_sure")
+                            ? "Lưu riêng hai góc nhìn để cùng trao đổi kỹ hơn trong buổi trải nghiệm đầu tiên."
+                            : "Đồng thuận giữ nguyên hướng công nghệ và Dream Project con đã chọn."}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
