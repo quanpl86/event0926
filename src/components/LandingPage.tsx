@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import {
-  ArrowRight, Bot, BookOpen, ChevronRight, Gamepad2, Globe2, Lightbulb, LockKeyhole,
+  ArrowRight, Bot, BookOpen, ChevronRight, Gamepad2, Globe2, Lightbulb,
   Palette, Rocket, Sparkles, Trophy, Compass
 } from "lucide-react";
 import { KittenbotHeroCards } from "./KittenbotHeroCards";
@@ -223,10 +223,6 @@ export function LandingPage({ onStart, onResume, hasResume, currentStep }: Landi
                 </>
               )}
             </div>
-
-            <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] font-semibold text-slate-400">
-              <LockKeyhole className="h-3.5 w-3.5 text-slate-400" /> Dữ liệu chỉ được lưu khi ba mẹ đồng ý ở cuối hành trình.
-            </p>
 
             {/* 3 Kitten Bot Profile Cards inside Hero Center Column */}
             <KittenbotHeroCards onStartJourney={onStart} />
