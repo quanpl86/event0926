@@ -97,13 +97,15 @@ export function StandardsModal({
               <p className="mt-1 text-xs font-extrabold text-slate-700">{detail.code}</p>
             </div>
             <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3.5">
-              <p className="text-[10px] font-bold uppercase tracking-[.12em] text-slate-400">Tổ chức ban hành</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.12em] text-slate-400">
+                {detail.code.startsWith("FM-") || detail.organization.includes("Không phải") ? "Phân loại chỉ số" : "Tổ chức ban hành"}
+              </p>
               <p className="mt-1 text-xs font-extrabold text-slate-700">{detail.organization}</p>
             </div>
           </div>
 
           <div className="rounded-2xl border border-slate-200 p-4">
-            <p className="text-xs font-extrabold text-ink">Mô tả tiêu chuẩn</p>
+            <p className="text-xs font-extrabold text-ink">Mô tả chi tiết</p>
             <p className="mt-1.5 text-xs font-medium leading-5 text-slate-600">
               {detail.description}
             </p>
@@ -143,18 +145,24 @@ export function StandardsModal({
 
         {/* Footer */}
         <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-slate-100 pt-4 sm:flex-row">
-          <a
-            href={detail.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-tek-600 hover:underline"
-          >
-            Xem tài liệu chính thức từ {detail.organization}
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+          {detail.sourceUrl && !detail.organization.includes("Không phải") ? (
+            <a
+              href={detail.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-tek-600 hover:underline"
+            >
+              Xem tài liệu chính thức từ {detail.organization}
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          ) : (
+            <span className="text-[11px] font-medium text-slate-400 italic">
+              Chỉ số quan sát trải nghiệm nội bộ trong khuôn khổ sự kiện
+            </span>
+          )}
           <button
             onClick={onClose}
-            className="w-full rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white hover:bg-slate-800 sm:w-auto"
+            className="w-full rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white hover:bg-slate-800 sm:w-auto cursor-pointer"
           >
             Đã hiểu
           </button>

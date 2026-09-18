@@ -121,16 +121,16 @@ export const STANDARDS_DB: Record<string, StandardDetail> = {
     sourceUrl: "https://nextgenscience.org"
   },
   "RIASEC-FUTURE": {
-    code: "RIASEC & Future Me Taxonomy",
-    name: "Mô hình Sở thích Hoạt động & Hệ Phân loại TEKY",
-    organization: "O*NET Interest Profiler & TEKY Academic Board",
-    version: "Future Me Framework",
-    description: "Khám phá xu hướng hoạt động tự nhiên (Tạo dựng, Khám phá, Nghệ thuật, Xã hội) kết nối vào 3 bộ môn: Lập trình, Robotics, Multimedia.",
-    scope: "Khám phá giáo dục cho học sinh 6–15 tuổi",
+    code: "RIASEC (Holland Codes / O*NET)",
+    name: "Mô hình Sở thích Hoạt động (RIASEC)",
+    organization: "Bộ Lao động Hoa Kỳ (O*NET) & TS. John L. Holland",
+    version: "O*NET Interest Profiler",
+    description: "Khám phá xu hướng hoạt động tự nhiên (Tạo dựng, Khám phá, Nghệ thuật, Xã hội) kết nối vào các bộ môn công nghệ: Lập trình, Robotics, Multimedia.",
+    scope: "Khám phá sở thích hoạt động cho học sinh 6–15 tuổi",
     criteria: "Học sinh tự do lựa chọn lĩnh vực khiến mình tò mò mà không bị áp đặt nghề nghiệp tương lai.",
     evidence: "Tổ hợp các lựa chọn thế giới công nghệ, phong cách sáng tạo và balo công cụ ưa thích.",
     limitations: "Sở thích ở lứa tuổi này là tín hiệu khơi gợi trải nghiệm, có thể thay đổi liên tục theo quá trình lớn lên của con.",
-    sourceUrl: "https://onetcenter.org"
+    sourceUrl: "https://www.onetcenter.org"
   },
   "UNESCO-AI": {
     code: "UNESCO AI & Privacy First",
@@ -290,63 +290,63 @@ export const STANDARDS_DB: Record<string, StandardDetail> = {
   },
   "FM-INTEREST": {
     code: "FM-INTEREST – Khám phá Sở thích Tự nhiên",
-    name: "Chỉ báo Nội bộ: Khám phá Xu hướng Sở thích & Tò mò Công nghệ",
-    organization: "Dự án Future Me · TEKY",
-    version: "Khung Năng Lực Future Me",
-    description: "Chỉ báo nội bộ nhằm quan sát phản xạ tự nhiên của học sinh với các chủ đề công nghệ, không xếp loại hay áp đặt nghề nghiệp.",
+    name: "Chỉ số Trải nghiệm: Xu hướng Sở thích & Tò mò Công nghệ",
+    organization: "Chỉ số tương tác trải nghiệm sự kiện (Không phải tiêu chuẩn ban hành)",
+    version: "Chỉ số Trải nghiệm",
+    description: "Chỉ số nội bộ quan sát phản xạ tự nhiên của học sinh với các chủ đề công nghệ, không xếp loại hay áp đặt nghề nghiệp.",
     scope: "Tiểu học (Lớp 1–5) & THCS (Lớp 6–9)",
     criteria: "Ghi nhận sự hào hứng tự nhiên của học sinh khi chọn thế giới công nghệ (Lập trình, Robotics, Multimedia).",
     evidence: "Lựa chọn tự nguyện của học sinh ở các bước khám phá sở thích và tình huống đời thường.",
     limitations: "Sở thích lứa tuổi này là gợi ý trải nghiệm, có thể biến chuyển theo thời gian và môi trường sống.",
-    sourceUrl: "https://teky.edu.vn"
+    sourceUrl: ""
   },
   "FM-PARENT": {
     code: "FM-PARENT – Bằng chứng Quan sát Gia đình",
-    name: "Chỉ báo Quan sát Độc lập từ Cha Mẹ",
-    organization: "Dự án Future Me · TEKY",
-    version: "Khung Năng Lực Future Me",
+    name: "Chỉ số Quan sát Độc lập từ Cha Mẹ",
+    organization: "Chỉ số tương tác trải nghiệm sự kiện (Không phải tiêu chuẩn ban hành)",
+    version: "Chỉ số Trải nghiệm",
     description: "Ghi nhận góc nhìn và quan sát sinh hoạt thực tế của cha mẹ ở nhà: con hay tò mò điều gì, phản ứng ra sao khi gặp khó khăn.",
     scope: "Phụ huynh có con 6–15 tuổi",
     criteria: "Cung cấp góc nhìn bổ trợ khách quan từ gia đình, không dùng để chứng thực đạt chuẩn năng lực hay xếp hạng.",
     evidence: "Phụ huynh chia sẻ hành vi thường thấy ở nhà và mức độ sẵn sàng đồng hành cùng con.",
     limitations: "Dữ liệu quan sát tự nhiên của gia đình, mang giá trị đồng hành và thấu hiểu hơn là khảo thí.",
-    sourceUrl: "https://teky.edu.vn"
+    sourceUrl: ""
   },
   "FM-DREAM": {
     code: "FM-DREAM – Phác thảo Ý tưởng Sáng tạo",
-    name: "Chỉ báo Phác thảo Dự án Ước mơ Nguyên bản",
-    organization: "Dự án Future Me · TEKY",
-    version: "Khung Năng Lực Future Me",
+    name: "Chỉ số Phác thảo Dự án Ước mơ Nguyên bản",
+    organization: "Chỉ số tương tác trải nghiệm sự kiện (Không phải tiêu chuẩn ban hành)",
+    version: "Chỉ số Trải nghiệm",
     description: "Tổng hợp ý tưởng độc lập của con về sản phẩm công nghệ con muốn tự tay làm ra để giúp ích cho đời sống.",
     scope: "Học sinh Tiểu học & THCS",
     criteria: "Tôn trọng tuyệt đối quyền tác giả ý tưởng của học sinh (Dream Project Brief).",
     evidence: "Hồ sơ dự án gồm tên gọi, mục đích xã hội, tính năng độc đáo và tạo hình nhân vật.",
     limitations: "Bản phác thảo sơ khởi, là kim chỉ nam để con hiện thực hóa qua các đồ án học tập.",
-    sourceUrl: "https://teky.edu.vn"
+    sourceUrl: ""
   },
   "FM-ULO-SIO": {
     code: "FM-ULO-SIO – Tình huống Năng lực Thực tế",
-    name: "Chỉ báo Tình huống Năng lực Ứng dụng (SIO Evidence)",
-    organization: "Dự án Future Me · TEKY",
-    version: "Khung Năng Lực Future Me",
+    name: "Tình huống Năng lực Ứng dụng (SIO Evidence)",
+    organization: "Chỉ số tương tác trải nghiệm sự kiện (Không phải tiêu chuẩn ban hành)",
+    version: "Chỉ số Trải nghiệm",
     description: "51 tình huống SIO đa dạng theo 17 chuyên ngành giúp học sinh bộc lộ tư duy giải quyết vấn đề một cách tự nhiên.",
     scope: "17 chuyên ngành Lập trình, Robotics, Multimedia",
     criteria: "Quan sát cách học sinh phản xạ khi gặp bài toán thực tế: phân tích nguyên nhân, thử nghiệm giải pháp, đề xuất sáng kiến.",
     evidence: "Câu trả lời và lựa chọn hành vi của học sinh trong tình huống mô phỏng theo chuẩn CSTA & ISTE.",
     limitations: "Tình huống trắc nghiệm và tương tác nhanh, không thay thế cho đánh giá đồ án thực hành tại xưởng.",
-    sourceUrl: "https://teky.edu.vn"
+    sourceUrl: ""
   },
   "FM-PATH": {
     code: "FM-PATH – Lộ trình Đồ án Cá nhân hóa",
-    name: "Khung Lộ trình Đồ án Thực nghiệm 4 Chặng",
-    organization: "Dự án Future Me · TEKY",
-    version: "Khung Năng Lực Future Me",
+    name: "Gợi ý Lộ trình Đồ án Thực nghiệm 4 Chặng",
+    organization: "Chỉ số tương tác trải nghiệm sự kiện (Không phải tiêu chuẩn ban hành)",
+    version: "Chỉ số Trải nghiệm",
     description: "Chuyển hóa ước mơ và năng lực quan sát được thành lộ trình học tập thực tế: Chặng 1 Khám phá → Chặng 2 Nền tảng → Chặng 3 Đột phá → Chặng 4 Chuyên sâu.",
     scope: "Cá nhân hóa theo độ tuổi và chuyên môn",
     criteria: "Mỗi chặng gắn liền với một sản phẩm thực tế có thể nhìn thấy, chạm vào và chia sẻ cùng ba mẹ.",
     evidence: "Lộ trình động gợi ý môn học, mục tiêu đạt được và tiêu chí kiểm chứng năng lực cụ thể.",
     limitations: "Lộ trình mở, phụ huynh và con hoàn toàn có thể điều chỉnh sau buổi trải nghiệm workshop thực tế.",
-    sourceUrl: "https://teky.edu.vn"
+    sourceUrl: ""
   }
 };
 
@@ -383,15 +383,15 @@ export function getStandardDetail(code: string): StandardDetail {
   const resolved = resolveStandardCode(code);
   return STANDARDS_DB[resolved] ?? {
     code,
-    name: "Chỉ báo năng lực định hướng",
-    organization: "Dự án Future Me · TEKY",
-    version: "Khung Khám Phá Năng Lực",
-    description: "Tiêu chuẩn hướng dẫn thiết kế câu hỏi khám phá năng lực và tư duy công nghệ phù hợp lứa tuổi.",
+    name: "Chỉ số tương tác định hướng",
+    organization: "Chỉ số tương tác trải nghiệm sự kiện (Không phải tiêu chuẩn ban hành)",
+    version: "Phiên bản Trải nghiệm",
+    description: "Tình huống khám phá phản xạ tự nhiên của học sinh trong quá trình giải quyết vấn đề.",
     scope: "Tiểu học & THCS",
     criteria: "Khám phá phản xạ tự nhiên của học sinh trong tình huống giải quyết vấn đề.",
     evidence: "Lựa chọn hành vi của học sinh trong bài tương tác.",
     limitations: "Dùng để định hướng trải nghiệm học tập, không chẩn đoán hay xếp loại.",
-    sourceUrl: "https://teky.edu.vn"
+    sourceUrl: ""
   };
 }
 
