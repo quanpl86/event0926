@@ -1,0 +1,1654 @@
+{
+  "displayName": "Long Quân",
+  "gender": "Nam",
+  "grade": 4,
+  "educationLevel": "primary",
+  "technologyDomain": "multimedia",
+  "specialization": "design_2d",
+  "specializationLabel": "Thiết kế hình ảnh 2D",
+  "futureCapabilityPortfolio": {
+    "portfolioType": "Future Capability Portfolio (Hồ Sơ Năng Lực Tương Lai Mục Tiêu)",
+    "conceptNotice": "Đây là chân dung năng lực và bộ dự án mục tiêu con cùng gia đình mong muốn đạt được, không phải bản đánh giá năng lực hiện tại.",
+    "curriculumOrientation": {
+      "techSector": "Multimedia",
+      "techSectorDescription": "Đam mê tạo hình không gian 3D, nghệ thuật thị giác số, thiết kế giao diện trải nghiệm người dùng (UI/UX) và kể chuyện tương tác đa phương tiện.",
+      "curriculumReferenceNotice": "Hệ thống định hướng nội dung học tập theo lĩnh vực công nghệ con đã lựa chọn. Các khía cạnh sư phạm chỉ đóng vai trò tham khảo thiết kế hoạt động trải nghiệm nội bộ, không phân loại mã Holland cá nhân hay đánh giá tính cách học sinh khi chưa có công cụ đo lường chuyên biệt.",
+      "targetSpecialization": "Thiết kế hình ảnh 2D",
+      "specializationPathway": "Chuyên môn nền tảng: Thiết kế đồ họa 2D (tạo hình, bố cục và màu sắc). Hướng mở rộng cho Dream Project: Dựng hình khối và tương tác 3D. Kỹ năng 2D là bước chuẩn bị then chốt để làm chủ không gian 3D."
+    },
+    "targetCapabilities": {
+      "knowledge": [
+        {
+          "id": "K-01",
+          "type": "knowledge",
+          "name": "Nguyên Lý Bố Cục, Phối Cảnh & Tỷ Lệ Thị Giác",
+          "description": "Hiểu cách sắp xếp nhân vật và cảnh vật theo tỷ lệ cân đối, làm nổi bật điểm nhìn chính.",
+          "projectIds": [
+            "P1",
+            "P2"
+          ],
+          "featureIds": [
+            "F-P1-01",
+            "F-P2-01"
+          ],
+          "outcomeCriteria": [
+            "Bố cục tranh/mô hình cân đối",
+            "Người xem nhận ra ngay chủ thể nổi bật"
+          ],
+          "standardRef": "CSTA-ALGO"
+        },
+        {
+          "id": "K-02",
+          "type": "knowledge",
+          "name": "Lý Thuyết Màu Sắc HSL & Ánh Sáng Tạo Hình Số",
+          "description": "Phối hợp màu sắc tương phản và hài hòa để thể hiện cảm xúc vui tươi hay bí ẩn.",
+          "projectIds": [
+            "P1",
+            "P2",
+            "P3"
+          ],
+          "featureIds": [
+            "F-P1-02",
+            "F-P2-01",
+            "F-P3-01"
+          ],
+          "outcomeCriteria": [
+            "Bảng màu chủ đạo đồng nhất",
+            "Ánh sáng tôn lên đường nét của công trình/nhân vật"
+          ],
+          "standardRef": "ISTE-INNOVATIVE"
+        },
+        {
+          "id": "K-03",
+          "type": "knowledge",
+          "name": "Dựng Hình 3D & Không Gian Di Sản Số Văn Hóa",
+          "description": "Ghép nối các khối hình học cơ bản trong Tinkercad thành công trình di sản quen thuộc.",
+          "projectIds": [
+            "P2",
+            "P3",
+            "P4"
+          ],
+          "featureIds": [
+            "F-P2-02",
+            "F-P3-02",
+            "F-P4-01"
+          ],
+          "outcomeCriteria": [
+            "Mô hình 3D hoàn chỉnh các góc nhìn",
+            "Thể hiện được đặc trưng văn hóa công trình"
+          ],
+          "standardRef": "NLS-DIGITAL-MASTERY"
+        }
+      ],
+      "skills": [
+        {
+          "id": "S-01",
+          "type": "skill",
+          "name": "Tạo Hình & Mô Hình Hóa Bằng Công Cụ Số",
+          "description": "Thao tác kéo thả khối 3D, xoay góc nhìn và nhóm khối để tạo hình sản phẩm mỹ thuật số.",
+          "projectIds": [
+            "P1",
+            "P2"
+          ],
+          "featureIds": [
+            "F-P1-01",
+            "F-P2-01"
+          ],
+          "outcomeCriteria": [
+            "Mô hình không bị rách lưới hay lộn xộn",
+            "Kích thước cân xứng hài hòa"
+          ],
+          "standardRef": "NLS-DIGITAL-MASTERY"
+        },
+        {
+          "id": "S-02",
+          "type": "skill",
+          "name": "Biên Tập Hoạt Hình Keyframe & Hiệu Ứng Chuyển Động",
+          "description": "Tạo chuyển động mượt mà cho nhân vật bước đi, biểu cảm vẫy tay hoặc đổi góc nhìn.",
+          "projectIds": [
+            "P2",
+            "P3",
+            "P4"
+          ],
+          "featureIds": [
+            "F-P2-02",
+            "F-P3-01",
+            "F-P4-01"
+          ],
+          "outcomeCriteria": [
+            "Chuyển động tự nhiên không bị giật cục",
+            "Hiệu ứng hoạt hình ăn khớp với nhịp điệu"
+          ],
+          "standardRef": "ISTE-INNOVATIVE"
+        },
+        {
+          "id": "S-03",
+          "type": "skill",
+          "name": "Thiết Kế Trải Nghiệm Thị Giác & Xuất Bản Đa Phương Tiện",
+          "description": "Lồng ghép phụ đề, âm thanh nền và xuất file video hoạt hình chia sẻ cùng bạn bè.",
+          "projectIds": [
+            "P3",
+            "P4"
+          ],
+          "featureIds": [
+            "F-P3-02",
+            "F-P4-02"
+          ],
+          "outcomeCriteria": [
+            "Video âm thanh rõ nét không vỡ hạt",
+            "Trình bày tác phẩm tự tin và ấn tượng"
+          ],
+          "standardRef": "NLS-DIGITAL-MASTERY"
+        }
+      ],
+      "competencies": [
+        {
+          "id": "C-01",
+          "type": "competency",
+          "name": "Kể Chuyện Bằng Hình Ảnh Số (Visual Storytelling)",
+          "description": "Truyền tải thông điệp ý nghĩa và cảm xúc nhân văn thông qua hình ảnh, ánh sáng và chuyển động.",
+          "projectIds": [
+            "P1",
+            "P3",
+            "P4"
+          ],
+          "featureIds": [
+            "F-P1-02",
+            "F-P3-01",
+            "F-P4-01"
+          ],
+          "outcomeCriteria": [
+            "Tác phẩm có cốt truyện mạch lạc",
+            "Khơi gợi được cảm xúc tích cực ở người xem"
+          ],
+          "standardRef": "ISTE-INNOVATIVE"
+        },
+        {
+          "id": "C-02",
+          "type": "competency",
+          "name": "Thẩm Mỹ Thị Giác & Tinh Tế Trong Chi Tiết",
+          "description": "Tôn trọng chuẩn mực thị giác, kiên nhẫn trau chuốt từng đường nét để tạo ra sản phẩm nghệ thuật hoàn chỉnh.",
+          "projectIds": [
+            "P1",
+            "P2",
+            "P4"
+          ],
+          "featureIds": [
+            "F-P1-01",
+            "F-P2-01",
+            "F-P4-02"
+          ],
+          "outcomeCriteria": [
+            "Màu sắc và tỷ lệ đạt độ thẩm mỹ cao",
+            "Chú ý đến các chi tiết nhỏ tinh tế"
+          ],
+          "standardRef": "ISTE-INNOVATIVE"
+        },
+        {
+          "id": "C-03",
+          "type": "competency",
+          "name": "Lan Tỏa Giá Trị Văn Hóa & Phục Vụ Cộng Đồng",
+          "description": "Ứng dụng công nghệ đồ họa để tôn vinh nét đẹp văn hóa, lịch sử và giáo dục cho mọi người.",
+          "projectIds": [
+            "P3",
+            "P4"
+          ],
+          "featureIds": [
+            "F-P3-02",
+            "F-P4-01",
+            "F-P4-02"
+          ],
+          "outcomeCriteria": [
+            "Tác phẩm có chủ đề văn hóa/xã hội rõ ràng",
+            "Được thầy cô và bạn bè đón nhận nồng nhiệt"
+          ],
+          "standardRef": "NLS-DIGITAL-MASTERY"
+        }
+      ]
+    },
+    "familyAlignment": {
+      "studentAspiration": "gửi lời chúc yêu thương và tình cảm tri ân",
+      "parentObservation": "Ở nhà con rất thích vẽ vời, phối màu và tự sáng tạo các câu chuyện bằng hình ảnh, luôn quan tâm đến vẻ đẹp của mọi vật.",
+      "agreedPoints": [
+        "Gia đình đồng thuận ủng hộ năng khiếu mỹ thuật số và tư duy thẩm mỹ không gian 3D của con",
+        "Ủng hộ con hoàn thiện tác phẩm sáng tạo \"Bộ tranh kể chuyện\" mang giá trị văn hóa"
+      ],
+      "differingPoints": [
+        "Cả nhà thống nhất; sẽ kiểm chứng độ kiên trì khi con chuyển từ vẽ tay sang dựng hình 3D ở Dự án 1"
+      ],
+      "confirmedDecision": "keep_direction",
+      "confirmedDecisionLabel": "Giữ hướng công nghệ và Dream Project con đã chọn",
+      "consensusSummary": "Gia đình đã thống nhất giữ nguyên định hướng Multimedia & 3D, sẵn sàng đồng hành cùng con."
+    },
+    "targetTechStack": [
+      {
+        "category": "Dựng Hình 3D & Không Gian Diorama",
+        "items": [
+          {
+            "name": "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+            "level": "Tiểu học"
+          },
+          {
+            "name": "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+            "level": "Tiểu học"
+          },
+          {
+            "name": "CodeKitten Storymaker (Dựng hoạt hình số)",
+            "level": "Tiểu học"
+          },
+          {
+            "name": "Blender 3D (Modeling, Materials & Lighting)",
+            "level": "THCS"
+          },
+          {
+            "name": "Diorama không gian di sản số 3D",
+            "level": "THCS"
+          }
+        ]
+      },
+      {
+        "category": "Thiết Kế Đồ Họa & Giao Diện UI/UX",
+        "items": [
+          {
+            "name": "Canva Design & Bảng vẽ kỹ thuật số",
+            "level": "Tiểu học"
+          },
+          {
+            "name": "Bảng màu HSL, Typography & Bố cục thị giác",
+            "level": "Tiểu học & THCS"
+          },
+          {
+            "name": "PictoBlox Animation (Kỹ xảo nhân vật tương tác)",
+            "level": "Tiểu học & THCS"
+          },
+          {
+            "name": "Figma UI/UX Design (Thiết kế Web/App)",
+            "level": "THCS"
+          },
+          {
+            "name": "Thiết kế hệ thống Icon Vector chuẩn tỉ lệ",
+            "level": "THCS"
+          }
+        ]
+      },
+      {
+        "category": "Biên Tập Truyền Thông & Kỹ Xảo Số",
+        "items": [
+          {
+            "name": "Kể chuyện đa phương tiện (Digital Storytelling)",
+            "level": "Tiểu học"
+          },
+          {
+            "name": "Kỹ xảo hoạt hình 2D Keyframe",
+            "level": "Tiểu học & THCS"
+          },
+          {
+            "name": "Biên tập Video kỹ thuật số & Âm thanh Sound FX",
+            "level": "THCS"
+          },
+          {
+            "name": "Xử lý hậu kỳ & Xuất bản tác phẩm số chuẩn quốc tế",
+            "level": "THCS"
+          }
+        ]
+      }
+    ],
+    "targetSoftSkills4Cs": [
+      "Tư duy thiết kế thấu cảm (Design Thinking)",
+      "Kể chuyện đa phương tiện truyền cảm hứng",
+      "Phối hợp hài hòa mỹ thuật và công nghệ số",
+      "Giao tiếp thị giác thuyết phục"
+    ],
+    "academicStandardsReferences": [
+      {
+        "code": "CSTA-ALGO",
+        "label": "CSTA K-12 (Tham chiếu mục tiêu)",
+        "domainSummary": "Mô hình hóa dữ liệu không gian & thiết kế giao diện số"
+      },
+      {
+        "code": "ISTE-INNOVATIVE",
+        "label": "ISTE Standards (Tham chiếu mục tiêu)",
+        "domainSummary": "Sáng tạo nghệ thuật số kết hợp công nghệ hiện đại"
+      },
+      {
+        "code": "NLS-DIGITAL-MASTERY",
+        "label": "Khung NLS (Tham chiếu mục tiêu)",
+        "domainSummary": "Sản xuất và biên tập sản phẩm truyền thông số chuẩn mực"
+      }
+    ],
+    "portfolioProjects": [
+      {
+        "id": "P1",
+        "projectNumber": 1,
+        "name": "Phác thảo Ý tưởng & Tạo khối 3D Nền tảng (Khởi động cho Bộ tranh kể chuyện)",
+        "roleDescription": "Xây dựng nền tảng trực tiếp phục vụ Dream Project.",
+        "goal": "Đặt nền tảng tư duy và kỹ thuật ban đầu phục vụ ý tưởng \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác).",
+        "tasks": [
+          "Chuẩn bị không gian làm việc số và bảng màu chủ đề gia đình",
+          "Thực hành tạo hình khối và phác thảo nhân vật cho Thiệp điện tử 3D tương tác",
+          "Tạo bản phác thảo nguyên mẫu ban đầu lấy cảm hứng từ ý tưởng Bộ tranh kể chuyện"
+        ],
+        "features": [
+          {
+            "id": "F-P1-01",
+            "name": "Chuẩn bị không gian sáng tạo & Bảng màu chủ đề",
+            "description": "Con tạo được không gian làm việc để bắt đầu phác thảo bộ tranh và thiết kế thiệp 3D \"Bộ tranh kể chuyện\".",
+            "knowledgeIds": [
+              "K-01"
+            ],
+            "skillIds": [
+              "S-01"
+            ],
+            "competencyIds": [],
+            "tasks": [
+              {
+                "id": "T-P1-01-A",
+                "description": "Mở công cụ thiết kế đồ họa đã chọn và tạo dự án mới với tên \"Bộ tranh kể chuyện\".",
+                "knowledgeIds": [
+                  "K-01"
+                ],
+                "skillIds": [
+                  "S-01"
+                ],
+                "competencyIds": []
+              },
+              {
+                "id": "T-P1-01-B",
+                "description": "Chọn kích thước, bố cục và bảng màu phù hợp với chủ đề gia đình yêu thương.",
+                "knowledgeIds": [
+                  "K-01"
+                ],
+                "skillIds": [
+                  "S-01"
+                ],
+                "competencyIds": []
+              },
+              {
+                "id": "T-P1-01-C",
+                "description": "Tạo một hình khối hoặc hình minh họa đầu tiên và lưu được tệp dự án an toàn.",
+                "knowledgeIds": [
+                  "K-01"
+                ],
+                "skillIds": [
+                  "S-01"
+                ],
+                "competencyIds": []
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Hiểu cách thiết lập không gian làm việc số và ý nghĩa của bảng màu chủ đề gia đình.",
+              "step2Practice": "Tạo tệp mới, làm quen thanh công cụ vẽ/dựng hình và thực hành lưu tệp định kỳ.",
+              "step3Apply": "Khởi tạo dự án \"Bộ tranh kể chuyện\", thiết lập tỷ lệ khung hình và bảng màu chủ đề.",
+              "step4Verify": "Kiểm tra tệp mở lại được, hình ảnh cân đối và đúng gam màu mong muốn.",
+              "step5Evidence": "Lưu tệp nguồn dự án và xuất ảnh chụp màn hình bản phác thảo đầu tiên."
+            },
+            "deliverable": "Tệp dự án ban đầu cùng ảnh chụp hình minh họa đầu tiên",
+            "successCriteria": [
+              "Mở lại được tệp thiết kế trên phần mềm mà không bị lỗi.",
+              "Hình minh họa và bảng màu hiển thị rõ nét, có thể chỉnh sửa tiếp."
+            ],
+            "evidenceArtifacts": [
+              "Tệp dự án thiết kế (.blend / file đồ họa)",
+              "Ảnh chụp màn hình bản phác thảo đầu tiên"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          },
+          {
+            "id": "F-P1-02",
+            "name": "Thử nghiệm nguyên mẫu tạo hình đầu tiên cho Bộ tranh kể chuyện",
+            "description": "Tạo phiên bản phác thảo mô phỏng ý tưởng cốt lõi của \"Bộ tranh kể chuyện\".",
+            "knowledgeIds": [
+              "K-03"
+            ],
+            "skillIds": [
+              "S-03"
+            ],
+            "competencyIds": [
+              "C-02"
+            ],
+            "tasks": [
+              {
+                "id": "T-P1-02-A",
+                "description": "Dựng mô hình hoặc vẽ chi tiết nhân vật/biểu tượng trung tâm của tấm thiệp.",
+                "knowledgeIds": [
+                  "K-03"
+                ],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-02"
+                ]
+              },
+              {
+                "id": "T-P1-02-B",
+                "description": "Sắp xếp bố cục thử nghiệm và ghi chú các điểm cần hoàn thiện cho chặng P2.",
+                "knowledgeIds": [
+                  "K-03"
+                ],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-02"
+                ]
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Hiểu nguyên lý tỷ lệ thị giác và điểm nhấn trung tâm trong bố cục nghệ thuật.",
+              "step2Practice": "Tập tạo hình nhân vật từ các khối cơ bản (hình hộp, hình cầu, nét vẽ vector).",
+              "step3Apply": "Tạo hình nhân vật/chi tiết chính cho \"Bộ tranh kể chuyện\" và đặt vào khung thiệp.",
+              "step4Verify": "Nhân vật nổi bật trên nền thiệp, đường nét gọn gàng và không bị méo.",
+              "step5Evidence": "Lưu tệp mẫu v0.1 và ghi nhận xét của bản thân."
+            },
+            "deliverable": "Bản phác thảo nguyên mẫu hình ảnh thử nghiệm đầu tiên",
+            "successCriteria": [
+              "Nhân vật/chi tiết chính nằm ở vị trí trung tâm, đúng tỷ lệ bố cục.",
+              "Hình khối rõ ràng, không bị méo lệch khi phóng to hoặc thu nhỏ."
+            ],
+            "evidenceArtifacts": [
+              "Bản vẽ phác thảo nguyên mẫu v0.1",
+              "Nhật ký ý tưởng tạo hình"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          }
+        ],
+        "deliverable": "Bản phác thảo nguyên mẫu thử nghiệm đầu tiên của Bộ tranh kể chuyện",
+        "completionCheck": "Mở lại được tệp dự án và nhìn thấy hình minh họa đầu tiên hoàn chỉnh",
+        "isDreamProject": false
+      },
+      {
+        "id": "P2",
+        "projectNumber": 2,
+        "name": "Tạo hình Mô hình 3D Hoàn chỉnh & Phối màu • Tích hợp Có hình minh họa chính",
+        "roleDescription": "Phát triển chức năng cốt lõi đầu tiên.",
+        "goal": "Kết hợp hình, chữ, màu theo thứ tự dễ nhìn. — Ứng dụng kỹ thuật để thử nghiệm tính năng \"Có hình minh họa chính\" cho sản phẩm.",
+        "tasks": [
+          "Dựng mô hình 3D hoàn chỉnh cho nhân vật chính",
+          "Phối màu sắc ấm áp và kiểm tra tương phản thị giác",
+          "Chạy thử và tối ưu phản hồi khi tương tác với người dùng"
+        ],
+        "features": [
+          {
+            "id": "F-P2-01",
+            "name": "Tạo mô hình 3D và phối màu nhân vật chính",
+            "description": "Phát triển nhân vật hoặc chi tiết chính của tấm thiệp \"Bộ tranh kể chuyện\" với đầy đủ khối 3D và màu sắc.",
+            "knowledgeIds": [
+              "K-01",
+              "K-02"
+            ],
+            "skillIds": [
+              "S-02"
+            ],
+            "competencyIds": [],
+            "tasks": [
+              {
+                "id": "T-P2-01-A",
+                "description": "Dựng hình 3D hoàn chỉnh cho nhân vật và các phụ kiện đi kèm.",
+                "knowledgeIds": [
+                  "K-01",
+                  "K-02"
+                ],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": []
+              },
+              {
+                "id": "T-P2-01-B",
+                "description": "Áp vật liệu và phối màu sắc ấm áp, tạo cảm giác thân thiện gần gũi.",
+                "knowledgeIds": [
+                  "K-02"
+                ],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": []
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Hiểu nguyên lý phối màu bổ túc và cách áp vật liệu bề mặt 3D cơ bản.",
+              "step2Practice": "Thao tác xoay các góc nhìn camera, gán màu sắc và điều chỉnh độ bóng/mịn.",
+              "step3Apply": "Áp dụng bảng màu gia đình vào nhân vật trung tâm của \"Bộ tranh kể chuyện\".",
+              "step4Verify": "Mô hình hiển thị mượt mà từ mọi góc nhìn, màu sắc ấm áp dễ chịu.",
+              "step5Evidence": "Lưu tệp mô hình 3D và xuất ảnh chụp 3 góc độ khác nhau."
+            },
+            "deliverable": "Mô hình 3D nhân vật hoàn thiện vật liệu và màu sắc",
+            "successCriteria": [
+              "Màu sắc nhân vật tương phản tốt với phông nền, các chi tiết nhỏ nhìn rõ.",
+              "Mô hình 3D xoay các hướng không bị hổng lưới hay lỗi hiển thị."
+            ],
+            "evidenceArtifacts": [
+              "Tệp mô hình 3D hoàn chỉnh",
+              "Ảnh render các góc nhìn của nhân vật"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          },
+          {
+            "id": "F-P2-02",
+            "name": "Kiểm tra tương phản thị giác & Tối ưu bố cục",
+            "description": "Đảm bảo các chi tiết chính và phụ hài hòa, chuẩn bị sẵn không gian cho nội dung lời chúc.",
+            "knowledgeIds": [],
+            "skillIds": [
+              "S-03"
+            ],
+            "competencyIds": [
+              "C-01",
+              "C-02"
+            ],
+            "tasks": [
+              {
+                "id": "T-P2-02-A",
+                "description": "Kiểm tra độ tương phản giữa nhân vật và nền trong các điều kiện hiển thị khác nhau.",
+                "knowledgeIds": [],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-01",
+                  "C-02"
+                ]
+              },
+              {
+                "id": "T-P2-02-B",
+                "description": "Căn chỉnh lại tỷ lệ để dành vị trí thông thoáng cho thông điệp và lời chúc.",
+                "knowledgeIds": [],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-01",
+                  "C-02"
+                ]
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Quy tắc 1/3 trong thị giác và khoảng trắng (white space) trong thiết kế thiệp.",
+              "step2Practice": "Thực hành dịch chuyển góc nhìn và căn chỉnh vị trí các lớp hình ảnh.",
+              "step3Apply": "Sắp xếp không gian thiệp để chuẩn bị tích hợp lời chúc ở các chặng sau.",
+              "step4Verify": "Mắt người xem tập trung vào nhân vật rồi di chuyển tự nhiên đến khu vực lời nhắn.",
+              "step5Evidence": "Lưu bản thiết kế đã chốt bố cục."
+            },
+            "deliverable": "Bản bố cục hoàn chỉnh sẵn sàng cho hoạt họa và lời chúc",
+            "successCriteria": [
+              "Không gian dành cho thông điệp rộng rãi, không bị nhân vật lấn át.",
+              "Tỷ lệ các thành phần cân đối hài hòa theo quy tắc 1/3 thị giác."
+            ],
+            "evidenceArtifacts": [
+              "Ảnh chụp màn hình bố cục thiệp chuẩn bị cho P3"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          }
+        ],
+        "deliverable": "Mô-đun chức năng Có hình minh họa chính vận hành ổn định",
+        "completionCheck": "Mô hình 3D và chức năng hiển thị sắc nét, xoay các góc không lỗi",
+        "isDreamProject": false
+      },
+      {
+        "id": "P3",
+        "projectNumber": 3,
+        "name": "Hoạt họa Tương tác & Lồng ghép Thông điệp (Phục vụ gia đình và người thân)",
+        "roleDescription": "Phát triển chức năng bổ sung, tích hợp hoặc thử nghiệm phù hợp với sản phẩm.",
+        "goal": "Tích hợp chức năng nâng cao và thử nghiệm thực tế phục vụ nhu cầu của gia đình và người thân.",
+        "tasks": [
+          "Thiết lập hoạt họa keyframe mở thiệp và ánh sáng 3D ấm áp",
+          "Mời gia đình và người thân trải nghiệm thử và ghi nhận phản hồi cảm xúc",
+          "Điều chỉnh chuyển động và vị trí dòng chữ dựa trên góp ý thực tế"
+        ],
+        "features": [
+          {
+            "id": "F-P3-01",
+            "name": "Hoạt họa chuyển động 3D & Hiệu ứng ánh sáng môi trường",
+            "description": "Tạo hoạt hình keyframe sinh động khi mở thiệp và bố trí ánh sáng ấm áp tôn vinh chủ đề tác phẩm \"Bộ tranh kể chuyện\".",
+            "knowledgeIds": [
+              "K-02",
+              "K-03"
+            ],
+            "skillIds": [
+              "S-02"
+            ],
+            "competencyIds": [
+              "C-01",
+              "C-02"
+            ],
+            "tasks": [
+              {
+                "id": "T-P3-01-A",
+                "description": "Thiết lập Timeline chuyển động cho nhân vật và mô hình thiệp khi mở ra (keyframe đóng và mở).",
+                "knowledgeIds": [
+                  "K-02"
+                ],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": [
+                  "C-01"
+                ]
+              },
+              {
+                "id": "T-P3-01-B",
+                "description": "Bố trí nguồn sáng ấm áp để tạo chiều sâu và làm nổi bật nhân vật trong không gian 3D.",
+                "knowledgeIds": [
+                  "K-02",
+                  "K-03"
+                ],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": [
+                  "C-02"
+                ]
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Hiểu keyframe là gì; nhận biết trạng thái đầu và trạng thái cuối của chuyển động.",
+              "step2Practice": "Tạo hai keyframe, thay đổi vị trí hoặc góc quay của mô hình và xem thử chuyển động.",
+              "step3Apply": "Làm cho nhân vật hoặc chi tiết trong \"Bộ tranh kể chuyện\" chuyển động nhẹ khi mở thiệp.",
+              "step4Verify": "Chuyển động diễn ra đúng trình tự, mượt mà và không che mất lời nhắn.",
+              "step5Evidence": "Lưu tệp nguồn và xuất video ngắn quay lại kết quả."
+            },
+            "deliverable": "Đoạn chuyển động 3D mở thiệp với ánh sáng hài hòa",
+            "successCriteria": [
+              "Chuyển động: Nhân vật có trạng thái bắt đầu và kết thúc rõ ràng khi mở thiệp.",
+              "Bố cục: Khi hoạt họa, chuyển động của nhân vật không che khuất dòng chữ chính.",
+              "Màu sắc & Ánh sáng: Nhân vật và lời nhắn vẫn dễ nhìn ở các khung hình chính, ánh sáng ấm áp.",
+              "Minh chứng: Có tệp nguồn và video ngắn thể hiện chức năng mở thiệp."
+            ],
+            "evidenceArtifacts": [
+              "Tệp dự án hoạt hình 3D",
+              "Video clip quay lại hiệu ứng mở thiệp chuyển động"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          },
+          {
+            "id": "F-P3-02",
+            "name": "Lồng ghép âm thanh & Thử nghiệm tiếp nhận cùng gia đình và người thân",
+            "description": "Tích hợp hiệu ứng âm thanh nhẹ nhàng và mời gia đình và người thân trải nghiệm thử để ghi nhận cảm xúc.",
+            "knowledgeIds": [
+              "K-03"
+            ],
+            "skillIds": [
+              "S-03"
+            ],
+            "competencyIds": [
+              "C-01",
+              "C-03"
+            ],
+            "tasks": [
+              {
+                "id": "T-P3-02-A",
+                "description": "Chọn và lồng ghép giai điệu âm nhạc hoặc hiệu ứng âm thanh ấm áp phù hợp với khoảnh khắc mở thiệp.",
+                "knowledgeIds": [
+                  "K-03"
+                ],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-01"
+                ]
+              },
+              {
+                "id": "T-P3-02-B",
+                "description": "Mời người thân (gia đình và người thân) trải nghiệm thử và lắng nghe nhận xét về cảm xúc khi xem.",
+                "knowledgeIds": [],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-03"
+                ]
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Hiểu cách âm thanh và chuyển động kết hợp để tạo nên cảm xúc sâu sắc cho người xem.",
+              "step2Practice": "Tập chèn tệp âm thanh vào timeline và khớp với thời điểm hành động diễn ra.",
+              "step3Apply": "Lồng bản nhạc ngắn vào tấm thiệp để phát khi người xem mở thiệp ra.",
+              "step4Verify": "Âm thanh không bị trễ nhịp so với hình ảnh, giai điệu truyền cảm hứng.",
+              "step5Evidence": "Lưu bản thử nghiệm hoàn chỉnh và phiếu phỏng vấn người thân."
+            },
+            "deliverable": "Nguyên mẫu thiệp 3D đa giác quan (hình ảnh, chuyển động, âm thanh)",
+            "successCriteria": [
+              "Âm thanh vang lên đúng thời điểm thiệp mở ra, âm lượng vừa phải.",
+              "gia đình và người thân cảm nhận được thông điệp yêu thương và có phản hồi tích cực."
+            ],
+            "evidenceArtifacts": [
+              "Bản ghi âm hoặc video người thân trải nghiệm thiệp",
+              "Phiếu ghi nhận ý kiến đóng góp ban đầu"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          }
+        ],
+        "deliverable": "Bản hoàn thiện thử nghiệm thực tế với gia đình và người thân",
+        "completionCheck": "Chuyển động mượt mà, ánh sáng hài hòa và người thân đánh giá tích cực",
+        "isDreamProject": false
+      },
+      {
+        "id": "P4",
+        "projectNumber": 4,
+        "name": "Bộ tranh kể chuyện",
+        "roleDescription": "Hoàn thiện phiên bản khả thi của Thiệp điện tử 3D tương tác \"Bộ tranh kể chuyện\" và xác định hướng mở rộng.",
+        "goal": "Hiện thực hóa ý tưởng \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác): Giải quyết mục đích \"gửi lời chúc yêu thương và tình cảm tri ân\" phục vụ \"gia đình và người thân\" với các đặc trưng (Có hình minh họa chính, Phối màu sắc theo chủ đề ấm áp, Dòng chữ ngắn dễ đọc gửi lời yêu thương). Chia làm các chức năng cốt lõi (MVP) và tính năng mở rộng phát triển (Extension).",
+        "tasks": [
+          "Lập trình & tích hợp chức năng tương tác cốt lõi: Có hình minh họa chính",
+          "Hoàn thiện chức năng nội dung & thử nghiệm cùng gia đình và người thân để đạt mục đích \"gửi lời chúc yêu thương và tình cảm tri ân\"",
+          "Xây dựng kế hoạch mở rộng & nâng cấp tính năng: Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng"
+        ],
+        "features": [
+          {
+            "id": "F-P4-01",
+            "name": "Chức năng tạo hình & cốt lõi: Có hình minh họa chính",
+            "description": "Xây dựng và hoàn thiện \"Có hình minh họa chính\" cho sản phẩm Bộ tranh kể chuyện, giúp gia đình và người thân có thể trải nghiệm và thao tác dễ dàng.",
+            "knowledgeIds": [
+              "K-02"
+            ],
+            "skillIds": [
+              "S-02"
+            ],
+            "competencyIds": [
+              "C-01",
+              "C-03"
+            ],
+            "tasks": [
+              {
+                "id": "T-P4-01-A",
+                "description": "Thiết kế bố cục tạo hình và cơ chế hiển thị / tương tác trực quan cho \"Có hình minh họa chính\" theo định dạng Thiệp điện tử 3D tương tác.",
+                "knowledgeIds": [
+                  "K-02"
+                ],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": [
+                  "C-01"
+                ]
+              },
+              {
+                "id": "T-P4-01-B",
+                "description": "Kiểm thử độ nhạy tương tác và tối ưu hóa phản hồi thị giác/chuyển động khi gia đình và người thân thao tác.",
+                "knowledgeIds": [],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": [
+                  "C-03"
+                ]
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Nắm vững quy trình hoàn thiện tác phẩm từ bản phác thảo đến sản phẩm cuối cùng.",
+              "step2Practice": "Kiểm tra từng chi tiết góc cạnh, lưới đa giác và ánh sáng tổng thể.",
+              "step3Apply": "Đóng gói tác phẩm tạo hình cốt lõi cho \"Bộ tranh kể chuyện\".",
+              "step4Verify": "Hình ảnh sắc nét, không có lỗi hiển thị ở bất kỳ góc nhìn nào.",
+              "step5Evidence": "Lưu bản xuất cuối cùng và ảnh chụp sản phẩm."
+            },
+            "deliverable": "Mô-đun tương tác [Có hình minh họa chính] hoàn chỉnh vận hành trong Bộ tranh kể chuyện",
+            "successCriteria": [
+              "Hình minh họa sắc nét, tỷ lệ chuẩn xác và thể hiện trọn vẹn chủ đề yêu thương.",
+              "Người dùng (gia đình và người thân) thao tác \"Có hình minh họa chính\" mượt mà và phản hồi diễn ra chính xác."
+            ],
+            "evidenceArtifacts": [
+              "Video quay lại thao tác tương tác thực tế",
+              "Ảnh chụp sản phẩm ở độ phân giải cao"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          },
+          {
+            "id": "F-P4-02",
+            "name": "Chức năng trải nghiệm & nội dung: Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương",
+            "description": "Tích hợp nội dung thông điệp và hiệu ứng trải nghiệm \"Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương\" vào Bộ tranh kể chuyện, giải quyết trọn vẹn mục tiêu \"gửi lời chúc yêu thương và tình cảm tri ân\".",
+            "knowledgeIds": [
+              "K-02"
+            ],
+            "skillIds": [
+              "S-02"
+            ],
+            "competencyIds": [
+              "C-01"
+            ],
+            "tasks": [
+              {
+                "id": "T-P4-02-A",
+                "description": "Tích hợp dữ liệu nội dung, hiệu ứng hình ảnh và âm thanh cho \"Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương\".",
+                "knowledgeIds": [
+                  "K-02"
+                ],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": [
+                  "C-01"
+                ]
+              },
+              {
+                "id": "T-P4-02-B",
+                "description": "Tổ chức buổi chạy thử nghiệm toàn diện cho gia đình và người thân và ghi nhận chỉ số thành công.",
+                "knowledgeIds": [],
+                "skillIds": [
+                  "S-02"
+                ],
+                "competencyIds": [
+                  "C-03"
+                ]
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Tầm quan trọng của Typography (nghệ thuật chữ) và độ tương phản khi truyền tải thông điệp.",
+              "step2Practice": "Thử nghiệm các kích thước chữ và màu chữ khác nhau để chọn phương án dễ đọc nhất.",
+              "step3Apply": "Đặt dòng chữ gửi lời yêu thương vào vị trí đẹp nhất trên \"Bộ tranh kể chuyện\".",
+              "step4Verify": "Lời nhắn nổi bật, không bị hình ảnh che lấp, người nhận đọc hiểu trong 5 giây.",
+              "step5Evidence": "Chụp lại tác phẩm hoàn thiện có đủ chữ và hình minh họa."
+            },
+            "deliverable": "Trải nghiệm nội dung [Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương] hoàn thiện trong sản phẩm Bộ tranh kể chuyện",
+            "successCriteria": [
+              "Dòng chữ ngắn gọn, chân thành, dễ đọc ngay cả trên màn hình nhỏ.",
+              "gia đình và người thân tiếp nhận rõ ràng thông điệp và đánh giá cao trải nghiệm sản phẩm mang lại."
+            ],
+            "evidenceArtifacts": [
+              "Ảnh chụp sản phẩm hoàn chỉnh chứa nội dung",
+              "Phiếu thu nhận ý kiến đánh giá của người trải nghiệm"
+            ],
+            "scope": "mvp",
+            "implementationMode": "design"
+          },
+          {
+            "id": "F-P4-03",
+            "name": "Tính năng mở rộng & nâng cấp: Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng",
+            "description": "Kế hoạch nâng cấp phiên bản tiếp theo với tính năng mở rộng \"Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng\", tự động hóa cao hơn và chuẩn bị trưng bày triển lãm.",
+            "knowledgeIds": [
+              "K-03"
+            ],
+            "skillIds": [
+              "S-03"
+            ],
+            "competencyIds": [
+              "C-02",
+              "C-03"
+            ],
+            "tasks": [
+              {
+                "id": "T-P4-03-A",
+                "description": "Lập tài liệu thiết kế và kiến trúc mở rộng cho tính năng [Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng].",
+                "knowledgeIds": [
+                  "K-03"
+                ],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-02"
+                ]
+              },
+              {
+                "id": "T-P4-03-B",
+                "description": "Chuẩn bị bài thuyết trình giới thiệu sản phẩm Bộ tranh kể chuyện và hành trình sáng tạo của bản thân.",
+                "knowledgeIds": [],
+                "skillIds": [
+                  "S-03"
+                ],
+                "competencyIds": [
+                  "C-03"
+                ]
+              }
+            ],
+            "learningGuide": {
+              "step1Learn": "Tư duy phát triển sản phẩm liên tục (Product Iteration) và khả năng mở rộng (Scalability).",
+              "step2Practice": "Lập sơ đồ tư duy phác thảo các tính năng nâng cao mà người dùng mong muốn thêm.",
+              "step3Apply": "Xây dựng tài liệu định hướng các tính năng mới cho phiên bản v2.0.",
+              "step4Verify": "Kế hoạch rõ ràng, khả thi với năng lực học tập của con.",
+              "step5Evidence": "Lưu bản kế hoạch nâng cấp và slide trình chiếu."
+            },
+            "deliverable": "Bản thiết kế nâng cấp v2.0 cho [Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng] và tài liệu thuyết trình Portfolio",
+            "successCriteria": [
+              "Xác định rõ các bước nâng cấp tính năng \"Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng\" trong kế hoạch học tập năm tới"
+            ],
+            "evidenceArtifacts": [
+              "Slide thuyết trình sản phẩm",
+              "Bản vẽ kỹ thuật / thiết kế tính năng nâng cấp"
+            ],
+            "scope": "extension",
+            "implementationMode": "design"
+          }
+        ],
+        "deliverable": "Sản phẩm hoàn chỉnh \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác) kèm video demo và tài liệu lộ trình phát triển",
+        "completionCheck": "Sản phẩm vận hành đúng ý tưởng con mong muốn, gia đình và người thân có thể sử dụng và phản hồi",
+        "isDreamProject": true
+      }
+    ]
+  },
+  "futureProfile": {
+    "role": "Nhà sáng tạo nội dung số & thiết kế trải nghiệm 3D tương lai",
+    "roleSubtitle": "Chuyên gia thiết kế mỹ thuật số, không gian 3D và giao diện tương tác",
+    "techSector": "Multimedia",
+    "motto": "Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!",
+    "quote": "Dự án Bộ tranh kể chuyện sẽ gửi lời chúc yêu thương và tình cảm tri ân",
+    "interests": "Thiết kế, đồ họa",
+    "style": "Tò mò, Sáng tạo",
+    "dreamAudience": "gia đình và người thân",
+    "aboutMe": "Con yêu thích sáng tạo nghệ thuật, vẽ tranh và thiết kế những hình ảnh sinh động. Con muốn dùng công nghệ đồ họa và câu chuyện tương tác để tạo nên \"Bộ tranh kể chuyện\", gửi gắm tình cảm yêu thương đến gia đình và người thân."
+  },
+  "dreamProject": {
+    "name": "Bộ tranh kể chuyện",
+    "productFormat": "Thiệp điện tử 3D tương tác",
+    "audience": "gia đình và người thân",
+    "purpose": "gửi lời chúc yêu thương và tình cảm tri ân",
+    "allFeatures": [
+      "Có hình minh họa chính",
+      "Phối màu sắc theo chủ đề ấm áp",
+      "Dòng chữ ngắn dễ đọc gửi lời yêu thương"
+    ],
+    "mvpFeatures": [
+      "Có hình minh họa chính (Tạo hình & bố cục cốt lõi)",
+      "Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương"
+    ],
+    "extensionFeatures": [
+      "Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng (Kế hoạch nâng cấp v2.0)"
+    ],
+    "appearance": "Mô hình thiệp 3D ấm cúng với nhân vật gia đình"
+  },
+  "schedule": {
+    "hoursPerWeek": 2,
+    "pacingMode": "weekly_scheduled",
+    "notice": "Ước tính theo cam kết 2 giờ/tuần của gia đình, linh hoạt theo nhịp học của con."
+  },
+  "familySupport": {
+    "resources": [
+      "Máy tính / Thiết bị sẵn có"
+    ],
+    "supportModes": [
+      "Lắng nghe và khích lệ"
+    ]
+  },
+  "characterAvatar": {
+    "source": "custom",
+    "gender": "Nam",
+    "note": "Sử dụng ảnh nhân vật do học sinh tự tạo/vẽ làm hình đại diện chính. Giữ nguyên thiết kế nhân vật."
+  },
+  "privacyConsent": {
+    "reviewedByParent": true,
+    "omitDirectIdentifiers": true,
+    "parentApprovesExport": true
+  },
+  "presentationLayer": {
+    "futureProfessionalRole": {
+      "title": "Nhà sáng tạo nội dung số & thiết kế trải nghiệm 3D tương lai",
+      "subtitle": "Chuyên gia thiết kế mỹ thuật số, không gian 3D và giao diện tương tác",
+      "techSector": "Multimedia",
+      "specialization": "Thiết kế hình ảnh 2D",
+      "specializationPathway": "Chuyên môn nền tảng: Thiết kế đồ họa 2D (tạo hình, bố cục và màu sắc). Hướng mở rộng phục vụ Dream Project: Dựng hình khối và tương tác 3D. Kỹ năng 2D là bước chuẩn bị then chốt để làm chủ không gian 3D.",
+      "motto": "Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!",
+      "badge": "Chân dung tương lai do con và gia đình định hướng",
+      "creativeStyle": "Tò mò, Sáng tạo, Kiên trì",
+      "environment": "Digital Media Studio, Không gian thiết kế trải nghiệm 3D & tương tác sáng tạo",
+      "targetAudience": "gia đình và người thân",
+      "representativeWork": "Bộ tranh kể chuyện"
+    },
+    "professionalSummary": {
+      "introduction": "Nhà sáng tạo tương lai, mong muốn kết hợp thiết kế đồ họa và nghệ thuật kể chuyện tương tác để tạo ra những sản phẩm giàu cảm xúc dành cho gia đình và người thân.",
+      "dreamProjectFocus": "Trọng tâm phát triển dự án \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác) với mục đích gửi lời chúc yêu thương và tình cảm tri ân.",
+      "techSector": "Multimedia",
+      "creativeValues": [
+        "Sáng tạo xuất phát từ sự thấu hiểu người dùng và nhu cầu thực tế",
+        "Học tập chủ động qua dự án thực hành (Project-Based Learning)",
+        "Từng bước làm chủ công nghệ từ nguyên lý nền tảng đến sản phẩm hoàn chỉnh"
+      ],
+      "targetOrientationNotice": "Mô tả thể hiện chân dung và giá trị hướng tới, không suy diễn tính cách bẩm sinh."
+    },
+    "futureExperiences": [
+      {
+        "stageId": "P1",
+        "projectNumber": 1,
+        "title": "Phác thảo Ý tưởng & Tạo khối 3D Nền tảng (Khởi động cho Bộ tranh kể chuyện)",
+        "role": "Xây dựng nền tảng trực tiếp phục vụ Dream Project.",
+        "experienceType": "Future Project Experience (Dự án con sẽ thực hiện)",
+        "status": "FUTURE_TARGET",
+        "statusNotice": "Mục tiêu dự kiến trong lộ trình — Sẽ chuyển sang Đã hoàn thành khi có minh chứng thực tế.",
+        "knowledgeTarget": [
+          "K-01: Nguyên Lý Bố Cục, Phối Cảnh & Tỷ Lệ Thị Giác"
+        ],
+        "skillsTarget": [
+          "S-01: Tạo Hình & Mô Hình Hóa Bằng Công Cụ Số"
+        ],
+        "toolsTarget": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Bản phác thảo nguyên mẫu thử nghiệm đầu tiên của Bộ tranh kể chuyện",
+        "targetOutcome": "Mở lại được tệp dự án và nhìn thấy hình minh họa đầu tiên hoàn chỉnh",
+        "isFeaturedDreamProject": false,
+        "imageAssetId": "asset-prototype-p1",
+        "fileName": "prototype-p1.png",
+        "roadmapLink": {
+          "tab": "ROADMAP",
+          "stageId": "P1",
+          "featureId": "F-P1-01"
+        }
+      },
+      {
+        "stageId": "P2",
+        "projectNumber": 2,
+        "title": "Tạo hình Mô hình 3D Hoàn chỉnh & Phối màu • Tích hợp Có hình minh họa chính",
+        "role": "Phát triển chức năng cốt lõi đầu tiên.",
+        "experienceType": "Future Project Experience (Dự án con sẽ thực hiện)",
+        "status": "FUTURE_TARGET",
+        "statusNotice": "Mục tiêu dự kiến trong lộ trình — Sẽ chuyển sang Đã hoàn thành khi có minh chứng thực tế.",
+        "knowledgeTarget": [
+          "K-02: Lý Thuyết Màu Sắc HSL & Ánh Sáng Tạo Hình Số"
+        ],
+        "skillsTarget": [
+          "S-02: Biên Tập Hoạt Hình Keyframe & Hiệu Ứng Chuyển Động"
+        ],
+        "toolsTarget": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Mô-đun chức năng Có hình minh họa chính vận hành ổn định",
+        "targetOutcome": "Mô hình 3D và chức năng hiển thị sắc nét, xoay các góc không lỗi",
+        "isFeaturedDreamProject": false,
+        "imageAssetId": "asset-prototype-p2",
+        "fileName": "prototype-p2.png",
+        "roadmapLink": {
+          "tab": "ROADMAP",
+          "stageId": "P2",
+          "featureId": "F-P2-01"
+        }
+      },
+      {
+        "stageId": "P3",
+        "projectNumber": 3,
+        "title": "Hoạt họa Tương tác & Lồng ghép Thông điệp (Phục vụ gia đình và người thân)",
+        "role": "Phát triển chức năng bổ sung, tích hợp hoặc thử nghiệm phù hợp với sản phẩm.",
+        "experienceType": "Future Project Experience (Dự án con sẽ thực hiện)",
+        "status": "FUTURE_TARGET",
+        "statusNotice": "Mục tiêu dự kiến trong lộ trình — Sẽ chuyển sang Đã hoàn thành khi có minh chứng thực tế.",
+        "knowledgeTarget": [
+          "K-03: Dựng Hình 3D & Không Gian Di Sản Số Văn Hóa"
+        ],
+        "skillsTarget": [
+          "S-03: Thiết Kế Trải Nghiệm Thị Giác & Xuất Bản Đa Phương Tiện"
+        ],
+        "toolsTarget": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Bản hoàn thiện thử nghiệm thực tế với gia đình và người thân",
+        "targetOutcome": "Chuyển động mượt mà, ánh sáng hài hòa và người thân đánh giá tích cực",
+        "isFeaturedDreamProject": false,
+        "imageAssetId": "asset-prototype-p3",
+        "fileName": "prototype-p3.png",
+        "roadmapLink": {
+          "tab": "ROADMAP",
+          "stageId": "P3",
+          "featureId": "F-P3-01"
+        }
+      },
+      {
+        "stageId": "P4",
+        "projectNumber": 4,
+        "title": "Bộ tranh kể chuyện",
+        "role": "Hoàn thiện phiên bản khả thi của Thiệp điện tử 3D tương tác \"Bộ tranh kể chuyện\" và xác định hướng mở rộng.",
+        "experienceType": "Future Project Experience (Dự án con sẽ thực hiện)",
+        "status": "FUTURE_TARGET",
+        "statusNotice": "Mục tiêu dự kiến trong lộ trình — Sẽ chuyển sang Đã hoàn thành khi có minh chứng thực tế.",
+        "knowledgeTarget": [
+          "K-01: Nguyên Lý Bố Cục, Phối Cảnh & Tỷ Lệ Thị Giác",
+          "K-02: Lý Thuyết Màu Sắc HSL & Ánh Sáng Tạo Hình Số",
+          "K-03: Dựng Hình 3D & Không Gian Di Sản Số Văn Hóa"
+        ],
+        "skillsTarget": [
+          "S-01: Tạo Hình & Mô Hình Hóa Bằng Công Cụ Số",
+          "S-02: Biên Tập Hoạt Hình Keyframe & Hiệu Ứng Chuyển Động",
+          "S-03: Thiết Kế Trải Nghiệm Thị Giác & Xuất Bản Đa Phương Tiện"
+        ],
+        "toolsTarget": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Sản phẩm hoàn chỉnh \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác) kèm video demo và tài liệu lộ trình phát triển",
+        "targetOutcome": "Sản phẩm vận hành đúng ý tưởng con mong muốn, gia đình và người thân có thể sử dụng và phản hồi",
+        "isFeaturedDreamProject": true,
+        "imageAssetId": "asset-prototype-p4",
+        "fileName": "prototype-p4.png",
+        "roadmapLink": {
+          "tab": "ROADMAP",
+          "stageId": "P4",
+          "featureId": "F-P4-01"
+        }
+      }
+    ],
+    "targetProficiency": {
+      "scaleDefinition": {
+        "L1": "L1 — Làm quen: Hiểu giao diện và thực hiện các thao tác căn bản theo hướng dẫn",
+        "L2": "L2 — Thực hành có hướng dẫn: Sử dụng công cụ hoàn thành nhiệm vụ theo quy trình mẫu",
+        "L3": "L3 — Tự triển khai sản phẩm: Tự chủ thiết kế, cấu hình và lập trình chức năng theo ý tưởng riêng",
+        "L4": "L4 — Vận dụng, cải tiến & giải thích: Tối ưu hóa, mở rộng chức năng và tự tin giải thích giải pháp"
+      },
+      "assessmentDisclaimer": "Đây là 4 mức mục tiêu nội bộ dùng để diễn đạt lộ trình phát triển, không phải chứng chỉ kiểm định quốc tế hay điểm số đánh giá năng lực hiện tại.",
+      "coreTools": [
+        {
+          "tool": "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "category": "Core Tool (Công cụ cốt lõi)",
+          "targetLevel": "L3 — Tự triển khai sản phẩm",
+          "targetCriteria": "Tự sử dụng Tinkercad 3D Design (Dựng hình khối cơ bản) để xây dựng các chức năng chính trong dự án P3 và P4",
+          "relatedProjects": [
+            "P2",
+            "P3",
+            "P4"
+          ]
+        },
+        {
+          "tool": "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "category": "Core Tool (Công cụ cốt lõi)",
+          "targetLevel": "L3 — Tự triển khai sản phẩm",
+          "targetCriteria": "Tự sử dụng Voxel Art Studio (Tạo nhân vật điểm ảnh 3D) để xây dựng các chức năng chính trong dự án P3 và P4",
+          "relatedProjects": [
+            "P2",
+            "P3",
+            "P4"
+          ]
+        },
+        {
+          "tool": "CodeKitten Storymaker (Dựng hoạt hình số)",
+          "category": "Core Tool (Công cụ cốt lõi)",
+          "targetLevel": "L3 — Tự triển khai sản phẩm",
+          "targetCriteria": "Tự sử dụng CodeKitten Storymaker (Dựng hoạt hình số) để xây dựng các chức năng chính trong dự án P3 và P4",
+          "relatedProjects": [
+            "P2",
+            "P3",
+            "P4"
+          ]
+        },
+        {
+          "tool": "Blender 3D (Modeling, Materials & Lighting)",
+          "category": "Core Tool (Công cụ cốt lõi)",
+          "targetLevel": "L3 — Tự triển khai sản phẩm",
+          "targetCriteria": "Tự sử dụng Blender 3D (Modeling, Materials & Lighting) để xây dựng các chức năng chính trong dự án P3 và P4",
+          "relatedProjects": [
+            "P2",
+            "P3",
+            "P4"
+          ]
+        },
+        {
+          "tool": "Diorama không gian di sản số 3D",
+          "category": "Core Tool (Công cụ cốt lõi)",
+          "targetLevel": "L3 — Tự triển khai sản phẩm",
+          "targetCriteria": "Tự sử dụng Diorama không gian di sản số 3D để xây dựng các chức năng chính trong dự án P3 và P4",
+          "relatedProjects": [
+            "P2",
+            "P3",
+            "P4"
+          ]
+        }
+      ],
+      "supportingTools": [
+        {
+          "tool": "Canva Design & Bảng vẽ kỹ thuật số",
+          "category": "Supporting Tool (Công cụ bổ trợ)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Vận dụng Canva Design & Bảng vẽ kỹ thuật số để tạo tài nguyên phụ trợ hoặc tối ưu giao diện/mô hình",
+          "relatedProjects": [
+            "P1",
+            "P2"
+          ]
+        },
+        {
+          "tool": "Bảng màu HSL, Typography & Bố cục thị giác",
+          "category": "Supporting Tool (Công cụ bổ trợ)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Vận dụng Bảng màu HSL, Typography & Bố cục thị giác để tạo tài nguyên phụ trợ hoặc tối ưu giao diện/mô hình",
+          "relatedProjects": [
+            "P1",
+            "P2"
+          ]
+        },
+        {
+          "tool": "PictoBlox Animation (Kỹ xảo nhân vật tương tác)",
+          "category": "Supporting Tool (Công cụ bổ trợ)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Vận dụng PictoBlox Animation (Kỹ xảo nhân vật tương tác) để tạo tài nguyên phụ trợ hoặc tối ưu giao diện/mô hình",
+          "relatedProjects": [
+            "P1",
+            "P2"
+          ]
+        },
+        {
+          "tool": "Figma UI/UX Design (Thiết kế Web/App)",
+          "category": "Supporting Tool (Công cụ bổ trợ)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Vận dụng Figma UI/UX Design (Thiết kế Web/App) để tạo tài nguyên phụ trợ hoặc tối ưu giao diện/mô hình",
+          "relatedProjects": [
+            "P1",
+            "P2"
+          ]
+        },
+        {
+          "tool": "Thiết kế hệ thống Icon Vector chuẩn tỉ lệ",
+          "category": "Supporting Tool (Công cụ bổ trợ)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Vận dụng Thiết kế hệ thống Icon Vector chuẩn tỉ lệ để tạo tài nguyên phụ trợ hoặc tối ưu giao diện/mô hình",
+          "relatedProjects": [
+            "P1",
+            "P2"
+          ]
+        }
+      ],
+      "extensionTools": [
+        {
+          "tool": "Kể chuyện đa phương tiện (Digital Storytelling)",
+          "category": "Advanced / Extension Tool (Công cụ mở rộng)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Tìm hiểu và tích hợp Kể chuyện đa phương tiện (Digital Storytelling) để tăng cường tính năng cho Dream Project",
+          "relatedProjects": [
+            "P4"
+          ]
+        },
+        {
+          "tool": "Kỹ xảo hoạt hình 2D Keyframe",
+          "category": "Advanced / Extension Tool (Công cụ mở rộng)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Tìm hiểu và tích hợp Kỹ xảo hoạt hình 2D Keyframe để tăng cường tính năng cho Dream Project",
+          "relatedProjects": [
+            "P4"
+          ]
+        },
+        {
+          "tool": "Biên tập Video kỹ thuật số & Âm thanh Sound FX",
+          "category": "Advanced / Extension Tool (Công cụ mở rộng)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Tìm hiểu và tích hợp Biên tập Video kỹ thuật số & Âm thanh Sound FX để tăng cường tính năng cho Dream Project",
+          "relatedProjects": [
+            "P4"
+          ]
+        },
+        {
+          "tool": "Xử lý hậu kỳ & Xuất bản tác phẩm số chuẩn quốc tế",
+          "category": "Advanced / Extension Tool (Công cụ mở rộng)",
+          "targetLevel": "L2 — Thực hành có hướng dẫn",
+          "targetCriteria": "Tìm hiểu và tích hợp Xử lý hậu kỳ & Xuất bản tác phẩm số chuẩn quốc tế để tăng cường tính năng cho Dream Project",
+          "relatedProjects": [
+            "P4"
+          ]
+        }
+      ]
+    },
+    "capabilityVisualization": {
+      "chartType": "Target Capability Matrix & Progress Map",
+      "note": "Biểu đồ trực quan hóa chân dung năng lực mục tiêu tương lai, không thể hiện điểm số đánh giá tâm lý hay chỉ số IQ.",
+      "dimensions": [
+        {
+          "group": "Kiến thức chuyên môn (Target Knowledge)",
+          "items": [
+            {
+              "id": "K-01",
+              "name": "Nguyên Lý Bố Cục, Phối Cảnh & Tỷ Lệ Thị Giác",
+              "targetLevel": "L2 — Thực hành có hướng dẫn",
+              "milestoneStage": "P1",
+              "status": "FUTURE_TARGET"
+            },
+            {
+              "id": "K-02",
+              "name": "Lý Thuyết Màu Sắc HSL & Ánh Sáng Tạo Hình Số",
+              "targetLevel": "L2 — Thực hành có hướng dẫn",
+              "milestoneStage": "P2",
+              "status": "FUTURE_TARGET"
+            },
+            {
+              "id": "K-03",
+              "name": "Dựng Hình 3D & Không Gian Di Sản Số Văn Hóa",
+              "targetLevel": "L3 — Tự triển khai sản phẩm",
+              "milestoneStage": "P3",
+              "status": "FUTURE_TARGET"
+            }
+          ]
+        },
+        {
+          "group": "Kỹ năng chuyên môn (Target Skills)",
+          "items": [
+            {
+              "id": "S-01",
+              "name": "Tạo Hình & Mô Hình Hóa Bằng Công Cụ Số",
+              "targetLevel": "L2 — Thực hành có hướng dẫn",
+              "milestoneStage": "P1",
+              "status": "FUTURE_TARGET"
+            },
+            {
+              "id": "S-02",
+              "name": "Biên Tập Hoạt Hình Keyframe & Hiệu Ứng Chuyển Động",
+              "targetLevel": "L2 — Thực hành có hướng dẫn",
+              "milestoneStage": "P2",
+              "status": "FUTURE_TARGET"
+            },
+            {
+              "id": "S-03",
+              "name": "Thiết Kế Trải Nghiệm Thị Giác & Xuất Bản Đa Phương Tiện",
+              "targetLevel": "L3 — Tự triển khai sản phẩm",
+              "milestoneStage": "P3",
+              "status": "FUTURE_TARGET"
+            }
+          ]
+        },
+        {
+          "group": "Năng lực giải quyết vấn đề & Sáng tạo (Competencies)",
+          "items": [
+            {
+              "id": "C-01",
+              "name": "Kể Chuyện Bằng Hình Ảnh Số (Visual Storytelling)",
+              "targetLevel": "L4 — Vận dụng, cải tiến & giải thích",
+              "milestoneStage": "P4",
+              "status": "FUTURE_TARGET"
+            },
+            {
+              "id": "C-02",
+              "name": "Thẩm Mỹ Thị Giác & Tinh Tế Trong Chi Tiết",
+              "targetLevel": "L4 — Vận dụng, cải tiến & giải thích",
+              "milestoneStage": "P4",
+              "status": "FUTURE_TARGET"
+            },
+            {
+              "id": "C-03",
+              "name": "Lan Tỏa Giá Trị Văn Hóa & Phục Vụ Cộng Đồng",
+              "targetLevel": "L4 — Vận dụng, cải tiến & giải thích",
+              "milestoneStage": "P4",
+              "status": "FUTURE_TARGET"
+            }
+          ]
+        }
+      ]
+    },
+    "featuredProjects": [
+      {
+        "id": "P1",
+        "projectNumber": 1,
+        "name": "Phác thảo Ý tưởng & Tạo khối 3D Nền tảng (Khởi động cho Bộ tranh kể chuyện)",
+        "isFeaturedDreamProject": false,
+        "heroBadge": "Dự án thành phần",
+        "imageAssetId": "asset-prototype-p1",
+        "fileName": "prototype-p1.png",
+        "goal": "Đặt nền tảng tư duy và kỹ thuật ban đầu phục vụ ý tưởng \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác).",
+        "roleDescription": "Xây dựng nền tảng trực tiếp phục vụ Dream Project.",
+        "highlightFeatures": [
+          {
+            "id": "F-P1-01",
+            "name": "Chuẩn bị không gian sáng tạo & Bảng màu chủ đề",
+            "scope": "mvp",
+            "description": "Con tạo được không gian làm việc để bắt đầu phác thảo bộ tranh và thiết kế thiệp 3D \"Bộ tranh kể chuyện\"."
+          },
+          {
+            "id": "F-P1-02",
+            "name": "Thử nghiệm nguyên mẫu tạo hình đầu tiên cho Bộ tranh kể chuyện",
+            "scope": "mvp",
+            "description": "Tạo phiên bản phác thảo mô phỏng ý tưởng cốt lõi của \"Bộ tranh kể chuyện\"."
+          }
+        ],
+        "targetTools": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Bản phác thảo nguyên mẫu thử nghiệm đầu tiên của Bộ tranh kể chuyện",
+        "completionCheck": "Mở lại được tệp dự án và nhìn thấy hình minh họa đầu tiên hoàn chỉnh",
+        "status": "FUTURE_TARGET",
+        "evidenceStatus": "Chờ sản phẩm thực tế khi thực hiện lộ trình"
+      },
+      {
+        "id": "P2",
+        "projectNumber": 2,
+        "name": "Tạo hình Mô hình 3D Hoàn chỉnh & Phối màu • Tích hợp Có hình minh họa chính",
+        "isFeaturedDreamProject": false,
+        "heroBadge": "Dự án thành phần",
+        "imageAssetId": "asset-prototype-p2",
+        "fileName": "prototype-p2.png",
+        "goal": "Kết hợp hình, chữ, màu theo thứ tự dễ nhìn. — Ứng dụng kỹ thuật để thử nghiệm tính năng \"Có hình minh họa chính\" cho sản phẩm.",
+        "roleDescription": "Phát triển chức năng cốt lõi đầu tiên.",
+        "highlightFeatures": [
+          {
+            "id": "F-P2-01",
+            "name": "Tạo mô hình 3D và phối màu nhân vật chính",
+            "scope": "mvp",
+            "description": "Phát triển nhân vật hoặc chi tiết chính của tấm thiệp \"Bộ tranh kể chuyện\" với đầy đủ khối 3D và màu sắc."
+          },
+          {
+            "id": "F-P2-02",
+            "name": "Kiểm tra tương phản thị giác & Tối ưu bố cục",
+            "scope": "mvp",
+            "description": "Đảm bảo các chi tiết chính và phụ hài hòa, chuẩn bị sẵn không gian cho nội dung lời chúc."
+          }
+        ],
+        "targetTools": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Mô-đun chức năng Có hình minh họa chính vận hành ổn định",
+        "completionCheck": "Mô hình 3D và chức năng hiển thị sắc nét, xoay các góc không lỗi",
+        "status": "FUTURE_TARGET",
+        "evidenceStatus": "Chờ sản phẩm thực tế khi thực hiện lộ trình"
+      },
+      {
+        "id": "P3",
+        "projectNumber": 3,
+        "name": "Hoạt họa Tương tác & Lồng ghép Thông điệp (Phục vụ gia đình và người thân)",
+        "isFeaturedDreamProject": false,
+        "heroBadge": "Dự án thành phần",
+        "imageAssetId": "asset-prototype-p3",
+        "fileName": "prototype-p3.png",
+        "goal": "Tích hợp chức năng nâng cao và thử nghiệm thực tế phục vụ nhu cầu của gia đình và người thân.",
+        "roleDescription": "Phát triển chức năng bổ sung, tích hợp hoặc thử nghiệm phù hợp với sản phẩm.",
+        "highlightFeatures": [
+          {
+            "id": "F-P3-01",
+            "name": "Hoạt họa chuyển động 3D & Hiệu ứng ánh sáng môi trường",
+            "scope": "mvp",
+            "description": "Tạo hoạt hình keyframe sinh động khi mở thiệp và bố trí ánh sáng ấm áp tôn vinh chủ đề tác phẩm \"Bộ tranh kể chuyện\"."
+          },
+          {
+            "id": "F-P3-02",
+            "name": "Lồng ghép âm thanh & Thử nghiệm tiếp nhận cùng gia đình và người thân",
+            "scope": "mvp",
+            "description": "Tích hợp hiệu ứng âm thanh nhẹ nhàng và mời gia đình và người thân trải nghiệm thử để ghi nhận cảm xúc."
+          }
+        ],
+        "targetTools": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Bản hoàn thiện thử nghiệm thực tế với gia đình và người thân",
+        "completionCheck": "Chuyển động mượt mà, ánh sáng hài hòa và người thân đánh giá tích cực",
+        "status": "FUTURE_TARGET",
+        "evidenceStatus": "Chờ sản phẩm thực tế khi thực hiện lộ trình"
+      },
+      {
+        "id": "P4",
+        "projectNumber": 4,
+        "name": "Bộ tranh kể chuyện",
+        "isFeaturedDreamProject": true,
+        "heroBadge": "Featured Dream Project (Dự án tâm điểm)",
+        "imageAssetId": "asset-prototype-p4",
+        "fileName": "prototype-p4.png",
+        "goal": "Hiện thực hóa ý tưởng \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác): Giải quyết mục đích \"gửi lời chúc yêu thương và tình cảm tri ân\" phục vụ \"gia đình và người thân\" với các đặc trưng (Có hình minh họa chính, Phối màu sắc theo chủ đề ấm áp, Dòng chữ ngắn dễ đọc gửi lời yêu thương). Chia làm các chức năng cốt lõi (MVP) và tính năng mở rộng phát triển (Extension).",
+        "roleDescription": "Hoàn thiện phiên bản khả thi của Thiệp điện tử 3D tương tác \"Bộ tranh kể chuyện\" và xác định hướng mở rộng.",
+        "highlightFeatures": [
+          {
+            "id": "F-P4-01",
+            "name": "Chức năng tạo hình & cốt lõi: Có hình minh họa chính",
+            "scope": "mvp",
+            "description": "Xây dựng và hoàn thiện \"Có hình minh họa chính\" cho sản phẩm Bộ tranh kể chuyện, giúp gia đình và người thân có thể trải nghiệm và thao tác dễ dàng."
+          },
+          {
+            "id": "F-P4-02",
+            "name": "Chức năng trải nghiệm & nội dung: Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương",
+            "scope": "mvp",
+            "description": "Tích hợp nội dung thông điệp và hiệu ứng trải nghiệm \"Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương\" vào Bộ tranh kể chuyện, giải quyết trọn vẹn mục tiêu \"gửi lời chúc yêu thương và tình cảm tri ân\"."
+          },
+          {
+            "id": "F-P4-03",
+            "name": "Tính năng mở rộng & nâng cấp: Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng",
+            "scope": "extension",
+            "description": "Kế hoạch nâng cấp phiên bản tiếp theo với tính năng mở rộng \"Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng\", tự động hóa cao hơn và chuẩn bị trưng bày triển lãm."
+          }
+        ],
+        "targetTools": [
+          "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+          "Voxel Art Studio (Tạo nhân vật điểm ảnh 3D)",
+          "CodeKitten Storymaker (Dựng hoạt hình số)"
+        ],
+        "deliverable": "Sản phẩm hoàn chỉnh \"Bộ tranh kể chuyện\" (Thiệp điện tử 3D tương tác) kèm video demo và tài liệu lộ trình phát triển",
+        "completionCheck": "Sản phẩm vận hành đúng ý tưởng con mong muốn, gia đình và người thân có thể sử dụng và phản hồi",
+        "status": "FUTURE_TARGET",
+        "evidenceStatus": "Chờ sản phẩm thực tế khi thực hiện lộ trình"
+      }
+    ],
+    "quickSnapshot": {
+      "specialization": "Thiết kế 2D ➔ Mở rộng 3D",
+      "dreamProjectTitle": "Bộ tranh kể chuyện",
+      "dreamProjectStage": "P4 (Sản phẩm tâm điểm)",
+      "primaryTool": "Tinkercad 3D Design (Dựng hình khối cơ bản)",
+      "targetProficiencyBadge": "Mục tiêu L3 (Tự triển khai)",
+      "roadmapLength": "4 Chặng thực hành hoàn thiện"
+    },
+    "featuredDreamProject": {
+      "name": "Bộ tranh kể chuyện",
+      "productFormat": "Thiệp điện tử 3D tương tác",
+      "purpose": "gửi lời chúc yêu thương và tình cảm tri ân",
+      "audience": "gia đình và người thân",
+      "imageAssetId": "asset-prototype-p4",
+      "fileName": "prototype-p4.png",
+      "mvpFeatures": [
+        {
+          "id": "F-P4-01",
+          "name": "Chức năng tạo hình & cốt lõi: Có hình minh họa chính",
+          "scope": "MVP",
+          "description": "Xây dựng và hoàn thiện \"Có hình minh họa chính\" cho sản phẩm Bộ tranh kể chuyện, giúp gia đình và người thân có thể trải nghiệm và thao tác dễ dàng."
+        },
+        {
+          "id": "F-P4-02",
+          "name": "Chức năng trải nghiệm & nội dung: Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương",
+          "scope": "MVP",
+          "description": "Tích hợp nội dung thông điệp và hiệu ứng trải nghiệm \"Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương\" vào Bộ tranh kể chuyện, giải quyết trọn vẹn mục tiêu \"gửi lời chúc yêu thương và tình cảm tri ân\"."
+        }
+      ],
+      "extensionFeatures": [
+        {
+          "id": "F-P4-03",
+          "name": "Tính năng mở rộng & nâng cấp: Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng",
+          "scope": "Extension (v2.0)",
+          "description": "Kế hoạch nâng cấp phiên bản tiếp theo với tính năng mở rộng \"Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng\", tự động hóa cao hơn và chuẩn bị trưng bày triển lãm."
+        }
+      ],
+      "completionCriteria": [
+        "Dòng chữ ngắn gọn, chân thành, dễ đọc ngay cả trên màn hình nhỏ.",
+        "Người nhận mở xem thiệp và tiếp nhận trọn vẹn thông điệp yêu thương.",
+        "Mô hình và hình minh họa chính hiển thị sắc nét, tỷ lệ cân đối."
+      ]
+    },
+    "testimonials": {
+      "hasVerifiedFeedback": false,
+      "displayMode": "awaiting_feedback",
+      "notice": "Phản hồi từ người trải nghiệm sẽ được cập nhật khi con giới thiệu sản phẩm.",
+      "targetAudience": "gia đình và người thân",
+      "expectedFeedbackQuestions": [
+        "Sản phẩm \"Bộ tranh kể chuyện\" đã mang lại cảm xúc gì cho gia đình và người thân?",
+        "Hình ảnh minh họa, màu sắc và lời chúc trong thiệp có dễ nhìn và ấn tượng không?",
+        "Người nhận mong muốn con bổ sung thêm chi tiết hoặc tính năng tương tác nào trong tương lai?"
+      ],
+      "reviews": []
+    },
+    "futureImpact": {
+      "targetAudience": "gia đình và người thân",
+      "problemStatement": "gửi lời chúc yêu thương và tình cảm tri ân",
+      "expectedValue": "Tạo ra sản phẩm \"Bộ tranh kể chuyện\" mang giá trị thực tiễn và cảm xúc ý nghĩa cho gia đình và người thân.",
+      "socialContribution": "Lan tỏa tình cảm gia đình, rèn luyện tư duy thẩm mỹ và kết nối mọi người qua trải nghiệm 3D.",
+      "nextStepCTA": "Khám phá lộ trình để trở thành phiên bản tương lai của con",
+      "targetTab": "ROADMAP"
+    }
+  },
+  "imageManifest": {
+    "activeHeroAssetId": "asset-hero-custom",
+    "assets": [
+      {
+        "assetId": "asset-hero-custom",
+        "type": "student_future_hero",
+        "source": "user_uploaded",
+        "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "fileName": "hero.png",
+        "alt": "Chân dung Future Me của Long Quân — Nhà sáng tạo nội dung số & thiết kế trải nghiệm 3D tương lai",
+        "approved": true,
+        "isActive": true,
+        "representation": "future_concept"
+      },
+      {
+        "assetId": "asset-avatar-companion",
+        "type": "student_avatar",
+        "source": "system_preset",
+        "url": "/assets/kittenbot-creator.png",
+        "fileName": "companion-avatar.png",
+        "alt": "Linh vật bạn đồng hành Kitten Bot (creator)",
+        "approved": true,
+        "isActive": true,
+        "representation": "future_concept"
+      },
+      {
+        "assetId": "asset-prototype-p1",
+        "type": "project_prototype",
+        "projectId": "P1",
+        "source": "system_preset",
+        "url": "/assets/activity-visual-storytelling.png",
+        "fileName": "prototype-p1.png",
+        "alt": "Ảnh concept prototype dự án Phác thảo Ý tưởng & Tạo khối 3D Nền tảng (Khởi động cho Bộ tranh kể chuyện) (P1)",
+        "approved": true,
+        "isActive": true,
+        "representation": "future_concept"
+      },
+      {
+        "assetId": "asset-prototype-p2",
+        "type": "project_prototype",
+        "projectId": "P2",
+        "source": "system_preset",
+        "url": "/assets/activity-world-building.png",
+        "fileName": "prototype-p2.png",
+        "alt": "Ảnh concept prototype dự án Tạo hình Mô hình 3D Hoàn chỉnh & Phối màu • Tích hợp Có hình minh họa chính (P2)",
+        "approved": true,
+        "isActive": true,
+        "representation": "future_concept"
+      },
+      {
+        "assetId": "asset-prototype-p3",
+        "type": "project_prototype",
+        "projectId": "P3",
+        "source": "system_preset",
+        "url": "/assets/activity-communication.png",
+        "fileName": "prototype-p3.png",
+        "alt": "Ảnh concept prototype dự án Hoạt họa Tương tác & Lồng ghép Thông điệp (Phục vụ gia đình và người thân) (P3)",
+        "approved": true,
+        "isActive": true,
+        "representation": "future_concept"
+      },
+      {
+        "assetId": "asset-prototype-p4",
+        "type": "project_prototype",
+        "projectId": "P4",
+        "source": "system_preset",
+        "url": "/assets/activity-nature-observation.png",
+        "fileName": "prototype-p4.png",
+        "alt": "Ảnh concept prototype dự án Bộ tranh kể chuyện (P4)",
+        "approved": true,
+        "isActive": true,
+        "representation": "future_concept"
+      }
+    ]
+  }
+}

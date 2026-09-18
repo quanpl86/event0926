@@ -19,7 +19,7 @@ const longQuanAnswers = {
   customAvatarData: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
   domain: 'multimedia',
   branch: 'design_2d', // Học sinh chọn 2D nhưng làm thiệp 3D
-  projectName: 'Bộ tranh kể chuyện — Thiệp 3D Yêu Thương',
+  projectName: 'Bộ tranh kể chuyện',
   productFormat: 'Thiệp điện tử 3D tương tác',
   dreamAudience: 'gia đình và người thân',
   dreamPurpose: 'gửi lời chúc yêu thương và tình cảm tri ân',

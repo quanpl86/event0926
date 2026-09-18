@@ -76,6 +76,13 @@ export type JourneyAnswers = {
   selfReflection?: string[];
   parentObservedTask?: string;
   parentObservedExample?: string;
+  // Expanded parent observations (Touchpoint 1 upgrade)
+  parentInterestActivities?: string[];      // RIASEC-mapped activities (Block A)
+  parentCuriosityTraits?: string[];          // Curiosity & Grit traits (Block B)
+  parentInterestIntensity?: Record<string, string>; // Activity → intensity level
+  parentInterestStory?: string;             // Free-text real-life story (Block C)
+  // Dream Project parent micro-check
+  parentDreamProjectFit?: string;           // "very_fit" | "adjustable" | "discuss_more"
   hoursPerWeek?: number | null;
   availableResources?: string[];
   supportMode?: string[];

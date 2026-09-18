@@ -330,6 +330,11 @@ const initialAnswers: JourneyAnswers = {
   problemResponse: "",
   parentObservedTask: "",
   parentObservedExample: "",
+  parentInterestActivities: [],
+  parentCuriosityTraits: [],
+  parentInterestIntensity: {},
+  parentInterestStory: "",
+  parentDreamProjectFit: "",
   hoursPerWeek: 2,
   availableResources: ["Máy tính / Thiết bị sẵn có"],
   supportMode: ["Lắng nghe và khích lệ"],
@@ -1020,57 +1025,229 @@ export function FutureJourney() {
                 );
               })()}
 
-              {/* STEP 3: PARENT INTEREST OBSERVATION (TOUCHPOINT 1) */}
+              {/* STEP 3: PARENT INTEREST OBSERVATION (TOUCHPOINT 1) — NÂNG CẤP 3 KHỐI */}
               {current === 3 && (
-                <div className="space-y-5">
-                  <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-4">
-                    <p className="text-xs font-bold text-amber-900">
-                      Góc nhìn từ Ba Mẹ: Ở nhà, ba mẹ thường quan sát thấy con hay dành thời gian cho điều gì nhất?
+                <div className="space-y-6">
+
+                  {/* ═══ KHỐI A: Hoạt động & Sở thích công nghệ ở nhà (RIASEC R/I/A) ═══ */}
+                  <div>
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-4 mb-3">
+                      <p className="text-xs font-bold text-amber-900">
+                        Góc nhìn từ Ba Mẹ: Ở nhà, ba mẹ thường quan sát thấy con hay dành thời gian cho những hoạt động nào?
+                      </p>
+                      <p className="text-[11px] text-amber-700 mt-1">
+                        Chọn tất cả hoạt động con hay làm. Có thể chọn nhiều mục.
+                      </p>
+                    </div>
+
+                    {/* R Group: Robotics & Engineering */}
+                    <div className="mb-3">
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
+                        <Wrench className="h-3 w-3" /> Nhóm Kỹ thuật & Cơ khí
+                      </p>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {[
+                          { id: "r_lego", label: "Say sưa lắp ghép đồ chơi / Lego / mô hình cơ khí" },
+                          { id: "r_disassemble", label: "Tự mày mò tháo đồ chơi điện tử xem bên trong có gì" },
+                          { id: "r_fix", label: "Thích sửa chữa đồ vật hỏng hoặc chế tạo thứ mới từ vật liệu có sẵn" }
+                        ].map(act => {
+                          const active = (answers.parentInterestActivities ?? []).includes(act.id);
+                          return (
+                            <button type="button" key={act.id}
+                              onClick={() => setAnswers(a => ({
+                                ...a, parentInterestActivities: active
+                                  ? (a.parentInterestActivities ?? []).filter(x => x !== act.id)
+                                  : [...(a.parentInterestActivities ?? []), act.id]
+                              }))}
+                              className={`flex items-center gap-2.5 rounded-2xl border p-3.5 text-left transition ${
+                                active ? "border-amber-400 bg-amber-50 text-amber-900 ring-1 ring-amber-300" : "border-slate-200 bg-white hover:bg-slate-50"
+                              }`}
+                            >
+                              <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${active ? "border-amber-600 bg-amber-600 text-white" : "border-slate-300"}`}>
+                                {active && <Check className="h-3 w-3" />}
+                              </span>
+                              <span className="text-xs font-bold">{act.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* I Group: Logic & Programming */}
+                    <div className="mb-3">
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
+                        <Code2 className="h-3 w-3" /> Nhóm Logic & Lập trình
+                      </p>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {[
+                          { id: "i_game", label: "Tò mò bấm thử ứng dụng / game và muốn biết cách tạo ra chúng" },
+                          { id: "i_rules", label: "Tự nghĩ ra luật chơi / trò chơi mới hoặc giải đố logic" },
+                          { id: "i_diagram", label: "Thích ghi chép, vẽ sơ đồ hoặc sắp xếp theo trình tự" }
+                        ].map(act => {
+                          const active = (answers.parentInterestActivities ?? []).includes(act.id);
+                          return (
+                            <button type="button" key={act.id}
+                              onClick={() => setAnswers(a => ({
+                                ...a, parentInterestActivities: active
+                                  ? (a.parentInterestActivities ?? []).filter(x => x !== act.id)
+                                  : [...(a.parentInterestActivities ?? []), act.id]
+                              }))}
+                              className={`flex items-center gap-2.5 rounded-2xl border p-3.5 text-left transition ${
+                                active ? "border-sky-400 bg-sky-50 text-sky-900 ring-1 ring-sky-300" : "border-slate-200 bg-white hover:bg-slate-50"
+                              }`}
+                            >
+                              <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${active ? "border-sky-600 bg-sky-600 text-white" : "border-slate-300"}`}>
+                                {active && <Check className="h-3 w-3" />}
+                              </span>
+                              <span className="text-xs font-bold">{act.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* A Group: Art & Multimedia */}
+                    <div className="mb-3">
+                      <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center gap-1.5">
+                        <Palette className="h-3 w-3" /> Nhóm Sáng tạo & Thẩm mỹ
+                      </p>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        {[
+                          { id: "a_draw", label: "Thích vẽ tranh, phối màu hoặc tạo hình nhân vật / truyện tranh" },
+                          { id: "a_video", label: "Thích chụp ảnh, quay video ngắn hoặc làm mô hình thủ công" },
+                          { id: "a_decor", label: "Hay tự sắp xếp, trang trí không gian hoặc nhận xét về hình ảnh, màu sắc" }
+                        ].map(act => {
+                          const active = (answers.parentInterestActivities ?? []).includes(act.id);
+                          return (
+                            <button type="button" key={act.id}
+                              onClick={() => setAnswers(a => ({
+                                ...a, parentInterestActivities: active
+                                  ? (a.parentInterestActivities ?? []).filter(x => x !== act.id)
+                                  : [...(a.parentInterestActivities ?? []), act.id]
+                              }))}
+                              className={`flex items-center gap-2.5 rounded-2xl border p-3.5 text-left transition ${
+                                active ? "border-violet-400 bg-violet-50 text-violet-900 ring-1 ring-violet-300" : "border-slate-200 bg-white hover:bg-slate-50"
+                              }`}
+                            >
+                              <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${active ? "border-violet-600 bg-violet-600 text-white" : "border-slate-300"}`}>
+                                {active && <Check className="h-3 w-3" />}
+                              </span>
+                              <span className="text-xs font-bold">{act.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Domain match indicator */}
+                    {(answers.parentInterestActivities ?? []).length > 0 && (
+                      <div className="rounded-xl bg-tek-50 border border-tek-200 p-2.5 flex items-center gap-2 mt-2">
+                        <CheckCircle2 className="h-4 w-4 text-tek-600 shrink-0" />
+                        <span className="text-[11px] font-bold text-tek-800">
+                          Đã chọn {(answers.parentInterestActivities ?? []).length} hoạt động
+                          {(() => {
+                            const acts = answers.parentInterestActivities ?? [];
+                            const rCount = acts.filter(a => a.startsWith("r_")).length;
+                            const iCount = acts.filter(a => a.startsWith("i_")).length;
+                            const aCount = acts.filter(a => a.startsWith("a_")).length;
+                            const dominant = rCount >= iCount && rCount >= aCount ? "robotics" : iCount >= aCount ? "game_programming" : "multimedia";
+                            const isMatch = dominant === answers.domain;
+                            return isMatch
+                              ? ` · Khớp với hướng ${DOMAIN_NAMES[answers.domain || "robotics"]} con đã chọn ✓`
+                              : ` · Xu hướng nổi bật: ${DOMAIN_NAMES[dominant]}`;
+                          })()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* ═══ KHỐI B: Sự tò mò & Tính kiên nhẫn (Curiosity & Grit) ═══ */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2.5">
+                      <Eye className="h-4 w-4 text-emerald-600" />
+                      <p className="text-xs font-extrabold text-slate-700">
+                        Quan sát về sự tò mò và tính kiên nhẫn của con:
+                      </p>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mb-3">
+                      Chọn những phẩm chất ba mẹ nhận thấy ở con. Nếu chưa quan sát kỹ, có thể bỏ qua.
+                    </p>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {[
+                        { id: "curiosity_ask", label: "Hay đặt câu hỏi \"Vì sao?\" và thích tìm hiểu nguyên lý", icon: "🔍" },
+                        { id: "curiosity_explore", label: "Tự mày mò bấm thử tính năng mới trên thiết bị, không sợ sai", icon: "🧭" },
+                        { id: "focus_deep", label: "Có thể ngồi say sưa rất lâu khi làm việc mình thích", icon: "🎯" },
+                        { id: "grit_retry", label: "Khi chưa được, con kiên trì thử lại cách khác thay vì bỏ cuộc", icon: "💪" },
+                        { id: "careful_detail", label: "Cẩn thận, tỉ mỉ trong từng chi tiết khi tạo sản phẩm", icon: "✨" },
+                        { id: "not_observed", label: "Chưa có dịp quan sát kỹ về điều này", icon: "🤔" }
+                      ].map(trait => {
+                        const active = (answers.parentCuriosityTraits ?? []).includes(trait.id);
+                        const isExclusive = trait.id === "not_observed";
+                        return (
+                          <button type="button" key={trait.id}
+                            onClick={() => setAnswers(a => {
+                              const list = a.parentCuriosityTraits ?? [];
+                              if (isExclusive) return { ...a, parentCuriosityTraits: active ? [] : [trait.id] };
+                              const withoutExclusive = list.filter(x => x !== "not_observed");
+                              return { ...a, parentCuriosityTraits: active
+                                ? withoutExclusive.filter(x => x !== trait.id)
+                                : [...withoutExclusive, trait.id]
+                              };
+                            })}
+                            className={`flex items-center gap-2.5 rounded-2xl border p-3 text-left transition ${
+                              active ? "border-emerald-400 bg-emerald-50 text-emerald-900 ring-1 ring-emerald-300" : "border-slate-200 bg-white hover:bg-slate-50"
+                            }`}
+                          >
+                            <span className="text-base shrink-0">{trait.icon}</span>
+                            <span className="text-xs font-bold">{trait.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* ═══ KHỐI C: Tình huống thực tế (Tùy chọn) ═══ */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-bold text-slate-600 flex items-center gap-1.5">
+                        <Lightbulb className="h-3.5 w-3.5 text-amber-500" />
+                        Ba mẹ có thể kể một tình huống thực tế về con (Tùy chọn):
+                      </label>
+                      <span className="text-[10px] font-bold text-slate-400">Bấm gợi ý nhanh hoặc tự gõ</span>
+                    </div>
+
+                    {/* Quick story suggestions by domain */}
+                    <div className="flex flex-wrap gap-1.5 mb-2.5">
+                      {(PARENT_OBSERVED_SUGGESTIONS[answers.domain || "robotics"] || PARENT_OBSERVED_SUGGESTIONS.robotics).map((sug, idx) => {
+                        const isSelected = answers.parentInterestStory === sug;
+                        return (
+                          <button type="button" key={idx}
+                            onClick={() => setAnswers(a => ({ ...a, parentInterestStory: sug }))}
+                            className={`rounded-xl border px-3 py-1.5 text-left text-[11px] font-medium transition ${
+                              isSelected
+                                ? "border-amber-500 bg-amber-50 text-amber-900 font-bold ring-1 ring-amber-400"
+                                : "border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                            }`}
+                          >
+                            💬 {sug}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <textarea
+                      rows={3}
+                      value={answers.parentInterestStory || ""}
+                      onChange={e => setAnswers(a => ({ ...a, parentInterestStory: e.target.value }))}
+                      placeholder="Ví dụ: Bé từng ngồi cả buổi chiều tự mày mò lắp chiếc xe Lego mà không cần ai giúp..."
+                      maxLength={450}
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-3 text-xs font-medium text-ink outline-none focus:border-amber-400 focus:bg-white transition"
+                    />
+                    <p className="mt-1 text-[10px] text-slate-400 text-right">
+                      {(answers.parentInterestStory || "").length}/450 ký tự
                     </p>
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {[
-                      { id: "lego", label: "Say sưa lắp ghép đồ chơi / Lego / mô hình", matchDomain: "robotics" },
-                      { id: "device", label: "Tò mò bấm thử các ứng dụng / game trên máy tính", matchDomain: "game_programming" },
-                      { id: "draw", label: "Thích vẽ tranh, cắt dán hoặc tạo hình sáng tạo", matchDomain: "multimedia" },
-                      { id: "ask", label: "Hay đặt câu hỏi vì sao và tìm hiểu cách máy móc chạy", matchDomain: null }
-                    ].map(act => {
-                      const active = (answers.selections.parentInterest ?? []).includes(act.id);
-                      const isMatch = act.matchDomain === answers.domain;
-                      return (
-                        <button
-                          type="button"
-                          key={act.id}
-                          onClick={() => setAnswers(a => ({
-                            ...a,
-                            selections: {
-                              ...a.selections,
-                              parentInterest: active
-                                ? (a.selections.parentInterest ?? []).filter(x => x !== act.id)
-                                : [...(a.selections.parentInterest ?? []), act.id]
-                            }
-                          }))}
-                          className={`flex items-center justify-between gap-3 rounded-2xl border p-4 text-left transition ${
-                            active ? "border-amber-400 bg-amber-50 text-amber-900 ring-1 ring-amber-300" : "border-slate-200 bg-white hover:bg-slate-50"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${
-                              active ? "border-amber-600 bg-amber-600 text-white" : "border-slate-300"
-                            }`}>
-                              {active && <Check className="h-3 w-3" />}
-                            </span>
-                            <span className="text-xs font-bold">{act.label}</span>
-                          </div>
-                          {isMatch && (
-                            <span className="rounded-md bg-amber-100 border border-amber-200 px-2 py-0.5 text-[9px] font-extrabold text-amber-800 shrink-0">
-                              Khớp lựa chọn ở Bước 2 ({DOMAIN_NAMES[answers.domain || "robotics"]})
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
+
                 </div>
               )}
 
@@ -1676,6 +1853,79 @@ export function FutureJourney() {
                           </span>
                         ))}
                       </div>
+                    </div>
+
+                    {/* ═══ PARENT MICRO-CHECK: Ba mẹ nhận xét nhanh về Dream Project ═══ */}
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50/40 p-5">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="grid h-7 w-7 place-items-center rounded-xl bg-amber-500 text-white text-xs font-bold shadow-2xs">
+                            👨‍👩‍👦
+                          </span>
+                          <div>
+                            <p className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800">
+                              Góc nhìn nhanh từ Ba Mẹ
+                            </p>
+                            <p className="text-xs font-bold text-slate-700">
+                              Ba mẹ thấy ý tưởng dự án này có phù hợp với con không?
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                        {[
+                          {
+                            val: "very_fit",
+                            icon: "🌟",
+                            label: "Rất phù hợp",
+                            desc: "Đúng sở thích và thế mạnh ba mẹ quan sát được ở con"
+                          },
+                          {
+                            val: "adjustable",
+                            icon: "🌱",
+                            label: "Phù hợp, có thể điều chỉnh",
+                            desc: "Hướng đi tốt, có thể linh hoạt quy mô hoặc độ khó"
+                          },
+                          {
+                            val: "discuss_more",
+                            icon: "💬",
+                            label: "Muốn bàn thêm",
+                            desc: "Lưu lại để trao đổi kỹ hơn ở bước Family Review"
+                          }
+                        ].map(choice => {
+                          const isSelected = answers.parentDreamProjectFit === choice.val;
+                          return (
+                            <button
+                              type="button"
+                              key={choice.val}
+                              onClick={() => setAnswers(a => ({ ...a, parentDreamProjectFit: choice.val }))}
+                              className={`flex flex-col justify-between rounded-xl border p-3 text-left transition ${
+                                isSelected
+                                  ? "border-amber-500 bg-amber-50 ring-2 ring-amber-300 shadow-xs"
+                                  : "border-slate-200 bg-white/80 hover:bg-white"
+                              }`}
+                            >
+                              <div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-lg">{choice.icon}</span>
+                                  {isSelected && <Check className="h-4 w-4 text-amber-600 stroke-[3]" />}
+                                </div>
+                                <strong className="mt-1.5 block text-xs font-bold text-ink">
+                                  {choice.label}
+                                </strong>
+                                <span className="mt-0.5 block text-[11px] leading-4 text-slate-500">
+                                  {choice.desc}
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {answers.parentDreamProjectFit === "discuss_more" && (
+                        <div className="mt-2.5 rounded-xl border border-sky-200 bg-sky-50/80 p-2.5 text-[11px] text-sky-900">
+                          <strong>📌 Ghi nhận:</strong> Ý kiến của ba mẹ sẽ được hiển thị tại Bước 16 (Family Review) để cùng đối chiếu với ước mơ của con. Hệ thống không ghi đè lựa chọn của bất kỳ ai.
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -2332,6 +2582,51 @@ export function FutureJourney() {
                             </div>
                           </div>
 
+                          {/* Curiosity & Grit Traits */}
+                          {(answers.parentCuriosityTraits ?? []).length > 0 && !(answers.parentCuriosityTraits ?? []).includes("not_observed") && (
+                            <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                              <span className="text-base shrink-0 mt-0.5">💪</span>
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase block">Sự tò mò & Kiên nhẫn:</span>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {(answers.parentCuriosityTraits ?? []).map(t => {
+                                    const traitLabels: Record<string, string> = {
+                                      curiosity_ask: "Hay hỏi Vì sao",
+                                      curiosity_explore: "Tự mày mò",
+                                      focus_deep: "Tập trung sâu",
+                                      grit_retry: "Kiên trì thử lại",
+                                      careful_detail: "Tỉ mỉ chi tiết"
+                                    };
+                                    return (
+                                      <span key={t} className="rounded-md bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                                        {traitLabels[t] || t}
+                                      </span>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Dream Project Fit */}
+                          {answers.parentDreamProjectFit && (
+                            <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
+                              <span className="text-base shrink-0 mt-0.5">
+                                {answers.parentDreamProjectFit === "very_fit" ? "🌟" : answers.parentDreamProjectFit === "adjustable" ? "🌱" : "💬"}
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase block">Đánh giá Dream Project:</span>
+                                <p className="text-xs font-bold text-slate-700 leading-snug break-words">
+                                  {answers.parentDreamProjectFit === "very_fit"
+                                    ? "Rất phù hợp với sở thích và thế mạnh của con"
+                                    : answers.parentDreamProjectFit === "adjustable"
+                                    ? "Phù hợp, có thể điều chỉnh quy mô hoặc độ khó"
+                                    : "Muốn bàn thêm — cần thảo luận gia đình"}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
                           <div className="flex items-start gap-2 rounded-xl bg-white p-2.5 border border-slate-100">
                             <span className="text-base shrink-0 mt-0.5">⏱️</span>
                             <div className="min-w-0 flex-1">
@@ -2359,6 +2654,29 @@ export function FutureJourney() {
                             <div className="rounded-xl bg-white/80 p-2 text-slate-700 leading-relaxed text-[11px]">
                               <strong>Kỷ niệm quan sát:</strong> {answers.parentObservedExample || answers.parentMoment || "Bé rất thích khám phá và thử nghiệm."}
                             </div>
+                            {answers.parentInterestStory && (
+                              <div className="rounded-xl bg-white/80 p-2 text-slate-700 leading-relaxed text-[11px]">
+                                <strong>Tình huống thực tế:</strong> {answers.parentInterestStory}
+                              </div>
+                            )}
+                            {(answers.parentInterestActivities ?? []).length > 0 && (
+                              <div className="rounded-xl bg-white/80 p-2 text-slate-700 leading-relaxed text-[11px]">
+                                <strong>Hoạt động RIASEC:</strong>
+                                <span className="ml-1">
+                                  {(() => {
+                                    const acts = answers.parentInterestActivities ?? [];
+                                    const rCount = acts.filter(a => a.startsWith("r_")).length;
+                                    const iCount = acts.filter(a => a.startsWith("i_")).length;
+                                    const aCount = acts.filter(a => a.startsWith("a_")).length;
+                                    const parts: string[] = [];
+                                    if (rCount > 0) parts.push(`Kỹ thuật (${rCount})`);
+                                    if (iCount > 0) parts.push(`Logic (${iCount})`);
+                                    if (aCount > 0) parts.push(`Sáng tạo (${aCount})`);
+                                    return parts.join(" · ");
+                                  })()}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>

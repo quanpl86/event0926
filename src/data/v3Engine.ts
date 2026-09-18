@@ -2481,6 +2481,59 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       resources: answers.availableResources || ['Máy tính / Thiết bị sẵn có'],
       supportModes: answers.supportMode || ['Lắng nghe và khích lệ']
     },
+    parentObservations: {
+      // RIASEC-mapped activities observed at home (Block A - Touchpoint 1)
+      interestActivities: (() => {
+        const acts = answers.parentInterestActivities ?? [];
+        if (acts.length === 0) return { summary: 'Chưa thu thập', rGroup: [], iGroup: [], aGroup: [] };
+        const actLabels: Record<string, string> = {
+          r_lego: 'Say sưa lắp ghép Lego / mô hình cơ khí',
+          r_disassemble: 'Tự mày mò tháo đồ chơi điện tử',
+          r_fix: 'Thích sửa chữa / chế tạo từ vật liệu có sẵn',
+          i_game: 'Tò mò ứng dụng / game, muốn biết cách tạo ra',
+          i_rules: 'Tự nghĩ luật chơi mới / giải đố logic',
+          i_diagram: 'Thích ghi chép, vẽ sơ đồ, sắp xếp trình tự',
+          a_draw: 'Thích vẽ tranh, phối màu, tạo hình nhân vật',
+          a_video: 'Thích chụp ảnh, quay video, làm mô hình thủ công',
+          a_decor: 'Hay tự trang trí không gian, nhận xét hình ảnh/màu sắc'
+        };
+        return {
+          summary: `${acts.length} hoạt động được ghi nhận`,
+          rGroup: acts.filter(a => a.startsWith('r_')).map(a => actLabels[a] || a),
+          iGroup: acts.filter(a => a.startsWith('i_')).map(a => actLabels[a] || a),
+          aGroup: acts.filter(a => a.startsWith('a_')).map(a => actLabels[a] || a)
+        };
+      })(),
+      // Curiosity & Grit traits observed by parent (Block B - Touchpoint 1)
+      curiosityAndGrit: (() => {
+        const traits = answers.parentCuriosityTraits ?? [];
+        if (traits.length === 0 || traits.includes('not_observed')) return { summary: 'Chưa có dịp quan sát kỹ', traits: [] };
+        const traitLabels: Record<string, string> = {
+          curiosity_ask: 'Hay đặt câu hỏi "Vì sao?" và tìm hiểu nguyên lý',
+          curiosity_explore: 'Tự mày mò bấm thử tính năng mới, không sợ sai',
+          focus_deep: 'Có thể ngồi say sưa rất lâu khi làm việc mình thích',
+          grit_retry: 'Kiên trì thử lại cách khác khi chưa được',
+          careful_detail: 'Cẩn thận, tỉ mỉ từng chi tiết khi tạo sản phẩm'
+        };
+        return {
+          summary: `${traits.length} phẩm chất được ghi nhận`,
+          traits: traits.map(t => traitLabels[t] || t)
+        };
+      })(),
+      // Parent's real-life story about the child (Block C - Touchpoint 1)
+      realLifeStory: answers.parentInterestStory?.trim() || null,
+      // Parent's quick assessment of Dream Project fit (Micro-check at Step 8)
+      dreamProjectFit: answers.parentDreamProjectFit
+        ? {
+            assessment: answers.parentDreamProjectFit,
+            label: answers.parentDreamProjectFit === 'very_fit'
+              ? 'Rất phù hợp với sở thích và thế mạnh của con'
+              : answers.parentDreamProjectFit === 'adjustable'
+              ? 'Phù hợp, có thể điều chỉnh quy mô hoặc độ khó'
+              : 'Muốn bàn thêm — cần thảo luận gia đình'
+          }
+        : null
+    },
     characterAvatar: {
       source: answers.avatarSource || 'system',
       gender: answers.gender === 'female' ? 'Nữ' : answers.gender === 'other' ? 'Khác' : 'Nam',
