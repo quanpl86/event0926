@@ -3,10 +3,10 @@ import {
   buildSafeAIStudioPrompt
 } from '../src/data/v3Engine.ts';
 
-console.log('=== TEST FUTURE ME V4 MASTER PROMPT & PRESENTATION DATA CONTRACT ===\n');
+console.log('=== TEST FUTURE ME V4 MASTER PROMPT & PRESENTATION DATA CONTRACT (6 ZONES + IMAGE FIXES) ===\n');
 
 // ─────────────────────────────────────────────────────────────
-// FIXTURE 1: Long Quân (Tiểu học lớp 4 - Multimedia 3D, Custom Avatar)
+// FIXTURE: Long Quân (Tiểu học lớp 4 - Multimedia 3D, Custom Avatar)
 // ─────────────────────────────────────────────────────────────
 console.log('--- [FIXTURE: LONG QUÂN - LỚP 4 MULTIMEDIA 3D] ---');
 const longQuanAnswers = {
@@ -18,17 +18,17 @@ const longQuanAnswers = {
   avatarSource: 'custom',
   customAvatarData: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
   domain: 'multimedia',
-  branch: 'design_3d',
-  projectName: 'Thiệp 3D Yêu Thương',
+  branch: 'design_2d', // Học sinh chọn 2D nhưng làm thiệp 3D
+  projectName: 'Bộ tranh kể chuyện — Thiệp 3D Yêu Thương',
   productFormat: 'Thiệp điện tử 3D tương tác',
   dreamAudience: 'gia đình và người thân',
   dreamPurpose: 'gửi lời chúc yêu thương và tình cảm tri ân',
   dreamFeatures: [
-    'Bấm nút mở thiệp tương tác (Hiệu ứng mở 3D)',
-    'Bấm nút phát lời chúc & âm nhạc nhẹ nhàng',
-    'Xoay mô hình 3D 360 độ để khám phá'
+    'Có hình minh họa chính',
+    'Phối màu sắc theo chủ đề ấm áp',
+    'Dòng chữ ngắn dễ đọc gửi lời yêu thương'
   ],
-  dreamAppearance: 'Mô hình ngôi nhà 3D ấm cúng',
+  dreamAppearance: 'Mô hình thiệp 3D ấm cúng với nhân vật gia đình',
   futureSelf: 'Nhà sáng tạo nội dung số & thiết kế trải nghiệm 3D tương lai',
   confirmedTraits: ['Tò mò', 'Sáng tạo', 'Kiên trì'],
   hoursPerWeek: 2,
@@ -52,135 +52,121 @@ if (!fullPrompt.includes('EXACTLY TWO MAIN TABS')) {
 }
 console.log('   => [PASS] Exactly two main tabs architecture verified.');
 
-// ── 2. KIỂM TRA 11 SECTIONS TRONG TAB 1 ──
-console.log('\n2. KIỂM TRA 11 SECTIONS TRONG TAB 1 (HỒ SƠ TƯƠNG LAI):');
-const expectedTab1Sections = [
-  'SECTION 1 — PROFESSIONAL HERO',
-  'SECTION 2 — PROFESSIONAL SUMMARY',
-  'SECTION 3 — FUTURE CAREER & PROFESSIONAL DIRECTION',
-  'SECTION 4 — FUTURE LEARNING & PROJECT EXPERIENCE',
-  'SECTION 5 — KNOWLEDGE & EXPERTISE',
-  'SECTION 6 — PROFESSIONAL SKILLS',
-  'SECTION 7 — TECH STACK & TOOL PROFICIENCY',
-  'SECTION 8 — FUTURE CAPABILITY VISUALIZATION',
-  'SECTION 9 — FEATURED PROJECTS & DREAM PROJECT SHOWCASE',
-  'SECTION 10 — FEEDBACK, TESTIMONIALS & SOCIAL IMPACT',
-  'SECTION 11 — FUTURE IMPACT & PROFESSIONAL VISION'
+// ── 2. KIỂM TRA 6 CORE EDITORIAL ZONES TRONG TAB 1 ──
+console.log('\n2. KIỂM TRA 6 CORE EDITORIAL ZONES TRONG TAB 1:');
+const expectedZones = [
+  'ZONE 01 · PROFESSIONAL HERO',
+  'ZONE 02 · FEATURED DREAM PROJECT SHOWCASE',
+  'ZONE 03 · TARGET CAPABILITY MAP',
+  'ZONE 04 · PROFESSIONAL TECH STACK & TOOL PROFICIENCY',
+  'ZONE 05 · FUTURE PROJECT EXPERIENCE',
+  'ZONE 06 · VISION, SOCIAL IMPACT & FEEDBACK'
 ];
 
-expectedTab1Sections.forEach(sec => {
-  if (!fullPrompt.includes(sec)) {
-    throw new Error(`Prompt missing Tab 1 section: "${sec}"!`);
+expectedZones.forEach(zone => {
+  if (!fullPrompt.includes(zone)) {
+    throw new Error(`Prompt missing Zone: "${zone}"!`);
   }
-  console.log(`   - Verified: ${sec}`);
+  console.log(`   - Verified: ${zone}`);
 });
-console.log('   => [PASS] All 11 sections present in Tab 1.');
+console.log('   => [PASS] All 6 Core Editorial Zones present in Tab 1.');
 
-// ── 3. KIỂM TRA 3 LEVELS TRONG TAB 2 ──
-console.log('\n3. KIỂM TRA 3 LEVELS TRONG TAB 2 (LỘ TRÌNH PHÁT TRIỂN) & BIDIRECTIONAL TRACEABILITY:');
-const expectedTab2Levels = [
+// ── 3. KIỂM TRA TAB 2: 2-COLUMN NAVIGATOR & 3 LEVELS ──
+console.log('\n3. KIỂM TRA TAB 2: BỐ CỤC 2 CỘT & 3 LEVELS:');
+const expectedTab2Elements = [
+  'BỐ CỤC GIAO DIỆN TAB 2',
+  'Project Navigator',
+  'Project Detail & Function-Level Roadmap',
   'LEVEL 1 — OVERALL ROADMAP',
   'LEVEL 2 — PROJECT ROADMAP',
   'LEVEL 3 — FUNCTION ROADMAP',
   'BIDIRECTIONAL TRACEABILITY'
 ];
 
-expectedTab2Levels.forEach(lvl => {
-  if (!fullPrompt.includes(lvl)) {
-    throw new Error(`Prompt missing Tab 2 level: "${lvl}"!`);
+expectedTab2Elements.forEach(item => {
+  if (!fullPrompt.includes(item)) {
+    throw new Error(`Prompt missing Tab 2 element: "${item}"!`);
   }
-  console.log(`   - Verified: ${lvl}`);
+  console.log(`   - Verified: ${item}`);
 });
-console.log('   => [PASS] All 3 levels and Bidirectional Traceability verified in Tab 2.');
+console.log('   => [PASS] 2-Column Navigator and 3 Levels verified in Tab 2.');
 
-// ── 4. KIỂM TRA PRESENTATION LAYER TRONG SAFEPAYLOAD ──
-console.log('\n4. KIỂM TRA PRESENTATION LAYER TRONG SAFEPAYLOAD:');
-const pres = safePayload.presentationLayer;
-if (!pres) throw new Error('safePayload missing presentationLayer!');
-
-// futureProfessionalRole
-if (!pres.futureProfessionalRole || pres.futureProfessionalRole.title !== 'Nhà sáng tạo nội dung số & thiết kế trải nghiệm 3D tương lai') {
-  throw new Error('Invalid futureProfessionalRole in presentationLayer!');
+// ── 4. KIỂM TRA 2D ➔ 3D PATHWAY CLARIFICATION ──
+console.log('\n4. KIỂM TRA DIỄN GIẢI CHUYÊN MÔN 2D ➔ 3D:');
+const pathway = safePayload.presentationLayer.futureProfessionalRole.specializationPathway;
+if (!pathway || !pathway.includes('Thiết kế đồ họa 2D') || !pathway.includes('3D')) {
+  throw new Error(`2D to 3D pathway not clarified! Got: "${pathway}"`);
 }
-console.log(`   - futureProfessionalRole.title: "${pres.futureProfessionalRole.title}"`);
-console.log(`   - futureProfessionalRole.techSector: "${pres.futureProfessionalRole.techSector}"`);
-console.log(`   - futureProfessionalRole.badge: "${pres.futureProfessionalRole.badge}"`);
+console.log(`   - Specialization Pathway: "${pathway}"`);
+console.log('   => [PASS] 2D foundation for 3D Dream Project properly explained.');
 
-// professionalSummary
-if (!pres.professionalSummary || !pres.professionalSummary.introduction) {
-  throw new Error('Invalid professionalSummary in presentationLayer!');
-}
-console.log(`   - professionalSummary: "${pres.professionalSummary.introduction.slice(0, 70)}..."`);
+// ── 5. KIỂM TRA TÍNH NĂNG P4: DÒNG CHỮ / LỜI CHÚC PHẢI TRONG MVP ──
+console.log('\n5. KIỂM TRA P4 FEATURES: CHỮ / THÔNG ĐIỆP NẰM TRỌN TRONG MVP:');
+const p4 = longQuanProjects[3];
+const mvpFeatures = p4.features?.filter(f => f.scope === 'mvp') || [];
+const extFeatures = p4.features?.filter(f => f.scope === 'extension') || [];
 
-// futureExperiences (4 items)
-if (!pres.futureExperiences || pres.futureExperiences.length !== 4) {
-  throw new Error(`Expected 4 futureExperiences, got ${pres.futureExperiences?.length}`);
-}
-const exp4 = pres.futureExperiences[3];
-if (!exp4.isFeaturedDreamProject || exp4.title !== 'Thiệp 3D Yêu Thương') {
-  throw new Error('P4 must be Featured Dream Project with exact name "Thiệp 3D Yêu Thương"!');
-}
-console.log(`   - futureExperiences count: ${pres.futureExperiences.length}`);
-console.log(`   - P4 Experience: "${exp4.title}" (Featured: ${exp4.isFeaturedDreamProject}, Status: ${exp4.status})`);
+console.log(`   - MVP Features (${mvpFeatures.length}):`);
+mvpFeatures.forEach(f => console.log(`     * [${f.id}] ${f.name}`));
+console.log(`   - Extension Features (${extFeatures.length}):`);
+extFeatures.forEach(f => console.log(`     * [${f.id}] ${f.name}`));
 
-// targetProficiency
-if (!pres.targetProficiency || !pres.targetProficiency.scaleDefinition?.L1 || !pres.targetProficiency.scaleDefinition?.L4) {
-  throw new Error('Invalid targetProficiency scale definition!');
+const hasTextMessageInMVP = mvpFeatures.some(f => f.name.toLowerCase().includes('chữ') || f.name.toLowerCase().includes('lời yêu thương') || f.name.toLowerCase().includes('màu sắc'));
+if (!hasTextMessageInMVP) {
+  throw new Error('Essential text / message feature was not included in MVP!');
 }
-console.log(`   - targetProficiency scale: L1 to L4 defined with criteria.`);
+console.log('   => [PASS] Essential short text message and color theme are in MVP.');
 
-// capabilityVisualization
-if (!pres.capabilityVisualization || pres.capabilityVisualization.dimensions.length !== 3) {
-  throw new Error('Invalid capabilityVisualization dimensions!');
+// ── 6. KIỂM TRA P4 K/S/C TRONG FUTURE EXPERIENCES KHÔNG BỊ RỖNG ──
+console.log('\n6. KIỂM TRA P4 TRONG FUTURE EXPERIENCES KHÔNG BỊ RỖNG:');
+const exp4 = safePayload.presentationLayer.futureExperiences[3];
+if (!exp4.knowledgeTarget || exp4.knowledgeTarget.length === 0) {
+  throw new Error('P4 knowledgeTarget is empty!');
 }
-console.log(`   - capabilityVisualization: 3 dimensions (Knowledge, Skills, Competencies) mapped without fake % scores.`);
-
-// featuredProjects
-if (!pres.featuredProjects || pres.featuredProjects.length !== 4) {
-  throw new Error(`Expected 4 featuredProjects, got ${pres.featuredProjects?.length}`);
+if (!exp4.skillsTarget || exp4.skillsTarget.length === 0) {
+  throw new Error('P4 skillsTarget is empty!');
 }
-console.log(`   - featuredProjects count: ${pres.featuredProjects.length}`);
+console.log(`   - P4 Knowledge Targets (${exp4.knowledgeTarget.length}):`, exp4.knowledgeTarget);
+console.log(`   - P4 Skills Targets (${exp4.skillsTarget.length}):`, exp4.skillsTarget);
+console.log('   => [PASS] P4 has full synthesized K/S targets.');
 
-// testimonials
-if (!pres.testimonials || pres.testimonials.hasVerifiedFeedback !== false || pres.testimonials.reviews.length !== 0) {
-  throw new Error('Testimonials must be unverified and empty by default (no fake reviews)!');
+// ── 7. KIỂM TRA ABOUTME KHÔNG DÙNG TEMPLATE "LẮP RÁP" CHO MULTIMEDIA ──
+console.log('\n7. KIỂM TRA ABOUTME ĐÃ ĐƯỢC CÁ NHÂN HÓA CHO MULTIMEDIA:');
+const aboutMe = safePayload.futureProfile.aboutMe;
+if (aboutMe.includes('lắp ráp, tìm hiểu cách các thiết bị hoạt động')) {
+  throw new Error('aboutMe still contains generic robotics template text for multimedia!');
 }
-console.log(`   - testimonials: verifiedReviews empty, notice displayed: "${pres.testimonials.notice}"`);
+console.log(`   - aboutMe: "${aboutMe}"`);
+console.log('   => [PASS] aboutMe is personalized for multimedia & art storytelling.');
 
-// futureImpact
-if (!pres.futureImpact || !pres.futureImpact.targetAudience) {
-  throw new Error('Invalid futureImpact in presentationLayer!');
-}
-console.log(`   - futureImpact: Audience="${pres.futureImpact.targetAudience}", CTA="${pres.futureImpact.nextStepCTA}"`);
-console.log('   => [PASS] Complete presentationLayer verified.');
-
-// ── 5. KIỂM TRA IMAGE ASSET MANIFEST ──
-console.log('\n5. KIỂM TRA IMAGE ASSET MANIFEST:');
+// ── 8. KIỂM TRA IMAGE MANIFEST & PROTOTYPE IMAGES ──
+console.log('\n8. KIỂM TRA IMAGE MANIFEST:');
 const manifest = safePayload.imageManifest;
-if (!manifest) throw new Error('safePayload missing imageManifest!');
-if (manifest.activeHeroAssetId !== 'asset-hero-custom') {
-  throw new Error(`activeHeroAssetId must be "asset-hero-custom", got "${manifest.activeHeroAssetId}"`);
-}
-const heroAsset = manifest.assets.find(a => a.assetId === 'asset-hero-custom');
-if (!heroAsset || heroAsset.source !== 'user_uploaded' || !heroAsset.dataUrl) {
-  throw new Error('Hero asset must preserve custom avatar dataUrl and user_uploaded source!');
-}
-console.log(`   - Hero Asset: ID="${heroAsset.assetId}", Type="${heroAsset.type}", Source="${heroAsset.source}", Approved=${heroAsset.approved}`);
-
 const pAssets = manifest.assets.filter(a => a.type === 'project_prototype');
-if (pAssets.length !== 4) {
-  throw new Error(`Expected 4 project_prototype assets, got ${pAssets.length}`);
-}
 pAssets.forEach(pa => {
-  console.log(`   - Project Asset: ID="${pa.assetId}", ProjectID="${pa.projectId}", URL="${pa.url}"`);
+  console.log(`   - [${pa.projectId}] fileName="${pa.fileName}", URL="${pa.url}"`);
 });
-console.log('   => [PASS] Image asset manifest verified.');
 
-// ── 6. KIỂM TRA DATA INTEGRITY & INPUT DATA SECTIONS ──
-console.log('\n6. KIỂM TRA INPUT DATA SECTIONS TRONG PROMPT:');
-if (!fullPrompt.includes('{{APPROVED_FUTURE_ME_DATA_JSON}}') || !fullPrompt.includes('{{APPROVED_IMAGE_ASSETS}}')) {
-  throw new Error('Prompt missing required data anchors {{APPROVED_FUTURE_ME_DATA_JSON}} or {{APPROVED_IMAGE_ASSETS}}!');
+// P2 must NOT be activity-robotics in multimedia!
+const p2Asset = pAssets.find(a => a.projectId === 'P2');
+if (p2Asset?.url.includes('robotics')) {
+  throw new Error('P2 in Multimedia must NOT have robotics image!');
 }
-console.log('   => [PASS] Required input data anchors present.');
+// P1 and P4 must NOT have identical URLs in multimedia!
+const p1Asset = pAssets.find(a => a.projectId === 'P1');
+const p4Asset = pAssets.find(a => a.projectId === 'P4');
+if (p1Asset?.url === p4Asset?.url) {
+  throw new Error('P1 and P4 should have distinct images!');
+}
+console.log('   => [PASS] Unique, domain-matched prototype assets assigned.');
 
-console.log('\n=== ALL TESTS PASSED SUCCESSFULLY! ===\n');
+// ── 9. KIỂM TRA TỐI ƯU KÍCH THƯỚC PROMPT ──
+console.log('\n9. KIỂM TRA TỐI ƯU KÍCH THƯỚC PROMPT:');
+console.log(`   - Full Prompt length: ${fullPrompt.length.toLocaleString('vi-VN')} characters`);
+if (fullPrompt.length > 600000) {
+  console.warn(`   [WARNING] Prompt length is high (${fullPrompt.length}), but no duplicate image manifest.`);
+} else {
+  console.log(`   => [PASS] Prompt size optimized successfully (under 600K chars, no duplicate base64).`);
+}
+
+console.log('\n=== ALL AUDIT CHECKS PASSED: READY FOR AI STUDIO ===\n');

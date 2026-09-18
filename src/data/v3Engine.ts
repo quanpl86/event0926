@@ -438,36 +438,61 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     : ['Giao diện thân thiện', 'Tính năng tương tác cốt lõi', 'Chia sẻ cùng mọi người'];
 
   const libraryProjects = branch?.projects || [];
-  const projectImages = [
-    isPrimary ? '/assets/activity-world-building.png' : '/assets/activity-problem-solving.png',
-    isPrimary ? '/assets/activity-robotics.png' : '/assets/activity-nature-observation.png',
-    isPrimary ? '/assets/activity-visual-storytelling.png' : '/assets/activity-communication.png',
-    '/assets/activity-world-building.png'
-  ];
+  const projectImages = domain === 'multimedia'
+    ? [
+        '/assets/activity-visual-storytelling.png',
+        '/assets/activity-world-building.png',
+        '/assets/activity-communication.png',
+        '/assets/activity-nature-observation.png'
+      ]
+    : domain === 'robotics'
+    ? [
+        '/assets/activity-robotics.png',
+        '/assets/activity-problem-solving.png',
+        '/assets/activity-world-building.png',
+        '/assets/activity-communication.png'
+      ]
+    : [
+        '/assets/activity-world-building.png',
+        '/assets/activity-problem-solving.png',
+        '/assets/activity-visual-storytelling.png',
+        '/assets/activity-communication.png'
+      ];
 
-  // ── XÁC ĐỊNH TÍNH NĂNG TƯƠNG TÁC VÀ CÁC TÍNH NĂNG ĐÃ DUYỆT TỪ DỮ LIỆU ──
-  const interactiveFeatureCandidate = dreamFeatures.find(f =>
+  // ── XÁC ĐỊNH TÍNH NĂNG MVP VÀ EXTENSION TỪ DỮ LIỆU ĐÃ CHỌN ──
+  // Nguyên tắc: Toàn bộ các đặc trưng cốt lõi mà học sinh chọn (hình minh họa, phối màu, lời chúc/dòng chữ) đều nằm trọn trong MVP!
+  // Extension chỉ dành cho tính năng mở rộng v2.0 (tùy chỉnh cá nhân hóa, hiệu ứng nâng cao, xuất bản).
+  const interactiveCandidate = dreamFeatures.find(f =>
     f.toLowerCase().includes('bấm') ||
     f.toLowerCase().includes('mở') ||
     f.toLowerCase().includes('xoay') ||
     f.toLowerCase().includes('chạm') ||
     f.toLowerCase().includes('điều khiển') ||
     f.toLowerCase().includes('tương tác') ||
-    f.toLowerCase().includes('nút') ||
-    f.toLowerCase().includes('chuyển cảnh')
+    f.toLowerCase().includes('nút')
   );
 
-  const interactionFeature = interactiveFeatureCandidate || dreamFeatures[0] || (
+  // MVP F1: Chức năng tạo hình / tương tác trực tiếp
+  const interactionFeature = interactiveCandidate || dreamFeatures[0] || (
     answers.dreamPurpose?.toLowerCase().includes('thiệp') || answers.productFormat?.toLowerCase().includes('thiệp')
-      ? 'Bấm nút để mở thiệp và kích hoạt hiệu ứng 3D'
+      ? 'Mở thiệp và hiển thị không gian 3D trực quan'
       : domain === 'robotics'
-      ? 'Điều khiển vận hành qua nút bấm hoặc cảm biến'
-      : 'Tương tác phím bấm điều khiển chuyển động'
+      ? 'Điều khiển chuyển động và vận hành cơ cấu'
+      : 'Điều khiển chuyển động nhân vật'
   );
 
-  const remainingFeatures = dreamFeatures.filter(f => f !== interactionFeature);
-  const experienceFeature = remainingFeatures[0] || (dreamFeatures[1] && dreamFeatures[1] !== interactionFeature ? dreamFeatures[1] : (dreamFeatures[0] !== interactionFeature ? dreamFeatures[0] : 'Trải nghiệm thông điệp và nội dung'));
-  const extensionFeature = remainingFeatures[1] || (dreamFeatures[2] && dreamFeatures[2] !== interactionFeature && dreamFeatures[2] !== experienceFeature ? dreamFeatures[2] : 'Tính năng mở rộng và nâng cấp phiên bản');
+  // MVP F2: Chức năng nội dung, thông điệp & phối màu (giữ trọn vẹn lời chúc / dòng chữ ngắn trong MVP!)
+  const otherFeatures = dreamFeatures.filter(f => f !== interactionFeature);
+  const experienceFeature = otherFeatures.length > 0
+    ? otherFeatures.join(' & ')
+    : 'Lồng ghép thông điệp ý nghĩa & phối màu sắc hài hòa';
+
+  // Extension F3: Tính năng nâng cao v2.0
+  const extensionFeature = domain === 'multimedia'
+    ? 'Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng'
+    : domain === 'robotics'
+    ? 'Tự động hóa cảm biến nâng cao & Điều khiển từ xa qua mạng'
+    : 'Bổ sung màn chơi mở rộng & Bảng xếp hạng trực tuyến';
 
   const firstFeature = interactionFeature;
   const secondFeature = experienceFeature;
@@ -918,15 +943,21 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   const p4Features: ProjectFeature[] = [
     {
       id: 'F-P4-01',
-      name: `Chức năng tương tác: ${interactionFeature}`,
-      description: `Xây dựng và lập trình cơ chế tương tác trực tiếp "${interactionFeature}" cho sản phẩm ${dreamName}, giúp ${dreamAudience} có thể chủ động thao tác và kích hoạt phản hồi sinh động.`,
+      name: interactionFeature.includes(':')
+        ? interactionFeature
+        : (interactionFeature.toLowerCase().includes('tương tác') || interactionFeature.toLowerCase().includes('bấm') || interactionFeature.toLowerCase().includes('mở')
+            ? `Chức năng tương tác: ${interactionFeature}`
+            : `Chức năng tạo hình & cốt lõi: ${interactionFeature}`),
+      description: `Xây dựng và hoàn thiện "${interactionFeature}" cho sản phẩm ${dreamName}, giúp ${dreamAudience} có thể trải nghiệm và thao tác dễ dàng.`,
       knowledgeIds: ['K-02'],
       skillIds: ['S-02'],
       competencyIds: ['C-01', 'C-03'],
       tasks: [
         {
           id: 'T-P4-01-A',
-          description: `Thiết kế và gắn bộ điều khiển / sự kiện tương tác (click / chạm / cảm biến) để kích hoạt chuyển động "${interactionFeature}".`,
+          description: domain === 'robotics'
+            ? `Thiết kế mạch điều khiển và cơ cấu vận hành cho tính năng "${interactionFeature}".`
+            : `Thiết kế bố cục tạo hình và cơ chế hiển thị / tương tác trực quan cho "${interactionFeature}" theo định dạng ${productFormat}.`,
           knowledgeIds: ['K-02'],
           skillIds: ['S-02'],
           competencyIds: ['C-01']
@@ -1638,6 +1669,20 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     ? 'asset-hero-custom'
     : 'asset-hero-preset';
 
+  const futureRoleTitle = answers.futureSelf || riasec.roleTitle;
+  const roleSubtitle = riasec.roleSubtitle;
+  const motto = answers.domain === 'multimedia'
+    ? (isPrimary
+        ? 'Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!'
+        : 'Thiết kế không chỉ là hình thức, mà là cách chúng ta lan tỏa giá trị sống.')
+    : answers.domain === 'game_programming'
+    ? (isPrimary
+        ? 'Chơi game thật vui, nhưng tự tay làm ra game còn tuyệt vời hơn!'
+        : 'Lập trình là công cụ biến mọi ý tưởng tưởng chừng không thể thành hiện thực.')
+    : (isPrimary
+        ? 'Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!'
+        : 'Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.');
+
   const heroAsset: FutureMeImageAsset = {
     assetId: heroAssetId,
     type: 'student_future_hero',
@@ -1648,7 +1693,8 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     dataUrl: (answers.avatarSource === 'custom' && answers.customAvatarData?.startsWith('data:'))
       ? answers.customAvatarData
       : undefined,
-    alt: `Chân dung Future Me của ${answers.name || 'học sinh'} — ${answers.futureSelf || riasec.roleTitle}`,
+    fileName: 'hero.png',
+    alt: `Chân dung Future Me của ${answers.name || 'học sinh'} — ${futureRoleTitle}`,
     approved: true,
     isActive: true,
     representation: 'future_concept'
@@ -1665,18 +1711,41 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     type: 'student_avatar',
     source: 'system_preset',
     url: companionAvatarUrl,
+    fileName: 'companion-avatar.png',
     alt: `Linh vật bạn đồng hành Kitten Bot (${answers.avatar || 'creator'})`,
     approved: true,
     isActive: true,
     representation: 'future_concept'
   };
 
-  const projectAssets: FutureMeImageAsset[] = projects.map(p => ({
+  const defaultImages = answers.domain === 'multimedia'
+    ? [
+        '/assets/activity-visual-storytelling.png',
+        '/assets/activity-world-building.png',
+        '/assets/activity-communication.png',
+        '/assets/activity-nature-observation.png'
+      ]
+    : answers.domain === 'robotics'
+    ? [
+        '/assets/activity-robotics.png',
+        '/assets/activity-problem-solving.png',
+        '/assets/activity-world-building.png',
+        '/assets/activity-communication.png'
+      ]
+    : [
+        '/assets/activity-world-building.png',
+        '/assets/activity-problem-solving.png',
+        '/assets/activity-visual-storytelling.png',
+        '/assets/activity-communication.png'
+      ];
+
+  const projectAssets: FutureMeImageAsset[] = projects.map((p, idx) => ({
     assetId: `asset-prototype-${p.id.toLowerCase()}`,
     type: 'project_prototype',
     projectId: p.id as 'P1' | 'P2' | 'P3' | 'P4',
-    source: 'system_preset',
-    url: p.image || (isPrimary ? '/assets/activity-world-building.png' : '/assets/activity-problem-solving.png'),
+    source: (p.image && !p.image.startsWith('/assets/')) ? 'user_uploaded' : 'system_preset',
+    url: p.image || defaultImages[idx],
+    fileName: `prototype-${p.id.toLowerCase()}.png`,
     alt: `Ảnh concept prototype dự án ${p.name} (${p.id})`,
     approved: true,
     isActive: true,
@@ -1689,19 +1758,11 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
   };
 
   // ── 2. PRESENTATION LAYER (LỚP TRÌNH BÀY CHUYÊN BIỆT CHO FUTURE ME PORTFOLIO) ──
-  const futureRoleTitle = answers.futureSelf || riasec.roleTitle;
-  const roleSubtitle = riasec.roleSubtitle;
-  const motto = answers.domain === 'multimedia'
-    ? (isPrimary
-        ? 'Mỗi nét vẽ hôm nay mở ra một thế giới rực rỡ ngày mai!'
-        : 'Thiết kế không chỉ là hình thức, mà là cách chúng ta lan tỏa giá trị sống.')
-    : answers.domain === 'game_programming'
-    ? (isPrimary
-        ? 'Chơi game thật vui, nhưng tự tay làm ra game còn tuyệt vời hơn!'
-        : 'Lập trình là công cụ biến mọi ý tưởng tưởng chừng không thể thành hiện thực.')
-    : (isPrimary
-        ? 'Mỗi ý tưởng nhỏ hôm nay có thể tạo nên thay đổi lớn ngày mai!'
-        : 'Công nghệ không chỉ để giải trí, mà còn để tạo ra một thế giới tốt đẹp hơn.');
+  const is2DTo3DPathway = answers.branch === 'design_2d' && (
+    answers.productFormat?.toLowerCase().includes('3d') ||
+    dreamName.toLowerCase().includes('3d') ||
+    answers.dreamPurpose?.toLowerCase().includes('3d')
+  );
 
   const presentationLayer = {
     futureProfessionalRole: {
@@ -1709,6 +1770,9 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       subtitle: roleSubtitle,
       techSector: riasec.techSector,
       specialization: branch?.label || branchKey,
+      specializationPathway: is2DTo3DPathway
+        ? 'Chuyên môn nền tảng: Thiết kế đồ họa 2D (tạo hình, bố cục và màu sắc). Hướng mở rộng phục vụ Dream Project: Dựng hình khối và tương tác 3D. Kỹ năng 2D là bước chuẩn bị then chốt để làm chủ không gian 3D.'
+        : `Chuyên môn định hướng: ${branch?.label || branchKey} gắn liền với thực hành dự án.`,
       motto: motto,
       badge: 'Chân dung tương lai do con và gia đình định hướng',
       creativeStyle: (answers.confirmedTraits && answers.confirmedTraits.join(', ')) || (isPrimary ? 'Tò mò, kiên trì, sáng tạo' : 'Chủ động, tư duy hệ thống, sáng tạo'),
@@ -1722,9 +1786,17 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     },
 
     professionalSummary: {
-      introduction: isPrimary
-        ? `Nhà sáng tạo tương lai, mong muốn kết hợp ${answers.domain === 'multimedia' ? 'thiết kế 3D và kể chuyện tương tác' : answers.domain === 'robotics' ? 'chế tạo robot và cảm biến thông minh' : 'lập trình game và thuật toán tương tác'} để tạo ra sản phẩm giàu cảm xúc dành cho ${dreamAudience}.`
-        : `Kỹ sư và nhà sáng tạo số trẻ tuổi hướng tới làm chủ ${answers.domain === 'multimedia' ? 'đồ họa 3D và trải nghiệm người dùng hiện đại' : answers.domain === 'robotics' ? 'hệ thống robotics và tự động hóa IoT' : 'phần mềm và công nghệ tương tác'}, giải quyết các bài toán thiết thực cho cộng đồng.`,
+      introduction: answers.domain === 'multimedia'
+        ? (isPrimary
+            ? `Nhà sáng tạo tương lai, mong muốn kết hợp thiết kế đồ họa và nghệ thuật kể chuyện tương tác để tạo ra những sản phẩm giàu cảm xúc dành cho ${dreamAudience}.`
+            : `Kỹ sư và nhà thiết kế số trẻ tuổi hướng tới làm chủ đồ họa và trải nghiệm người dùng hiện đại, giải quyết các bài toán thiết thực cho cộng đồng.`)
+        : answers.domain === 'robotics'
+        ? (isPrimary
+            ? `Nhà sáng chế công nghệ tương lai, say mê lắp ráp và lập trình những chú robot thông minh hữu ích cho ${dreamAudience}.`
+            : `Kỹ sư công nghệ trẻ định hướng nghiên cứu và phát triển trong lĩnh vực robotics, IoT và tự động hóa phục vụ đời sống.`)
+        : (isPrimary
+            ? `Nhà sáng tạo game tương lai, mong muốn tự tay lập trình những trò chơi thông minh, bổ ích và mang lại niềm vui cho ${dreamAudience}.`
+            : `Kỹ sư phần mềm tương lai hướng tới phát triển các ứng dụng và trò chơi tương tác giải quyết bài toán thực tế.`),
       dreamProjectFocus: `Trọng tâm phát triển dự án "${dreamName}" (${answers.productFormat?.trim() || 'Sản phẩm tương tác công nghệ'}) với mục đích ${dreamPurpose}.`,
       techSector: riasec.techSector,
       creativeValues: [
@@ -1735,27 +1807,41 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       targetOrientationNotice: 'Mô tả thể hiện chân dung và giá trị hướng tới, không suy diễn tính cách bẩm sinh.'
     },
 
-    futureExperiences: projects.map((p, idx) => ({
-      stageId: p.id,
-      projectNumber: p.projectNumber,
-      title: p.name,
-      role: p.roleDescription,
-      experienceType: 'Future Project Experience (Dự án con sẽ thực hiện)',
-      status: 'FUTURE_TARGET',
-      statusNotice: 'Mục tiêu dự kiến trong lộ trình — Sẽ chuyển sang Đã hoàn thành khi có minh chứng thực tế.',
-      knowledgeTarget: (riasec.targetCapabilities.knowledge || []).filter((_, i) => i === idx || (idx === 3 && i >= 3)).map(k => `${k.id}: ${k.name}`),
-      skillsTarget: (riasec.targetCapabilities.skills || []).filter((_, i) => i === idx || (idx === 3 && i >= 3)).map(s => `${s.id}: ${s.name}`),
-      toolsTarget: (riasec.techStack[0]?.items || []).map(it => typeof it === 'string' ? it : it.name).slice(0, 3),
-      deliverable: p.deliverable,
-      targetOutcome: p.completionCheck,
-      isFeaturedDreamProject: Boolean(p.isDreamProject),
-      imageAssetId: `asset-prototype-${p.id.toLowerCase()}`,
-      roadmapLink: {
-        tab: 'ROADMAP',
+    futureExperiences: projects.map((p, idx) => {
+      const allK = riasec.targetCapabilities.knowledge || [];
+      const allS = riasec.targetCapabilities.skills || [];
+      
+      const knowledgeTargetList = idx === 3
+        ? allK.map(k => `${k.id}: ${k.name}`)
+        : (allK[idx] ? [`${allK[idx].id}: ${allK[idx].name}`] : allK.slice(0, 1).map(k => `${k.id}: ${k.name}`));
+
+      const skillsTargetList = idx === 3
+        ? allS.map(s => `${s.id}: ${s.name}`)
+        : (allS[idx] ? [`${allS[idx].id}: ${allS[idx].name}`] : allS.slice(0, 1).map(s => `${s.id}: ${s.name}`));
+
+      return {
         stageId: p.id,
-        featureId: p.features?.[0]?.id || `F-${p.id}-01`
-      }
-    })),
+        projectNumber: p.projectNumber,
+        title: p.name,
+        role: p.roleDescription,
+        experienceType: 'Future Project Experience (Dự án con sẽ thực hiện)',
+        status: 'FUTURE_TARGET',
+        statusNotice: 'Mục tiêu dự kiến trong lộ trình — Sẽ chuyển sang Đã hoàn thành khi có minh chứng thực tế.',
+        knowledgeTarget: knowledgeTargetList,
+        skillsTarget: skillsTargetList,
+        toolsTarget: (riasec.techStack[0]?.items || []).map(it => typeof it === 'string' ? it : it.name).slice(0, 3),
+        deliverable: p.deliverable,
+        targetOutcome: p.completionCheck,
+        isFeaturedDreamProject: Boolean(p.isDreamProject),
+        imageAssetId: `asset-prototype-${p.id.toLowerCase()}`,
+        fileName: `prototype-${p.id.toLowerCase()}.png`,
+        roadmapLink: {
+          tab: 'ROADMAP',
+          stageId: p.id,
+          featureId: p.features?.[0]?.id || `F-${p.id}-01`
+        }
+      };
+    }),
 
     targetProficiency: {
       scaleDefinition: {
@@ -1832,6 +1918,7 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       isFeaturedDreamProject: Boolean(p.isDreamProject),
       heroBadge: p.isDreamProject ? 'Featured Dream Project (Dự án tâm điểm)' : 'Dự án thành phần',
       imageAssetId: `asset-prototype-${p.id.toLowerCase()}`,
+      fileName: `prototype-${p.id.toLowerCase()}.png`,
       goal: p.goal,
       roleDescription: p.roleDescription,
       highlightFeatures: (p.features || []).map(f => ({
@@ -1892,6 +1979,9 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
         techSectorDescription: riasec.techSectorDescription,
         curriculumReferenceNotice: 'Hệ thống định hướng nội dung học tập theo lĩnh vực công nghệ con đã lựa chọn. Các khía cạnh sư phạm chỉ đóng vai trò tham khảo thiết kế hoạt động trải nghiệm nội bộ, không phân loại mã Holland cá nhân hay đánh giá tính cách học sinh khi chưa có công cụ đo lường chuyên biệt.',
         targetSpecialization: branch?.label || branchKey,
+        specializationPathway: is2DTo3DPathway
+          ? 'Chuyên môn nền tảng: Thiết kế đồ họa 2D (tạo hình, bố cục và màu sắc). Hướng mở rộng cho Dream Project: Dựng hình khối và tương tác 3D. Kỹ năng 2D là bước chuẩn bị then chốt để làm chủ không gian 3D.'
+          : `Định hướng chuyên môn: ${branch?.label || branchKey}.`
       },
       targetCapabilities: riasec.targetCapabilities,
       familyAlignment: {
@@ -1935,9 +2025,17 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       interests: answers.domain === 'robotics' ? 'Robot, sáng tạo' : answers.domain === 'game_programming' ? 'Lập trình, công nghệ' : answers.domain === 'multimedia' ? 'Thiết kế, đồ họa' : 'Khoa học, công nghệ',
       style: (answers.confirmedTraits && answers.confirmedTraits.slice(0, 2).join(', ')) || (isPrimary ? 'Tò mò, kiên trì' : 'Chủ động, sáng tạo'),
       dreamAudience: dreamAudience,
-      aboutMe: isPrimary
-        ? `Con thích lắp ráp, tìm hiểu cách các thiết bị hoạt động và luôn muốn tạo ra những sản phẩm có ích. Con đặc biệt thích ${answers.domain === 'robotics' ? 'robot' : answers.domain === 'game_programming' ? 'lập trình game' : answers.domain === 'multimedia' ? 'thiết kế sáng tạo' : 'khám phá công nghệ'} và muốn dùng công nghệ để giúp cuộc sống tốt đẹp hơn.`
-        : `Con thích tìm hiểu công nghệ, đặc biệt là ${answers.domain === 'robotics' ? 'robotics và vi điều khiển' : answers.domain === 'game_programming' ? 'lập trình và phát triển phần mềm' : answers.domain === 'multimedia' ? 'thiết kế đồ họa và trải nghiệm số' : 'công nghệ và đổi mới sáng tạo'}. Con muốn dùng kỹ năng của mình để tạo ra những giải pháp hữu ích cho cộng đồng.`
+      aboutMe: answers.domain === 'multimedia'
+        ? (isPrimary
+            ? `Con yêu thích sáng tạo nghệ thuật, vẽ tranh và thiết kế những hình ảnh sinh động. Con muốn dùng công nghệ đồ họa và câu chuyện tương tác để tạo nên "${dreamName}", gửi gắm tình cảm yêu thương đến ${dreamAudience}.`
+            : `Con đam mê thiết kế đồ họa và trải nghiệm số. Con muốn làm chủ các công cụ sáng tạo để hiện thực hóa dự án "${dreamName}", mang lại giá trị cảm xúc và kết nối cho ${dreamAudience}.`)
+        : answers.domain === 'game_programming'
+        ? (isPrimary
+            ? `Con say mê thế giới trò chơi tương tác và muốn tự tay lập trình nên những sản phẩm thú vị. Con mong muốn tạo ra "${dreamName}" mang lại niềm vui lành mạnh cho ${dreamAudience}.`
+            : `Con say mê lập trình và phát triển phần mềm tương tác. Con định hướng dùng công nghệ để giải quyết các bài toán thực tiễn và phát triển dự án "${dreamName}".`)
+        : (isPrimary
+            ? `Con thích tìm hiểu cách các thiết bị hoạt động, say mê lắp ráp và sáng tạo công nghệ có ích. Con muốn chế tạo "${dreamName}" để hỗ trợ ${dreamAudience} trong đời sống.`
+            : `Con định hướng nghiên cứu và phát triển trong lĩnh vực robotics, IoT và tự động hóa, ứng dụng công nghệ để giải quyết các thách thức thực tế thông qua dự án "${dreamName}".`),
     },
     dreamProject: {
       name: dreamName,
@@ -2053,164 +2151,97 @@ Roadmap là con đường để đạt được Portfolio đó.
 ---
 
 # 2. INFORMATION ARCHITECTURE — EXACTLY TWO MAIN TABS
-Website chỉ có hai tab điều hướng cấp cao nhất:
-TAB 1: HỒ SƠ TƯƠNG LAI (English label: My Future Profile)
-TAB 2: LỘ TRÌNH PHÁT TRIỂN (English label: My Development Roadmap)
+Website chỉ có đúng hai tab điều hướng cấp cao nhất:
+* TAB 1: HỒ SƠ TƯƠNG LAI (English label: My Future Profile)
+* TAB 2: LỘ TRÌNH PHÁT TRIỂN (English label: My Development Roadmap)
 
 Không tạo thêm tab chính như Dashboard, Assessment, Home, About, Projects hoặc Progress.
 Có thể sử dụng các section, card, accordion, modal, drawer và bộ lọc bên trong hai tab.
-Thanh điều hướng hai tab phải luôn dễ tiếp cận và hoạt động tốt trên desktop, tablet và mobile.
+Thanh điều hướng hai tab phải luôn cố định dễ tiếp cận và hoạt động hoàn hảo trên desktop, tablet và mobile.
 
 ---
 
-# 3. TAB 1 — PROFESSIONAL FUTURE PROFILE
-Đây là trang quan trọng nhất.
-Thiết kế như hồ sơ nghề nghiệp sáng tạo trong tương lai, tương tự một professional portfolio hiện đại, nhưng có phong cách phù hợp với cấp học của học sinh.
-Không thiết kế như CV văn bản khô cứng.
-Không dùng giao diện assessment report.
+# 3. TAB 1 — PROFESSIONAL FUTURE PROFILE (6 CORE EDITORIAL ZONES)
+Đây là trang quan trọng nhất. Thiết kế như một Creative Professional Portfolio hiện đại, có chiều sâu thị giác và phân cấp thông tin khoa học. Tuyệt đối không xếp 11 section phẳng lì nối tiếp nhau thành bản báo cáo dài. Thay vào đó, bố cục chặt chẽ thành 6 KHU VỰC THỊ GIÁC CHÍNH (6 Core Editorial Zones):
 
-## SECTION 1 — PROFESSIONAL HERO
-Hiển thị:
-* Ảnh đại diện hoặc hình minh họa Future Me của học sinh (sử dụng asset từ imageManifest hoặc CSS placeholder sang trọng).
+## ZONE 01 · PROFESSIONAL HERO (CHÂN DUNG TƯƠNG LAI)
+* Bố cục: Hero banner lớn tỷ lệ 16:9 hoặc split layout (trái: chân dung, phải: thông tin sáng tạo).
+* Ảnh đại diện Future Me của học sinh (lấy từ imageManifest với fileName "hero.png" hoặc assetId "asset-hero-custom" / dataUrl; nếu chưa có ảnh, dựng CSS Gradient Studio sang trọng).
 * Tên hiển thị ("${answers.name || 'Nhà Sáng Tạo'}").
-* Vai trò nghề nghiệp hoặc danh xưng sáng tạo tương lai ("${futureRoleTitle}").
-* Lĩnh vực công nghệ ("${riasec.techSector}").
-* Chuyên môn ("${branch?.label || branchKey}").
+* Vai trò sáng tạo tương lai ("${futureRoleTitle}").
+* Lĩnh vực & Chuyên môn ("${riasec.techSector} — ${branch?.label || branchKey}").
+${is2DTo3DPathway ? `* Chuyên môn & Lộ trình mở rộng: "Chuyên môn nền tảng: Thiết kế đồ họa 2D (tạo hình, bố cục và màu sắc). Hướng mở rộng cho Dream Project: Dựng hình khối và tương tác 3D."` : ''}
 * Tuyên ngôn tương lai ("${motto}").
-* Dream Project nổi bật ("${dreamName}").
-* Một câu mô tả ngắn về những sản phẩm học sinh muốn sáng tạo.
-* Hiển thị nhãn nhỏ, trang nhã: "Chân dung tương lai do con và gia đình định hướng".
+* Nhãn trang nhã: "Chân dung tương lai do con và gia đình định hướng".
+* Giới thiệu bản thân ngắn gọn (từ presentationLayer.professionalSummary), thể hiện khát vọng sáng tạo của con mà không suy diễn tính cách bẩm sinh.
 
-## SECTION 2 — PROFESSIONAL SUMMARY
-Trình bày phần giới thiệu bản thân trong tương lai:
-* Con muốn trở thành ai?
-* Con muốn sáng tạo những loại sản phẩm nào?
-* Lĩnh vực và chuyên môn con hướng tới.
-* Giá trị mà con muốn tạo ra.
-* Phong cách sáng tạo do con lựa chọn hoặc gia đình xác nhận.
-Văn phong chuyên nghiệp nhưng phù hợp lứa tuổi (${ageVisualConfig.styleTone}).
-Chỉ dùng dữ liệu được cung cấp. Không suy diễn tính cách hoặc thiên hướng nghề nghiệp bẩm sinh.
+## ZONE 02 · FEATURED DREAM PROJECT SHOWCASE (TÂM ĐIỂM SẢN PHẨM ƯỚC MƠ P4)
+* Thiết kế dạng Showcase Card nổi bật nhất Portfolio, đặt ngay dưới Hero để thu hút ánh nhìn đầu tiên.
+* Hiển thị ảnh prototype P4 lớn (từ imageManifest: fileName "prototype-p4.png" hoặc assetId "asset-prototype-p4").
+* Tiêu đề: Tên Dream Project giữ nguyên chính xác ("${dreamName}").
+* Thông điệp & Mục đích: "${dreamPurpose}" dành cho "${dreamAudience}".
+* Danh sách chức năng cốt lõi MVP (toàn bộ các tính năng chính con chọn như hình minh họa, màu sắc, dòng chữ ngắn gửi lời yêu thương đều nằm trọn trong MVP!).
+* Sản phẩm đầu ra kỳ vọng & Tiêu chuẩn hoàn thành.
+* Nút "Xem chi tiết dự án" (mở Modal/Drawer) và nút "Khám phá lộ trình thực hiện P4" (chuyển sang Tab 2 mở đúng chặng P4).
 
-## SECTION 3 — FUTURE CAREER & PROFESSIONAL DIRECTION
-Trình bày chân dung nghề nghiệp tương lai:
-* Vai trò nghề nghiệp mục tiêu.
-* Chuyên môn mong muốn.
-* Những loại công việc sáng tạo có thể thực hiện.
-* Môi trường hoặc lĩnh vực ứng dụng (${presentationLayer.futureProfessionalRole.environment}).
-* Giá trị đóng góp cho người dùng hoặc cộng đồng.
-Role cards: ví dụ 3D Designer, Digital Storyteller, Game Creator, Robotics Engineer, IoT Creator.
-Chỉ chọn vai trò tương ứng với hồ sơ đầu vào (${futureRoleTitle}).
-Không tự khẳng định nghề nghiệp này đã được một bài trắc nghiệm xác định là phù hợp nhất.
-Không tự tạo tên doanh nghiệp, chức vụ thực tế hoặc kinh nghiệm đi làm. Đây là định hướng nghề nghiệp tương lai.
+## ZONE 03 · TARGET CAPABILITY MAP (BIỂU ĐỒ NĂNG LỰC MỤC TIÊU)
+* Bắt buộc có biểu đồ năng lực trực quan dạng Horizontal Capability Bars hoặc Grouped Capability Matrix phân theo 3 nhóm:
+  1. Kiến thức chuyên môn (Target Knowledge K-xx)
+  2. Kỹ năng chuyên môn (Target Skills S-xx)
+  3. Năng lực giải quyết vấn đề & Sáng tạo (Competencies C-xx)
+* Trục mức độ thể hiện 4 MỨC MỤC TIÊU HƯỚNG TỚI:
+  - L1: Làm quen (Hiểu giao diện & thao tác cơ bản)
+  - L2: Thực hành có hướng dẫn (Làm theo quy trình mẫu)
+  - L3: Tự triển khai sản phẩm (Tự chủ thiết kế & lập trình chức năng)
+  - L4: Vận dụng & cải tiến (Tối ưu hóa, mở rộng chức năng & giải thích giải pháp)
+* NGUYÊN TẮC BẮT BUỘC: Thanh thể hiện mức mục tiêu cần rèn luyện qua các chặng P1–P4, TUYỆT ĐỐI KHÔNG BIỂU DIỄN PHẦN TRĂM ĐÃ ĐẠT (như 80%, 95%) hay điểm số tâm lý/IQ.
+* TƯƠNG TÁC HAI CHIỀU: Nhấn vào bất kỳ thanh năng lực nào sẽ tự động chuyển sang Tab 2, chọn đúng chặng dự án và mở đúng chức năng rèn luyện năng lực đó.
 
-## SECTION 4 — FUTURE LEARNING & PROJECT EXPERIENCE
-Thiết kế section theo phong cách Experience Timeline của professional portfolio.
-Hiển thị bốn trải nghiệm học tập và phát triển dự kiến từ P1 đến P4 (dữ liệu trong presentationLayer.futureExperiences).
-Mỗi experience card gồm:
-* Tên dự án.
-* Vai trò học sinh sẽ đảm nhiệm.
-* Kiến thức sẽ vận dụng.
-* Kỹ năng sẽ phát triển.
-* Công cụ dự kiến sử dụng.
-* Sản phẩm đầu ra.
-* Kết quả mục tiêu.
-* Hình minh họa dự án (từ imageManifest).
-* Liên kết "Xem lộ trình thực hiện" (chuyển sang Tab 2, chọn đúng chặng tương ứng).
-P4 phải là Featured Dream Project ("${dreamName}").
-Không tạo các kinh nghiệm làm việc tại công ty, cuộc thi hay giải thưởng ngoài dữ liệu.
-Không viết "đã hoàn thành" cho những dự án mới nằm trong kế hoạch.
-Hiển thị cấu trúc: "Future Project Experience" / "Dự án con sẽ thực hiện" / "Portfolio mục tiêu".
+## ZONE 04 · PROFESSIONAL TECH STACK & TOOL PROFICIENCY
+* Bố cục dạng thẻ công cụ hiện đại (Tech Stack Grid): Logo/Icon, Tên công cụ, Mục đích sử dụng, Mức thuần thục mục tiêu (L1–L4 kèm tiêu chí cụ thể), Dự án áp dụng.
+* Phân 3 nhóm công cụ rõ ràng:
+  - Core Tools (Công cụ cốt lõi cần làm chủ): ví dụ Blender, TinkerCAD, Scratch, Micro:bit...
+  - Supporting Tools (Công cụ bổ trợ thiết kế & tối ưu).
+  - Advanced / Extension Tools (Công cụ mở rộng cho tương lai).
 
-## SECTION 5 — KNOWLEDGE & EXPERTISE
-Hiển thị các mục tiêu kiến thức K-xx (phân nhóm theo lĩnh vực chuyên môn).
-Mỗi knowledge card gồm: Tên kiến thức, Mô tả ngắn, Kết quả học tập mong muốn, Vai trò trong Dream Project, Các chặng phát triển, Liên kết tới roadmap tương ứng.
-Hỗ trợ bấm mở chi tiết và điều hướng trực tiếp sang Tab 2.
+## ZONE 05 · FUTURE PROJECT EXPERIENCE (TIMELINE & GALLERY 4 CHẶNG P1 ➔ P4)
+* Trình bày dạng Gallery 4 dự án theo dòng thời gian (P1 ➔ P2 ➔ P3 ➔ P4).
+* Mỗi project card có:
+  - Ảnh prototype riêng biệt (P1: prototype-p1.png, P2: prototype-p2.png, P3: prototype-p3.png, P4: prototype-p4.png).
+  - Vai trò học sinh đảm nhiệm trong chặng.
+  - Mục tiêu kiến thức & kỹ năng áp dụng (đảm bảo P4 tổng hợp đầy đủ K/S của Dream Project, không để rỗng).
+  - Sản phẩm đầu ra kỳ vọng.
+  - Nhãn trạng thái: "Future Project Experience" (Dự án con sẽ thực hiện - Mục tiêu tương lai).
+  - Nút "Xem lộ trình chặng này" (chuyển sang Tab 2 chọn đúng dự án).
 
-## SECTION 6 — PROFESSIONAL SKILLS
-Hiển thị mục tiêu kỹ năng S-xx (nhóm Technical Skills, Creative Skills, Problem Solving, Communication & Collaboration).
-Mỗi kỹ năng có: Tên kỹ năng, Mức thuần thục mục tiêu, Mô tả cụ thể tiêu chí đạt mức mục tiêu, Sản phẩm hoặc chức năng minh chứng, Liên kết roadmap.
-Không tự tuyên bố học sinh đã thành thạo kỹ năng mục tiêu.
-
-## SECTION 7 — TECH STACK & TOOL PROFICIENCY
-Trình bày bộ công cụ như professional developer/designer portfolio:
-Tool logo/icon, Tên công cụ, Vai trò sử dụng, Mức thuần thục mục tiêu, Dự án liên quan.
-Chia thành:
-* Core Tools — công cụ chính cần học.
-* Supporting Tools — công cụ hỗ trợ.
-* Advanced / Extension Tools — công cụ mở rộng.
-Mức thuần thục mục tiêu dùng hệ thống bốn mức mô tả:
-L1 — Làm quen.
-L2 — Thực hành có hướng dẫn.
-L3 — Tự triển khai sản phẩm.
-L4 — Vận dụng, cải tiến và giải thích giải pháp.
-Không tự điền Expert, Advanced hoặc 95% proficiency.
-
-## SECTION 8 — FUTURE CAPABILITY VISUALIZATION
-Bắt buộc có một vùng biểu đồ năng lực tương tác đẹp và dễ đọc.
-Sử dụng dữ liệu từ presentationLayer.capabilityVisualization.
-Ưu tiên: Horizontal capability bars, Grouped skill matrix, hoặc Interactive competency map.
-Biểu đồ phải thể hiện MỤC TIÊU TƯƠNG LAI, không phải điểm đánh giá tâm lý hay kết quả học sinh đã đạt.
-Không tạo tỷ lệ phù hợp nghề nghiệp, IQ, năng lực bẩm sinh hoặc điểm chuẩn quốc tế.
-
-## SECTION 9 — FEATURED PROJECTS & DREAM PROJECT SHOWCASE
-Thiết kế như trang trưng bày sản phẩm chuyên nghiệp.
-Hiển thị bốn project cards với hình ảnh riêng từ imageManifest.
-Mỗi project card gồm: Tên dự án, Ảnh minh họa, Mục đích, Vai trò trong portfolio, Chức năng nổi bật, Công cụ mục tiêu, Kiến thức và kỹ năng liên quan, Sản phẩm dự kiến, Trạng thái thực hiện (FUTURE_TARGET), Nút xem chi tiết, Nút xem lộ trình hoàn thành.
-P4 sử dụng thiết kế Featured Project lớn hơn, tâm điểm của trang.
-Khi mở Project Detail (sử dụng modal hoặc drawer bên trong Tab 1): xem Overview, Problem & Purpose, Product Features, Target Audience, Technology, Learning Outcomes, Expected Deliverables, Development Roadmap link.
-Không tạo tab điều hướng cấp cao mới.
-
-## SECTION 10 — FEEDBACK, TESTIMONIALS & SOCIAL IMPACT
-Hiển thị giá trị mà sản phẩm hướng tới:
-* Đối tượng sử dụng (${dreamAudience}).
-* Vấn đề muốn giải quyết (${dreamPurpose}).
-* Giá trị mong muốn tạo ra.
-* Kế hoạch thu thập phản hồi.
-Chưa có phản hồi thật, hiển thị:
-"Phản hồi từ người trải nghiệm sẽ được cập nhật khi con giới thiệu sản phẩm."
-Trình bày các câu hỏi dự kiến dùng để thu thập phản hồi từ presentationLayer.testimonials. Không tự tạo nhận xét giả hay 5 sao ảo.
-
-## SECTION 11 — FUTURE IMPACT & PROFESSIONAL VISION
-Trình bày: Sứ mệnh sáng tạo, Giá trị dự án, Đóng góp mong muốn cho gia đình hoặc cộng đồng (${presentationLayer.futureImpact.socialContribution}).
-Kết thúc Tab 1 bằng CTA nổi bật:
-"Khám phá lộ trình để trở thành phiên bản tương lai của con" -> Nhấn vào chuyển sang Tab 2.
+## ZONE 06 · VISION, SOCIAL IMPACT & FEEDBACK
+* Trình bày giá trị hướng tới: Đối tượng sử dụng ("${dreamAudience}"), Vấn đề giải quyết ("${dreamPurpose}"), Đóng góp mong muốn cho gia đình và cộng đồng (${presentationLayer.futureImpact.socialContribution}).
+* Khu vực phản hồi (Testimonials):
+  - Mặc định danh sách đánh giá rỗng (bảo toàn tính trung thực, không tự tạo review giả hay 5 sao ảo).
+  - Hiển thị thông báo trang trọng: "Phản hồi từ người trải nghiệm sẽ được cập nhật khi con giới thiệu sản phẩm."
+  - Trình bày các câu hỏi dự kiến dùng để thu thập ý kiến đóng góp từ người thân.
+* CTA NỔI BẬT: Nút bấm lớn "Khám phá lộ trình để trở thành phiên bản tương lai của con" ➔ Nhấn vào chuyển sang Tab 2.
 
 ---
 
-# 4. TAB 2 — DEVELOPMENT ROADMAP
-Tab này giải thích chính xác con cần làm gì để đạt chính xác những gì được trình bày trong Tab 1.
-Không tạo roadmap chung chung dựa trên tên lĩnh vực. Roadmap phải được sinh từ các mục tiêu và dự án thực tế trong JSON.
+# 4. TAB 2 — DEVELOPMENT ROADMAP (LỘ TRÌNH PHÁT TRIỂN 3 CẤP ĐỘ)
+Giải thích chính xác con cần làm gì để đạt được Portfolio ở Tab 1.
 
-## LEVEL 1 — OVERALL ROADMAP
-Hiển thị bản đồ bốn chặng: P1 → P2 → P3 → P4.
-Mỗi chặng có: Tên, Vai trò, Mục tiêu, Kiến thức sẽ học, Kỹ năng sẽ rèn, Năng lực sẽ phát triển, Sản phẩm đầu ra, Trạng thái thực hiện (FUTURE_TARGET / IN_PROGRESS / VERIFIED).
-P4 giữ nguyên chính xác tên Dream Project ("${dreamName}").
+## BỐ CỤC GIAO DIỆN TAB 2
+* Phía trên: Thanh Mini-profile tóm tắt Chân dung tương lai & Dream Project ("${dreamName}").
+* Desktop: Bố cục 2 cột chuyên nghiệp:
+  - Cột trái (30%): Project Navigator (Danh sách 4 chặng P1 ➔ P4 với tiến độ, vai trò và trạng thái).
+  - Cột phải (70%): Project Detail & Function-Level Roadmap (Xem chi tiết từng chức năng, chuỗi nhiệm vụ tuần tự kèm checkbox cập nhật tiến độ, tiêu chí hoàn thành và minh chứng).
+* Mobile: Bố cục 1 cột tinh gọn, chạm vào chức năng sẽ mở Drawer toàn màn hình.
 
-## LEVEL 2 — PROJECT ROADMAP
-Bấm một chặng sẽ mở chi tiết dự án:
-Hiển thị: Project Overview, Vai trò chuẩn bị cho Future Profile, Sản phẩm cần tạo, Danh sách chức năng (các object độc lập có ID), Công cụ cần dùng, Kiến thức, Kỹ năng, Năng lực mục tiêu, Các nhiệm vụ, Tiêu chí hoàn thành, Minh chứng dự kiến.
+## 3 CẤP ĐỘ LỘ TRÌNH
+* LEVEL 1 — OVERALL ROADMAP: Bản đồ 4 chặng P1 ➔ P2 ➔ P3 ➔ P4 (P4 giữ nguyên chính xác tên Dream Project "${dreamName}").
+* LEVEL 2 — PROJECT ROADMAP: Mục tiêu dự án, danh sách tính năng (F-Px-01, F-Px-02, F-Px-03), công cụ cần dùng, tiêu chí nghiệm thu.
+* LEVEL 3 — FUNCTION ROADMAP: Đi sâu vào từng tính năng: Tại sao Dream Project cần chức năng này, K/S/C rèn luyện, các bước nhiệm vụ tuần tự có checkbox lưu vào localStorage (key 'future_me_tasks_v1'), sản phẩm nhỏ cần nộp và tiêu chí kiểm tra.
 
-## LEVEL 3 — FUNCTION ROADMAP
-Bấm vào một chức năng sẽ mở lộ trình thực hiện chính chức năng đó:
-1. Chức năng này dùng để làm gì?
-2. Vì sao Dream Project cần chức năng này?
-3. Cần hiểu những kiến thức nào?
-4. Cần luyện những kỹ năng nào?
-5. Năng lực tương lai nào được phát triển?
-6. Các nhiệm vụ cần thực hiện theo trình tự.
-7. Sản phẩm nhỏ cần hoàn thành.
-8. Tiêu chí kiểm tra.
-9. Minh chứng cần lưu lại.
-10. Những chức năng hoặc nhiệm vụ cần hoàn thành trước.
-Mỗi nhiệm vụ có checkbox cập nhật tiến độ (lưu vào localStorage). Không đánh đồng checkbox nhiệm vụ với việc đã chứng minh đạt năng lực.
-
-## BIDIRECTIONAL TRACEABILITY (LIÊN KẾT HAI CHIỀU)
-Bắt buộc hỗ trợ hai chiều:
-Future Profile → Capability → Project → Feature → Task.
-Và:
-Task / Feature → Capability → Future Profile.
-Khi người dùng nhấn vào một kỹ năng, kiến thức hoặc dự án trong Tab 1, hệ thống chuyển sang Tab 2, chọn đúng chặng và mở đúng chức năng liên quan.
-Có nút quay lại đúng mục tiêu vừa xem ở Tab 1.
+## BIDIRECTIONAL TRACEABILITY (LIÊN KẾT HAI CHIỀU HOÀN HẢO)
+* Tab 1 ➔ Tab 2: Bấm vào bất kỳ Năng lực K/S/C, Công cụ hoặc Dự án nào ở Tab 1 sẽ chuyển sang Tab 2, tự động chọn chặng và mở đúng chức năng liên quan.
+* Tab 2 ➔ Tab 1: Trong mỗi chức năng ở Tab 2, có nút "Xem năng lực bồi dưỡng ở Hồ sơ tương lai" để quay lại đúng vị trí ở Tab 1.
 
 ---
 
@@ -2219,9 +2250,7 @@ Sử dụng hình ảnh giao diện Future Creator làm cảm hứng:
 - Màu chủ đạo: Mint-teal (#1a8a7d, #0d9488, #14b8a6) kết hợp nền sạch sẽ, thoáng mát.
 - Bo góc mềm, shadow nhẹ, thẻ rõ ràng, kiểu chữ hiện đại Google Font 'Plus Jakarta Sans'.
 - Hình ảnh nhân vật và prototype lấy từ imageManifest.
-- Bố cục responsive:
-  * Desktop: Hero rộng, thanh tab ngang cố định/dễ tiếp cận, layout 12 cột, card portfolio dạng editorial, capability bars trực quan.
-  * Mobile: 1 cột tinh gọn, tab dễ bấm, drawer chi tiết thân thiện cảm ứng.
+- Bố cục responsive: Desktop 2 cột khoa học, Mobile 1 cột tinh gọn thân thiện cảm ứng.
 - Phong cách:
   * PRIMARY: Chibi thân thiện, màu tươi sáng, Kitten Bot đồng hành, giải thích dễ hiểu.
   * SECONDARY: Tech studio hiện đại, thanh lịch, typography sắc nét.
@@ -2262,13 +2291,17 @@ Phân biệt 3 trạng thái:
 
 # 8. DELIVERABLES
 Tạo ứng dụng hoàn chỉnh với:
-* Đúng hai tab hoạt động: TAB 1 (Hồ sơ năng lực tương lai - 11 sections) và TAB 2 (Lộ trình phát triển - 3 levels).
-* Future Professional Profile đầy đủ: Career Vision, Learning & Project Experience, Knowledge, Skills, Tech Stack, Tool Proficiency L1-L4, Capability Charts, Project Portfolio với P4 Dream Project Showcase, Testimonials placeholder & Future Impact.
+* Đúng hai tab hoạt động: TAB 1 (Hồ sơ năng lực tương lai - 6 Core Zones) và TAB 2 (Lộ trình phát triển - 2-Column Navigator & 3 Levels).
+* Future Professional Profile đầy đủ: Career Vision, Learning & Project Experience, Knowledge, Skills, Tech Stack, Tool Proficiency L1-L4, Target Capability Map, Project Portfolio với P4 Dream Project Showcase, Testimonials placeholder & Future Impact.
 * Development Roadmap 3 cấp: Overall → Project → Function với chuỗi nhiệm vụ và checkbox.
 * Bidirectional Capability Tracing hoạt động 2 chiều.
 * Tích hợp Image Manifest sử dụng đúng ảnh đã duyệt.
 * Local task progress và JSON backup/import.
 Generate the complete working application now.`;
+
+  const assetSummaryText = imageManifest.assets.map(a =>
+    `- [${a.assetId}] Tệp: "${a.fileName}" | Loại: ${a.type}${a.projectId ? ` (${a.projectId})` : ''} | Miêu tả: "${a.alt}" | Nguồn: ${a.source} | Ý nghĩa: ${a.representation} ${a.dataUrl ? '(Đã nhúng Data URL trong safePayload)' : `(URL: ${a.url})`}`
+  ).join('\n');
 
   const fullPrompt = `${masterPromptInstructions}
 
@@ -2280,7 +2313,8 @@ Generate the complete working application now.`;
 ${JSON.stringify(safePayload, null, 2)}
 
 ## DANH MỤC HÌNH ẢNH ĐƯỢC CẤP PHÉP ({{APPROVED_IMAGE_ASSETS}}):
-${JSON.stringify(imageManifest, null, 2)}
+Các tệp ảnh được đính kèm cùng dự án (dữ liệu chi tiết nằm trong trường safePayload.imageManifest):
+${assetSummaryText}
 `;
 
   return { safePayload, fullPrompt };

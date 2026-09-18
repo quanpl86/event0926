@@ -104,6 +104,7 @@ export interface FutureMeImageAsset {
   source: "ai_generated" | "user_uploaded" | "system_preset";
   url?: string;
   dataUrl?: string;
+  fileName?: string;
   attachmentId?: string;
   mimeType?: string;
   alt: string;
