@@ -139,11 +139,11 @@ export const ALIGNMENT_PILLARS: AlignmentPillar[] = [
         citationLabel: "ERIC / Epstein Family Partnerships"
       },
       {
-        authorOrOrg: "Hội đồng Học thuật TEKY",
-        title: "Quy tắc Kiểm soát Xung đột Nhận thức & Đối chiếu Gia đình (Family Alignment Protocol)",
-        year: "2026",
-        url: "https://teky.edu.vn",
-        citationLabel: "TEKY Academic Board (2026)"
+        authorOrOrg: "Dietrich, J., & Kracke, B.",
+        title: "Career-specific parental behaviors in adolescents' development: Theory and research",
+        year: "2009",
+        url: "https://doi.org/10.1016/j.jvb.2009.03.005",
+        citationLabel: "Journal of Vocational Behavior"
       }
     ]
   },

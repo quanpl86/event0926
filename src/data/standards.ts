@@ -291,7 +291,7 @@ export const STANDARDS_DB: Record<string, StandardDetail> = {
   "FM-INTEREST": {
     code: "FM-INTEREST – Khám phá Sở thích Tự nhiên",
     name: "Chỉ báo Nội bộ: Khám phá Xu hướng Sở thích & Tò mò Công nghệ",
-    organization: "Hội đồng Học thuật Future Me · TEKY",
+    organization: "Dự án Future Me · TEKY",
     version: "Khung Năng Lực Future Me",
     description: "Chỉ báo nội bộ nhằm quan sát phản xạ tự nhiên của học sinh với các chủ đề công nghệ, không xếp loại hay áp đặt nghề nghiệp.",
     scope: "Tiểu học (Lớp 1–5) & THCS (Lớp 6–9)",
@@ -303,7 +303,7 @@ export const STANDARDS_DB: Record<string, StandardDetail> = {
   "FM-PARENT": {
     code: "FM-PARENT – Bằng chứng Quan sát Gia đình",
     name: "Chỉ báo Quan sát Độc lập từ Cha Mẹ",
-    organization: "Hội đồng Học thuật Future Me · TEKY",
+    organization: "Dự án Future Me · TEKY",
     version: "Khung Năng Lực Future Me",
     description: "Ghi nhận góc nhìn và quan sát sinh hoạt thực tế của cha mẹ ở nhà: con hay tò mò điều gì, phản ứng ra sao khi gặp khó khăn.",
     scope: "Phụ huynh có con 6–15 tuổi",
@@ -315,7 +315,7 @@ export const STANDARDS_DB: Record<string, StandardDetail> = {
   "FM-DREAM": {
     code: "FM-DREAM – Phác thảo Ý tưởng Sáng tạo",
     name: "Chỉ báo Phác thảo Dự án Ước mơ Nguyên bản",
-    organization: "Hội đồng Học thuật Future Me · TEKY",
+    organization: "Dự án Future Me · TEKY",
     version: "Khung Năng Lực Future Me",
     description: "Tổng hợp ý tưởng độc lập của con về sản phẩm công nghệ con muốn tự tay làm ra để giúp ích cho đời sống.",
     scope: "Học sinh Tiểu học & THCS",
@@ -327,7 +327,7 @@ export const STANDARDS_DB: Record<string, StandardDetail> = {
   "FM-ULO-SIO": {
     code: "FM-ULO-SIO – Tình huống Năng lực Thực tế",
     name: "Chỉ báo Tình huống Năng lực Ứng dụng (SIO Evidence)",
-    organization: "Hội đồng Học thuật Future Me · TEKY",
+    organization: "Dự án Future Me · TEKY",
     version: "Khung Năng Lực Future Me",
     description: "51 tình huống SIO đa dạng theo 17 chuyên ngành giúp học sinh bộc lộ tư duy giải quyết vấn đề một cách tự nhiên.",
     scope: "17 chuyên ngành Lập trình, Robotics, Multimedia",
@@ -339,7 +339,7 @@ export const STANDARDS_DB: Record<string, StandardDetail> = {
   "FM-PATH": {
     code: "FM-PATH – Lộ trình Đồ án Cá nhân hóa",
     name: "Khung Lộ trình Đồ án Thực nghiệm 4 Chặng",
-    organization: "Hội đồng Học thuật Future Me · TEKY",
+    organization: "Dự án Future Me · TEKY",
     version: "Khung Năng Lực Future Me",
     description: "Chuyển hóa ước mơ và năng lực quan sát được thành lộ trình học tập thực tế: Chặng 1 Khám phá → Chặng 2 Nền tảng → Chặng 3 Đột phá → Chặng 4 Chuyên sâu.",
     scope: "Cá nhân hóa theo độ tuổi và chuyên môn",
@@ -383,9 +383,9 @@ export function getStandardDetail(code: string): StandardDetail {
   const resolved = resolveStandardCode(code);
   return STANDARDS_DB[resolved] ?? {
     code,
-    name: "Tiêu chuẩn tham chiếu giáo dục",
-    organization: "Hội đồng học thuật TEKY",
-    version: "2026",
+    name: "Chỉ báo năng lực định hướng",
+    organization: "Dự án Future Me · TEKY",
+    version: "Khung Khám Phá Năng Lực",
     description: "Tiêu chuẩn hướng dẫn thiết kế câu hỏi khám phá năng lực và tư duy công nghệ phù hợp lứa tuổi.",
     scope: "Tiểu học & THCS",
     criteria: "Khám phá phản xạ tự nhiên của học sinh trong tình huống giải quyết vấn đề.",

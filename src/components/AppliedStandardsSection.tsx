@@ -75,7 +75,7 @@ export const standardFrameworks = [
     id: "riasec",
     code: "RIASEC-FUTURE",
     title: "Mô Hình Sở Thích & Khung Hướng Nghiệp (RIASEC)",
-    organization: "Holland Code / O*NET (Hoa Kỳ) & Hội Đồng Học Thuật TEKY",
+    organization: "Holland Code / O*NET (Hoa Kỳ)",
     badge: "Chuẩn Hướng Nghiệp & Đối Chiếu",
     badgeColor: "bg-rose-100 text-rose-800 border-rose-200",
     icon: Compass,
