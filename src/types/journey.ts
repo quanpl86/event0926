@@ -90,3 +90,33 @@ export type JourneyAnswers = {
   customAvatarData?: string;
   avatarExportConsent?: boolean;
 };
+
+export interface FutureMeImageAsset {
+  assetId: string;
+  type:
+    | "student_future_hero"
+    | "student_avatar"
+    | "project_prototype"
+    | "project_gallery"
+    | "feature_illustration";
+  projectId?: "P1" | "P2" | "P3" | "P4";
+  featureId?: string;
+  source: "ai_generated" | "user_uploaded" | "system_preset";
+  url?: string;
+  dataUrl?: string;
+  attachmentId?: string;
+  mimeType?: string;
+  alt: string;
+  approved: boolean;
+  isActive?: boolean;
+  representation:
+    | "future_concept"
+    | "in_progress"
+    | "verified_product";
+}
+
+export interface FutureMeImageManifest {
+  activeHeroAssetId: string | null;
+  assets: FutureMeImageAsset[];
+}
+
