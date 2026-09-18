@@ -16,6 +16,7 @@ import {
   getBranchData,
   getBranchesForDomain,
   getDefaultBranchForDomain,
+  getPersonalizedSIOScenarios,
   DOMAIN_NAMES,
   type V3Step
 } from "@/data/v3Engine";
@@ -577,7 +578,7 @@ export function FutureJourney() {
             className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-bold text-slate-600 shadow-xs hover:bg-slate-50"
           >
             <BookOpen className="h-3.5 w-3.5 text-tek-600" />
-            <span className="hidden md:inline">Căn cứ: {primaryStandardCode}</span>
+            <span className="hidden md:inline">Cơ sở sư phạm</span>
           </button>
 
           {/* Home / Reset button */}
@@ -694,31 +695,17 @@ export function FutureJourney() {
                 <p className="mt-1 text-xs leading-5 text-slate-600 sm:text-sm">
                   {stepIntro}
                 </p>
-                <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                <div className="mt-2.5 flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => setInspectingStandard({ code: primaryStandardCode })}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-tek-300 bg-white/95 px-2.5 py-1 text-[10px] font-bold text-tek-700 hover:bg-white hover:border-tek-500 transition shadow-2xs"
-                    title="Bấm để xem chuẩn học thuật và lý do hỏi câu này"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-[10px] font-semibold text-slate-500 hover:text-tek-700 hover:bg-white hover:border-tek-300 transition shadow-2xs"
+                    title="Dành cho phụ huynh & người hướng dẫn: Bấm xem cơ sở sư phạm và các chuẩn đối chiếu của hoạt động này"
                   >
                     <BookOpen className="h-3 w-3 text-tek-600" />
-                    <span>Chuẩn đối chiếu: {primaryStandardCode}</span>
-                    <span className="text-tek-500 font-extrabold">· Xem căn cứ đánh giá →</span>
+                    <span>Cơ sở thiết kế hoạt động</span>
+                    <span className="text-slate-400 font-normal">({primaryStandardCode})</span>
                   </button>
-
-                  {allStepStandards
-                    .filter((code) => code !== primaryStandardCode)
-                    .map((code) => (
-                      <button
-                        key={code}
-                        type="button"
-                        onClick={() => setInspectingStandard({ code })}
-                        className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/80 px-2 py-0.5 text-[9px] font-bold text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition"
-                        title={`Bấm để xem chi tiết chuẩn bổ trợ: ${code}`}
-                      >
-                        <span>{code}</span>
-                      </button>
-                    ))}
                 </div>
               </div>
             </div>
@@ -1055,8 +1042,8 @@ export function FutureJourney() {
                             <span className="text-xs font-bold">{act.label}</span>
                           </div>
                           {isMatch && (
-                            <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[9px] font-extrabold text-amber-800 shrink-0">
-                              Khớp sở thích của con
+                            <span className="rounded-md bg-amber-100 border border-amber-200 px-2 py-0.5 text-[9px] font-extrabold text-amber-800 shrink-0">
+                              Khớp lựa chọn ở Bước 2 ({DOMAIN_NAMES[answers.domain || "robotics"]})
                             </span>
                           )}
                         </button>
@@ -1401,42 +1388,175 @@ export function FutureJourney() {
                 </div>
               )}
 
-              {/* STEP 8: DREAM CONFIRM (NAME YOUR DREAM PROJECT) */}
+              {/* STEP 8: DREAM CONFIRM (NAME YOUR DREAM PROJECT & PRODUCT FORMAT) */}
               {current === 8 && (() => {
-                const sampleProjects: string[] = (branchData?.projects || [])
-                  .map((p: any) => p.title || p.name)
-                  .filter(Boolean);
-                const defaultNamesByDomain: Record<string, { primary: string[]; secondary: string[] }> = {
-                  robotics: {
-                    primary: ["Robot Hỗ Trợ Đời Sống", "Trạm Công Nghệ Mini", "Cỗ Máy Thông Minh Vui Nhộn"],
-                    secondary: ["Hệ Thống Tự Động Hóa Thông Minh", "Thiết Bị IoT Giám Sát Môi Trường", "Cánh Tay Robot Công Nghiệp"]
-                  },
-                  game_programming: {
-                    primary: ["Thế Giới Phiêu Lưu Ký", "Chiến Binh Giải Đố", "Hành Trình Ngôi Sao Diệu Kỳ"],
-                    secondary: ["Vương Quốc Huyền Thoại RPG", "Siêu Ứng Dụng Học Tập Tương Tác", "Đấu Trường Logic & Chiến Thuật"]
-                  },
-                  multimedia: {
-                    primary: ["Cuốn Phim Hoạt Hình Vui Nhộn", "Thế Giới 3D Kỳ Diệu", "Triển Lãm Nghệ Thuật Số Của Bé"],
-                    secondary: ["Bộ Phim Hoạt Hình Kỹ Xảo 3D", "Không Gian Kiến Trúc Thực Tế Ảo", "Bộ Nhận Diện Sáng Tạo Đa Phương Tiện"]
+                const domain = answers.domain || "robotics";
+                const dreamPurpose = (answers.dreamPurpose || "").toLowerCase();
+                const is3D = (answers.branch || "").includes("3d") ||
+                  (answers.dreamAppearance || "").toLowerCase().includes("3d") ||
+                  dreamPurpose.includes("3d");
+                const isCard = dreamPurpose.includes("thiệp");
+
+                // Product format choices tailored to domain and purpose
+                const productFormatOptions: { id: string; label: string; desc: string }[] =
+                  domain === "multimedia"
+                    ? [
+                        {
+                          id: "Thiệp điện tử 3D tương tác",
+                          label: "Thiệp điện tử 3D tương tác",
+                          desc: "Mô hình 3D tương tác gửi thông điệp yêu thương đến gia đình & bạn bè"
+                        },
+                        {
+                          id: "Bộ tranh 3D tương tác dùng làm thiệp",
+                          label: "Bộ tranh 3D tương tác (Dùng làm thiệp)",
+                          desc: "Kết hợp câu chuyện hình ảnh 3D và tấm thiệp trao gửi yêu thương"
+                        },
+                        {
+                          id: "Bộ tranh / Phim kể chuyện số độc lập",
+                          label: "Bộ tranh / Phim hoạt hình kể chuyện số",
+                          desc: "Tác phẩm thị giác độc lập tập trung vào cốt truyện và hình ảnh sống động"
+                        },
+                        {
+                          id: "Mô hình / Không gian 3D tương tác",
+                          label: "Mô hình / Không gian 3D tương tác",
+                          desc: "Sản phẩm thế giới 3D đa chiều cho phép người xem xoay góc nhìn tự do"
+                        }
+                      ]
+                    : domain === "robotics"
+                    ? [
+                        {
+                          id: "Mô hình robot thông minh hỗ trợ đời sống",
+                          label: "Robot thông minh hỗ trợ đời sống",
+                          desc: "Cơ cấu cơ khí và cảm biến tự động giải quyết công việc hàng ngày"
+                        },
+                        {
+                          id: "Thiết bị IoT cảnh báo an toàn gia đình",
+                          label: "Thiết bị IoT cảnh báo thông minh",
+                          desc: "Hệ thống vi mạch giám sát môi trường và tự động phát tín hiệu"
+                        },
+                        {
+                          id: "Cánh tay robot / Cơ cấu tự động hóa",
+                          label: "Cánh tay robot / Cơ cấu cơ khí",
+                          desc: "Hệ thống truyền động chính xác hỗ trợ vận chuyển và phân loại đồ vật"
+                        }
+                      ]
+                    : [
+                        {
+                          id: "Trò chơi phiêu lưu & vượt ải tương tác",
+                          label: "Game phiêu lưu & vượt ải",
+                          desc: "Thế giới trò chơi 2D/3D với cơ chế điều khiển và chướng ngại vật phong phú"
+                        },
+                        {
+                          id: "Trò chơi giải đố rèn luyện tư duy",
+                          label: "Game giải đố & logic",
+                          desc: "Trò chơi rèn luyện trí tuệ với các câu đố thuật toán tăng dần độ khó"
+                        },
+                        {
+                          id: "Phần mềm ứng dụng học tập tương tác",
+                          label: "Ứng dụng tương tác số",
+                          desc: "Phần mềm tiện ích với giao diện phản hồi mượt mà cho người dùng"
+                        }
+                      ];
+
+                // Auto initialize productFormat if empty
+                const currentFormat = answers.productFormat || (
+                  isCard ? "Thiệp điện tử 3D tương tác" :
+                  is3D ? "Mô hình / Không gian 3D tương tác" :
+                  productFormatOptions[0].id
+                );
+
+                // Contextual Name Suggestions
+                let contextualSuggestions: string[] = [];
+                if (domain === "multimedia") {
+                  if (isCard) {
+                    contextualSuggestions = [
+                      "Thiệp 3D Yêu Thương",
+                      "Thiệp Đất Sét 3D Tương Tác",
+                      "Lời Nhắn 3D Gửi Cả Nhà",
+                      "Bộ Tranh & Thiệp 3D Pastel"
+                    ];
+                  } else if (is3D) {
+                    contextualSuggestions = [
+                      "Thế Giới 3D Kỳ Diệu",
+                      "Mô Hình Đất Sét Trong Mơ",
+                      "Không Gian Sáng Tạo 3D",
+                      "Cuốn Phim 3D Sống Động"
+                    ];
+                  } else {
+                    contextualSuggestions = [
+                      "Cuốn Phim Hoạt Hình Vui Nhộn",
+                      "Bộ Tranh Kể Chuyện Số",
+                      "Triển Lãm Nghệ Thuật Của Bé",
+                      "Sắc Màu Tuổi Thơ"
+                    ];
                   }
-                };
-                const domNames = defaultNamesByDomain[answers.domain || "robotics"] || defaultNamesByDomain.robotics;
-                const defaultNames = isPrimary ? domNames.primary : domNames.secondary;
-                const projectSuggestions = Array.from(new Set([...sampleProjects, ...defaultNames])).slice(0, 4);
+                } else if (domain === "robotics") {
+                  contextualSuggestions = isPrimary
+                    ? ["Robot Thủ Thư Thông Minh", "Trạm Công Nghệ Mini", "Cỗ Máy Tự Động Vui Nhộn", "Robot Giúp Việc Nhí"]
+                    : ["Hệ Thống Tự Động Hóa Thông Minh", "Thiết Bị IoT Giám Sát Môi Trường", "Cánh Tay Robot Đa Năng", "Trợ Lý Công Nghệ Thông Minh"];
+                } else {
+                  contextualSuggestions = isPrimary
+                    ? ["Thế Giới Phiêu Lưu Ký", "Chiến Binh Giải Đố", "Hành Trình Ngôi Sao Diệu Kỳ", "Khu Rừng Phép Thuật"]
+                    : ["Vương Quốc Huyền Thoại RPG", "Đấu Trường Logic & Chiến Thuật", "Siêu Ứng Dụng Học Tập Tương Tác", "Mê Cung Không Gian"];
+                }
+
+                // Check for potential divergence between chosen name and purpose/format
+                const currentName = answers.projectName || "";
+                const hasDivergence = currentName.toLowerCase().includes("tranh") &&
+                  dreamPurpose.includes("thiệp") &&
+                  !currentName.toLowerCase().includes("thiệp");
 
                 return (
                   <div className="space-y-6">
+                    {/* 1. Format selector */}
                     <div>
                       <div className="flex items-center justify-between">
                         <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
-                          {isPrimary ? "Con đặt tên cho sản phẩm trong mơ là gì?" : "Đặt tên định danh cho Dự Án Mơ Ước của bạn:"}
+                          1. Xác nhận định dạng & hình thức sản phẩm:
                         </label>
-                        <span className="text-[10px] font-bold text-slate-400">Chọn tên mẫu hoặc tự đặt tên mới</span>
+                        <span className="text-[10px] font-bold text-slate-400">Chọn đúng ý tưởng của con</span>
+                      </div>
+                      <div className="mt-2.5 grid gap-2 sm:grid-cols-2">
+                        {productFormatOptions.map(fmt => {
+                          const isFmtSelected = currentFormat === fmt.id;
+                          return (
+                            <button
+                              type="button"
+                              key={fmt.id}
+                              onClick={() => setAnswers(a => ({ ...a, productFormat: fmt.id }))}
+                              className={`rounded-2xl border p-3.5 text-left transition ${
+                                isFmtSelected
+                                  ? "border-tek-500 bg-tek-50 text-tek-900 ring-2 ring-tek-200"
+                                  : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-extrabold">{fmt.label}</span>
+                                <span className={`grid h-4 w-4 shrink-0 place-items-center rounded-full border ${
+                                  isFmtSelected ? "border-tek-600 bg-tek-600 text-white" : "border-slate-300"
+                                }`}>
+                                  {isFmtSelected && <Check className="h-2.5 w-2.5 stroke-[3]" />}
+                                </span>
+                              </div>
+                              <p className="mt-1 text-[11px] leading-4 text-slate-500">{fmt.desc}</p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 2. Project Name input */}
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                          2. {isPrimary ? "Con đặt tên cho sản phẩm là gì?" : "Đặt tên định danh cho Dự Án Mơ Ước:"}
+                        </label>
+                        <span className="text-[10px] font-bold text-slate-400">Chọn gợi ý theo dự án hoặc tự đặt tên</span>
                       </div>
 
                       {/* Project Name Suggestions */}
                       <div className="mt-2.5 flex flex-wrap gap-1.5">
-                        {projectSuggestions.map((nameSug, nIdx) => {
+                        {contextualSuggestions.map((nameSug, nIdx) => {
                           const isSelected = answers.projectName === nameSug;
                           return (
                             <button
@@ -1460,28 +1580,37 @@ export function FutureJourney() {
                         maxLength={60}
                         value={answers.projectName}
                         onChange={e => setAnswers(a => ({ ...a, projectName: e.target.value }))}
-                        placeholder="Ví dụ: Robot Thủ Thư Thông Minh / Website Hành Tinh Xanh"
+                        placeholder="Ví dụ: Thiệp 3D Yêu Thương / Robot Thủ Thư Thông Minh"
                         className="mt-2.5 w-full rounded-2xl border border-amber-300 bg-amber-50/40 px-4 py-3.5 text-base font-extrabold text-ink outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-100"
                       />
+
+                      {/* Consistency helper notice */}
+                      {hasDivergence && (
+                        <div className="mt-2.5 rounded-xl border border-amber-200 bg-amber-50/80 p-3 text-[11px] text-amber-900">
+                          <strong>💡 Gợi ý đồng bộ ý tưởng:</strong> Tên dự án hiện là <em>"{currentName}"</em>, mục đích ở Bước 7 là <em>"{answers.dreamPurpose}"</em>. Con có thể giữ nguyên tên này hoặc chọn định dạng sản phẩm <strong>"Bộ tranh 3D tương tác (Dùng làm thiệp)"</strong> để lộ trình và hồ sơ đồng nhất hoàn toàn!
+                        </div>
+                      )}
                     </div>
 
                     {/* Dream Brief Card */}
                     <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                       <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
-                        Bản tóm tắt ý tưởng của con:
+                        Bản tóm tắt ý tưởng Dream Project:
                       </span>
                       <h3 className="mt-1 text-base font-extrabold text-ink">
                         {answers.projectName || "Dự án Ước Mơ"}
                       </h3>
-                      <p className="mt-2 text-xs leading-5 text-slate-600">
-                        <strong>Đối tượng:</strong> {answers.dreamAudience || "Gia đình và người thân"}
-                      </p>
-                      <p className="mt-1 text-xs leading-5 text-slate-600">
-                        <strong>Mục đích:</strong> {answers.dreamPurpose || "Giải quyết vấn đề thực tế"}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-1.5">
+                      <div className="mt-3 grid gap-1.5 text-xs text-slate-600 sm:grid-cols-2">
+                        <p><strong>Định dạng:</strong> {currentFormat}</p>
+                        <p><strong>Đối tượng:</strong> {answers.dreamAudience || "Gia đình và người thân"}</p>
+                        <p className="sm:col-span-2"><strong>Mục đích:</strong> {answers.dreamPurpose || "Giải quyết vấn đề thực tế"}</p>
+                        {answers.dreamAppearance && (
+                          <p className="sm:col-span-2"><strong>Hình dáng / Phong cách:</strong> {answers.dreamAppearance}</p>
+                        )}
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
                         {(answers.dreamFeatures ?? []).map(f => (
-                          <span key={f} className="rounded-md bg-white px-2 py-1 text-[10px] font-bold text-tek-700 shadow-2xs">
+                          <span key={f} className="rounded-md bg-white px-2 py-1 text-[10px] font-bold text-tek-700 shadow-2xs border border-slate-200">
                             {f}
                           </span>
                         ))}
@@ -1511,15 +1640,23 @@ export function FutureJourney() {
                         <button
                           type="button"
                           key={exp.id}
-                          onClick={() => setAnswers(a => ({
-                            ...a,
-                            selections: {
-                              ...a.selections,
-                              priorActivities: active
-                                ? (a.selections.priorActivities ?? []).filter(x => x !== exp.id)
-                                : [...(a.selections.priorActivities ?? []), exp.id]
+                          onClick={() => setAnswers(a => {
+                            const currentList = a.selections.priorActivities ?? [];
+                            let nextList: string[];
+                            if (exp.id === "not_yet") {
+                              nextList = active ? [] : ["not_yet"];
+                            } else {
+                              const withoutNotYet = currentList.filter(x => x !== "not_yet");
+                              nextList = active ? withoutNotYet.filter(x => x !== exp.id) : [...withoutNotYet, exp.id];
                             }
-                          }))}
+                            return {
+                              ...a,
+                              selections: {
+                                ...a.selections,
+                                priorActivities: nextList
+                              }
+                            };
+                          })}
                           className={`flex items-center gap-3 rounded-xl border p-3.5 text-left text-xs font-bold transition ${
                             active ? "border-tek-500 bg-tek-50 text-tek-800" : "border-slate-200 bg-slate-50 hover:bg-slate-100"
                           }`}
@@ -1539,28 +1676,25 @@ export function FutureJourney() {
 
               {/* STEP 10: SIO SITUATION 1 (KNOWLEDGE) */}
               {current === 10 && (() => {
-                const sio = branchData?.sioInteractions?.[0];
-                const suggestions: string[] = (sio as any)?.suggestedAnswers || [
-                  "Con sẽ tìm hiểu cách hoạt động và chức năng từng bộ phận trước",
-                  "Con sẽ quan sát các thành phần và thử kết nối từng phần nhỏ",
-                  "Con sẽ phác thảo sơ đồ ý tưởng hoặc nhờ thầy cô hướng dẫn thêm"
-                ];
+                const scenarios = getPersonalizedSIOScenarios(answers, isPrimary);
+                const sio = scenarios[0];
+                const suggestions: string[] = sio.suggestedAnswers;
 
                 return (
                   <div className="space-y-4">
                     <div className="rounded-2xl border border-tek-200 bg-tek-50/50 p-4">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[10px] font-extrabold uppercase tracking-wider text-tek-700">
-                          Tình huống thử thách 1: Nhận thức & Hiểu biết
+                          Tình huống thử thách 1: {sio.stageName}
                         </span>
-                        {sio?.observable && (
+                        {sio.observable && (
                           <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-bold text-tek-700 border border-tek-200 shadow-2xs">
                             Quan sát: {sio.observable}
                           </span>
                         )}
                       </div>
                       <p className="mt-2 text-sm font-extrabold text-ink leading-relaxed">
-                        {sio?.question || "Khi bắt đầu một sản phẩm, con sẽ tìm hiểu bộ phận nào trước?"}
+                        {sio.question}
                       </p>
                     </div>
 
@@ -1578,7 +1712,11 @@ export function FutureJourney() {
                           <button
                             type="button"
                             key={sIdx}
-                            onClick={() => setAnswers(a => ({ ...a, knowledgeResponse: sug }))}
+                            onClick={() => setAnswers(a => ({
+                              ...a,
+                              knowledgeResponse: sug,
+                              assistedSIO: { ...(a.assistedSIO || {}), knowledge: true }
+                            }))}
                             className={`rounded-xl border px-3 py-1.5 text-left text-[11px] font-medium transition ${
                               answers.knowledgeResponse === sug
                                 ? "border-tek-500 bg-tek-50 text-tek-800 font-bold"
@@ -1593,18 +1731,26 @@ export function FutureJourney() {
                       <textarea
                         rows={3}
                         value={answers.knowledgeResponse}
-                        onChange={e => setAnswers(a => ({ ...a, knowledgeResponse: e.target.value }))}
+                        onChange={e => setAnswers(a => ({
+                          ...a,
+                          knowledgeResponse: e.target.value,
+                          assistedSIO: { ...(a.assistedSIO || {}), knowledge: false }
+                        }))}
                         placeholder="Nhập suy nghĩ của con vào đây hoặc bấm gợi ý ở trên..."
                         className="mt-2.5 w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-medium text-ink outline-none focus:border-tek-500 focus:bg-white"
                       />
 
                       <div className="mt-2 flex items-center justify-between">
                         <p className="text-[11px] text-slate-400 italic">
-                          *Câu hỏi quan sát phản xạ, không chấm điểm đúng sai.
+                          *Câu hỏi quan sát bối cảnh thực tế, không kết luận năng lực chỉ từ câu trả lời ngắn.
                         </p>
                         <button
                           type="button"
-                          onClick={() => setAnswers(a => ({ ...a, knowledgeResponse: "Chưa rõ / Muốn tìm hiểu thêm khi vào lớp" }))}
+                          onClick={() => setAnswers(a => ({
+                            ...a,
+                            knowledgeResponse: "Chưa rõ / Muốn tìm hiểu thêm khi vào lớp",
+                            assistedSIO: { ...(a.assistedSIO || {}), knowledge: false }
+                          }))}
                           className="text-[11px] font-bold text-slate-500 hover:text-tek-600 transition"
                         >
                           Chưa rõ câu này (bỏ qua) →
@@ -1617,28 +1763,25 @@ export function FutureJourney() {
 
               {/* STEP 11: SIO SITUATION 2 (SKILL) */}
               {current === 11 && (() => {
-                const sio = branchData?.sioInteractions?.[1];
-                const suggestions: string[] = (sio as any)?.suggestedAnswers || [
-                  "Làm theo 3 bước: Làm khung chính → Lắp chức năng → Chạy thử",
-                  "Lập trình khối lệnh cơ bản trước rồi mới thêm chi tiết và hiệu ứng",
-                  "Thử nghiệm từng phần nhỏ xem chạy đúng rồi mới ghép hoàn chỉnh"
-                ];
+                const scenarios = getPersonalizedSIOScenarios(answers, isPrimary);
+                const sio = scenarios[1];
+                const suggestions: string[] = sio.suggestedAnswers;
 
                 return (
                   <div className="space-y-4">
                     <div className="rounded-2xl border border-tek-200 bg-tek-50/50 p-4">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[10px] font-extrabold uppercase tracking-wider text-tek-700">
-                          Tình huống thử thách 2: Kỹ năng & Trình tự thực hiện
+                          Tình huống thử thách 2: {sio.stageName}
                         </span>
-                        {sio?.observable && (
+                        {sio.observable && (
                           <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-bold text-tek-700 border border-tek-200 shadow-2xs">
                             Quan sát: {sio.observable}
                           </span>
                         )}
                       </div>
                       <p className="mt-2 text-sm font-extrabold text-ink leading-relaxed">
-                        {sio?.question || "Con sẽ sắp xếp các bước thực hiện như thế nào để sản phẩm chạy đúng?"}
+                        {sio.question}
                       </p>
                     </div>
 
@@ -1656,7 +1799,11 @@ export function FutureJourney() {
                           <button
                             type="button"
                             key={sIdx}
-                            onClick={() => setAnswers(a => ({ ...a, skillResponse: sug }))}
+                            onClick={() => setAnswers(a => ({
+                              ...a,
+                              skillResponse: sug,
+                              assistedSIO: { ...(a.assistedSIO || {}), skill: true }
+                            }))}
                             className={`rounded-xl border px-3 py-1.5 text-left text-[11px] font-medium transition ${
                               answers.skillResponse === sug
                                 ? "border-tek-500 bg-tek-50 text-tek-800 font-bold"
@@ -1671,8 +1818,12 @@ export function FutureJourney() {
                       <textarea
                         rows={3}
                         value={answers.skillResponse}
-                        onChange={e => setAnswers(a => ({ ...a, skillResponse: e.target.value }))}
-                        placeholder="Ví dụ: Bước 1 con làm khung, bước 2 gắn cảm biến..."
+                        onChange={e => setAnswers(a => ({
+                          ...a,
+                          skillResponse: e.target.value,
+                          assistedSIO: { ...(a.assistedSIO || {}), skill: false }
+                        }))}
+                        placeholder="Ví dụ: Bước 1 con phác thảo, bước 2 nặn hình 3D..."
                         className="mt-2.5 w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-medium text-ink outline-none focus:border-tek-500 focus:bg-white"
                       />
 
@@ -1682,7 +1833,11 @@ export function FutureJourney() {
                         </p>
                         <button
                           type="button"
-                          onClick={() => setAnswers(a => ({ ...a, skillResponse: "Chưa rõ quy trình / Sẽ học hỏi thêm trong dự án" }))}
+                          onClick={() => setAnswers(a => ({
+                            ...a,
+                            skillResponse: "Chưa rõ quy trình / Sẽ học hỏi thêm trong dự án",
+                            assistedSIO: { ...(a.assistedSIO || {}), skill: false }
+                          }))}
                           className="text-[11px] font-bold text-slate-500 hover:text-tek-600 transition"
                         >
                           Chưa rõ quy trình (bỏ qua) →
@@ -1695,28 +1850,25 @@ export function FutureJourney() {
 
               {/* STEP 12: SIO SITUATION 3 (PROBLEM SOLVING / DEBUG) */}
               {current === 12 && (() => {
-                const sio = branchData?.sioInteractions?.[2];
-                const suggestions: string[] = (sio as any)?.suggestedAnswers || [
-                  "Kiểm tra lại từng vị trí nối hoặc từng dòng lệnh vừa sửa đổi",
-                  "Tách nhỏ từng phần ra chạy thử độc lập để tìm chính xác chỗ lỗi",
-                  "Bình tĩnh xem lại mẫu hoặc nhờ bạn bè, thầy cô gợi ý cách khắc phục"
-                ];
+                const scenarios = getPersonalizedSIOScenarios(answers, isPrimary);
+                const sio = scenarios[2];
+                const suggestions: string[] = sio.suggestedAnswers;
 
                 return (
                   <div className="space-y-4">
                     <div className="rounded-2xl border border-tek-200 bg-tek-50/50 p-4">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[10px] font-extrabold uppercase tracking-wider text-tek-700">
-                          Tình huống thử thách 3: Xử lý tình huống & Kiên trì sửa lỗi
+                          Tình huống thử thách 3: {sio.stageName}
                         </span>
-                        {sio?.observable && (
+                        {sio.observable && (
                           <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-bold text-tek-700 border border-tek-200 shadow-2xs">
                             Quan sát: {sio.observable}
                           </span>
                         )}
                       </div>
                       <p className="mt-2 text-sm font-extrabold text-ink leading-relaxed">
-                        {sio?.question || "Nếu sản phẩm chưa hoạt động như mong đợi, con sẽ thử cách nào trước?"}
+                        {sio.question}
                       </p>
                     </div>
 
@@ -1734,7 +1886,11 @@ export function FutureJourney() {
                           <button
                             type="button"
                             key={sIdx}
-                            onClick={() => setAnswers(a => ({ ...a, problemResponse: sug }))}
+                            onClick={() => setAnswers(a => ({
+                              ...a,
+                              problemResponse: sug,
+                              assistedSIO: { ...(a.assistedSIO || {}), problem: true }
+                            }))}
                             className={`rounded-xl border px-3 py-1.5 text-left text-[11px] font-medium transition ${
                               answers.problemResponse === sug
                                 ? "border-tek-500 bg-tek-50 text-tek-800 font-bold"
@@ -1749,7 +1905,11 @@ export function FutureJourney() {
                       <textarea
                         rows={3}
                         value={answers.problemResponse}
-                        onChange={e => setAnswers(a => ({ ...a, problemResponse: e.target.value }))}
+                        onChange={e => setAnswers(a => ({
+                          ...a,
+                          problemResponse: e.target.value,
+                          assistedSIO: { ...(a.assistedSIO || {}), problem: false }
+                        }))}
                         placeholder="Con sẽ kiểm tra lại các chỗ nối hoặc thử đổi một cách làm khác..."
                         className="mt-2.5 w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs font-medium text-ink outline-none focus:border-tek-500 focus:bg-white"
                       />
@@ -1760,7 +1920,11 @@ export function FutureJourney() {
                         </p>
                         <button
                           type="button"
-                          onClick={() => setAnswers(a => ({ ...a, problemResponse: "Chưa rõ cách sửa / Sẽ nhờ thầy cô hướng dẫn" }))}
+                          onClick={() => setAnswers(a => ({
+                            ...a,
+                            problemResponse: "Chưa rõ cách sửa / Sẽ nhờ thầy cô hướng dẫn",
+                            assistedSIO: { ...(a.assistedSIO || {}), problem: false }
+                          }))}
                           className="text-[11px] font-bold text-slate-500 hover:text-tek-600 transition"
                         >
                           Chưa rõ cách sửa (bỏ qua) →
@@ -1772,44 +1936,64 @@ export function FutureJourney() {
               })()}
 
               {/* STEP 13: SELF REFLECTION */}
-              {current === 13 && (
-                <div className="space-y-4">
-                  <p className="text-xs font-bold text-slate-500">
-                    Trong hành trình vừa qua, điều gì khiến {isPrimary ? "con" : "bạn"} muốn học hỏi thêm nhất?
-                  </p>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {(
-                      REFLECTION_OPTIONS_BY_DOMAIN[answers.domain || "robotics"] ||
-                      REFLECTION_OPTIONS_BY_DOMAIN.robotics
-                    ).map(ref => {
-                      const active = (answers.selfReflection ?? []).includes(ref.id);
-                      return (
-                        <button
-                          type="button"
-                          key={ref.id}
-                          onClick={() => {
-                            const list = answers.selfReflection ?? [];
-                            const next = list.includes(ref.id)
-                              ? list.filter(r => r !== ref.id)
-                              : [...list, ref.id];
-                            setAnswers(a => ({ ...a, selfReflection: next }));
-                          }}
-                          className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition ${
-                            active ? "border-tek-500 bg-tek-50 text-tek-800" : "border-slate-200 bg-white"
-                          }`}
-                        >
-                          <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${
-                            active ? "border-tek-600 bg-tek-600 text-white" : "border-slate-300"
-                          }`}>
-                            {active && <Check className="h-3 w-3" />}
-                          </span>
-                          <span className="text-xs font-bold">{ref.label}</span>
-                        </button>
-                      );
-                    })}
+              {current === 13 && (() => {
+                const domain = answers.domain || "robotics";
+                const is3D = answers.branch?.includes("3d") || (answers.productFormat || "").toLowerCase().includes("3d") || (answers.dreamPurpose || "").toLowerCase().includes("thiệp");
+                let options = REFLECTION_OPTIONS_BY_DOMAIN[domain] || REFLECTION_OPTIONS_BY_DOMAIN.robotics;
+
+                if (domain === "multimedia" && is3D) {
+                  options = [
+                    { id: "3d_modeling", label: "Cách dựng hình 3D và tạo khối nhân vật không gian sống động" },
+                    { id: "ui_visual", label: "Cách phối màu sắc, hiệu ứng ánh sáng và góc quay bắt mắt" },
+                    { id: "script_story", label: "Cách viết kịch bản và kể câu chuyện truyền cảm hứng cho người xem" },
+                    { id: "story", label: "Cách dựng phim, lồng tiếng và xuất bản tác phẩm số hoàn chỉnh" }
+                  ];
+                }
+
+                return (
+                  <div className="space-y-4">
+                    <p className="text-xs font-bold text-slate-500">
+                      Trong hành trình vừa qua, điều gì khiến {isPrimary ? "con" : "bạn"} muốn học hỏi thêm nhất?
+                    </p>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {options.map((ref, rIdx) => {
+                        const active = (answers.selfReflection ?? []).includes(ref.id);
+                        const isPriority = domain === "multimedia" && is3D && rIdx < 2;
+                        return (
+                          <button
+                            type="button"
+                            key={ref.id}
+                            onClick={() => {
+                              const list = answers.selfReflection ?? [];
+                              const next = list.includes(ref.id)
+                                ? list.filter(r => r !== ref.id)
+                                : [...list, ref.id];
+                              setAnswers(a => ({ ...a, selfReflection: next }));
+                            }}
+                            className={`flex items-center justify-between gap-3 rounded-2xl border p-4 text-left transition ${
+                              active ? "border-tek-500 bg-tek-50 text-tek-800" : "border-slate-200 bg-white hover:bg-slate-50"
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${
+                                active ? "border-tek-600 bg-tek-600 text-white" : "border-slate-300"
+                              }`}>
+                                {active && <Check className="h-3 w-3" />}
+                              </span>
+                              <span className="text-xs font-bold">{ref.label}</span>
+                            </div>
+                            {isPriority && (
+                              <span className="rounded-md bg-tek-100 border border-tek-200 px-2 py-0.5 text-[9px] font-extrabold text-tek-800 shrink-0">
+                                Ưu tiên theo dự án
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* STEP 14: PARENT COMPETENCY OBSERVATION (TOUCHPOINT 2) */}
               {current === 14 && (

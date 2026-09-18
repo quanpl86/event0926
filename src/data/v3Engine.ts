@@ -448,22 +448,56 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   const firstFeature = dreamFeatures[0] || 'Tính năng tương tác chính';
   const secondFeature = dreamFeatures[1] || 'Cơ chế phản hồi người dùng';
   const extraFeature = dreamFeatures[2] || 'Tính năng mở rộng nâng cao';
+  const productFormat = answers.productFormat?.trim() || (
+    answers.dreamPurpose?.toLowerCase().includes('thiệp') ? 'Thiệp điện tử 3D tương tác' :
+    domain === 'multimedia' ? 'Tác phẩm đa phương tiện 3D' :
+    domain === 'robotics' ? 'Mô hình robot thông minh' : 'Ứng dụng trò chơi tương tác'
+  );
 
   const defaultMode: "physical" | "simulation" | "software" | "design" =
     domain === 'robotics' ? (isPrimary ? 'physical' : 'physical') :
     domain === 'multimedia' ? 'design' : 'software';
 
+  // ── XÁC ĐỊNH TIÊU ĐỀ P1, P2, P3 THEO ĐÚNG DOMAIN & DREAM PROJECT (KHÔNG LẤY TÊN THƯ VIỆN LỆCH Ý TƯỞNG) ──
+  let p1DerivedTitle = 'Khởi động Nền tảng Kỹ thuật';
+  let p2DerivedTitle = 'Phát triển Cơ chế Tương tác Cốt lõi';
+  let p3DerivedTitle = 'Tích hợp Tính năng Nâng cao & Thử nghiệm Thực tế';
+
+  if (domain === 'multimedia') {
+    const is3D = answers.branch?.includes('3d') ||
+      answers.dreamAppearance?.toLowerCase().includes('3d') ||
+      answers.dreamPurpose?.toLowerCase().includes('3d') ||
+      productFormat.toLowerCase().includes('3d');
+
+    if (is3D) {
+      p1DerivedTitle = 'Phác thảo Ý tưởng & Tạo khối 3D Nền tảng';
+      p2DerivedTitle = 'Tạo hình Mô hình 3D Hoàn chỉnh & Phối màu';
+      p3DerivedTitle = 'Hoạt họa Tương tác & Lồng ghép Thông điệp';
+    } else {
+      p1DerivedTitle = 'Phác thảo Kịch bản & Tuyến Nhân vật';
+      p2DerivedTitle = 'Thiết kế Đồ họa & Cơ chế Chuyển động';
+      p3DerivedTitle = 'Biên tập Đa phương tiện & Kỹ xảo Hoàn thiện';
+    }
+  } else if (domain === 'robotics') {
+    p1DerivedTitle = 'Thiết kế Khung cơ khí & Mạch điều khiển Khởi động';
+    p2DerivedTitle = 'Lắp ráp Động cơ & Cảm biến Thông minh';
+    p3DerivedTitle = 'Tự động hóa & Hệ thống An toàn Thực tế';
+  } else if (domain === 'game_programming') {
+    p1DerivedTitle = 'Xây dựng Màn chơi Thử nghiệm & Nhân vật';
+    p2DerivedTitle = 'Lập trình Điều khiển & Va chạm Cốt lõi';
+    p3DerivedTitle = 'Trí tuệ Nhân tạo Đối thủ & Gameplay Loop';
+  }
+
   // ── DỰ ÁN 1 (P1): Xây dựng nền tảng trực tiếp phục vụ Dream Project ──
   const p1Base = libraryProjects[0] || {
-    title: 'Khởi động nền tảng kỹ thuật',
-    name: 'Khởi động nền tảng kỹ thuật',
-    goal: 'Làm quen với các công cụ cơ bản và hoàn thiện thử nghiệm đầu tiên',
-    tasks: ['Tìm hiểu bộ công cụ', 'Thực hành tính năng cơ bản', 'Thử nghiệm sản phẩm nhỏ'],
-    deliverable: 'Bản phác thảo thử nghiệm đầu tiên',
+    title: p1DerivedTitle,
+    name: p1DerivedTitle,
+    goal: `Làm quen với các công cụ nền tảng và hoàn thiện bản phác thảo thử nghiệm đầu tiên phục vụ "${dreamName}".`,
+    tasks: ['Làm quen môi trường sáng tạo', 'Thực hành các thao tác kỹ thuật cốt lõi', `Tạo bản phác thảo ban đầu cho ${dreamName}`],
+    deliverable: `Bản phác thảo thử nghiệm đầu tiên của ${dreamName}`,
     completionCheck: 'Hoàn thành các bước hướng dẫn cơ bản',
     sioIds: []
   };
-  const p1Title = (p1Base as any).title || p1Base.name || 'Khởi động nền tảng';
 
   const p1Features: ProjectFeature[] = [
     {
@@ -531,28 +565,28 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   const project1: DetailedPersonalizedProject = {
     id: 'P1',
     projectNumber: 1,
-    name: `${p1Title} (Khởi động cho ${dreamName})`,
+    name: `${p1DerivedTitle} (Khởi động cho ${dreamName})`,
     roleDescription: 'Xây dựng nền tảng trực tiếp phục vụ Dream Project.',
-    goal: `${p1Base.goal} — Đặt nền tảng tư duy và kỹ thuật phục vụ ý tưởng "${dreamName}".`,
+    goal: `Đặt nền tảng tư duy và kỹ thuật ban đầu phục vụ ý tưởng "${dreamName}" (${productFormat}).`,
     features: p1Features,
     tasks: [
-      p1Base.tasks?.[0] || 'Làm quen môi trường sáng tạo',
-      p1Base.tasks?.[1] || 'Thử nghiệm các thao tác kỹ thuật cốt lõi',
-      `Tạo bản phác thảo ban đầu lấy cảm hứng từ ý tưởng ${dreamName}`
+      'Làm quen với công cụ thiết kế/kỹ thuật nền tảng',
+      `Thực hành tạo các thành phần cốt lõi của ${productFormat}`,
+      `Tạo bản phác thảo nguyên mẫu ban đầu lấy cảm hứng từ ý tưởng ${dreamName}`
     ] as [string, string, string],
-    deliverable: `${p1Base.deliverable} có liên hệ với chủ đề ${dreamName}`,
-    completionCheck: p1Base.completionCheck || 'Vận hành thành công bản mẫu đầu tiên',
+    deliverable: `Bản phác thảo nguyên mẫu thử nghiệm đầu tiên của ${dreamName}`,
+    completionCheck: 'Vận hành thành công bản mẫu thử nghiệm đầu tiên',
     isDreamProject: false,
-    adaptedFromLibraryId: p1Title,
+    adaptedFromLibraryId: p1DerivedTitle,
     sioIds: (p1Base as any).sioIds || [],
     image: projectImages[0]
   };
 
   // ── DỰ ÁN 2 (P2): Phát triển chức năng cốt lõi đầu tiên ──
   const p2Base = libraryProjects[1] || {
-    title: 'Xây dựng cơ chế tương tác',
-    name: 'Xây dựng cơ chế tương tác',
-    goal: 'Phát triển các tính năng có tính logic và chiều sâu',
+    title: p2DerivedTitle,
+    name: p2DerivedTitle,
+    goal: `Phát triển chức năng cốt lõi "${firstFeature}" có tính logic và chiều sâu`,
     tasks: ['Thiết kế cấu trúc chức năng', 'Lập trình / ráp nối cơ chế', 'Kiểm tra độ ổn định'],
     deliverable: 'Mô-đun chức năng hoàn chỉnh',
     completionCheck: 'Cơ chế hoạt động đúng yêu cầu',
@@ -624,7 +658,7 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   const project2: DetailedPersonalizedProject = {
     id: 'P2',
     projectNumber: 2,
-    name: `${p2Title} • Tích hợp ${firstFeature}`,
+    name: `${p2DerivedTitle} • Tích hợp ${firstFeature}`,
     roleDescription: 'Phát triển chức năng cốt lõi đầu tiên.',
     goal: `${p2Base.goal} — Ứng dụng kỹ thuật để thử nghiệm tính năng "${firstFeature}" cho sản phẩm.`,
     features: p2Features,
@@ -835,7 +869,7 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   const project3: DetailedPersonalizedProject = {
     id: 'P3',
     projectNumber: 3,
-    name: `${p3Title} (Phục vụ ${dreamAudience})`,
+    name: `${p3DerivedTitle} (Phục vụ ${dreamAudience})`,
     roleDescription: 'Phát triển chức năng bổ sung, tích hợp hoặc thử nghiệm phù hợp với sản phẩm.',
     goal: `Tích hợp chức năng nâng cao và thử nghiệm thực tế phục vụ nhu cầu của ${dreamAudience}.`,
     features: p3Features,
@@ -922,15 +956,15 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     id: 'P4',
     projectNumber: 4,
     name: answers.projectName?.trim() || 'Dự Án Sáng Tạo Ước Mơ',
-    roleDescription: 'Hoàn thiện phiên bản khả thi của Dream Project và xác định hướng mở rộng.',
-    goal: `Hiện thực hóa ý tưởng "${dreamName}": Giải quyết vấn đề "${dreamPurpose}" phục vụ "${dreamAudience}" với các tính năng (${dreamFeatures.join(', ')}). Chia làm bản thử nghiệm thực tế khả thi (MVP) và lộ trình mở rộng phát triển (Extension).`,
+    roleDescription: `Hoàn thiện phiên bản khả thi của ${productFormat} "${dreamName}" và xác định hướng mở rộng.`,
+    goal: `Hiện thực hóa ý tưởng "${dreamName}" (${productFormat}): Giải quyết mục đích "${dreamPurpose}" phục vụ "${dreamAudience}" với các đặc trưng (${dreamFeatures.join(', ')}). Chia làm bản thử nghiệm thực tế khả thi (MVP) và lộ trình mở rộng phát triển (Extension).`,
     features: p4Features,
     tasks: [
       `Xây dựng Bản Thử Nghiệm Thực Tế (MVP): Tập trung vào tính năng cốt lõi [${dreamFeatures.slice(0, 2).join(', ')}]`,
       `Thử nghiệm người dùng thực tế: Trình diễn cho ${dreamAudience} và đo lường mức độ giải quyết mục tiêu "${dreamPurpose}"`,
       `Lập kế hoạch nâng cấp mở rộng: Bổ sung tính năng nâng cao [${dreamFeatures.slice(2).join(', ') || 'nâng cao tính tự động'}] và chuẩn bị trưng bày`
     ] as [string, string, string],
-    deliverable: 'Bản sản phẩm thực tế hoạt động được (Sản phẩm hoàn chỉnh) kèm video demo và tài liệu lộ trình phát triển',
+    deliverable: `Sản phẩm hoàn chỉnh "${dreamName}" (${productFormat}) kèm video demo và tài liệu lộ trình phát triển`,
     completionCheck: `Sản phẩm vận hành đúng ý tưởng con mong muốn, ${dreamAudience} có thể sử dụng và phản hồi`,
     isDreamProject: true,
     adaptedFromLibraryId: 'Ý tưởng gốc từ học sinh (Dream Project Brief)',
@@ -954,67 +988,548 @@ export type SIOEvidenceCard = {
   caveat: string;
 };
 
+export interface PersonalizedSIOScenario {
+  id: string;
+  stepIndex: number;
+  stageName: string;
+  dimension: 'knowledge' | 'skill' | 'problem_solving';
+  observable: string;
+  standardRefs: string[];
+  question: string;
+  suggestedAnswers: string[];
+  evidencePolicy: string;
+  parentExplanation: string;
+  childWhy: string;
+  nonScoringRubric: {
+    observed: string;
+    emerging: string;
+    not_observed: string;
+    insufficient_evidence: string;
+  };
+}
+
+/**
+ * Cá nhân hóa 3 tình huống thử thách quan sát (SIO Steps 10-12)
+ * Bối cảnh bám sát tuyệt đối theo Dự án Ước mơ (Dream Project), hình thức sản phẩm và chuyên môn
+ * TUÂN THỦ: Không kết luận đạt năng lực 3D chỉ từ câu trả lời ngắn hoặc tình huống 2D mô phỏng
+ */
+export function getPersonalizedSIOScenarios(answers: JourneyAnswers, isPrimary: boolean): PersonalizedSIOScenario[] {
+  const domain = answers.domain || 'robotics';
+  const branchKey = answers.branch || (isPrimary ? (domain === 'robotics' ? 'robot_build_and_block_control' : 'game') : 'web');
+  const dreamName = answers.projectName?.trim() || 'Dự án sáng tạo';
+  const dreamAudience = answers.dreamAudience || 'người thân và bạn bè';
+  const dreamPurpose = answers.dreamPurpose || 'lan tỏa yêu thương và giải quyết vấn đề thực tế';
+  const productFormat = answers.productFormat?.trim() || (
+    dreamPurpose.toLowerCase().includes('thiệp') ? 'thiệp điện tử 3D tương tác' :
+    domain === 'multimedia' ? 'sản phẩm đồ họa 3D' :
+    domain === 'robotics' ? 'mô hình robot thông minh' : 'trò chơi tương tác'
+  );
+
+  if (domain === 'multimedia') {
+    const is3D = branchKey.includes('3d') ||
+      (answers.dreamAppearance || '').toLowerCase().includes('3d') ||
+      dreamPurpose.toLowerCase().includes('3d') ||
+      productFormat.toLowerCase().includes('3d');
+
+    const isCard = dreamPurpose.toLowerCase().includes('thiệp') ||
+      productFormat.toLowerCase().includes('thiệp') ||
+      dreamName.toLowerCase().includes('thiệp');
+
+    if (isCard) {
+      return [
+        {
+          id: 'FM-P-MUL-SIO-01',
+          stepIndex: 10,
+          stageName: 'Nhận thức & Điểm nhấn Thị giác',
+          dimension: 'knowledge',
+          observable: 'Xác định điểm nhấn thị giác và phân cấp thông tin trên sản phẩm tương tác',
+          standardRefs: ['ISTE-1.6.c', 'NLS25-3.1'],
+          question: `Khi người nhận mở tấm ${productFormat} "${dreamName}", con muốn họ chú ý đến chi tiết nổi bật nào đầu tiên?`,
+          suggestedAnswers: [
+            'Mô hình 3D nhân vật/chi tiết chính nổi bật lên ngay giữa tấm thiệp',
+            'Dòng chữ lời chúc yêu thương thật ấm áp, rõ ràng và dễ đọc',
+            'Hiệu ứng màu sắc pastel theo chủ đề và giai điệu âm thanh vui tươi'
+          ],
+          evidencePolicy: 'Chỉ ghi nhận phản xạ lựa chọn bối cảnh của học sinh; chưa coi là chứng nhận năng lực 3D độc lập.',
+          parentExplanation: 'Quan sát cách con hình dung bố cục và điểm nhấn cảm xúc cho người nhận.',
+          childWhy: 'Mình muốn hiểu điều con muốn người nhận cảm thấy ấn tượng nhất khi mở thiệp.',
+          nonScoringRubric: {
+            observed: 'Có chủ đích rõ ràng về điểm nhìn hoặc thông điệp cốt lõi.',
+            emerging: 'Có ý tưởng nhưng chưa phân tách rõ thứ tự ưu tiên.',
+            not_observed: 'Chưa thể hiện sự lựa chọn bố cục.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu quan sát.'
+          }
+        },
+        {
+          id: 'FM-P-MUL-SIO-02',
+          stepIndex: 11,
+          stageName: 'Kỹ năng & Quy trình Thực hiện',
+          dimension: 'skill',
+          observable: 'Trình tự thiết kế nguyên mẫu 3D và ghép nối thành phần',
+          standardRefs: ['ISTE-1.4.a', 'ISTE-1.6.c'],
+          question: `Để hoàn thành ${productFormat} gửi tặng ${dreamAudience}, con dự định làm theo thứ tự các bước nào?`,
+          suggestedAnswers: [
+            'Phác thảo ý tưởng ra giấy → Nặn/tạo hình 3D → Thêm lời chúc → Xem thử tương tác',
+            'Viết lời chúc yêu thương trước → Chọn màu sắc và phong cách 3D → Ghép thành tấm thiệp hoàn chỉnh',
+            'Tạo mô hình 3D trước → Điều chỉnh góc nhìn xoay 360° → Thêm nút bấm tương tác và lời chúc'
+          ],
+          evidencePolicy: 'Ghi nhận tư duy sắp xếp các bước công việc; không yêu cầu thành thạo thao tác phần mềm chuyên sâu.',
+          parentExplanation: 'Quan sát khả năng chia nhỏ công việc và lập kế hoạch thực hiện của con.',
+          childWhy: 'Hiểu các bước con dự định bắt tay vào sáng tạo sản phẩm.',
+          nonScoringRubric: {
+            observed: 'Trình bày được chuỗi hành động tuần tự hợp lý từ ý tưởng đến hoàn thiện.',
+            emerging: 'Có các bước nhưng thứ tự chưa chặt chẽ.',
+            not_observed: 'Chưa thể hiện tư duy quy trình.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu quan sát.'
+          }
+        },
+        {
+          id: 'FM-P-MUL-SIO-03',
+          stepIndex: 12,
+          stageName: 'Xử lý Tình huống & Tinh chỉnh Trải nghiệm',
+          dimension: 'problem_solving',
+          observable: 'Phát hiện vấn đề trải nghiệm người dùng và điều chỉnh góc nhìn/bố cục',
+          standardRefs: ['ISTE-1.4.c', 'NLS25-3.2'],
+          question: `Người nhận nói hình 3D che mất một phần lời nhắn yêu thương. Con sẽ kiểm tra và điều chỉnh điều gì trước?`,
+          suggestedAnswers: [
+            'Thu nhỏ mô hình 3D hoặc đổi góc đặt sang bên cạnh để nhường chỗ cho dòng chữ',
+            'Đổi màu chữ tương phản hơn hoặc cho chữ hiện ra sau khi mô hình đã xoay xong',
+            'Thêm nút bấm để người nhận có thể xoay đổi góc nhìn hoặc ẩn/hiện lời nhắn dễ dàng'
+          ],
+          evidencePolicy: 'Ghi nhận phản xạ tìm giải pháp cải tiến sản phẩm khi nhận phản hồi; không suy diễn kỹ năng kỹ thuật cao cấp.',
+          parentExplanation: 'Quan sát thái độ tiếp nhận phản hồi và tư duy tìm giải pháp khắc phục vấn đề của con.',
+          childWhy: 'Biết cách con kiên trì sửa chữa và làm cho sản phẩm đẹp hơn.',
+          nonScoringRubric: {
+            observed: 'Đề xuất giải pháp giải quyết được xung đột giữa hình ảnh và thông điệp.',
+            emerging: 'Nhận ra vấn đề nhưng cách xử lý chưa giải quyết triệt để.',
+            not_observed: 'Chưa đưa ra phương án điều chỉnh.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu quan sát.'
+          }
+        }
+      ];
+    } else if (is3D) {
+      return [
+        {
+          id: 'FM-P-MUL-SIO-01',
+          stepIndex: 10,
+          stageName: 'Nhận thức & Điểm nhấn Không gian',
+          dimension: 'knowledge',
+          observable: 'Chọn góc nhìn và điểm nhấn không gian cho mô hình 3D',
+          standardRefs: ['ISTE-1.6.c', 'NLS25-3.1'],
+          question: `Khi đưa mô hình 3D "${dreamName}" vào không gian hiển thị, con muốn người xem nhìn thấy góc cạnh nào đầu tiên?`,
+          suggestedAnswers: [
+            'Góc nhìn chính diện nổi bật khuôn mặt và dáng điệu đặc trưng của mô hình',
+            'Góc nghiêng 45 độ để thấy rõ chiều sâu không gian và các chi tiết khối nổi bật',
+            'Góc nhìn bao quát toàn cảnh kèm hiệu ứng ánh sáng chiếu sáng toàn bộ mô hình'
+          ],
+          evidencePolicy: 'Chỉ ghi nhận phản xạ lựa chọn bối cảnh của học sinh; chưa coi là chứng nhận năng lực 3D độc lập.',
+          parentExplanation: 'Quan sát cách con tư duy không gian 3 chiều và truyền tải cảm xúc thị giác.',
+          childWhy: 'Tìm hiểu cách con muốn mọi người khám phá mô hình của mình.',
+          nonScoringRubric: {
+            observed: 'Có chủ đích rõ ràng về điểm nhìn và không gian.',
+            emerging: 'Có ý tưởng nhưng chưa rõ bố cục.',
+            not_observed: 'Chưa thấy biểu hiện.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+          }
+        },
+        {
+          id: 'FM-P-MUL-SIO-02',
+          stepIndex: 11,
+          stageName: 'Kỹ năng & Trình tự Dựng hình',
+          dimension: 'skill',
+          observable: 'Trình tự tạo hình từ khối cơ bản đến chi tiết và chất liệu',
+          standardRefs: ['ISTE-1.4.a', 'ISTE-1.6.c'],
+          question: `Để tạo nên mô hình 3D "${dreamName}", con sẽ thực hiện theo thứ tự nào?`,
+          suggestedAnswers: [
+            'Phác thảo hình khối cơ bản (hộp, cầu) → Ghép thành dáng chính → Thêm chi tiết và tô màu',
+            'Chọn bảng màu chủ đạo trước → Dựng từng bộ phận riêng lẻ → Ráp nối lại hoàn chỉnh',
+            'Dựng nhân vật chính trước → Thêm phụ kiện xung quanh → Thiết lập góc quay và ánh sáng'
+          ],
+          evidencePolicy: 'Ghi nhận tư duy sắp xếp quy trình tạo hình; không yêu cầu thành thạo công cụ chuyên nghiệp.',
+          parentExplanation: 'Quan sát phương pháp tư duy tạo hình và lập kế hoạch thực hiện của con.',
+          childWhy: 'Hiểu cách con bắt đầu hiện thực hóa khối hình 3D.',
+          nonScoringRubric: {
+            observed: 'Hiểu nguyên lý đi từ khối lớn cơ bản đến chi tiết tinh tế.',
+            emerging: 'Có các bước nhưng thứ tự chưa hợp lý.',
+            not_observed: 'Chưa thể hiện tư duy quy trình.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+          }
+        },
+        {
+          id: 'FM-P-MUL-SIO-03',
+          stepIndex: 12,
+          stageName: 'Xử lý Lỗi & Tinh chỉnh Ánh sáng/Khối',
+          dimension: 'problem_solving',
+          observable: 'Kiểm tra lỗi khối hoặc góc khuất ánh sáng và hiệu chỉnh',
+          standardRefs: ['ISTE-1.4.c', 'NLS25-3.2'],
+          question: `Khi xoay thử mô hình 3D, nếu con phát hiện một góc bị tối hoặc chi tiết bị méo lệch, con sẽ làm gì?`,
+          suggestedAnswers: [
+            'Dịch chuyển nguồn sáng phụ (Fill light) rọi vào góc tối để nhìn rõ hơn',
+            'Dùng công cụ nắn chỉnh (Sculpt/Transform) để kéo lại phần khối bị lệch cho cân đối',
+            'Bình tĩnh bấm nút Hoàn tác (Undo) hoặc xem lại bản phác thảo ban đầu để chỉnh sửa'
+          ],
+          evidencePolicy: 'Ghi nhận phản xạ tự sửa chữa và tinh chỉnh chất lượng tác phẩm.',
+          parentExplanation: 'Quan sát sự cẩn trọng và kiên nhẫn khi phát hiện chi tiết chưa hoàn hảo.',
+          childWhy: 'Giúp con nhận ra mọi lỗi kỹ thuật đều có cách giải quyết.',
+          nonScoringRubric: {
+            observed: 'Có giải pháp logic nhắm đúng vào ánh sáng hoặc hình khối.',
+            emerging: 'Nhận ra lỗi nhưng phương án xử lý chưa cụ thể.',
+            not_observed: 'Chưa có phương án xử lý.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+          }
+        }
+      ];
+    } else {
+      return [
+        {
+          id: 'FM-P-MUL-SIO-01',
+          stepIndex: 10,
+          stageName: 'Nhận thức & Truyền đạt Thông điệp',
+          dimension: 'knowledge',
+          observable: 'Chọn bố cục/hình ảnh để truyền đạt thông điệp',
+          standardRefs: ['ISTE-1.6.c', 'NLS25-3.1'],
+          question: `Khi sáng tạo tác phẩm "${dreamName}", con muốn người xem nhìn thấy hình ảnh nổi bật nào đầu tiên?`,
+          suggestedAnswers: [
+            'Hình ảnh nhân vật chính mang cảm xúc vui tươi và ấn tượng',
+            'Dòng tiêu đề lớn thật to làm nổi bật chủ đề thông điệp',
+            'Khung cảnh rực rỡ với màu sắc tương phản thu hút ánh nhìn'
+          ],
+          evidencePolicy: 'Chỉ ghi nhận phản xạ biểu đạt của học sinh tại thời điểm trả lời.',
+          parentExplanation: 'Quan sát tư duy truyền thông thị giác của học sinh.',
+          childWhy: 'Tìm hiểu cách con thu hút người xem vào tác phẩm.',
+          nonScoringRubric: {
+            observed: 'Xác định được trọng tâm thị giác.',
+            emerging: 'Có ý tưởng nhưng chưa nêu rõ điểm nhấn.',
+            not_observed: 'Chưa thể hiện điểm nhấn.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+          }
+        },
+        {
+          id: 'FM-P-MUL-SIO-02',
+          stepIndex: 11,
+          stageName: 'Kỹ năng & Quy trình Kể chuyện',
+          dimension: 'skill',
+          observable: 'Sắp xếp bố cục hình vẽ, tiêu đề và phân cảnh',
+          standardRefs: ['ISTE-1.4.a', 'ISTE-1.6.c'],
+          question: `Con sẽ sắp xếp hình ảnh chính, tiêu đề và các chi tiết như thế nào để người xem hiểu nhanh nhất?`,
+          suggestedAnswers: [
+            'Tiêu đề ở vị trí dễ thấy → Hình ảnh trung tâm thật to → Lời chú thích ngắn gọn',
+            'Bố trí theo trình tự câu chuyện từ trái qua phải, từ trên xuống dưới',
+            'Dùng màu sắc nổi bật cho điểm quan trọng nhất để người xem nhận ra ngay'
+          ],
+          evidencePolicy: 'Ghi nhận tư duy sắp xếp bố cục trực quan.',
+          parentExplanation: 'Quan sát kỹ năng tổ chức thông tin trực quan.',
+          childWhy: 'Hiểu cách con kể chuyện bằng hình ảnh.',
+          nonScoringRubric: {
+            observed: 'Có trình tự phân cấp thông tin rõ ràng.',
+            emerging: 'Có ý tưởng nhưng sắp xếp lộn xộn.',
+            not_observed: 'Chưa có trật tự.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+          }
+        },
+        {
+          id: 'FM-P-MUL-SIO-03',
+          stepIndex: 12,
+          stageName: 'Xử lý Lỗi & Tinh chỉnh Trải nghiệm',
+          dimension: 'problem_solving',
+          observable: 'Điều chỉnh thiết kế khi nhận phản hồi từ người xem',
+          standardRefs: ['ISTE-1.4.c', 'NLS25-3.2'],
+          question: `Nếu người xem nhận xét chữ trên tác phẩm hơi khó đọc hoặc hình vẽ bị rối, con sẽ làm gì?`,
+          suggestedAnswers: [
+            'Đổi màu chữ sang màu tương phản với nền và tăng kích thước chữ to hơn',
+            'Bớt các chi tiết rườm rà ở nền để làm nổi bật nội dung quan trọng',
+            'Hỏi thêm bạn xem phần nào khó hiểu nhất để cùng thảo luận cách sửa'
+          ],
+          evidencePolicy: 'Ghi nhận thái độ lắng nghe phản hồi và giải pháp cải tiến.',
+          parentExplanation: 'Quan sát sự sẵn sàng tinh chỉnh sản phẩm của học sinh.',
+          childWhy: 'Biết cách lắng nghe nhận xét để sản phẩm ngày càng hoàn thiện.',
+          nonScoringRubric: {
+            observed: 'Có giải pháp tương phản hoặc đơn giản hóa bố cục hợp lý.',
+            emerging: 'Nhận ra khó khăn nhưng giải pháp chưa đúng chỗ.',
+            not_observed: 'Chưa có giải pháp cải tiến.',
+            insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+          }
+        }
+      ];
+    }
+  }
+
+  if (domain === 'robotics') {
+    return [
+      {
+        id: 'FM-P-ROB-SIO-01',
+        stepIndex: 10,
+        stageName: 'Nhận thức & Phản ứng Thiết bị',
+        dimension: 'knowledge',
+        observable: 'Nhận biết tín hiệu cảm biến và phản ứng an toàn của máy móc',
+        standardRefs: ['CSTA-1A-CS-01', 'ISTE-1.1.a'],
+        question: `Khi thiết kế ${dreamName}, con muốn nó nhận biết và phản hồi với tín hiệu nào đầu tiên từ môi trường?`,
+        suggestedAnswers: [
+          'Cảm biến siêu âm phát hiện vật cản phía trước để dừng an toàn',
+          'Đèn LED tín hiệu phát sáng đổi màu khi có người đến gần',
+          'Nút bấm khởi động nhanh trên thân robot để người dùng dễ điều khiển'
+        ],
+        evidencePolicy: 'Chỉ ghi nhận phản xạ lựa chọn của học sinh trong tình huống mô phỏng.',
+        parentExplanation: 'Quan sát cách con hiểu mối liên hệ giữa cảm biến và hành vi của robot.',
+        childWhy: 'Tìm hiểu giác quan công nghệ nào con muốn trang bị cho robot trước tiên.',
+        nonScoringRubric: {
+          observed: 'Chọn được cảm biến hoặc tín hiệu đầu vào phù hợp với mục đích.',
+          emerging: 'Có ý tưởng nhưng chưa gắn với cơ chế cảm biến.',
+          not_observed: 'Chưa thể hiện sự lựa chọn.',
+          insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+        }
+      },
+      {
+        id: 'FM-P-ROB-SIO-02',
+        stepIndex: 11,
+        stageName: 'Kỹ năng & Quy trình Chế tạo',
+        dimension: 'skill',
+        observable: 'Trình tự lắp ráp cơ khí và kết nối mạch điện an toàn',
+        standardRefs: ['CSTA-1A-AP-10', 'ISTE-1.4.a'],
+        question: `Để chế tạo ${dreamName}, con sẽ sắp xếp thứ tự các bước làm như thế nào để xe chạy ổn định?`,
+        suggestedAnswers: [
+          'Lắp khung cơ khí và bánh xe trước → Gắn mạch điều khiển và động cơ → Nạp code chạy thử',
+          'Kiểm tra pin và cắm dây mạch điện trước → Lập trình lệnh cơ bản → Ráp vỏ ngoài',
+          'Vẽ phác thảo vị trí linh kiện → Lắp ráp từng cụm nhỏ → Ghép nối và thử tải'
+        ],
+        evidencePolicy: 'Ghi nhận tư duy sắp xếp quy trình kỹ thuật.',
+        parentExplanation: 'Quan sát kỹ năng phân chia các bước trong dự án cơ khí - lập trình.',
+        childWhy: 'Hiểu lộ trình thực hiện trong suy nghĩ của con.',
+        nonScoringRubric: {
+          observed: 'Quy trình logic từ phần cứng đến nạp phần mềm và kiểm thử.',
+          emerging: 'Các bước còn đảo lộn (ví dụ nạp code trước khi lắp mạch).',
+          not_observed: 'Chưa có trình tự.',
+          insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+        }
+      },
+      {
+        id: 'FM-P-ROB-SIO-03',
+        stepIndex: 12,
+        stageName: 'Xử lý Lỗi & Kiểm tra Kỹ thuật (Debug)',
+        dimension: 'problem_solving',
+        observable: 'Phương pháp kiểm tra nguyên nhân khi thiết bị hoạt động sai',
+        standardRefs: ['CSTA-1A-AP-14', 'ISTE-1.4.c'],
+        question: `Khi chạy thử nghiệm, nếu robot bị chạy lệch hướng hoặc chưa dừng trước vật cản, con sẽ kiểm tra điều gì trước?`,
+        suggestedAnswers: [
+          'Kiểm tra xem hai bánh xe có bị kẹt rác hoặc tốc độ động cơ hai bên có đều nhau không',
+          'Đo lại khoảng cách cảm biến siêu âm xem đã cắm đúng cổng và đúng thông số trong code chưa',
+          'Tách riêng phần code cảm biến ra thử độc lập trước khi chạy toàn bộ chương trình'
+        ],
+        evidencePolicy: 'Ghi nhận tư duy cô lập lỗi (isolation testing) và kiên trì khắc phục sự cố.',
+        parentExplanation: 'Quan sát phản xạ xử lý tình huống lỗi kỹ thuật.',
+        childWhy: 'Biết cách con suy luận nguyên nhân khi máy móc gặp trục trặc.',
+        nonScoringRubric: {
+          observed: 'Xác định được nguyên nhân cơ khí hoặc phần mềm và kiểm tra có phương pháp.',
+          emerging: 'Biết là có lỗi nhưng chưa biết bắt đầu kiểm tra từ đâu.',
+          not_observed: 'Chưa có phương án xử lý.',
+          insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+        }
+      }
+    ];
+  }
+
+  // Game Programming
+  return [
+    {
+      id: 'FM-P-GAM-SIO-01',
+      stepIndex: 10,
+      stageName: 'Nhận thức & Trải nghiệm Người chơi',
+      dimension: 'knowledge',
+      observable: 'Xác định yếu tố tương tác cốt lõi thu hút người chơi',
+      standardRefs: ['CSTA-1A-CS-01', 'ISTE-1.6.c'],
+      question: `Khi người chơi bắt đầu vào game "${dreamName}", con muốn họ chú ý hoặc trải nghiệm điều gì đầu tiên?`,
+      suggestedAnswers: [
+        'Hình ảnh nhân vật chính độc đáo và bối cảnh màn chơi thật bắt mắt',
+        'Bảng hướng dẫn luật chơi ngắn gọn và nút bấm bắt đầu thật dễ thấy',
+        'Âm thanh nền hào hứng cùng mục tiêu vượt ải rõ ràng'
+      ],
+      evidencePolicy: 'Ghi nhận định hướng trải nghiệm người dùng trong bối cảnh trò chơi.',
+      parentExplanation: 'Quan sát tư duy lấy người chơi làm trung tâm của học sinh.',
+      childWhy: 'Tìm hiểu điểm nhấn thu hút nhất trong trò chơi con tạo ra.',
+      nonScoringRubric: {
+        observed: 'Có chủ đích cụ thể về nhân vật, giao diện hoặc luật chơi mở đầu.',
+        emerging: 'Ý tưởng chung chung chưa rõ điểm nhấn.',
+        not_observed: 'Chưa có biểu hiện.',
+        insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+      }
+    },
+    {
+      id: 'FM-P-GAM-SIO-02',
+      stepIndex: 11,
+      stageName: 'Kỹ năng & Quy trình Lập trình Game',
+      dimension: 'skill',
+      observable: 'Trình tự phát triển game từ cơ chế chính đến cấp độ',
+      standardRefs: ['CSTA-1A-AP-10', 'ISTE-1.4.a'],
+      question: `Để lập trình trò chơi "${dreamName}", con sẽ sắp xếp các bước theo trình tự nào?`,
+      suggestedAnswers: [
+        'Vẽ nhân vật và sàn đấu trước → Lập trình phím di chuyển và nhảy → Thêm chướng ngại vật',
+        'Xây dựng luật tính điểm và kết thúc game trước → Thiết kế đồ họa → Tinh chỉnh độ khó',
+        'Làm một màn chơi mẫu siêu nhỏ (demo) → Chơi thử tìm lỗi → Mở rộng thêm màn tiếp theo'
+      ],
+      evidencePolicy: 'Ghi nhận tư duy phát triển phần mềm theo nguyên mẫu lặp lại (iterative).',
+      parentExplanation: 'Quan sát phương pháp tiếp cận lập trình phần mềm trò chơi của con.',
+      childWhy: 'Hiểu các bước con xây dựng trò chơi từ đầu đến cuối.',
+      nonScoringRubric: {
+        observed: 'Trình tự logic từ nhân vật/cơ chế đến màn chơi và thử nghiệm.',
+        emerging: 'Có các bước nhưng thứ tự chưa chặt chẽ.',
+        not_observed: 'Chưa có trình tự.',
+        insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+      }
+    },
+    {
+      id: 'FM-P-GAM-SIO-03',
+      stepIndex: 12,
+      stageName: 'Xử lý Lỗi & Cân bằng Gameplay (Debug)',
+      dimension: 'problem_solving',
+      observable: 'Phát hiện lỗi logic hoặc độ khó mất cân bằng và hiệu chỉnh',
+      standardRefs: ['CSTA-1A-AP-14', 'ISTE-1.4.c'],
+      question: `Nếu bạn chơi thử nói trò chơi bị khó quá hoặc nhân vật nhảy hay bị vướng vào chướng ngại vật, con sẽ sửa thế nào?`,
+      suggestedAnswers: [
+        'Giảm tốc độ di chuyển của chướng ngại vật hoặc nới rộng khoảng cách giữa các bục nhảy',
+        'Kiểm tra lại vùng va chạm (hitbox) của nhân vật xem có bị to hơn hình vẽ hay không',
+        'Thêm mạng chơi (HP) hoặc cho phép hồi sinh gần chỗ vừa ngã để bạn không nản lòng'
+      ],
+      evidencePolicy: 'Ghi nhận năng lực phát hiện nguyên nhân thuật toán và tối ưu trải nghiệm người chơi.',
+      parentExplanation: 'Quan sát cách con phản ứng trước ý kiến phản hồi và điều chỉnh thuật toán.',
+      childWhy: 'Giúp con biết cách lắng nghe người chơi để làm game hay hơn.',
+      nonScoringRubric: {
+        observed: 'Đề xuất cách sửa chuẩn xác về va chạm, thông số tốc độ hoặc cơ chế hỗ trợ.',
+        emerging: 'Biết game khó nhưng chưa biết chỉnh sửa thông số nào.',
+        not_observed: 'Chưa có phương án xử lý.',
+        insufficient_evidence: 'Bỏ qua hoặc chưa đủ dữ liệu.'
+      }
+    }
+  ];
+}
+
 /**
  * Trích xuất thẻ bằng chứng SIO thực tế (thay thế hoàn toàn Radar chart)
  * Tuân thủ P0: Chỉ ghi nhận những câu hỏi học sinh đã trả lời, không suy diễn điểm năng lực
  */
 export function extractSIOEvidenceCards(answers: JourneyAnswers): SIOEvidenceCard[] {
   const isPrimary = !answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand) || (answers.grade && parseInt(answers.grade, 10) <= 5);
-  const branchKey = answers.branch || (isPrimary ? 'game' : 'web');
-  const branch = getBranchData(Boolean(isPrimary), branchKey);
+  const scenarios = getPersonalizedSIOScenarios(answers, Boolean(isPrimary));
   const cards: SIOEvidenceCard[] = [];
-
-  const sioQuestions = branch?.sioInteractions || [];
+  const assistedMap = answers.assistedSIO || {};
 
   // 1. Tình huống SIO 1 (Nhận thức / Kiến thức) - Bước 10
-  if (sioQuestions[0]) {
+  if (scenarios[0]) {
+    const sc = scenarios[0];
     const resp = answers.knowledgeResponse?.trim();
-    cards.push({
-      id: 'evidence-sio-1',
-      sioId: sioQuestions[0].id,
-      stepIndex: 10,
-      stageName: 'Nhận thức & Khái niệm',
-      questionPrompt: sioQuestions[0].question,
-      responsePreview: resp ? `Học sinh đã trả lời: "${resp}"` : 'Học sinh chọn bỏ qua / Chưa có câu trả lời trực tiếp.',
-      sourceLabel: 'Tình huống tương tác trực tiếp',
-      sourceType: resp ? 'student_situation' : 'insufficient_evidence',
-      standardRef: sioQuestions[0].standardRefs?.[0],
-      caveat: 'Ghi nhận trong phạm vi câu hỏi tình huống mô phỏng, không đại diện cho chứng nhận kiến thức tổng thể.'
-    });
+    const isSkipped = !resp || resp.includes('bỏ qua') || resp.includes('Chưa rõ');
+    const isAssisted = Boolean(assistedMap['knowledge']);
+
+    if (isSkipped) {
+      cards.push({
+        id: 'evidence-sio-1',
+        sioId: sc.id,
+        stepIndex: 10,
+        stageName: sc.stageName,
+        questionPrompt: sc.question,
+        responsePreview: resp || 'Học sinh chọn tìm hiểu thêm khi vào lớp / Chưa có câu trả lời trực tiếp.',
+        sourceLabel: 'Chưa đủ dữ liệu quan sát',
+        sourceType: 'insufficient_evidence',
+        standardRef: sc.standardRefs[0],
+        caveat: 'Chưa đủ thông tin để ghi nhận ở câu hỏi này; bảo lưu để quan sát thực tế trong quá trình học tập.'
+      });
+    } else {
+      cards.push({
+        id: 'evidence-sio-1',
+        sioId: sc.id,
+        stepIndex: 10,
+        stageName: sc.stageName,
+        questionPrompt: sc.question,
+        responsePreview: isAssisted
+          ? `Học sinh đã chọn phương án định hướng: "${resp}"`
+          : `Học sinh đã trả lời: "${resp}"`,
+        sourceLabel: isAssisted ? 'Câu trả lời có gợi ý hỗ trợ từ hệ thống' : 'Học sinh tự diễn đạt độc lập',
+        sourceType: 'student_situation',
+        standardRef: sc.standardRefs[0],
+        caveat: isAssisted
+          ? 'Phản hồi được hỗ trợ từ gợi ý có sẵn, ghi nhận mức độ tiếp nhận thông tin, chưa coi là giải pháp độc lập.'
+          : 'Ghi nhận phản xạ tự nhiên của học sinh trong phạm vi câu hỏi tình huống mô phỏng.'
+      });
+    }
   }
 
   // 2. Tình huống SIO 2 (Kỹ năng / Quy trình) - Bước 11
-  if (sioQuestions[1]) {
+  if (scenarios[1]) {
+    const sc = scenarios[1];
     const resp = answers.skillResponse?.trim();
-    cards.push({
-      id: 'evidence-sio-2',
-      sioId: sioQuestions[1].id,
-      stepIndex: 11,
-      stageName: 'Kỹ năng & Quy trình thực hiện',
-      questionPrompt: sioQuestions[1].question,
-      responsePreview: resp ? `Học sinh đã trình bày: "${resp}"` : 'Học sinh chưa hoàn thành thao tác sắp xếp.',
-      sourceLabel: 'Tình huống tương tác trực tiếp',
-      sourceType: resp ? 'student_situation' : 'insufficient_evidence',
-      standardRef: sioQuestions[1].standardRefs?.[0],
-      caveat: 'Ghi nhận phản xạ giải quyết vấn đề tại thời điểm làm bài, cần thêm trải nghiệm thực tế để củng cố.'
-    });
+    const isSkipped = !resp || resp.includes('bỏ qua') || resp.includes('Chưa rõ');
+    const isAssisted = Boolean(assistedMap['skill']);
+
+    if (isSkipped) {
+      cards.push({
+        id: 'evidence-sio-2',
+        sioId: sc.id,
+        stepIndex: 11,
+        stageName: sc.stageName,
+        questionPrompt: sc.question,
+        responsePreview: resp || 'Học sinh chưa hoàn thành thao tác sắp xếp.',
+        sourceLabel: 'Chưa đủ dữ liệu quan sát',
+        sourceType: 'insufficient_evidence',
+        standardRef: sc.standardRefs[0],
+        caveat: 'Chưa đủ thông tin để ghi nhận ở câu hỏi này; bảo lưu để quan sát thực tế trong quá trình học tập.'
+      });
+    } else {
+      cards.push({
+        id: 'evidence-sio-2',
+        sioId: sc.id,
+        stepIndex: 11,
+        stageName: sc.stageName,
+        questionPrompt: sc.question,
+        responsePreview: isAssisted
+          ? `Học sinh đã chọn phương án định hướng: "${resp}"`
+          : `Học sinh đã trình bày: "${resp}"`,
+        sourceLabel: isAssisted ? 'Câu trả lời có gợi ý hỗ trợ từ hệ thống' : 'Học sinh tự diễn đạt độc lập',
+        sourceType: 'student_situation',
+        standardRef: sc.standardRefs[0],
+        caveat: isAssisted
+          ? 'Phản hồi được hỗ trợ từ gợi ý có sẵn, ghi nhận mức độ tiếp nhận quy trình, chưa coi là giải pháp độc lập.'
+          : 'Ghi nhận phản xạ giải quyết vấn đề tại thời điểm làm bài, cần thêm trải nghiệm thực tế để củng cố.'
+      });
+    }
   }
 
   // 3. Tình huống SIO 3 (Giải quyết vấn đề / Debug) - Bước 12
-  if (sioQuestions[2]) {
+  if (scenarios[2]) {
+    const sc = scenarios[2];
     const resp = answers.problemResponse?.trim();
-    cards.push({
-      id: 'evidence-sio-3',
-      sioId: sioQuestions[2].id,
-      stepIndex: 12,
-      stageName: 'Xử lý lỗi & Kiên trì thử nghiệm',
-      questionPrompt: sioQuestions[2].question,
-      responsePreview: resp ? `Học sinh đề xuất cách giải quyết: "${resp}"` : 'Chưa ghi nhận phương án sửa lỗi.',
-      sourceLabel: 'Tình huống tương tác trực tiếp',
-      sourceType: resp ? 'student_situation' : 'insufficient_evidence',
-      standardRef: sioQuestions[2].standardRefs?.[0],
-      caveat: 'Biểu hiện tư duy logic khi phát hiện tình huống bất thường.'
-    });
+    const isSkipped = !resp || resp.includes('bỏ qua') || resp.includes('Chưa rõ');
+    const isAssisted = Boolean(assistedMap['problem']);
+
+    if (isSkipped) {
+      cards.push({
+        id: 'evidence-sio-3',
+        sioId: sc.id,
+        stepIndex: 12,
+        stageName: sc.stageName,
+        questionPrompt: sc.question,
+        responsePreview: resp || 'Chưa ghi nhận phương án sửa lỗi.',
+        sourceLabel: 'Chưa đủ dữ liệu quan sát',
+        sourceType: 'insufficient_evidence',
+        standardRef: sc.standardRefs[0],
+        caveat: 'Chưa đủ thông tin để ghi nhận ở câu hỏi này; bảo lưu để quan sát thực tế trong quá trình học tập.'
+      });
+    } else {
+      cards.push({
+        id: 'evidence-sio-3',
+        sioId: sc.id,
+        stepIndex: 12,
+        stageName: sc.stageName,
+        questionPrompt: sc.question,
+        responsePreview: isAssisted
+          ? `Học sinh đã chọn phương án định hướng: "${resp}"`
+          : `Học sinh đề xuất cách giải quyết: "${resp}"`,
+        sourceLabel: isAssisted ? 'Câu trả lời có gợi ý hỗ trợ từ hệ thống' : 'Học sinh tự diễn đạt độc lập',
+        sourceType: 'student_situation',
+        standardRef: sc.standardRefs[0],
+        caveat: isAssisted
+          ? 'Phản hồi được hỗ trợ từ gợi ý có sẵn, ghi nhận phương hướng khắc phục, chưa coi là giải pháp độc lập.'
+          : 'Biểu hiện tư duy logic tự nhiên khi phát hiện tình huống bất thường.'
+      });
+    }
   }
 
   // 4. Quan sát từ phụ huynh - Bước 14
@@ -1139,6 +1654,11 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     },
     dreamProject: {
       name: dreamName,
+      productFormat: answers.productFormat?.trim() || (
+        dreamPurpose.toLowerCase().includes('thiệp') ? 'Thiệp điện tử 3D tương tác' :
+        answers.domain === 'multimedia' ? 'Tác phẩm đồ họa 3D' :
+        answers.domain === 'robotics' ? 'Mô hình robot thông minh' : 'Ứng dụng trò chơi tương tác'
+      ),
       audience: dreamAudience,
       purpose: dreamPurpose,
       features: dreamFeatures,

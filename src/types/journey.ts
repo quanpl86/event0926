@@ -81,6 +81,8 @@ export type JourneyAnswers = {
   familyConflict?: string;
   familyReviewConfirmed?: boolean;
   parentApprovesExternalTransfer?: boolean;
+  productFormat?: string;
+  assistedSIO?: Record<string, boolean>;
 
   // Custom Avatar support
   avatarSource?: "system" | "custom";
