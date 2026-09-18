@@ -45,6 +45,7 @@ export type JourneyStep = {
 
 export type JourneyAnswers = {
   name: string;
+  gender?: "male" | "female" | "other";
   gradeBand: string; // "1-2" | "3-5" | "6-7" | "8-9"
   grade?: string; // "1" .. "9"
   avatar: string;

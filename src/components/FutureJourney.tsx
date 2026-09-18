@@ -303,6 +303,7 @@ const PARENT_OBSERVED_SUGGESTIONS: Record<string, string[]> = {
 
 const initialAnswers: JourneyAnswers = {
   name: "",
+  gender: "male",
   gradeBand: "3-5",
   grade: "4",
   avatar: "creator",
@@ -721,6 +722,40 @@ export function FutureJourney() {
                     />
                     <p className="mt-1.5 text-[11px] text-slate-400">
                       *Chỉ cần nhập tên gọi thân mật hoặc biệt danh, không cần nhập họ tên thật.
+                    </p>
+                  </div>
+
+                  {/* CHỌN GIỚI TÍNH ĐỂ SINH PROMPT TẠO ẢNH NHÂN VẬT */}
+                  <div>
+                    <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-500">
+                      {isPrimary ? "Giới tính của con (Dùng để AI tạo ảnh nhân vật đại diện):" : "Giới tính (Dùng để AI tạo prompt ảnh nhân vật đại diện):"}
+                    </label>
+                    <div className="mt-2 grid grid-cols-3 gap-2.5">
+                      {[
+                        { id: "male", label: "Nam", desc: isPrimary ? "Cậu bé" : "Nam sinh" },
+                        { id: "female", label: "Nữ", desc: isPrimary ? "Cô bé" : "Nữ sinh" },
+                        { id: "other", label: "Khác", desc: "Trung tính" }
+                      ].map(g => {
+                        const active = (answers.gender || "male") === g.id;
+                        return (
+                          <button
+                            type="button"
+                            key={g.id}
+                            onClick={() => setAnswers(a => ({ ...a, gender: g.id as "male" | "female" | "other" }))}
+                            className={`flex flex-col items-center justify-center rounded-2xl border p-3 text-center transition ${
+                              active
+                                ? "border-tek-500 bg-tek-50 text-tek-800 font-extrabold ring-2 ring-tek-400 shadow-2xs"
+                                : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 font-bold"
+                            }`}
+                          >
+                            <span className="text-sm">{g.label}</span>
+                            <span className="text-[10px] text-slate-400 mt-0.5">{g.desc}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="mt-1.5 text-[11px] text-slate-400">
+                      *Thông tin này giúp hệ thống tạo câu lệnh (prompt) xuất ảnh nhân vật chính xác theo mong muốn của con.
                     </p>
                   </div>
 

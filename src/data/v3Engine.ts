@@ -1632,6 +1632,7 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
   // Whitelist payload strictly for Google AI Studio React + TypeScript + Tailwind SPA generator
   const safePayload = {
     displayName: answers.name?.trim() || 'Nhà Sáng Tạo',
+    gender: answers.gender === 'female' ? 'Nữ' : answers.gender === 'other' ? 'Khác' : 'Nam',
     grade: gradeNum,
     educationLevel: level,
     technologyDomain: branch?.domain || answers.domain || (isPrimary ? 'game_programming' : 'programming'),
@@ -1732,9 +1733,10 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     },
     characterAvatar: {
       source: answers.avatarSource || 'system',
+      gender: answers.gender === 'female' ? 'Nữ' : answers.gender === 'other' ? 'Khác' : 'Nam',
       note: answers.avatarSource === 'custom'
         ? 'Sử dụng ảnh nhân vật do học sinh tự tạo/vẽ làm hình đại diện chính. Giữ nguyên thiết kế nhân vật.'
-        : 'Sử dụng linh vật Kitten Bot thân thiện làm bạn đồng hành.'
+        : `Sử dụng hình tượng nhân vật đại diện (${answers.gender === 'female' ? 'Nữ' : answers.gender === 'other' ? 'Khác' : 'Nam'}) cùng linh vật Kitten Bot thân thiện làm bạn đồng hành.`
     },
     privacyConsent: {
       reviewedByParent: true,
@@ -1827,7 +1829,9 @@ ${JSON.stringify(safePayload, null, 2)}
  * Không bao giờ dừng lại đòi ảnh tham chiếu, tự động fallback theo độ tuổi, lĩnh vực, dự án mơ ước.
  */
 export function buildSafeImageGenerationPrompt(answers: Partial<JourneyAnswers>): string {
-  const isPrimary = !answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand) || (answers.grade && parseInt(answers.grade, 10) <= 5);
+  const isPrimary = answers.grade
+    ? parseInt(answers.grade, 10) <= 5
+    : (!answers.gradeBand || ['1-2', '3-5'].includes(answers.gradeBand));
   const gradeNum = parseInt(answers.grade || (isPrimary ? '4' : '8'), 10);
   const studentName = answers.name?.trim() || 'Student Creator';
   const dreamName = answers.projectName?.trim() || (answers.domain === 'multimedia' ? 'Landmark in Vietnam' : answers.domain === 'game_programming' ? 'City Hero Game' : 'City Helper Robot');
@@ -1876,17 +1880,35 @@ Not flat icon style.
 Not gloomy or dark cyberpunk.
 Not a website screenshot.`;
 
+  // Giới tính nhân vật (Nam, Nữ, Khác) phục vụ tạo ảnh
+  const rawGender = answers.gender || 'male';
+  const genderLabel = rawGender === 'female' ? 'Nữ (Female)' : rawGender === 'other' ? 'Khác / Trung tính (Gender-neutral)' : 'Nam (Male)';
+  const genderArchetype = rawGender === 'female'
+    ? (isPrimary ? 'young Vietnamese schoolgirl' : 'young Vietnamese female secondary student')
+    : rawGender === 'other'
+    ? (isPrimary ? 'young Vietnamese elementary student' : 'young Vietnamese secondary student')
+    : (isPrimary ? 'young Vietnamese schoolboy' : 'young Vietnamese male secondary student');
+
+  const characterPronoun = rawGender === 'female' ? 'girl' : rawGender === 'other' ? 'child' : 'boy';
+  const characterOutfit = rawGender === 'female'
+    ? 'neat school-age girl outfit in white, mint-teal, and soft accent colors (e.g. cheerful polo/shirt with skirt or comfortable trousers, neat hair)'
+    : rawGender === 'male'
+    ? 'neat school-age boy outfit in white, mint-teal, and soft accent colors (e.g. smart polo/shirt with shorts or trousers, friendly short hair)'
+    : 'comfortable student outfit in white, mint-teal, and soft warm accent colors';
+
   const characterDesign = isPrimary
-    ? `Create an original fictional Grade ${gradeNum} student character named "${studentName}".
+    ? `Create an original fictional Grade ${gradeNum} ${genderArchetype} named "${studentName}".
+Gender: ${genderLabel}.
 Do not claim resemblance to any real child.
-The child should look cheerful, curious, proud, and excited about their creation.
-Use a simple school-age outfit in white, mint-teal, and soft accent colors.
+The ${characterPronoun} should look cheerful, curious, proud, and excited about their creation.
+Outfit: ${characterOutfit}.
 Keep the character proportions chibi and age-appropriate.
 Show the child interacting naturally with their creation (guiding, pointing, or interacting via a small tablet).`
-    : `Create an original fictional Grade ${gradeNum} secondary school student character named "${studentName}".
+    : `Create an original fictional Grade ${gradeNum} secondary school ${genderArchetype} named "${studentName}".
+Gender: ${genderLabel}.
 Do not claim resemblance to any real child.
-The student should look confident, creative, innovative, and focused on building technology.
-Modern youth casual attire (e.g. comfortable hoodie or jacket with tech details, optional creative headset).
+The student (${genderLabel}) should look confident, creative, innovative, and focused on building technology.
+Modern youth casual attire (${rawGender === 'female' ? 'e.g. stylish modern hoodie or jacket with tech details, neat hair' : rawGender === 'male' ? 'e.g. comfortable modern hoodie or jacket with tech details' : 'comfortable modern youth outfit'}).
 Well-proportioned expressive character showing pride in their project.
 Show the student presenting or interacting naturally with their creation using modern digital tools.`;
 
@@ -2002,6 +2024,7 @@ OUTPUT:
 
 STUDENT PROFILE:
 - Student display name: ${studentName}
+- Character gender: ${genderLabel}
 - Grade: ${gradeNum}
 - Education level: ${isPrimary ? 'Vietnamese elementary school' : 'Vietnamese secondary school (middle school)'}
 - Technology domain: ${domainLabel}
