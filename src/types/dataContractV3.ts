@@ -76,6 +76,14 @@ export interface ProjectFeatureTask {
   competencyIds: string[];
 }
 
+export interface FeatureLearningGuide {
+  step1Learn: string;       // 1. Học kiến thức cốt lõi
+  step2Practice: string;    // 2. Luyện thao tác kỹ thuật
+  step3Apply: string;       // 3. Áp dụng vào sản phẩm
+  step4Verify: string;      // 4. Kiểm tra tiêu chí quan sát được
+  step5Evidence: string;    // 5. Lưu minh chứng sản phẩm
+}
+
 export interface ProjectFeature {
   id: string;
   name: string;
@@ -84,6 +92,7 @@ export interface ProjectFeature {
   skillIds: string[];
   competencyIds: string[];
   tasks: ProjectFeatureTask[];
+  learningGuide?: FeatureLearningGuide;
   deliverable: string;
   successCriteria: string[];
   evidenceArtifacts: string[];

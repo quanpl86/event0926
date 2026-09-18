@@ -548,68 +548,243 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     sioIds: []
   };
 
-  const p1Features: ProjectFeature[] = [
-    {
-      id: 'F-P1-01',
-      name: 'Khởi tạo môi trường & Cơ chế vận hành cơ bản',
-      description: `Thiết lập môi trường làm việc ban đầu và làm chủ các thao tác kỹ thuật nền tảng để sẵn sàng cho ${dreamName}.`,
-      knowledgeIds: ['K-01'],
-      skillIds: ['S-01'],
-      competencyIds: [],
-      tasks: [
+  const p1Features: ProjectFeature[] = domain === 'multimedia'
+    ? [
         {
-          id: 'T-P1-01-A',
-          description: isPrimary
-            ? 'Làm quen với bảng điều khiển và kiểm tra kết nối thiết bị / phần mềm.'
-            : 'Thiết lập môi trường phát triển và cấu hình thông số kỹ thuật ban đầu.',
+          id: 'F-P1-01',
+          name: 'Chuẩn bị không gian sáng tạo & Bảng màu chủ đề',
+          description: `Con tạo được không gian làm việc để bắt đầu phác thảo bộ tranh và thiết kế thiệp 3D "${dreamName}".`,
           knowledgeIds: ['K-01'],
           skillIds: ['S-01'],
-          competencyIds: []
+          competencyIds: [],
+          tasks: [
+            {
+              id: 'T-P1-01-A',
+              description: `Mở công cụ thiết kế đồ họa đã chọn và tạo dự án mới với tên "${dreamName}".`,
+              knowledgeIds: ['K-01'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            },
+            {
+              id: 'T-P1-01-B',
+              description: 'Chọn kích thước, bố cục và bảng màu phù hợp với chủ đề gia đình yêu thương.',
+              knowledgeIds: ['K-01'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            },
+            {
+              id: 'T-P1-01-C',
+              description: 'Tạo một hình khối hoặc hình minh họa đầu tiên và lưu được tệp dự án an toàn.',
+              knowledgeIds: ['K-01'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Hiểu cách thiết lập không gian làm việc số và ý nghĩa của bảng màu chủ đề gia đình.',
+            step2Practice: 'Tạo tệp mới, làm quen thanh công cụ vẽ/dựng hình và thực hành lưu tệp định kỳ.',
+            step3Apply: `Khởi tạo dự án "${dreamName}", thiết lập tỷ lệ khung hình và bảng màu chủ đề.`,
+            step4Verify: 'Kiểm tra tệp mở lại được, hình ảnh cân đối và đúng gam màu mong muốn.',
+            step5Evidence: 'Lưu tệp nguồn dự án và xuất ảnh chụp màn hình bản phác thảo đầu tiên.'
+          },
+          deliverable: 'Tệp dự án ban đầu cùng ảnh chụp hình minh họa đầu tiên',
+          successCriteria: [
+            'Mở lại được tệp thiết kế trên phần mềm mà không bị lỗi.',
+            'Hình minh họa và bảng màu hiển thị rõ nét, có thể chỉnh sửa tiếp.'
+          ],
+          evidenceArtifacts: ['Tệp dự án thiết kế (.blend / file đồ họa)', 'Ảnh chụp màn hình bản phác thảo đầu tiên'],
+          scope: 'mvp',
+          implementationMode: 'design'
         },
         {
-          id: 'T-P1-01-B',
-          description: 'Thực hành thao tác mẫu và chạy thử lệnh khởi động cơ bản.',
+          id: 'F-P1-02',
+          name: `Thử nghiệm nguyên mẫu tạo hình đầu tiên cho ${dreamName}`,
+          description: `Tạo phiên bản phác thảo mô phỏng ý tưởng cốt lõi của "${dreamName}".`,
+          knowledgeIds: ['K-03'],
+          skillIds: ['S-03'],
+          competencyIds: ['C-02'],
+          tasks: [
+            {
+              id: 'T-P1-02-A',
+              description: `Dựng mô hình hoặc vẽ chi tiết nhân vật/biểu tượng trung tâm của tấm thiệp.`,
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: ['C-02']
+            },
+            {
+              id: 'T-P1-02-B',
+              description: 'Sắp xếp bố cục thử nghiệm và ghi chú các điểm cần hoàn thiện cho chặng P2.',
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: ['C-02']
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Hiểu nguyên lý tỷ lệ thị giác và điểm nhấn trung tâm trong bố cục nghệ thuật.',
+            step2Practice: 'Tập tạo hình nhân vật từ các khối cơ bản (hình hộp, hình cầu, nét vẽ vector).',
+            step3Apply: `Tạo hình nhân vật/chi tiết chính cho "${dreamName}" và đặt vào khung thiệp.`,
+            step4Verify: 'Nhân vật nổi bật trên nền thiệp, đường nét gọn gàng và không bị méo.',
+            step5Evidence: 'Lưu tệp mẫu v0.1 và ghi nhận xét của bản thân.'
+          },
+          deliverable: 'Bản phác thảo nguyên mẫu hình ảnh thử nghiệm đầu tiên',
+          successCriteria: [
+            'Nhân vật/chi tiết chính nằm ở vị trí trung tâm, đúng tỷ lệ bố cục.',
+            'Hình khối rõ ràng, không bị méo lệch khi phóng to hoặc thu nhỏ.'
+          ],
+          evidenceArtifacts: ['Bản vẽ phác thảo nguyên mẫu v0.1', 'Nhật ký ý tưởng tạo hình'],
+          scope: 'mvp',
+          implementationMode: 'design'
+        }
+      ]
+    : domain === 'robotics'
+    ? [
+        {
+          id: 'F-P1-01',
+          name: 'Lắp ráp khung cơ khí & Kiểm tra nguồn mạch điều khiển',
+          description: `Thiết lập môi trường làm việc kỹ thuật và lắp đặt bộ khung đầu tiên cho ${dreamName}.`,
           knowledgeIds: ['K-01'],
           skillIds: ['S-01'],
-          competencyIds: []
-        }
-      ],
-      deliverable: 'Mô hình / Bản chạy thử nghiệm đầu tiên hoạt động ổn định',
-      successCriteria: ['Thiết bị/phần mềm nhận lệnh chính xác', 'Không có cảnh báo lỗi kết nối'],
-      evidenceArtifacts: ['Ảnh chụp hoặc video ghi lại thao tác khởi động thành công'],
-      scope: 'mvp',
-      implementationMode: defaultMode
-    },
-    {
-      id: 'F-P1-02',
-      name: `Thử nghiệm nguyên mẫu ban đầu cho ${dreamName}`,
-      description: `Tạo phiên bản phác thảo kỹ thuật mô phỏng ý tưởng cốt lõi của "${dreamName}".`,
-      knowledgeIds: ['K-03'],
-      skillIds: ['S-03'],
-      competencyIds: ['C-02'],
-      tasks: [
-        {
-          id: 'T-P1-02-A',
-          description: `Vẽ phác thảo hoặc sơ đồ khối cơ chế phục vụ mục tiêu "${dreamPurpose}".`,
-          knowledgeIds: ['K-03'],
-          skillIds: ['S-03'],
-          competencyIds: ['C-02']
+          competencyIds: [],
+          tasks: [
+            {
+              id: 'T-P1-01-A',
+              description: 'Kiểm tra linh kiện, nguồn pin và kết nối mạch điều khiển vi xử lý.',
+              knowledgeIds: ['K-01'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            },
+            {
+              id: 'T-P1-01-B',
+              description: 'Thực hành nạp chương trình kiểm tra đèn báo hiệu và còi buzzer.',
+              knowledgeIds: ['K-01'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Hiểu sơ đồ khối mạch điện tử và nguyên tắc an toàn khi cấp nguồn pin.',
+            step2Practice: 'Cắm cáp kết nối máy tính với vi điều khiển, cài driver và chọn đúng cổng COM.',
+            step3Apply: 'Lắp ráp bộ khung gầm xe/robot và nối nguồn vào mạch chính.',
+            step4Verify: 'Đèn nguồn sáng ổn định, chương trình nhấp nháy đèn nạp thành công.',
+            step5Evidence: 'Video ngắn quay lại bo mạch hoạt động khi bật công tắc nguồn.'
+          },
+          deliverable: 'Khung gầm và bo mạch điều khiển hoạt động ổn định',
+          successCriteria: ['Mạch nhận lệnh nạp code chính xác', 'Không chập nguồn hoặc quá nhiệt'],
+          evidenceArtifacts: ['Ảnh chụp khung cơ khí hoàn thiện', 'Nhật ký kiểm tra nguồn điện'],
+          scope: 'mvp',
+          implementationMode: 'physical'
         },
         {
-          id: 'T-P1-02-B',
-          description: 'Chạy thử nghiệm bản phác thảo và ghi chép nhật ký các điểm cần hoàn thiện.',
+          id: 'F-P1-02',
+          name: `Thử nghiệm nguyên mẫu chuyển động ban đầu cho ${dreamName}`,
+          description: `Tạo phiên bản thử nghiệm cơ cấu vận hành căn bản của "${dreamName}".`,
           knowledgeIds: ['K-03'],
           skillIds: ['S-03'],
-          competencyIds: ['C-02']
+          competencyIds: ['C-02'],
+          tasks: [
+            {
+              id: 'T-P1-02-A',
+              description: `Lắp động cơ vào khung và lập trình quay thử nghiệm hai chiều.`,
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: ['C-02']
+            },
+            {
+              id: 'T-P1-02-B',
+              description: 'Chạy thử nghiệm lăn bánh trên mặt sàn phẳng và ghi nhận độ lệch.',
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: ['C-02']
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Nguyên lý truyền động bánh răng và điều khiển động cơ DC bằng tín hiệu PWM.',
+            step2Practice: 'Viết khối lệnh quay tiến, quay lùi và dừng động cơ trên phần mềm.',
+            step3Apply: `Tải code vào ${dreamName} và quan sát bánh xe quay theo lệnh.`,
+            step4Verify: 'Cả hai bánh xe quay đều nhịp, robot di chuyển thẳng trên 2 mét sàn phẳng.',
+            step5Evidence: 'Video ghi lại robot chạy tiến 2 mét và dừng an toàn.'
+          },
+          deliverable: 'Nguyên mẫu xe/robot di chuyển cơ bản',
+          successCriteria: ['Robot chuyển động ổn định theo đúng lệnh lập trình'],
+          evidenceArtifacts: ['Video thử nghiệm chạy thử v0.1'],
+          scope: 'mvp',
+          implementationMode: 'physical'
         }
-      ],
-      deliverable: 'Bản mô hình nguyên mẫu thử nghiệm sơ bộ',
-      successCriteria: ['Vận hành được luồng thao tác căn bản', 'Ghi nhận được nhật ký thử nghiệm ban đầu'],
-      evidenceArtifacts: ['Sơ đồ khối thiết kế', 'Nhật ký thử nghiệm bản v0.1'],
-      scope: 'mvp',
-      implementationMode: defaultMode
-    }
-  ];
+      ]
+    : [
+        {
+          id: 'F-P1-01',
+          name: 'Thiết lập màn chơi thử nghiệm & Điều khiển nhân vật',
+          description: `Khởi tạo dự án game "${dreamName}" và lập trình di chuyển căn bản cho nhân vật.`,
+          knowledgeIds: ['K-01'],
+          skillIds: ['S-01'],
+          competencyIds: [],
+          tasks: [
+            {
+              id: 'T-P1-01-A',
+              description: 'Tạo dự án game mới, nhập ảnh nhân vật và thiết lập trọng lực không gian.',
+              knowledgeIds: ['K-01'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            },
+            {
+              id: 'T-P1-01-B',
+              description: 'Lập trình phím mũi tên hoặc nút chạm để nhân vật di chuyển trái/phải/nhảy.',
+              knowledgeIds: ['K-01'],
+              skillIds: ['S-01'],
+              competencyIds: []
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Hiểu hệ trục tọa độ 2D (X, Y) và vòng lặp trò chơi (Game Loop).',
+            step2Practice: 'Viết code thay đổi tọa độ X, Y khi nhấn các phím mũi tên.',
+            step3Apply: `Áp dụng điều khiển di chuyển cho nhân vật chính của game "${dreamName}".`,
+            step4Verify: 'Nhân vật di chuyển mượt mà, không bị rơi xuyên qua nền đất.',
+            step5Evidence: 'Tệp dự án game và ảnh chụp màn chơi đầu tiên.'
+          },
+          deliverable: 'Bản chơi thử nghiệm điều khiển nhân vật',
+          successCriteria: ['Nhân vật phản hồi ngay lập tức khi nhấn phím điều khiển'],
+          evidenceArtifacts: ['Tệp dự án game v0.1'],
+          scope: 'mvp',
+          implementationMode: 'software'
+        },
+        {
+          id: 'F-P1-02',
+          name: `Thử nghiệm cơ chế gameplay ban đầu cho ${dreamName}`,
+          description: `Xây dựng cơ chế nhặt vật phẩm hoặc vượt chướng ngại vật đầu tiên.`,
+          knowledgeIds: ['K-03'],
+          skillIds: ['S-03'],
+          competencyIds: ['C-02'],
+          tasks: [
+            {
+              id: 'T-P1-02-A',
+              description: 'Thêm vật phẩm và lập trình sự kiện va chạm để biến mất và cộng điểm.',
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: ['C-02']
+            },
+            {
+              id: 'T-P1-02-B',
+              description: 'Chơi thử 3 lần và tinh chỉnh tốc độ rơi/di chuyển của vật phẩm.',
+              knowledgeIds: ['K-03'],
+              skillIds: ['S-03'],
+              competencyIds: ['C-02']
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Khái niệm hộp va chạm (Hitbox / Collider) và biến số lưu trữ điểm (Score Variable).',
+            step2Practice: 'Lập trình khối lệnh kiểm tra: Nếu chạm vào vật phẩm thì tăng điểm và phát âm thanh.',
+            step3Apply: `Tích hợp cơ chế thu thập vật phẩm vào game "${dreamName}".`,
+            step4Verify: 'Điểm số nhảy chính xác mỗi khi chạm vào vật phẩm, không bị cộng trùng lặp.',
+            step5Evidence: 'Bản demo gameplay v0.1.'
+          },
+          deliverable: 'Màn chơi có va chạm và cộng điểm số',
+          successCriteria: ['Cơ chế va chạm và cộng điểm vận hành không có lỗi'],
+          evidenceArtifacts: ['Bản ghi màn hình chơi thử game'],
+          scope: 'mvp',
+          implementationMode: 'software'
+        }
+      ];
 
   const project1: DetailedPersonalizedProject = {
     id: 'P1',
@@ -619,12 +794,12 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     goal: `Đặt nền tảng tư duy và kỹ thuật ban đầu phục vụ ý tưởng "${dreamName}" (${productFormat}).`,
     features: p1Features,
     tasks: [
-      'Làm quen với công cụ thiết kế/kỹ thuật nền tảng',
-      `Thực hành tạo các thành phần cốt lõi của ${productFormat}`,
+      domain === 'multimedia' ? 'Chuẩn bị không gian làm việc số và bảng màu chủ đề gia đình' : 'Làm quen với công cụ thiết kế/kỹ thuật nền tảng',
+      domain === 'multimedia' ? `Thực hành tạo hình khối và phác thảo nhân vật cho ${productFormat}` : `Thực hành tạo các thành phần cốt lõi của ${productFormat}`,
       `Tạo bản phác thảo nguyên mẫu ban đầu lấy cảm hứng từ ý tưởng ${dreamName}`
     ] as [string, string, string],
     deliverable: `Bản phác thảo nguyên mẫu thử nghiệm đầu tiên của ${dreamName}`,
-    completionCheck: 'Vận hành thành công bản mẫu thử nghiệm đầu tiên',
+    completionCheck: 'Mở lại được tệp dự án và nhìn thấy hình minh họa đầu tiên hoàn chỉnh',
     isDreamProject: false,
     adaptedFromLibraryId: p1DerivedTitle,
     sioIds: (p1Base as any).sioIds || [],
@@ -643,66 +818,161 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   };
   const p2Title = (p2Base as any).title || p2Base.name || 'Xây dựng cơ chế tương tác';
 
-  const p2Features: ProjectFeature[] = [
-    {
-      id: 'F-P2-01',
-      name: `Phát triển chức năng cốt lõi: ${firstFeature}`,
-      description: `Hiện thực hóa chức năng quan trọng nhất "${firstFeature}" cho sản phẩm với độ chính xác cao.`,
-      knowledgeIds: ['K-01', 'K-02'],
-      skillIds: ['S-02'],
-      competencyIds: [],
-      tasks: [
+  const p2Features: ProjectFeature[] = domain === 'multimedia'
+    ? [
         {
-          id: 'T-P2-01-A',
-          description: `Xây dựng giải thuật / cơ chế điều khiển cho chức năng "${firstFeature}".`,
+          id: 'F-P2-01',
+          name: 'Tạo mô hình 3D và phối màu nhân vật chính',
+          description: `Phát triển nhân vật hoặc chi tiết chính của tấm thiệp "${dreamName}" với đầy đủ khối 3D và màu sắc.`,
           knowledgeIds: ['K-01', 'K-02'],
           skillIds: ['S-02'],
-          competencyIds: []
+          competencyIds: [],
+          tasks: [
+            {
+              id: 'T-P2-01-A',
+              description: 'Dựng hình 3D hoàn chỉnh cho nhân vật và các phụ kiện đi kèm.',
+              knowledgeIds: ['K-01', 'K-02'],
+              skillIds: ['S-02'],
+              competencyIds: []
+            },
+            {
+              id: 'T-P2-01-B',
+              description: 'Áp vật liệu và phối màu sắc ấm áp, tạo cảm giác thân thiện gần gũi.',
+              knowledgeIds: ['K-02'],
+              skillIds: ['S-02'],
+              competencyIds: []
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Hiểu nguyên lý phối màu bổ túc và cách áp vật liệu bề mặt 3D cơ bản.',
+            step2Practice: 'Thao tác xoay các góc nhìn camera, gán màu sắc và điều chỉnh độ bóng/mịn.',
+            step3Apply: `Áp dụng bảng màu gia đình vào nhân vật trung tâm của "${dreamName}".`,
+            step4Verify: 'Mô hình hiển thị mượt mà từ mọi góc nhìn, màu sắc ấm áp dễ chịu.',
+            step5Evidence: 'Lưu tệp mô hình 3D và xuất ảnh chụp 3 góc độ khác nhau.'
+          },
+          deliverable: 'Mô hình 3D nhân vật hoàn thiện vật liệu và màu sắc',
+          successCriteria: [
+            'Màu sắc nhân vật tương phản tốt với phông nền, các chi tiết nhỏ nhìn rõ.',
+            'Mô hình 3D xoay các hướng không bị hổng lưới hay lỗi hiển thị.'
+          ],
+          evidenceArtifacts: ['Tệp mô hình 3D hoàn chỉnh', 'Ảnh render các góc nhìn của nhân vật'],
+          scope: 'mvp',
+          implementationMode: 'design'
         },
         {
-          id: 'T-P2-01-B',
-          description: 'Ghép nối tín hiệu và kiểm tra dữ liệu phản hồi trong tình huống chuẩn.',
-          knowledgeIds: ['K-02'],
+          id: 'F-P2-02',
+          name: 'Kiểm tra tương phản thị giác & Tối ưu bố cục',
+          description: 'Đảm bảo các chi tiết chính và phụ hài hòa, chuẩn bị sẵn không gian cho nội dung lời chúc.',
+          knowledgeIds: [],
+          skillIds: ['S-03'],
+          competencyIds: ['C-01', 'C-02'],
+          tasks: [
+            {
+              id: 'T-P2-02-A',
+              description: 'Kiểm tra độ tương phản giữa nhân vật và nền trong các điều kiện hiển thị khác nhau.',
+              knowledgeIds: [],
+              skillIds: ['S-03'],
+              competencyIds: ['C-01', 'C-02']
+            },
+            {
+              id: 'T-P2-02-B',
+              description: 'Căn chỉnh lại tỷ lệ để dành vị trí thông thoáng cho thông điệp và lời chúc.',
+              knowledgeIds: [],
+              skillIds: ['S-03'],
+              competencyIds: ['C-01', 'C-02']
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Quy tắc 1/3 trong thị giác và khoảng trắng (white space) trong thiết kế thiệp.',
+            step2Practice: 'Thực hành dịch chuyển góc nhìn và căn chỉnh vị trí các lớp hình ảnh.',
+            step3Apply: 'Sắp xếp không gian thiệp để chuẩn bị tích hợp lời chúc ở các chặng sau.',
+            step4Verify: 'Mắt người xem tập trung vào nhân vật rồi di chuyển tự nhiên đến khu vực lời nhắn.',
+            step5Evidence: 'Lưu bản thiết kế đã chốt bố cục.'
+          },
+          deliverable: 'Bản bố cục hoàn chỉnh sẵn sàng cho hoạt họa và lời chúc',
+          successCriteria: [
+            'Không gian dành cho thông điệp rộng rãi, không bị nhân vật lấn át.',
+            'Tỷ lệ các thành phần cân đối hài hòa theo quy tắc 1/3 thị giác.'
+          ],
+          evidenceArtifacts: ['Ảnh chụp màn hình bố cục thiệp chuẩn bị cho P3'],
+          scope: 'mvp',
+          implementationMode: 'design'
+        }
+      ]
+    : [
+        {
+          id: 'F-P2-01',
+          name: `Phát triển chức năng cốt lõi: ${firstFeature}`,
+          description: `Hiện thực hóa chức năng quan trọng nhất "${firstFeature}" cho sản phẩm với độ chính xác cao.`,
+          knowledgeIds: ['K-01', 'K-02'],
           skillIds: ['S-02'],
-          competencyIds: []
-        }
-      ],
-      deliverable: `Mô-đun chức năng ${firstFeature} hoàn chỉnh`,
-      successCriteria: [`Tính năng ${firstFeature} phản hồi đúng yêu cầu đề ra`],
-      evidenceArtifacts: ['Đoạn mã kịch bản hoặc mô hình vật lý hoạt động'],
-      scope: 'mvp',
-      implementationMode: defaultMode
-    },
-    {
-      id: 'F-P2-02',
-      name: 'Kiểm soát phản hồi & Đo độ ổn định tương tác',
-      description: 'Đảm bảo chức năng cốt lõi vận hành mượt mà, phản xạ nhanh và không bị nghẽn lệnh.',
-      knowledgeIds: [],
-      skillIds: ['S-03'],
-      competencyIds: ['C-01', 'C-02'],
-      tasks: [
-        {
-          id: 'T-P2-02-A',
-          description: 'Thực hiện 5 lần thử nghiệm liên tiếp trong các điều kiện khác nhau.',
-          knowledgeIds: [],
-          skillIds: ['S-03'],
-          competencyIds: ['C-01', 'C-02']
+          competencyIds: [],
+          tasks: [
+            {
+              id: 'T-P2-01-A',
+              description: `Xây dựng giải thuật / cơ chế điều khiển cho chức năng "${firstFeature}".`,
+              knowledgeIds: ['K-01', 'K-02'],
+              skillIds: ['S-02'],
+              competencyIds: []
+            },
+            {
+              id: 'T-P2-01-B',
+              description: 'Ghép nối tín hiệu và kiểm tra dữ liệu phản hồi trong tình huống chuẩn.',
+              knowledgeIds: ['K-02'],
+              skillIds: ['S-02'],
+              competencyIds: []
+            }
+          ],
+          learningGuide: {
+            step1Learn: `Nguyên lý hoạt động và kiến trúc dữ liệu của tính năng "${firstFeature}".`,
+            step2Practice: 'Viết thử nghiệm hàm xử lý hoặc ráp nối cụm linh kiện riêng lẻ.',
+            step3Apply: `Tích hợp tính năng "${firstFeature}" vào khung sản phẩm chính.`,
+            step4Verify: 'Chức năng thực thi chính xác và đáp ứng nhanh khi người dùng thao tác.',
+            step5Evidence: 'Đoạn mã kịch bản hoặc mô hình vật lý hoạt động.'
+          },
+          deliverable: `Mô-đun chức năng ${firstFeature} hoàn chỉnh`,
+          successCriteria: [`Tính năng ${firstFeature} phản hồi đúng yêu cầu đề ra`],
+          evidenceArtifacts: ['Đoạn mã kịch bản hoặc mô hình vật lý hoạt động'],
+          scope: 'mvp',
+          implementationMode: defaultMode
         },
         {
-          id: 'T-P2-02-B',
-          description: 'Sửa các lỗi phát sinh (debug) để tối ưu thời gian phản hồi.',
+          id: 'F-P2-02',
+          name: 'Kiểm soát phản hồi & Đo độ ổn định tương tác',
+          description: 'Đảm bảo chức năng cốt lõi vận hành mượt mà, phản xạ nhanh và không bị nghẽn lệnh.',
           knowledgeIds: [],
           skillIds: ['S-03'],
-          competencyIds: ['C-01', 'C-02']
+          competencyIds: ['C-01', 'C-02'],
+          tasks: [
+            {
+              id: 'T-P2-02-A',
+              description: 'Thực hiện 5 lần thử nghiệm liên tiếp trong các điều kiện khác nhau.',
+              knowledgeIds: [],
+              skillIds: ['S-03'],
+              competencyIds: ['C-01', 'C-02']
+            },
+            {
+              id: 'T-P2-02-B',
+              description: 'Sửa các lỗi phát sinh (debug) để tối ưu thời gian phản hồi.',
+              knowledgeIds: [],
+              skillIds: ['S-03'],
+              competencyIds: ['C-01', 'C-02']
+            }
+          ],
+          learningGuide: {
+            step1Learn: 'Các phương pháp kiểm thử (testing) và kỹ thuật tìm lỗi (debugging).',
+            step2Practice: 'Ghi nhật ký log khi chạy chương trình để xác định vị trí phát sinh lỗi.',
+            step3Apply: 'Thực hiện chuỗi kiểm thử 5 lần liên tiếp trên sản phẩm.',
+            step4Verify: 'Tất cả các lần thử đều vượt qua tiêu chuẩn mà không gặp sự cố.',
+            step5Evidence: 'Bảng thống kê kết quả kiểm thử.'
+          },
+          deliverable: 'Bản kiểm thử độ ổn định (Test Report)',
+          successCriteria: ['Tỷ lệ thực thi chuẩn xác đạt trên 80% trong các lần thử'],
+          evidenceArtifacts: ['Bảng thống kê kết quả thử nghiệm'],
+          scope: 'mvp',
+          implementationMode: defaultMode
         }
-      ],
-      deliverable: 'Bản kiểm thử độ ổn định (Test Report)',
-      successCriteria: ['Tỷ lệ thực thi chuẩn xác đạt trên 80% trong các lần thử'],
-      evidenceArtifacts: ['Bảng thống kê kết quả thử nghiệm'],
-      scope: 'mvp',
-      implementationMode: defaultMode
-    }
-  ];
+      ];
 
   const project2: DetailedPersonalizedProject = {
     id: 'P2',
@@ -712,12 +982,12 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     goal: `${p2Base.goal} — Ứng dụng kỹ thuật để thử nghiệm tính năng "${firstFeature}" cho sản phẩm.`,
     features: p2Features,
     tasks: [
-      p2Base.tasks?.[0] || 'Thiết kế cấu trúc logic',
-      `Lập trình / thiết kế cơ chế mô phỏng tính năng "${firstFeature}"`,
+      domain === 'multimedia' ? 'Dựng mô hình 3D hoàn chỉnh cho nhân vật chính' : (p2Base.tasks?.[0] || 'Thiết kế cấu trúc logic'),
+      domain === 'multimedia' ? 'Phối màu sắc ấm áp và kiểm tra tương phản thị giác' : `Lập trình / thiết kế cơ chế mô phỏng tính năng "${firstFeature}"`,
       'Chạy thử và tối ưu phản hồi khi tương tác với người dùng'
     ] as [string, string, string],
     deliverable: `Mô-đun chức năng ${firstFeature} vận hành ổn định`,
-    completionCheck: p2Base.completionCheck || 'Mô-đun chạy trơn tru không lỗi',
+    completionCheck: 'Mô hình 3D và chức năng hiển thị sắc nét, xoay các góc không lỗi',
     isDreamProject: false,
     adaptedFromLibraryId: p2Title,
     sioIds: (p2Base as any).sioIds || [],
@@ -725,7 +995,6 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
   };
 
   // ── DỰ ÁN 3 (P3): Phát triển chức năng bổ sung, tích hợp hoặc thử nghiệm phù hợp ──
-  // Cá nhân hóa theo chuyên môn, KHÔNG cố định là "tối ưu giao diện"
   const p3Title = domain === 'robotics'
     ? 'Hệ thống Cảm biến Thông minh & Dừng An Toàn'
     : domain === 'game_programming'
@@ -757,8 +1026,18 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
               competencyIds: ['C-02', 'C-03']
             }
           ],
+          learningGuide: {
+            step1Learn: 'Nguyên lý phát thu sóng siêu âm và cách tính khoảng cách: d = (t * v) / 2.',
+            step2Practice: 'Đọc dữ liệu cảm biến và in ra màn hình Serial Monitor để kiểm tra độ nhạy.',
+            step3Apply: 'Lập trình robot tự động dừng lại khi phát hiện vật cản dưới 15cm.',
+            step4Verify: 'Chuyển động: Robot dừng dứt khoát trước vật cản, không bị đâm va.',
+            step5Evidence: 'Video quay cảnh robot tự động dừng an toàn trước vật cản.'
+          },
           deliverable: 'Cơ chế né vật cản an toàn hoạt động tự động',
-          successCriteria: ['Robot luôn dừng cách chướng ngại vật an toàn, không va chạm'],
+          successCriteria: [
+            'Chuyển động: Robot luôn dừng cách chướng ngại vật an toàn 10-15cm, không va chạm.',
+            'Minh chứng: Video quay cảnh robot nhận biết vật cản và dừng tự động.'
+          ],
           evidenceArtifacts: ['Video quay cảnh robot né vật cản'],
           scope: 'mvp',
           implementationMode: 'physical'
@@ -786,8 +1065,18 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
               competencyIds: []
             }
           ],
+          learningGuide: {
+            step1Learn: 'Khái niệm về đòn bẩy cơ khí và động cơ servo điều khiển góc quay chính xác.',
+            step2Practice: 'Lập trình servo gắp mở góc từ 0 đến 90 độ mượt mà.',
+            step3Apply: `Tích hợp tay gắp/khay đỡ phục vụ mục tiêu hỗ trợ cho ${dreamAudience}.`,
+            step4Verify: 'Cơ cấu gắp giữ vật dụng chắc chắn mà không làm rơi hay hỏng đồ vật.',
+            step5Evidence: 'Phiếu nhận xét đóng góp từ người thân khi xem thử nghiệm.'
+          },
           deliverable: `Nguyên mẫu robot tích hợp hoàn chỉnh dành cho ${dreamAudience}`,
-          successCriteria: ['Người dùng thực tế thao tác thuận tiện và an tâm'],
+          successCriteria: [
+            'Người dùng thực tế thao tác thuận tiện và an tâm.',
+            'Cơ cấu vận hành an toàn và tin cậy trong các tình huống thử nghiệm.'
+          ],
           evidenceArtifacts: ['Phiếu nhận xét đóng góp từ người dùng thử'],
           scope: 'mvp',
           implementationMode: 'physical'
@@ -797,7 +1086,7 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
     ? [
         {
           id: 'F-P3-01',
-          name: 'Máy trạng thái đối thủ AI (Finite State Machine) & Màn chơi thử thách',
+          name: 'Máy trạng thái đối thủ AI & Màn chơi thử thách',
           description: 'Lập trình hành vi đối thủ tự động tuần tra, truy đuổi và tính điểm số tương tác.',
           knowledgeIds: ['K-02', 'K-03'],
           skillIds: ['S-02'],
@@ -818,8 +1107,18 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
               competencyIds: ['C-02']
             }
           ],
+          learningGuide: {
+            step1Learn: 'Hiểu máy trạng thái hữu hạn (FSM): Trạng thái Đứng yên, Đi tuần, và Truy đuổi.',
+            step2Practice: 'Lập trình đối thủ di chuyển qua lại giữa 2 điểm mốc và quay đầu khi chạm biên.',
+            step3Apply: 'Đưa đối thủ vào màn chơi thử thách trong game.',
+            step4Verify: 'Đối thủ phản ứng tự nhiên, không bị kẹt vào tường hay giật lag.',
+            step5Evidence: 'Video ghi lại một ván chơi vượt qua đối thủ AI.'
+          },
           deliverable: 'Màn chơi hoàn chỉnh có đối thủ AI thông minh',
-          successCriteria: ['AI đối thủ phản xạ tự nhiên, không bị giật lag'],
+          successCriteria: [
+            'AI đối thủ phản xạ tự nhiên, không bị giật lag hay kẹt vào chướng ngại vật.',
+            'Người chơi cảm nhận được thử thách hợp lý và thú vị.'
+          ],
           evidenceArtifacts: ['Bản demo gameplay màn chơi thử thách'],
           scope: 'mvp',
           implementationMode: 'software'
@@ -847,8 +1146,18 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
               competencyIds: ['C-03']
             }
           ],
+          learningGuide: {
+            step1Learn: 'Nguyên lý thiết kế trải nghiệm người dùng (UX) và tâm lý người chơi game.',
+            step2Practice: 'Tạo bảng câu hỏi khảo sát ngắn và quan sát phản xạ của người chơi thử.',
+            step3Apply: 'Tinh chỉnh lại kích thước nút bấm và tốc độ phản hồi của trò chơi.',
+            step4Verify: 'Người chơi hiểu luật chơi ngay trong 60 giây đầu tiên mà không cần giải thích.',
+            step5Evidence: 'Phiếu thu nhận ý kiến và video màn chơi thử nghiệm.'
+          },
           deliverable: 'Bản game tối ưu hóa trải nghiệm người dùng',
-          successCriteria: ['Người chơi hiểu luật chơi ngay trong 60 giây đầu tiên'],
+          successCriteria: [
+            'Người chơi hiểu luật chơi ngay trong 60 giây đầu tiên.',
+            'Giao diện nút bấm trực quan, âm thanh hiệu ứng tạo cảm giác hào hứng.'
+          ],
           evidenceArtifacts: ['Video ghi lại màn chơi thử nghiệm thực tế'],
           scope: 'mvp',
           implementationMode: 'software'
@@ -858,58 +1167,80 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
         {
           id: 'F-P3-01',
           name: 'Hoạt họa chuyển động 3D & Hiệu ứng ánh sáng môi trường',
-          description: 'Tạo hoạt hình keyframe sinh động và bố trí ánh sáng tôn vinh chủ đề tác phẩm.',
+          description: `Tạo hoạt hình keyframe sinh động khi mở thiệp và bố trí ánh sáng ấm áp tôn vinh chủ đề tác phẩm "${dreamName}".`,
           knowledgeIds: ['K-02', 'K-03'],
           skillIds: ['S-02'],
           competencyIds: ['C-01', 'C-02'],
           tasks: [
             {
               id: 'T-P3-01-A',
-              description: 'Thiết lập Timeline chuyển động cho các nhân vật và mô hình.',
+              description: 'Thiết lập Timeline chuyển động cho nhân vật và mô hình thiệp khi mở ra (keyframe đóng và mở).',
               knowledgeIds: ['K-02'],
               skillIds: ['S-02'],
               competencyIds: ['C-01']
             },
             {
               id: 'T-P3-01-B',
-              description: 'Tinh chỉnh nguồn sáng 3 điểm (Key, Fill, Rim) để tạo chiều sâu ấn tượng.',
+              description: 'Bố trí nguồn sáng ấm áp để tạo chiều sâu và làm nổi bật nhân vật trong không gian 3D.',
               knowledgeIds: ['K-02', 'K-03'],
               skillIds: ['S-02'],
               competencyIds: ['C-02']
             }
           ],
-          deliverable: 'Đoạn hoạt hình 3D hoàn chỉnh hiệu ứng chuyển động',
-          successCriteria: ['Khung hình chuyển động mượt mà và ánh sáng hài hòa'],
-          evidenceArtifacts: ['Video kết xuất Render 3D độ nét cao'],
+          learningGuide: {
+            step1Learn: 'Hiểu keyframe là gì; nhận biết trạng thái đầu và trạng thái cuối của chuyển động.',
+            step2Practice: 'Tạo hai keyframe, thay đổi vị trí hoặc góc quay của mô hình và xem thử chuyển động.',
+            step3Apply: `Làm cho nhân vật hoặc chi tiết trong "${dreamName}" chuyển động nhẹ khi mở thiệp.`,
+            step4Verify: 'Chuyển động diễn ra đúng trình tự, mượt mà và không che mất lời nhắn.',
+            step5Evidence: 'Lưu tệp nguồn và xuất video ngắn quay lại kết quả.'
+          },
+          deliverable: 'Đoạn chuyển động 3D mở thiệp với ánh sáng hài hòa',
+          successCriteria: [
+            'Chuyển động: Nhân vật có trạng thái bắt đầu và kết thúc rõ ràng khi mở thiệp.',
+            'Bố cục: Khi hoạt họa, chuyển động của nhân vật không che khuất dòng chữ chính.',
+            'Màu sắc & Ánh sáng: Nhân vật và lời nhắn vẫn dễ nhìn ở các khung hình chính, ánh sáng ấm áp.',
+            'Minh chứng: Có tệp nguồn và video ngắn thể hiện chức năng mở thiệp.'
+          ],
+          evidenceArtifacts: ['Tệp dự án hoạt hình 3D', 'Video clip quay lại hiệu ứng mở thiệp chuyển động'],
           scope: 'mvp',
           implementationMode: 'design'
         },
         {
           id: 'F-P3-02',
-          name: `Kể chuyện đa phương tiện & Thử nghiệm tiếp nhận cùng ${dreamAudience}`,
-          description: `Lồng ghép âm thanh, thuyết minh và trình chiếu thử nghiệm cho ${dreamAudience}.`,
+          name: `Lồng ghép âm thanh & Thử nghiệm tiếp nhận cùng ${dreamAudience}`,
+          description: `Tích hợp hiệu ứng âm thanh nhẹ nhàng và mời ${dreamAudience} trải nghiệm thử để ghi nhận cảm xúc.`,
           knowledgeIds: ['K-03'],
           skillIds: ['S-03'],
           competencyIds: ['C-01', 'C-03'],
           tasks: [
             {
               id: 'T-P3-02-A',
-              description: 'Biên tập âm nhạc nền và hiệu ứng âm thanh Sound FX phù hợp câu chuyện.',
+              description: 'Chọn và lồng ghép giai điệu âm nhạc hoặc hiệu ứng âm thanh ấm áp phù hợp với khoảnh khắc mở thiệp.',
               knowledgeIds: ['K-03'],
               skillIds: ['S-03'],
               competencyIds: ['C-01']
             },
             {
               id: 'T-P3-02-B',
-              description: `Thu nhận cảm xúc và ý kiến đánh giá từ ${dreamAudience}.`,
+              description: `Mời người thân (${dreamAudience}) trải nghiệm thử và lắng nghe nhận xét về cảm xúc khi xem.`,
               knowledgeIds: [],
               skillIds: ['S-03'],
               competencyIds: ['C-03']
             }
           ],
-          deliverable: 'Tác phẩm đa phương tiện hoàn chỉnh âm thanh và hình ảnh',
-          successCriteria: ['Thông điệp văn hóa/giáo dục được truyền tải rõ ràng'],
-          evidenceArtifacts: ['Bản trình chiếu tương tác kèm nhận xét'],
+          learningGuide: {
+            step1Learn: 'Hiểu cách âm thanh và chuyển động kết hợp để tạo nên cảm xúc sâu sắc cho người xem.',
+            step2Practice: 'Tập chèn tệp âm thanh vào timeline và khớp với thời điểm hành động diễn ra.',
+            step3Apply: 'Lồng bản nhạc ngắn vào tấm thiệp để phát khi người xem mở thiệp ra.',
+            step4Verify: 'Âm thanh không bị trễ nhịp so với hình ảnh, giai điệu truyền cảm hứng.',
+            step5Evidence: 'Lưu bản thử nghiệm hoàn chỉnh và phiếu phỏng vấn người thân.'
+          },
+          deliverable: 'Nguyên mẫu thiệp 3D đa giác quan (hình ảnh, chuyển động, âm thanh)',
+          successCriteria: [
+            'Âm thanh vang lên đúng thời điểm thiệp mở ra, âm lượng vừa phải.',
+            `${dreamAudience} cảm nhận được thông điệp yêu thương và có phản hồi tích cực.`
+          ],
+          evidenceArtifacts: ['Bản ghi âm hoặc video người thân trải nghiệm thiệp', 'Phiếu ghi nhận ý kiến đóng góp ban đầu'],
           scope: 'mvp',
           implementationMode: 'design'
         }
@@ -927,12 +1258,12 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
         ? 'Lắp đặt cụm cảm biến và thiết lập khoảng cách an toàn'
         : domain === 'game_programming'
         ? 'Lập trình logic máy trạng thái đối thủ AI'
-        : 'Thiết lập hoạt họa keyframe và ánh sáng 3D',
-      `Mời ${dreamAudience} trải nghiệm thử và ghi nhận phản hồi`,
-      'Điều chỉnh cơ chế vận hành dựa trên góp ý thực tế'
+        : 'Thiết lập hoạt họa keyframe mở thiệp và ánh sáng 3D ấm áp',
+      `Mời ${dreamAudience} trải nghiệm thử và ghi nhận phản hồi cảm xúc`,
+      'Điều chỉnh chuyển động và vị trí dòng chữ dựa trên góp ý thực tế'
     ] as [string, string, string],
     deliverable: `Bản hoàn thiện thử nghiệm thực tế với ${dreamAudience}`,
-    completionCheck: `Ít nhất một người thuộc nhóm ${dreamAudience} thử nghiệm và đánh giá tích cực`,
+    completionCheck: `Chuyển động mượt mà, ánh sáng hài hòa và người thân đánh giá tích cực`,
     isDreamProject: false,
     adaptedFromLibraryId: p3Title,
     sioIds: (p1Base as any).sioIds || [],
@@ -970,9 +1301,19 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
           competencyIds: ['C-03']
         }
       ],
+      learningGuide: {
+        step1Learn: 'Nắm vững quy trình hoàn thiện tác phẩm từ bản phác thảo đến sản phẩm cuối cùng.',
+        step2Practice: 'Kiểm tra từng chi tiết góc cạnh, lưới đa giác và ánh sáng tổng thể.',
+        step3Apply: `Đóng gói tác phẩm tạo hình cốt lõi cho "${dreamName}".`,
+        step4Verify: 'Hình ảnh sắc nét, không có lỗi hiển thị ở bất kỳ góc nhìn nào.',
+        step5Evidence: 'Lưu bản xuất cuối cùng và ảnh chụp sản phẩm.'
+      },
       deliverable: `Mô-đun tương tác [${interactionFeature}] hoàn chỉnh vận hành trong ${dreamName}`,
-      successCriteria: [`Người dùng (${dreamAudience}) thao tác "${interactionFeature}" mượt mà và phản hồi diễn ra chính xác`],
-      evidenceArtifacts: ['Video quay lại thao tác tương tác thực tế', 'Tài liệu hướng dẫn thao tác tương tác cho người dùng'],
+      successCriteria: [
+        `Hình minh họa sắc nét, tỷ lệ chuẩn xác và thể hiện trọn vẹn chủ đề yêu thương.`,
+        `Người dùng (${dreamAudience}) thao tác "${interactionFeature}" mượt mà và phản hồi diễn ra chính xác.`
+      ],
+      evidenceArtifacts: ['Video quay lại thao tác tương tác thực tế', 'Ảnh chụp sản phẩm ở độ phân giải cao'],
       scope: 'mvp',
       implementationMode: defaultMode
     },
@@ -999,8 +1340,18 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
           competencyIds: ['C-03']
         }
       ],
+      learningGuide: {
+        step1Learn: 'Tầm quan trọng của Typography (nghệ thuật chữ) và độ tương phản khi truyền tải thông điệp.',
+        step2Practice: 'Thử nghiệm các kích thước chữ và màu chữ khác nhau để chọn phương án dễ đọc nhất.',
+        step3Apply: `Đặt dòng chữ gửi lời yêu thương vào vị trí đẹp nhất trên "${dreamName}".`,
+        step4Verify: 'Lời nhắn nổi bật, không bị hình ảnh che lấp, người nhận đọc hiểu trong 5 giây.',
+        step5Evidence: 'Chụp lại tác phẩm hoàn thiện có đủ chữ và hình minh họa.'
+      },
       deliverable: `Trải nghiệm nội dung [${experienceFeature}] hoàn thiện trong sản phẩm ${dreamName}`,
-      successCriteria: [`${dreamAudience} tiếp nhận rõ ràng thông điệp và đánh giá cao trải nghiệm sản phẩm mang lại`],
+      successCriteria: [
+        `Dòng chữ ngắn gọn, chân thành, dễ đọc ngay cả trên màn hình nhỏ.`,
+        `${dreamAudience} tiếp nhận rõ ràng thông điệp và đánh giá cao trải nghiệm sản phẩm mang lại.`
+      ],
       evidenceArtifacts: ['Ảnh chụp sản phẩm hoàn chỉnh chứa nội dung', 'Phiếu thu nhận ý kiến đánh giá của người trải nghiệm'],
       scope: 'mvp',
       implementationMode: defaultMode
@@ -1028,6 +1379,13 @@ export function generatePersonalizedProjects(answers: JourneyAnswers): DetailedP
           competencyIds: ['C-03']
         }
       ],
+      learningGuide: {
+        step1Learn: 'Tư duy phát triển sản phẩm liên tục (Product Iteration) và khả năng mở rộng (Scalability).',
+        step2Practice: 'Lập sơ đồ tư duy phác thảo các tính năng nâng cao mà người dùng mong muốn thêm.',
+        step3Apply: 'Xây dựng tài liệu định hướng các tính năng mới cho phiên bản v2.0.',
+        step4Verify: 'Kế hoạch rõ ràng, khả thi với năng lực học tập của con.',
+        step5Evidence: 'Lưu bản kế hoạch nâng cấp và slide trình chiếu.'
+      },
       deliverable: `Bản thiết kế nâng cấp v2.0 cho [${extensionFeature}] và tài liệu thuyết trình Portfolio`,
       successCriteria: [`Xác định rõ các bước nâng cấp tính năng "${extensionFeature}" trong kế hoạch học tập năm tới`],
       evidenceArtifacts: ['Slide thuyết trình sản phẩm', 'Bản vẽ kỹ thuật / thiết kế tính năng nâng cấp'],
@@ -1764,6 +2122,9 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
     answers.dreamPurpose?.toLowerCase().includes('3d')
   );
 
+  const p4Project = projects[3];
+  const p4Features = p4Project?.features || [];
+
   const presentationLayer = {
     futureProfessionalRole: {
       title: futureRoleTitle,
@@ -1934,16 +2295,66 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       evidenceStatus: 'Chờ sản phẩm thực tế khi thực hiện lộ trình'
     })),
 
+    quickSnapshot: {
+      specialization: is2DTo3DPathway ? 'Thiết kế 2D ➔ Mở rộng 3D' : (branch?.label || branchKey),
+      dreamProjectTitle: dreamName,
+      dreamProjectStage: 'P4 (Sản phẩm tâm điểm)',
+      primaryTool: (riasec.techStack[0]?.items || []).map(it => typeof it === 'string' ? it : it.name)[0] || 'Blender / Công cụ đồ họa',
+      targetProficiencyBadge: 'Mục tiêu L3 (Tự triển khai)',
+      roadmapLength: '4 Chặng thực hành hoàn thiện'
+    },
+
+    featuredDreamProject: {
+      name: dreamName,
+      productFormat: answers.productFormat?.trim() || (
+        dreamPurpose.toLowerCase().includes('thiệp') ? 'Thiệp điện tử 3D tương tác' :
+        answers.domain === 'multimedia' ? 'Tác phẩm đồ họa 3D' :
+        answers.domain === 'robotics' ? 'Mô hình robot thông minh' : 'Ứng dụng trò chơi tương tác'
+      ),
+      purpose: dreamPurpose,
+      audience: dreamAudience,
+      imageAssetId: 'asset-prototype-p4',
+      fileName: 'prototype-p4.png',
+      mvpFeatures: [
+        {
+          id: 'F-P4-01',
+          name: p4Features[0]?.name || 'Có hình minh họa chính',
+          scope: 'MVP',
+          description: p4Features[0]?.description
+        },
+        {
+          id: 'F-P4-02',
+          name: p4Features[1]?.name || 'Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương',
+          scope: 'MVP',
+          description: p4Features[1]?.description
+        }
+      ],
+      extensionFeatures: [
+        {
+          id: 'F-P4-03',
+          name: p4Features[2]?.name || 'Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng',
+          scope: 'Extension (v2.0)',
+          description: p4Features[2]?.description
+        }
+      ],
+      completionCriteria: [
+        'Dòng chữ ngắn gọn, chân thành, dễ đọc ngay cả trên màn hình nhỏ.',
+        'Người nhận mở xem thiệp và tiếp nhận trọn vẹn thông điệp yêu thương.',
+        'Mô hình và hình minh họa chính hiển thị sắc nét, tỷ lệ cân đối.'
+      ]
+    },
+
     testimonials: {
       hasVerifiedFeedback: false,
+      displayMode: 'awaiting_feedback',
       notice: 'Phản hồi từ người trải nghiệm sẽ được cập nhật khi con giới thiệu sản phẩm.',
       targetAudience: dreamAudience,
       expectedFeedbackQuestions: [
-        `Sản phẩm "${dreamName}" đã giải quyết được nhu cầu nào của ${dreamAudience}?`,
-        'Tính năng tương tác nào mang lại ấn tượng hoặc trải nghiệm thú vị nhất?',
-        'Có điểm nào cần hoàn thiện thêm để sản phẩm trực quan và tiện dụng hơn?'
+        `Sản phẩm "${dreamName}" đã mang lại cảm xúc gì cho ${dreamAudience}?`,
+        'Hình ảnh minh họa, màu sắc và lời chúc trong thiệp có dễ nhìn và ấn tượng không?',
+        'Người nhận mong muốn con bổ sung thêm chi tiết hoặc tính năng tương tác nào trong tương lai?'
       ],
-      reviews: [] // Empty by default to preserve absolute truthfulness
+      reviews: [] // Mặc định danh sách rỗng để bảo toàn tính trung thực tuyệt đối
     },
 
     futureImpact: {
@@ -2046,7 +2457,14 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
       ),
       audience: dreamAudience,
       purpose: dreamPurpose,
-      features: dreamFeatures,
+      allFeatures: dreamFeatures,
+      mvpFeatures: [
+        'Có hình minh họa chính (Tạo hình & bố cục cốt lõi)',
+        'Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương'
+      ],
+      extensionFeatures: [
+        'Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng (Kế hoạch nâng cấp v2.0)'
+      ],
       appearance: answers.dreamAppearance || 'Giao diện sinh động, dễ nhìn'
     },
     schedule: answers.hoursPerWeek && answers.hoursPerWeek > 0
@@ -2122,73 +2540,74 @@ export function buildSafeAIStudioPrompt(answers: JourneyAnswers, projects: V3Per
 
 # FUTURE ME — PROFESSIONAL FUTURE CAPABILITY PORTFOLIO WEBSITE
 
-## 0. MỆNH LỆNH TRIỂN KHAI
-Hãy tạo ngay một website hoàn chỉnh, có thể chạy và tương tác được.
-Không chỉ tạo mockup.
-Không chỉ tạo ảnh giao diện.
-Không trả về bản mô tả ý tưởng thay cho mã nguồn.
-Sử dụng dữ liệu hồ sơ JSON được cung cấp ở cuối prompt.
-Nếu một trường dữ liệu không có, áp dụng quy tắc fallback được mô tả bên dưới. Không dừng lại để hỏi thêm thông tin.
-Đầu ra phải là website React + TypeScript + Tailwind CSS hoàn chỉnh.
+## 0. MỆNH LỆNH TRIỂN KHAI & NGUYÊN TẮC BẢO TOÀN THỊ GIÁC (VISUAL GROUNDING)
+Hãy tạo ngay một website hoàn chỉnh, chạy được ngay trong trình duyệt.
+Website phải có cảm giác như một Creative Professional Portfolio cá nhân được thiết kế riêng cho học sinh, giàu tính cảm xúc và nghệ thuật trình diễn.
+
+### ĐIỀU KIỆN TIÊN QUYẾT VỀ HÌNH ẢNH (MANDATORY IMAGE USAGE):
+1. TUYỆT ĐỐI KHÔNG thay thế ảnh chân dung của học sinh bằng icon hoặc placeholder avatar nếu dữ liệu ảnh tồn tại trong imageManifest!
+   - Sử dụng thẻ <img src={asset.dataUrl || asset.url} alt={asset.alt} /> trực tiếp.
+   - Thẻ Hero BẮT BUỘC hiển thị ảnh của học sinh (assetId: "asset-hero-custom" hoặc dataUrl/url trong imageManifest).
+2. TUYỆT ĐỐI KHÔNG thay thế ảnh prototype của các dự án P1–P4 bằng khối CSS Gradient trống rỗng hay icon đơn điệu!
+   - BẮT BUỘC render thẻ <img /> với đường dẫn fileName / url tương ứng (prototype-p1.png đến prototype-p4.png).
+   - Nếu tệp ảnh không tải được trong môi trường sandbox của Google AI Studio (khi chưa có tệp tĩnh), BẮT BUỘC render khung tranh minh họa sản phẩm có chiều sâu mỹ thuật (Artwork Frame mô phỏng bìa thiệp 3D, mô hình robot thông minh hoặc khung cảnh game tương tác với hình vẽ vector SVG tinh tế), KHÔNG để hộp màu xám hoặc gradient trống!
+
+### TÁCH BIỆT GIAO DIỆN PORTFOLIO CÔNG KHAI VỚI CÔNG CỤ DỮ LIỆU/TIẾN ĐỘ:
+- Thanh điều hướng Header giữ sự thanh lịch, sang trọng: Logo, Tên học sinh, Vai trò tương lai, và 2 Tab chính [Hồ sơ tương lai | Lộ trình phát triển].
+- Các nút kỹ thuật mang tính quản trị như "0/18 nhiệm vụ", "Xuất JSON", "Nhập JSON", "Reset tiến độ" TUYỆT ĐỐI KHÔNG để lộ ra trên màn hình chính!
+- Thay vào đó, gom toàn bộ vào một nút biểu tượng Cài đặt / Quản lý nhỏ tinh tế ở góc phải trên (hoặc footer): "Quản lý dữ liệu & Lưu tiến độ" ➔ Chỉ khi người dùng bấm vào mới mở Modal quản lý tiến độ.
 
 ---
 
-# 1. PRODUCT VISION
+# 1. PRODUCT VISION & KIẾN TRÚC 2 TAB DUY NHẤT (EXACTLY TWO MAIN TABS)
 Tên website: FUTURE ME — PERSONAL FUTURE PORTFOLIO.
-Đây là website Portfolio Năng lực Tương lai được học sinh và phụ huynh cùng tạo ra sau khi hoàn thành hành trình tương tác Future Creator.
-Website cho phép gia đình:
-1. Hình dung đầy đủ chân dung nghề nghiệp và năng lực tương lai của học sinh.
-2. Khám phá những kiến thức, kỹ năng và công cụ mà học sinh hướng tới.
-3. Nhìn thấy danh mục sản phẩm, dự án và kinh nghiệm học tập dự kiến.
-4. Hình dung mức độ thuần thục mục tiêu thông qua biểu đồ năng lực.
-5. Hiểu giá trị mà các sản phẩm tương lai có thể tạo ra.
-6. Theo dõi một lộ trình chi tiết để hiện thực hóa toàn bộ chân dung đó.
-
-Website phải có cảm giác như một professional portfolio cá nhân được thiết kế riêng cho học sinh, không phải một báo cáo đánh giá hay một trang biểu mẫu.
-Portfolio tương lai là sản phẩm chính.
-Roadmap là con đường để đạt được Portfolio đó.
-
----
-
-# 2. INFORMATION ARCHITECTURE — EXACTLY TWO MAIN TABS
-Website chỉ có đúng hai tab điều hướng cấp cao nhất:
+Website chỉ có đúng hai tab điều hướng cấp cao nhất (EXACTLY TWO MAIN TABS):
 * TAB 1: HỒ SƠ TƯƠNG LAI (English label: My Future Profile)
 * TAB 2: LỘ TRÌNH PHÁT TRIỂN (English label: My Development Roadmap)
 
 Không tạo thêm tab chính như Dashboard, Assessment, Home, About, Projects hoặc Progress.
-Có thể sử dụng các section, card, accordion, modal, drawer và bộ lọc bên trong hai tab.
-Thanh điều hướng hai tab phải luôn cố định dễ tiếp cận và hoạt động hoàn hảo trên desktop, tablet và mobile.
 
 ---
 
-# 3. TAB 1 — PROFESSIONAL FUTURE PROFILE (6 CORE EDITORIAL ZONES)
-Đây là trang quan trọng nhất. Thiết kế như một Creative Professional Portfolio hiện đại, có chiều sâu thị giác và phân cấp thông tin khoa học. Tuyệt đối không xếp 11 section phẳng lì nối tiếp nhau thành bản báo cáo dài. Thay vào đó, bố cục chặt chẽ thành 6 KHU VỰC THỊ GIÁC CHÍNH (6 Core Editorial Zones):
+# 2. TAB 1 — PROFESSIONAL FUTURE PROFILE (6 CORE EDITORIAL ZONES)
+Trình bày hồ sơ sáng tạo chuyên nghiệp, phân bổ khoa học thành 6 KHU VỰC THỊ GIÁC CHÍNH (6 Core Editorial Zones):
 
-## ZONE 01 · PROFESSIONAL HERO (CHÂN DUNG TƯƠNG LAI)
-* Bố cục: Hero banner lớn tỷ lệ 16:9 hoặc split layout (trái: chân dung, phải: thông tin sáng tạo).
-* Ảnh đại diện Future Me của học sinh (lấy từ imageManifest với fileName "hero.png" hoặc assetId "asset-hero-custom" / dataUrl; nếu chưa có ảnh, dựng CSS Gradient Studio sang trọng).
+## ZONE 01 · PROFESSIONAL HERO & QUICK SNAPSHOT
+* Bố cục: Hero banner lớn tỷ lệ 16:9 hoặc split layout ấn tượng (trái: chân dung khổ lớn nổi bật, phải: thông tin nghề nghiệp tương lai).
+* Ảnh đại diện Future Me của con (lấy từ imageManifest với fileName "hero.png" hoặc assetId "asset-hero-custom" / dataUrl).
 * Tên hiển thị ("${answers.name || 'Nhà Sáng Tạo'}").
 * Vai trò sáng tạo tương lai ("${futureRoleTitle}").
 * Lĩnh vực & Chuyên môn ("${riasec.techSector} — ${branch?.label || branchKey}").
-${is2DTo3DPathway ? `* Chuyên môn & Lộ trình mở rộng: "Chuyên môn nền tảng: Thiết kế đồ họa 2D (tạo hình, bố cục và màu sắc). Hướng mở rộng cho Dream Project: Dựng hình khối và tương tác 3D."` : ''}
+${is2DTo3DPathway ? `* Chuyên môn & Lộ trình mở rộng: "${presentationLayer.futureProfessionalRole.specializationPathway}"` : ''}
 * Tuyên ngôn tương lai ("${motto}").
 * Nhãn trang nhã: "Chân dung tương lai do con và gia đình định hướng".
-* Giới thiệu bản thân ngắn gọn (từ presentationLayer.professionalSummary), thể hiện khát vọng sáng tạo của con mà không suy diễn tính cách bẩm sinh.
+* Giới thiệu bản thân ngắn gọn (từ presentationLayer.professionalSummary), tôn vinh khát vọng sáng tạo của con.
+* QUICK SNAPSHOT BAR (Tổng quan 1 phút cho phụ huynh): Dải 4 thẻ tóm tắt nhanh:
+  1. [Chuyên môn]: ${presentationLayer.quickSnapshot.specialization}
+  2. [Dự án tâm điểm]: ${presentationLayer.quickSnapshot.dreamProjectTitle} (${presentationLayer.quickSnapshot.dreamProjectStage})
+  3. [Công cụ chính]: ${presentationLayer.quickSnapshot.primaryTool} (${presentationLayer.quickSnapshot.targetProficiencyBadge})
+  4. [Lộ trình hoàn thiện]: ${presentationLayer.quickSnapshot.roadmapLength}
+* MINI NAVIGATION BAR (Dễ dàng lướt nhanh): [Tổng quan | Dự án ước mơ | Biểu đồ năng lực | Bộ công cụ | 4 Chặng dự án | Tác động xã hội].
 
 ## ZONE 02 · FEATURED DREAM PROJECT SHOWCASE (TÂM ĐIỂM SẢN PHẨM ƯỚC MƠ P4)
-* Thiết kế dạng Showcase Card nổi bật nhất Portfolio, đặt ngay dưới Hero để thu hút ánh nhìn đầu tiên.
+* Thiết kế dạng Showcase Card lớn và nổi bật nhất Portfolio, đặt ngay dưới Hero.
 * Hiển thị ảnh prototype P4 lớn (từ imageManifest: fileName "prototype-p4.png" hoặc assetId "asset-prototype-p4").
 * Tiêu đề: Tên Dream Project giữ nguyên chính xác ("${dreamName}").
 * Thông điệp & Mục đích: "${dreamPurpose}" dành cho "${dreamAudience}".
-* Danh sách chức năng cốt lõi MVP (toàn bộ các tính năng chính con chọn như hình minh họa, màu sắc, dòng chữ ngắn gửi lời yêu thương đều nằm trọn trong MVP!).
-* Sản phẩm đầu ra kỳ vọng & Tiêu chuẩn hoàn thành.
-* Nút "Xem chi tiết dự án" (mở Modal/Drawer) và nút "Khám phá lộ trình thực hiện P4" (chuyển sang Tab 2 mở đúng chặng P4).
+* PHÂN ĐỊNH RÕ RÀNG MVP VÀ EXTENSION:
+  - MVP (Chức năng cốt lõi):
+    * [F-P4-01]: Có hình minh họa chính (Tạo hình 3D và bố cục cốt lõi)
+    * [F-P4-02]: Phối màu sắc theo chủ đề ấm áp & Dòng chữ ngắn dễ đọc gửi lời yêu thương (Trọn vẹn trong MVP!)
+  - Extension (Phiên bản nâng cấp v2.0):
+    * [F-P4-03]: Tùy biến lời chúc cá nhân hóa & Hiệu ứng chuyển động 3D mở rộng
+* Tiêu chuẩn hoàn thành: Dòng chữ ngắn gọn, dễ đọc; người nhận tiếp nhận trọn vẹn thông điệp yêu thương; mô hình hiển thị sắc nét.
+* Nút "Xem chi tiết dự án" (mở Modal) và nút "Khám phá lộ trình thực hiện P4" (chuyển sang Tab 2 mở đúng chặng P4).
 
 ## ZONE 03 · TARGET CAPABILITY MAP (BIỂU ĐỒ NĂNG LỰC MỤC TIÊU)
-* Bắt buộc có biểu đồ năng lực trực quan dạng Horizontal Capability Bars hoặc Grouped Capability Matrix phân theo 3 nhóm:
-  1. Kiến thức chuyên môn (Target Knowledge K-xx)
-  2. Kỹ năng chuyên môn (Target Skills S-xx)
-  3. Năng lực giải quyết vấn đề & Sáng tạo (Competencies C-xx)
+* Biểu đồ năng lực trực quan dạng Horizontal Capability Bars phân theo 3 nhóm:
+  1. Kiến thức con sẽ học (Target Knowledge K-xx)
+  2. Kỹ năng con sẽ rèn (Target Skills S-xx)
+  3. Năng lực sáng tạo & giải quyết vấn đề (Competencies C-xx)
 * Trục mức độ thể hiện 4 MỨC MỤC TIÊU HƯỚNG TỚI:
   - L1: Làm quen (Hiểu giao diện & thao tác cơ bản)
   - L2: Thực hành có hướng dẫn (Làm theo quy trình mẫu)
@@ -2199,10 +2618,10 @@ ${is2DTo3DPathway ? `* Chuyên môn & Lộ trình mở rộng: "Chuyên môn n�
 
 ## ZONE 04 · PROFESSIONAL TECH STACK & TOOL PROFICIENCY
 * Bố cục dạng thẻ công cụ hiện đại (Tech Stack Grid): Logo/Icon, Tên công cụ, Mục đích sử dụng, Mức thuần thục mục tiêu (L1–L4 kèm tiêu chí cụ thể), Dự án áp dụng.
-* Phân 3 nhóm công cụ rõ ràng:
-  - Core Tools (Công cụ cốt lõi cần làm chủ): ví dụ Blender, TinkerCAD, Scratch, Micro:bit...
-  - Supporting Tools (Công cụ bổ trợ thiết kế & tối ưu).
-  - Advanced / Extension Tools (Công cụ mở rộng cho tương lai).
+* Phân 3 nhóm công cụ thân thiện:
+  - Công cụ chính (Core Tools): ví dụ Blender, TinkerCAD, Scratch, Micro:bit...
+  - Công cụ bổ trợ (Supporting Tools): Thiết kế vector, tối ưu hình ảnh.
+  - Công cụ mở rộng (Extension Tools): Thư viện nâng cao cho tương lai.
 
 ## ZONE 05 · FUTURE PROJECT EXPERIENCE (TIMELINE & GALLERY 4 CHẶNG P1 ➔ P4)
 * Trình bày dạng Gallery 4 dự án theo dòng thời gian (P1 ➔ P2 ➔ P3 ➔ P4).
@@ -2216,16 +2635,31 @@ ${is2DTo3DPathway ? `* Chuyên môn & Lộ trình mở rộng: "Chuyên môn n�
 
 ## ZONE 06 · VISION, SOCIAL IMPACT & FEEDBACK
 * Trình bày giá trị hướng tới: Đối tượng sử dụng ("${dreamAudience}"), Vấn đề giải quyết ("${dreamPurpose}"), Đóng góp mong muốn cho gia đình và cộng đồng (${presentationLayer.futureImpact.socialContribution}).
-* Khu vực phản hồi (Testimonials):
-  - Mặc định danh sách đánh giá rỗng (bảo toàn tính trung thực, không tự tạo review giả hay 5 sao ảo).
-  - Hiển thị thông báo trang trọng: "Phản hồi từ người trải nghiệm sẽ được cập nhật khi con giới thiệu sản phẩm."
-  - Trình bày các câu hỏi dự kiến dùng để thu thập ý kiến đóng góp từ người thân.
+* Khu vực lắng nghe ý kiến (Testimonials):
+  - Mặc định danh sách đánh giá rỗng (bảo toàn tính trung thực tuyệt đối, không tự tạo review giả hay 5 sao ảo).
+  - Hiển thị thông báo trang trọng: "Chờ đón phản hồi từ người trải nghiệm khi con giới thiệu sản phẩm hoàn chỉnh."
+  - Trình bày 3 câu hỏi khảo sát dự kiến dùng để thu thập ý kiến đóng góp từ người thân:
+    1. Sản phẩm "${dreamName}" đã mang lại cảm xúc gì cho ${dreamAudience}?
+    2. Hình ảnh minh họa, màu sắc và lời chúc trong thiệp có dễ nhìn và ấn tượng không?
+    3. Người nhận mong muốn con bổ sung thêm chi tiết hoặc tính năng tương tác nào trong tương lai?
 * CTA NỔI BẬT: Nút bấm lớn "Khám phá lộ trình để trở thành phiên bản tương lai của con" ➔ Nhấn vào chuyển sang Tab 2.
 
 ---
 
-# 4. TAB 2 — DEVELOPMENT ROADMAP (LỘ TRÌNH PHÁT TRIỂN 3 CẤP ĐỘ)
-Giải thích chính xác con cần làm gì để đạt được Portfolio ở Tab 1.
+# 3. TAB 2 — DEVELOPMENT ROADMAP (HÀNH TRÌNH THỰC HÀNH 3 CẤP ĐỘ)
+Giải thích chính xác con cần làm gì và học như thế nào để đạt được Portfolio ở Tab 1.
+
+## DANH PHÁP THÂN THIỆN CHO HỌC SINH & PHỤ HUYNH
+* Thay "L1 — Overall Roadmap" thành: "Hành trình 4 chặng của con" (LEVEL 1 — OVERALL ROADMAP)
+* Thay "L2 — Project Roadmap" thành: "Con sẽ làm gì trong dự án này?" (LEVEL 2 — PROJECT ROADMAP)
+* Thay "L3 — Function Roadmap" thành: "Cùng hoàn thành tính năng & Hướng dẫn thực hiện" (LEVEL 3 — FUNCTION ROADMAP)
+* Thay "Evidence Artifacts" thành: "Sản phẩm & Minh chứng thực tế"
+* Thay "Prerequisites" thành: "Con cần chuẩn bị gì trước?"
+
+## 3 CẤP ĐỘ LỘ TRÌNH (3 ROADMAP LEVELS)
+* LEVEL 1 — OVERALL ROADMAP: Bản đồ 4 chặng P1 ➔ P2 ➔ P3 ➔ P4 (P4 giữ nguyên chính xác tên Dream Project "${dreamName}").
+* LEVEL 2 — PROJECT ROADMAP: Mục tiêu dự án, danh sách tính năng (F-Px-01, F-Px-02, F-Px-03), công cụ cần dùng, tiêu chí nghiệm thu.
+* LEVEL 3 — FUNCTION ROADMAP: Đi sâu vào từng tính năng: Tại sao cần chức năng, K/S/C rèn luyện, các bước nhiệm vụ tuần tự có checkbox lưu vào localStorage (key 'future_me_tasks_v1'), sản phẩm nhỏ cần nộp và tiêu chí kiểm tra.
 
 ## BỐ CỤC GIAO DIỆN TAB 2
 * Phía trên: Thanh Mini-profile tóm tắt Chân dung tương lai & Dream Project ("${dreamName}").
@@ -2234,10 +2668,27 @@ Giải thích chính xác con cần làm gì để đạt được Portfolio ở
   - Cột phải (70%): Project Detail & Function-Level Roadmap (Xem chi tiết từng chức năng, chuỗi nhiệm vụ tuần tự kèm checkbox cập nhật tiến độ, tiêu chí hoàn thành và minh chứng).
 * Mobile: Bố cục 1 cột tinh gọn, chạm vào chức năng sẽ mở Drawer toàn màn hình.
 
-## 3 CẤP ĐỘ LỘ TRÌNH
-* LEVEL 1 — OVERALL ROADMAP: Bản đồ 4 chặng P1 ➔ P2 ➔ P3 ➔ P4 (P4 giữ nguyên chính xác tên Dream Project "${dreamName}").
-* LEVEL 2 — PROJECT ROADMAP: Mục tiêu dự án, danh sách tính năng (F-Px-01, F-Px-02, F-Px-03), công cụ cần dùng, tiêu chí nghiệm thu.
-* LEVEL 3 — FUNCTION ROADMAP: Đi sâu vào từng tính năng: Tại sao Dream Project cần chức năng này, K/S/C rèn luyện, các bước nhiệm vụ tuần tự có checkbox lưu vào localStorage (key 'future_me_tasks_v1'), sản phẩm nhỏ cần nộp và tiêu chí kiểm tra.
+## CẤU TRÚC 4 TẦNG TRẢI NGHIỆM CHO MỖI CHỨC NĂNG (ACTION-ORIENTED)
+Khi học sinh hoặc phụ huynh mở một chức năng, giao diện ưu tiên hành động và hướng dẫn thực hành theo 4 tầng:
+1. HIỂN THỊ NGAY:
+   - Tên chức năng + Khung hình minh họa sản phẩm
+   - "Con sẽ tạo ra điều gì?": Mô tả kết quả đầu ra cụ thể, trực quan.
+2. PHẦN CHÍNH (HƯỚNG DẪN 5 BƯỚC THỰC HÀNH & NHIỆM VỤ):
+   - Trình tự 5 bước thực hành rõ ràng:
+     * Bước 1 · Học kiến thức: Hiểu khái niệm cốt lõi (learningGuide.step1Learn).
+     * Bước 2 · Luyện thao tác: Thực hành bài tập nhỏ trên phần mềm/thiết bị (learningGuide.step2Practice).
+     * Bước 3 · Áp dụng vào sản phẩm: Triển khai trực tiếp trên dự án "${dreamName}" (learningGuide.step3Apply).
+     * Bước 4 · Kiểm tra kết quả: Đối chiếu tiêu chí quan sát được (learningGuide.step4Verify).
+     * Bước 5 · Lưu minh chứng: Lưu tệp nguồn và video/ảnh kết quả (learningGuide.step5Evidence).
+   - Danh sách các nhiệm vụ tuần tự kèm Checkbox cập nhật tiến độ (lưu vào localStorage với key 'future_me_tasks_v1').
+3. MỞ KHI CẦN (ACCORDION "CON CẦN CHUẨN BỊ GÌ?"):
+   - Kiến thức con sẽ học (K-xx).
+   - Kỹ năng con sẽ rèn (S-xx).
+   - Công cụ cần chuẩn bị.
+4. DÀNH CHO PHỤ HUYNH & THẦY CÔ (ACCORDION "TIÊU CHÍ ĐÁNH GIÁ & MINH CHỨNG"):
+   - Tiêu chí nghiệm thu có thể quan sát được (Ví dụ: Chuyển động bắt đầu/kết thúc rõ ràng, không che khuất dòng chữ, màu sắc dễ đọc).
+   - Sản phẩm & Minh chứng cần nộp.
+   - Mã năng lực học thuật và trạng thái xác minh.
 
 ## BIDIRECTIONAL TRACEABILITY (LIÊN KẾT HAI CHIỀU HOÀN HẢO)
 * Tab 1 ➔ Tab 2: Bấm vào bất kỳ Năng lực K/S/C, Công cụ hoặc Dự án nào ở Tab 1 sẽ chuyển sang Tab 2, tự động chọn chặng và mở đúng chức năng liên quan.
@@ -2245,19 +2696,14 @@ Giải thích chính xác con cần làm gì để đạt được Portfolio ở
 
 ---
 
-# 5. VISUAL DESIGN
-Sử dụng hình ảnh giao diện Future Creator làm cảm hứng:
+# 4. VISUAL DESIGN & RESPONSIVE LAYOUT
 - Màu chủ đạo: Mint-teal (#1a8a7d, #0d9488, #14b8a6) kết hợp nền sạch sẽ, thoáng mát.
-- Bo góc mềm, shadow nhẹ, thẻ rõ ràng, kiểu chữ hiện đại Google Font 'Plus Jakarta Sans'.
-- Hình ảnh nhân vật và prototype lấy từ imageManifest.
-- Bố cục responsive: Desktop 2 cột khoa học, Mobile 1 cột tinh gọn thân thiện cảm ứng.
-- Phong cách:
-  * PRIMARY: Chibi thân thiện, màu tươi sáng, Kitten Bot đồng hành, giải thích dễ hiểu.
-  * SECONDARY: Tech studio hiện đại, thanh lịch, typography sắc nét.
+- Bo góc mềm (rounded-3xl cho tiểu học, rounded-2xl cho THCS), shadow nhẹ, typography sắc nét 'Plus Jakarta Sans'.
+- Responsive: Desktop 2 cột khoa học, Mobile 1 cột tinh gọn thân thiện cảm ứng.
 
 ---
 
-# 6. TECHNICAL REQUIREMENTS
+# 5. TECHNICAL REQUIREMENTS
 Stack: React + TypeScript + Tailwind CSS + Lucide React.
 * Website chạy được ngay.
 * Hai tab chuyển đổi thật (state activeTab: 'profile' | 'roadmap').
@@ -2265,13 +2711,12 @@ Stack: React + TypeScript + Tailwind CSS + Lucide React.
 * Các card mở chi tiết thật bằng Modal hoặc Drawer.
 * Nút chuyển từ Profile sang Roadmap hoạt động chuẩn xác theo ID.
 * Checkbox nhiệm vụ lưu trạng thái với versioned localStorage key 'future_me_tasks_v1'.
-* Có nút Xuất JSON và Nhập JSON tiến độ (có kiểm tra tính hợp lệ trước khi nạp).
-* Có hộp thoại xác nhận khi Reset tiến độ.
+* Hộp thoại Modal "Quản lý dữ liệu & Lưu tiến độ" hỗ trợ Xuất JSON và Nhập JSON tiến độ.
 * Responsive hoàn hảo và hỗ trợ keyboard accessibility.
 
 ---
 
-# 7. DATA INTEGRITY RULES
+# 6. DATA INTEGRITY RULES
 Nguồn sự thật duy nhất là APPROVED_FUTURE_ME_DATA.
 Bảo toàn:
 * Tên hiển thị ("${answers.name || 'Nhà Sáng Tạo'}").
@@ -2289,13 +2734,12 @@ Phân biệt 3 trạng thái:
 
 ---
 
-# 8. DELIVERABLES
+# 7. DELIVERABLES
 Tạo ứng dụng hoàn chỉnh với:
-* Đúng hai tab hoạt động: TAB 1 (Hồ sơ năng lực tương lai - 6 Core Zones) và TAB 2 (Lộ trình phát triển - 2-Column Navigator & 3 Levels).
-* Future Professional Profile đầy đủ: Career Vision, Learning & Project Experience, Knowledge, Skills, Tech Stack, Tool Proficiency L1-L4, Target Capability Map, Project Portfolio với P4 Dream Project Showcase, Testimonials placeholder & Future Impact.
-* Development Roadmap 3 cấp: Overall → Project → Function với chuỗi nhiệm vụ và checkbox.
+* Đúng hai tab hoạt động: TAB 1 (Hồ sơ năng lực tương lai - 6 Core Zones, Quick Snapshot, Mini Nav) và TAB 2 (Hành trình thực hành - 2-Column Navigator, 3 Levels, 4 Tầng trải nghiệm & Hướng dẫn 5 bước).
+* Visual Grounding: Hiển thị đúng ảnh chân dung học sinh và prototype P4/P1-P3, có khung mockup mỹ thuật khi thiếu asset tĩnh.
+* Giao diện Portfolio công khai sang trọng, tách biệt công cụ dữ liệu JSON vào modal quản lý riêng.
 * Bidirectional Capability Tracing hoạt động 2 chiều.
-* Tích hợp Image Manifest sử dụng đúng ảnh đã duyệt.
 * Local task progress và JSON backup/import.
 Generate the complete working application now.`;
 
@@ -2307,7 +2751,7 @@ Generate the complete working application now.`;
 
 ---
 
-# 9. INPUT DATA
+# 8. INPUT DATA
 
 ## DỮ LIỆU HỒ SƠ DUYỆT ĐỂ DỰNG WEBSITE ({{APPROVED_FUTURE_ME_DATA_JSON}}):
 ${JSON.stringify(safePayload, null, 2)}

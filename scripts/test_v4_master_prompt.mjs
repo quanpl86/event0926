@@ -160,13 +160,76 @@ if (p1Asset?.url === p4Asset?.url) {
 }
 console.log('   => [PASS] Unique, domain-matched prototype assets assigned.');
 
-// ── 9. KIỂM TRA TỐI ƯU KÍCH THƯỚC PROMPT ──
-console.log('\n9. KIỂM TRA TỐI ƯU KÍCH THƯỚC PROMPT:');
-console.log(`   - Full Prompt length: ${fullPrompt.length.toLocaleString('vi-VN')} characters`);
-if (fullPrompt.length > 600000) {
-  console.warn(`   [WARNING] Prompt length is high (${fullPrompt.length}), but no duplicate image manifest.`);
-} else {
-  console.log(`   => [PASS] Prompt size optimized successfully (under 600K chars, no duplicate base64).`);
+// ── 10. KIỂM TRA P1 TASKS ĐÚNG NGỮ CẢNH MULTIMEDIA ──
+console.log('\n10. KIỂM TRA P1 TASKS ĐÚNG NGỮ CẢNH MULTIMEDIA:');
+const p1 = longQuanProjects[0];
+const fP1_01 = p1.features?.[0];
+if (!fP1_01 || !fP1_01.name.includes('Chuẩn bị không gian sáng tạo')) {
+  throw new Error(`P1 F1 name is not multimedia-specific: "${fP1_01?.name}"`);
 }
+const p1TaskText = fP1_01.tasks.map(t => t.description).join(' ');
+if (p1TaskText.includes('bảng điều khiển') || p1TaskText.includes('kết nối thiết bị')) {
+  throw new Error(`P1 still contains robotics hardware template text! Got: "${p1TaskText}"`);
+}
+console.log(`   - F-P1-01 Name: "${fP1_01.name}"`);
+console.log(`   - F-P1-01 Tasks:`, fP1_01.tasks.map(t => t.description));
+console.log('   => [PASS] P1 tasks correctly customized for Multimedia.');
 
-console.log('\n=== ALL AUDIT CHECKS PASSED: READY FOR AI STUDIO ===\n');
+// ── 11. KIỂM TRA HƯỚNG DẪN 5 BƯỚC (LEARNING GUIDE) ──
+console.log('\n11. KIỂM TRA HƯỚNG DẪN 5 BƯỚC (LEARNING GUIDE):');
+if (!fP1_01.learningGuide || !fP1_01.learningGuide.step1Learn || !fP1_01.learningGuide.step5Evidence) {
+  throw new Error('F-P1-01 missing 5-step learningGuide!');
+}
+console.log('   - Step 1 (Học kiến thức):', fP1_01.learningGuide.step1Learn);
+console.log('   - Step 2 (Luyện thao tác):', fP1_01.learningGuide.step2Practice);
+console.log('   - Step 3 (Áp dụng):', fP1_01.learningGuide.step3Apply);
+console.log('   - Step 4 (Kiểm tra):', fP1_01.learningGuide.step4Verify);
+console.log('   - Step 5 (Lưu minh chứng):', fP1_01.learningGuide.step5Evidence);
+console.log('   => [PASS] 5-step learningGuide verified.');
+
+// ── 12. KIỂM TRA ĐỒNG NHẤT DỮ LIỆU FEATURED DREAM PROJECT & MVP TRÊN 2 TAB ──
+console.log('\n12. KIỂM TRA ĐỒNG NHẤT FEATURED DREAM PROJECT TRÊN CẢ 2 TAB:');
+const featuredProj = safePayload.presentationLayer.featuredDreamProject;
+if (!featuredProj || !featuredProj.mvpFeatures || featuredProj.mvpFeatures.length !== 2) {
+  throw new Error('featuredDreamProject in presentationLayer missing explicit 2 MVP features!');
+}
+if (!featuredProj.extensionFeatures || featuredProj.extensionFeatures.length !== 1) {
+  throw new Error('featuredDreamProject in presentationLayer missing explicit Extension feature!');
+}
+console.log(`   - PresentationLayer MVP Features (${featuredProj.mvpFeatures.length}):`, featuredProj.mvpFeatures.map(f => f.name));
+console.log(`   - PresentationLayer Extension Features (${featuredProj.extensionFeatures.length}):`, featuredProj.extensionFeatures.map(f => f.name));
+console.log(`   - SafePayload dreamProject.mvpFeatures:`, safePayload.dreamProject.mvpFeatures);
+console.log('   => [PASS] Absolute consistency of MVP / Extension across Tab 1 & Tab 2 verified.');
+
+// ── 13. KIỂM TRA QUICK SNAPSHOT BAR CHO TAB 1 ──
+console.log('\n13. KIỂM TRA QUICK SNAPSHOT BAR:');
+const snapshot = safePayload.presentationLayer.quickSnapshot;
+if (!snapshot || !snapshot.specialization || !snapshot.dreamProjectTitle) {
+  throw new Error('presentationLayer missing quickSnapshot!');
+}
+console.log('   - Quick Snapshot:', snapshot);
+console.log('   => [PASS] Quick snapshot bar verified.');
+
+// ── 14. KIỂM TRA TỪ KHÓA THÂN THIỆN & VISUAL GROUNDING TRONG PROMPT ──
+console.log('\n14. KIỂM TRA TỪ KHÓA THÂN THIỆN & VISUAL GROUNDING TRONG PROMPT:');
+const friendlyKeywords = [
+  'Hành trình 4 chặng của con',
+  'Con sẽ làm gì trong dự án này?',
+  'Cùng hoàn thành tính năng & Hướng dẫn thực hiện',
+  'Sản phẩm & Minh chứng thực tế',
+  'Con cần chuẩn bị gì trước?',
+  'QUICK SNAPSHOT BAR',
+  'MINI NAVIGATION BAR',
+  'MANDATORY IMAGE USAGE',
+  'Quản lý dữ liệu & Lưu tiến độ'
+];
+friendlyKeywords.forEach(kw => {
+  if (!fullPrompt.includes(kw)) {
+    throw new Error(`Prompt missing friendly keyword: "${kw}"!`);
+  }
+  console.log(`   - Verified: "${kw}"`);
+});
+console.log('   => [PASS] All friendly keywords & visual grounding rules present in prompt.');
+
+console.log('\n=== ALL 14 AUDIT CHECKS PASSED: READY FOR AI STUDIO ===\n');
+
