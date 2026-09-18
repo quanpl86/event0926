@@ -343,9 +343,10 @@ export function LandingPage({ onStart, onResume, hasResume, currentStep }: Landi
             <button
               type="button"
               onClick={onStart}
-              className="focus-ring shrink-0 rounded-xl bg-[#ffd044] px-6 py-3.5 text-sm font-extrabold text-[#064d47] shadow-md hover:bg-amber-300 transition"
+              className="group focus-ring shrink-0 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#FFE817] via-[#FFDE00] to-[#FFCF00] hover:from-[#FFF14D] hover:via-[#FFE936] hover:to-[#FFDA24] px-6 py-3.5 text-sm sm:text-base font-black text-[#033630] shadow-lg shadow-yellow-400/30 hover:shadow-xl hover:shadow-yellow-300/50 hover:scale-[1.03] active:scale-[0.98] border border-yellow-100/90 transition-all duration-200 cursor-pointer"
             >
-              Khám phá 60 phút miễn phí
+              <span>Khám phá 60 phút miễn phí</span>
+              <ArrowRight className="h-4 w-4 text-[#033630] transition-transform duration-200 group-hover:translate-x-1 shrink-0" />
             </button>
           </div>
         </section>
